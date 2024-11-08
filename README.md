@@ -1,12 +1,18 @@
 ## To Run The Project
-Within the top level directory for this project:
+Within the top level directory run the following commands:
 ```shell
-> ./run.sh
+./install.sh
 ```
 
-## Dependencies and Installation
-Requires `npm`, `pipenv`.
+```shell
+./run.sh
+```
 
-Run `chmod u+x ./install.sh ./run.sh` to grant execute permissions.
+If either fails you may need to run:
+```shell
+chmod u+x ./install.sh ./run.sh
+```
 
-Run `./install.sh`.
+## Package Managers
+- `npm` for the frontend
+- `pipenv` for the backend
