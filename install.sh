@@ -2,7 +2,7 @@
 
 # Install frontend dependencies
 cd frontend || exit
-npm run dev
+npm install
 cd ..
 
 # Install backend dependencies
