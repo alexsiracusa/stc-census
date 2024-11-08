@@ -4,7 +4,9 @@ Within the top level directory for this project:
 > ./run.sh
 ```
 
-If this does not work at first, you may need to run
-```shell
-> chmod u+x ./run.sh  
-```
+## Dependencies and Installation
+Requires `npm`, `pipenv`.
+
+Run `chmod u+x ./install.sh ./run.sh` to grant execute permissions.
+
+Run `./install.sh`.
