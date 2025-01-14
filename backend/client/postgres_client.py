@@ -1,4 +1,4 @@
-from .config import POSTGRES
+from backend.config import POSTGRES
 import asyncpg
 
 

@@ -2,10 +2,10 @@ from pydantic import BaseModel
 from fastapi import Request
 from datetime import datetime, timedelta, timezone
 from backend.database.exceptions import InvalidCredentials
-from backend.client import postgres_client
 
 import uuid
 import backend.database.util as util
+import backend.client as client
 
 # https://medium.com/@marcnealer/fastapi-http-authentication-f1bb2e8c3433
 
@@ -23,7 +23,7 @@ async def _create_session(account_id: int, host):
     last_activity = session_start
     timout_duration = timedelta(hours=8)
 
-    await postgres_client.fetch_row("""
+    await client.postgres_client.fetch_row("""
         INSERT INTO Session (id, ip_address, account_id, session_start, expires_at, last_activity, timeout_duration)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
     """, session_hash, host, account_id, session_start, expires_at, last_activity, timout_duration)
@@ -35,7 +35,7 @@ async def register(account: AccountInfo, host):
     # hash password
     password_hash = util.hash_bcrypt_2b(account.password)
 
-    record = await postgres_client.fetch_row("""
+    record = await client.postgres_client.fetch_row("""
         INSERT INTO Account (email, password_hash) 
         VALUES ($1, $2) RETURNING id;
     """, account.email, password_hash)
@@ -46,7 +46,7 @@ async def register(account: AccountInfo, host):
 
 async def login(account: AccountInfo, host):
     # get stored hash value from database
-    record = await postgres_client.fetch_row("""
+    record = await client.postgres_client.fetch_row("""
         SELECT id, password_hash 
         FROM Account 
         WHERE lower(email)=lower($1)
@@ -73,7 +73,7 @@ async def authenticate(request: Request):
 
     session_id_hash = util.hash_sha3_256(session_id)
 
-    account_info = await postgres_client.fetch_row("""
+    account_info = await client.postgres_client.fetch_row("""
         WITH Account_Session AS (
             UPDATE Session SET last_activity = CURRENT_TIMESTAMP
             WHERE (
