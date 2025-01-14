@@ -6,8 +6,12 @@
 --
 -- ===================================
 
-DROP TABLE IF EXISTS Account, Session;
+DROP TABLE IF EXISTS Account, Session, Project, Task;
 
+
+-- ===================================
+-- Table Definitions
+-- ===================================
 
 CREATE TABLE Account (
     id              SERIAL  PRIMARY KEY,
@@ -30,5 +34,52 @@ CREATE TABLE Session (
 
 CREATE INDEX session_account_b_tree_index ON Session USING BTREE (account_id);
 
+
+CREATE TABLE Project (
+    id              SERIAL      PRIMARY KEY,
+    parent          INT         REFERENCES Project(id),
+    name            TEXT        NOT NULL
+);
+
+
+CREATE TABLE Task (
+    id              SERIAL      PRIMARY KEY ,
+    parent          INT         REFERENCES Project(id),
+    name            TEXT        NOT NULL
+);
+
+
+
+-- ===================================
+-- Schema Constraints
+-- ===================================
+
+-- Ensures that a Project's parent cannot be itself.
+CREATE OR REPLACE FUNCTION project_parent_not_self()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.parent = NEW.id THEN
+        RAISE EXCEPTION 'Project parent id cannot be itself';
+    END IF;
+
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER project_parent_not_self
+BEFORE INSERT ON Project
+FOR EACH ROW EXECUTE FUNCTION project_parent_not_self();
+
+-- Ensures that a Project's parent cannot be changed. This ensures a tree structure with no loops.
+CREATE OR REPLACE FUNCTION raise_immutable()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'UPDATE not allowed on %(%)', TG_ARGV[0], TG_ARGV[1];
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER project_parent_immutable
+AFTER UPDATE OF parent ON Project
+FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Project', 'parent')
 
 
