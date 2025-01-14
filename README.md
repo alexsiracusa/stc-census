@@ -17,6 +17,8 @@ If any of them fail you may need to run:
 chmod u+x ./install.sh ./run.sh ./setup.sh
 ```
 
+You may also need to install `psql` on your command line, and ensure you have a PostgreSQL server running.
+
 ## Ports
 - Frontend: `5173`
 - Backend: `8000`
