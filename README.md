@@ -12,10 +12,14 @@ Within the top level directory run the following commands:
 ./run.sh
 ```
 
-If either fails you may need to run:
+If any of them fail you may need to run:
 ```shell
 chmod u+x ./install.sh ./run.sh ./setup.sh
 ```
+
+## Ports
+- Frontend: `5173`
+- Backend: `8000`
 
 ## Package Managers
 - `npm` for the frontend
