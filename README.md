@@ -5,12 +5,16 @@ Within the top level directory run the following commands:
 ```
 
 ```shell
+./setup.sh
+```
+
+```shell
 ./run.sh
 ```
 
 If either fails you may need to run:
 ```shell
-chmod u+x ./install.sh ./run.sh
+chmod u+x ./install.sh ./run.sh ./setup.sh
 ```
 
 ## Package Managers
