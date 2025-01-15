@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4em;
+    height: var(--navbar-height);
 
     display: flex;
     flex-direction: row;
@@ -20,11 +20,11 @@
 .header .logo {
     display: flex;
     align-content: center;
-    width: 6.5em
+    width: 7.8em
 }
 
 .header .logo img {
-    height: 2.5em;
+    height: 3em;
 }
 
 .navbar a {
@@ -38,18 +38,3 @@
 .navbar a:hover {
   text-decoration: underline;
 }
-
-/*.navbar a::before {*/
-/*    content: '';*/
-/*    position: absolute;*/
-/*    top: 100%;*/
-/*    left: 0;*/
-/*    width: 100%;*/
-/*    height: 2px;*/
-/*    background-color: #ffffff;*/
-/*    transition: .3s;*/
-/*}*/
-
-/*.navbar a:hover::before {*/
-/*    width: 100%;*/
-/*}*/
