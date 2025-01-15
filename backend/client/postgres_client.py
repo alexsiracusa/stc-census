@@ -1,5 +1,6 @@
 from backend.config import POSTGRES
 import asyncpg
+import json
 
 
 class PostgresClient:
@@ -26,6 +27,7 @@ class PostgresClient:
                     user=self.user,
                     password=self.password,
                     database=self.database,
+                    init=PostgresClient._setup_json_codec
                 )
 
             except Exception:
@@ -58,6 +60,24 @@ class PostgresClient:
             raise
         finally:
             await self._connection_pool.release(self.con)
+
+    @staticmethod
+    async def _setup_json_codec(conn):
+        """Set up the custom codec for JSON and JSONB on a connection."""
+        await conn.set_type_codec(
+            'json',
+            encoder=json.dumps,
+            decoder=json.loads,
+            schema='pg_catalog',
+            format='text'
+        )
+        await conn.set_type_codec(
+            'jsonb',
+            encoder=json.dumps,
+            decoder=json.loads,
+            schema='pg_catalog',
+            format='text'
+        )
 
 
 postgres_client: PostgresClient = None

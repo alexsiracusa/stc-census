@@ -6,8 +6,21 @@
 --
 -- ===================================
 
-DROP TABLE IF EXISTS Account, Session;
+DROP TABLE IF EXISTS Account, Session, Project, Task, Task_Depends_On;
+DROP TYPE IF EXISTS TASK_STATUS;
 
+
+-- ===================================
+-- Type Definitions
+-- ===================================
+
+CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
+CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
+
+
+-- ===================================
+-- Table Definitions
+-- ===================================
 
 CREATE TABLE Account (
     id              SERIAL  PRIMARY KEY,
@@ -30,5 +43,62 @@ CREATE TABLE Session (
 
 CREATE INDEX session_account_b_tree_index ON Session USING BTREE (account_id);
 
+
+CREATE TABLE Project (
+    id              SERIAL          PRIMARY KEY,
+    parent          INT             REFERENCES Project(id),
+    name            TEXT            NOT NULL,
+    status          PROJECT_STATUS  NOT NULL DEFAULT 'not_started'
+);
+
+
+CREATE TABLE Task (
+    id              SERIAL      PRIMARY KEY ,
+    parent          INT         NOT NULL REFERENCES Project(id),
+    name            TEXT        NOT NULL,
+    status          TASK_STATUS NOT NULL DEFAULT 'not_started'
+);
+
+
+CREATE TABLE Task_Depends_On (
+    task_id         INT         REFERENCES Task(id),
+    depends_id      INT         REFERENCES Task(id),
+
+    PRIMARY KEY (task_id, depends_id)
+);
+
+
+
+-- ===================================
+-- Schema Constraints
+-- ===================================
+
+-- Ensures that a Project's parent cannot be itself.
+CREATE OR REPLACE FUNCTION project_parent_not_self()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.parent = NEW.id THEN
+        RAISE EXCEPTION 'Project parent id cannot be itself';
+    END IF;
+
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER project_parent_not_self
+BEFORE INSERT ON Project
+FOR EACH ROW EXECUTE FUNCTION project_parent_not_self();
+
+-- Ensures that a Project's parent cannot be changed. This ensures a tree structure with no loops.
+CREATE OR REPLACE FUNCTION raise_immutable()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'UPDATE not allowed on %(%)', TG_ARGV[0], TG_ARGV[1];
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER project_parent_immutable
+AFTER UPDATE OF parent ON Project
+FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Project', 'parent')
 
 
