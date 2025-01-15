@@ -15,6 +15,7 @@ DROP TYPE IF EXISTS TASK_STATUS;
 -- ===================================
 
 CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
+CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
 
 
 -- ===================================
@@ -44,9 +45,10 @@ CREATE INDEX session_account_b_tree_index ON Session USING BTREE (account_id);
 
 
 CREATE TABLE Project (
-    id              SERIAL      PRIMARY KEY,
-    parent          INT         REFERENCES Project(id),
-    name            TEXT        NOT NULL
+    id              SERIAL          PRIMARY KEY,
+    parent          INT             REFERENCES Project(id),
+    name            TEXT            NOT NULL,
+    status          PROJECT_STATUS  NOT NULL DEFAULT 'not_started'
 );
 
 
