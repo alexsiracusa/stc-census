@@ -6,7 +6,15 @@
 --
 -- ===================================
 
-DROP TABLE IF EXISTS Account, Session, Project, Task;
+DROP TABLE IF EXISTS Account, Session, Project, Task, Task_Depends_On;
+DROP TYPE IF EXISTS TASK_STATUS;
+
+
+-- ===================================
+-- Type Definitions
+-- ===================================
+
+CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
 
 
 -- ===================================
@@ -44,8 +52,9 @@ CREATE TABLE Project (
 
 CREATE TABLE Task (
     id              SERIAL      PRIMARY KEY ,
-    parent          INT         REFERENCES Project(id),
-    name            TEXT        NOT NULL
+    parent          INT         NOT NULL REFERENCES Project(id),
+    name            TEXT        NOT NULL,
+    status          TASK_STATUS NOT NULL DEFAULT 'not_started'
 );
 
 
