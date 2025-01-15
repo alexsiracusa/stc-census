@@ -49,6 +49,14 @@ CREATE TABLE Task (
 );
 
 
+CREATE TABLE Task_Depends_On (
+    task_id         INT         REFERENCES Task(id),
+    depends_id      INT         REFERENCES Task(id),
+
+    PRIMARY KEY (task_id, depends_id)
+);
+
+
 
 -- ===================================
 -- Schema Constraints
