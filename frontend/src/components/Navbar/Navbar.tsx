@@ -4,14 +4,14 @@ import Logo from '../../assets/STC.png'
 const Navbar = () => {
     return (
         <header className="header">
-            <a href="/frontend/public" className="logo">
+            <a href="/" className="logo">
                 <img src={Logo} alt="logo"/>
             </a>
 
             <nav className="navbar">
-                <a href="/home">Home</a>
+                <a href="/">Home</a>
                 <a href="/menu">Menu</a>
-                <a href="/ProjectPage/Project">Project</a>
+                <a href="/project/-1">Project</a>
             </nav>
         </header>
     )

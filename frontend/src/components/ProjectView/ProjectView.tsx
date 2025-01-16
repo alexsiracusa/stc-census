@@ -1,9 +1,13 @@
 import './ProjectView.css'
 
-const ProjectView = () => {
+type ProjectViewProps = {
+    id: number
+}
+
+const ProjectView = (props: ProjectViewProps) => {
     return (
         <div className='project-view'>
-            Project View
+            Project View {props.id}
         </div>
     )
 };
