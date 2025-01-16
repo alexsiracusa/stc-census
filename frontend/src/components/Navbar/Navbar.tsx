@@ -11,7 +11,7 @@ const Navbar = () => {
             <nav className="navbar">
                 <a href="/">Home</a>
                 <a href="/menu">Menu</a>
-                <a href="/project/-1">Project</a>
+                <a href="/project/-1/summary">Project</a>
             </nav>
         </header>
     )

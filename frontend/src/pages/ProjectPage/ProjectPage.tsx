@@ -11,7 +11,7 @@ const ProjectPage = () => {
     if (Number.isInteger(Number(id))) {
         return (
             <div className='project-page'>
-                <ProjectSidebar/>
+                <ProjectSidebar id={Number(id)}/>
                 <ProjectView id={Number(id)}/>
             </div>
         )

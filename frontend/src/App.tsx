@@ -12,7 +12,7 @@ function App() {
             <div className='page-content'>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
-                    <Route path="/project/:id" element={<ProjectPage/>}/>
+                    <Route path="/project/:id/:page/" element={<ProjectPage/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
