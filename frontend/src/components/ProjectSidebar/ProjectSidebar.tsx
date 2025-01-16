@@ -1,7 +1,7 @@
-import './Sidebar.css'
-import React from 'react'
+import './ProjectSidebar.css'
 
-const Sidebar = () => {
+
+const ProjectSidebar = () => {
     return (
         <aside className='sidebar' id='sidebar'>
             <div>
@@ -33,4 +33,4 @@ const Sidebar = () => {
     )
 }
 
-export default Sidebar
+export default ProjectSidebar

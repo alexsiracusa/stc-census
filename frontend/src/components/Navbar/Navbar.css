@@ -14,7 +14,7 @@
     align-items: center;
     z-index: 100;
 
-    border-bottom: solid #dedede 1px;
+    border-bottom: solid #dedede 1.5px;
 }
 
 .header .logo {

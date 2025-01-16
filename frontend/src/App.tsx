@@ -7,9 +7,12 @@ function App() {
     return (
         <BrowserRouter>
             <Navbar/>
-            <Routes className='page-content'>
-                <Route path="/" element={<ProjectPage/>}/>
-            </Routes>
+
+            <div className='page-content'>
+                <Routes>
+                    <Route path="/" element={<ProjectPage/>}/>
+                </Routes>
+            </div>
         </BrowserRouter>
     )
 }

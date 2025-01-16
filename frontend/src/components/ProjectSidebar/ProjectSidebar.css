@@ -1,0 +1,8 @@
+
+.sidebar {
+    height: 100%;
+    width: 16em;
+    max-width: 100vw;
+
+    border-right: solid #dedede 2px;
+}
