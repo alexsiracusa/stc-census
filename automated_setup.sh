@@ -5,17 +5,21 @@ set -e
 
 # Store the base directory
 BASE_DIR="$(pwd)"
-SCRIPTS_DIR="$BASE_DIR/scripts/setup"
+SCRIPTS_DIR="$BASE_DIR/script/setup"
+
+INSTALL_SCRIPT = "install.sh"
+SCHEMA_SCRIPT = "load_schemas.sh"
+RUN_SCRIPT = "run.sh"
 
 # Make all setup scripts executable
-chmod u+x "$SCRIPTS_DIR/install.sh" "$SCRIPTS_DIR/setup.sh" "$SCRIPTS_DIR/run.sh"
+chmod u+x "$SCRIPTS_DIR/$INSTALL_SCRIPT" "$SCRIPTS_DIR/$SCHEMA_SCRIPT" "$SCRIPTS_DIR/$RUN_SCRIPT"
 
 # Execute scripts in order
 echo "Running installation script..."
-"$SCRIPTS_DIR/install.sh"
+"$SCRIPTS_DIR/$INSTALL_SCRIPT"
 
-echo "Running database setup script..."
-"$SCRIPTS_DIR/setup.sh"
+echo "Running schema loading script..."
+"$SCRIPTS_DIR/$SCHEMA_SCRIPT"
 
 echo "Running application..."
-"$SCRIPTS_DIR/run.sh"
+"$SCRIPTS_DIR/$RUN_SCRIPT"
