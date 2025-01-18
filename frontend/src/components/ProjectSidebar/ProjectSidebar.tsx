@@ -16,7 +16,7 @@ const ProjectSidebar = (props: ProjectSidebarProps) => {
                     </a>
                 </li>
                 <li>
-                    <a href={`/project/${props.id}/tasks`}>
+                    <a href={`/project/${props.id}/task-list`}>
                         <img src={Ring} alt={''}/>
                         Task List
                     </a>

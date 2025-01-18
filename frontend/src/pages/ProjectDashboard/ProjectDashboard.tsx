@@ -1,7 +1,7 @@
 import './ProjectDashboard.css'
 
-import { Link } from "react-router";
-import { useState, useEffect } from 'react';
+import {Link} from "react-router";
+import {useState, useEffect} from 'react';
 
 
 const ProjectDashboard = () => {
@@ -11,23 +11,27 @@ const ProjectDashboard = () => {
     useEffect(() => {
         fetch(`${host}/projects/`)
             .then(response => response.json())
-            .then(json => {setProjects(json)})
+            .then(json => {
+                setProjects(json)
+            })
             .catch(error => console.error(error));
     }, []);
 
     return (
         <div className='project-dashboard'>
             {projects !== null && (
-                <div className='project-list'>
+                <ul>
                     {projects.map((project) => (
-                        <Link
-                            to={`/project/${project['id']}/summary`}
-                            className='project-row'
-                        >
-                            {project['name']}
-                        </Link>
+                        <li key={project['id']}>
+                            <Link
+                                to={`/project/${project['id']}/summary`}
+                                className='project-row'
+                            >
+                                {project['name']}
+                            </Link>
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
         </div>
     )
