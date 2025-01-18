@@ -13,7 +13,7 @@ function App() {
 
             <div className='page-content'>
                 <Routes>
-                    <Route path="/project/:id/:page" element={<ProjectPage/>}/>
+                    <Route path="/project/:id/*" element={<ProjectPage/>}/>
                     <Route path="/projects" element={<ProjectDashboard/>}/>
                     <Route path="/" element={<HomePage/>}/>
                 </Routes>
