@@ -14,7 +14,7 @@ async def get_projects(
     try:
         projects = await data.get_projects()
         response.status_code = status.HTTP_200_OK
-        return {"projects": projects}
+        return projects
 
     except Exception as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -29,7 +29,7 @@ async def get_project(
     try:
         project = await data.get_project_by_id(project_id)
         response.status_code = status.HTTP_200_OK
-        return {"project": project}
+        return project
 
     except Exception as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
