@@ -1,0 +1,40 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 10px;
+
+    background-color: #ffffff;
+    align-items: center;
+    z-index: 100;
+
+    border-bottom: solid #dedede 1.5px;
+}
+
+.header .logo {
+    display: flex;
+    align-content: center;
+    width: 7.8em
+}
+
+.header .logo img {
+    height: 3em;
+}
+
+.navbar a {
+    position: relative;
+    font-size: 1.125em;
+    color: #242424;
+    font-weight: 500;
+    margin-left: 40px;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
