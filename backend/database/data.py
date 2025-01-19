@@ -13,8 +13,9 @@ async def get_project_by_id(project_id):
     return await client.postgres_client.fetch_row("""
         SELECT 
             Project.*,
-            to_json(array_agg(Task.*)) AS tasks,
-            to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects
+            to_json(array_remove(array_agg(Task.*), NULL)) AS tasks,
+            to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
+            (SELECT path FROM Project_Path WHERE id = $1) AS path
         FROM Project 
         LEFT JOIN Task ON Task.parent = $1
         LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = $1

@@ -6,8 +6,10 @@
 --
 -- ===================================
 
+DROP VIEW IF EXISTS Project_Path;
 DROP TABLE IF EXISTS Account, Session, Project, Task, Task_Depends_On;
 DROP TYPE IF EXISTS TASK_STATUS;
+
 
 
 -- ===================================
@@ -16,6 +18,7 @@ DROP TYPE IF EXISTS TASK_STATUS;
 
 CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
 CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
+
 
 
 -- ===================================
@@ -65,6 +68,29 @@ CREATE TABLE Task_Depends_On (
     depends_id      INT         REFERENCES Task(id),
 
     PRIMARY KEY (task_id, depends_id)
+);
+
+
+
+-- ===================================
+-- Views
+-- ===================================
+
+CREATE VIEW Project_Path AS (
+    WITH RECURSIVE project_cte(id, name, parent, depth, path) AS (
+        SELECT
+            Project.id, Project.name, Project.parent, 1::INT AS depth,
+            ARRAY[jsonb_build_object('id', Project.id, 'name', Project.name)]::JSONB[] AS path
+        FROM Project
+        WHERE Project.parent IS NULL
+    UNION ALL
+        SELECT
+            Project.id, Project.name, Project.parent, project_cte.depth + 1 AS depth,
+            array_append(project_cte.path, jsonb_build_object('id', Project.id, 'name', Project.name))
+        FROM project_cte, Project
+        WHERE Project.parent = project_cte.id)
+    SELECT *
+    FROM project_cte
 );
 
 
