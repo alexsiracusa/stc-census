@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
             <nav className="navbar">
                 <a href="/">{t('navbar.home', 'Home')}</a>
                 <a href="/menu">{t('navbar.menu', 'Menu')}</a>
-                <a href="/project">{t('navbar.project', 'Project')}</a>
+                <a href="/projects">{t('navbar.project', 'Project')}</a>
             </nav>
 
             <LanguageSelector />
