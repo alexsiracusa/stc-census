@@ -34,7 +34,7 @@ i18n
                     navbar: {
                         home: '主頁',
                         menu: '菜單',
-                        projects: '項目',
+                        project: '項目',
                     },
                     greeting: '您好，歡迎光臨！',
                 },
