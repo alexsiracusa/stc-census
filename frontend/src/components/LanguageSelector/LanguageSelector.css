@@ -1,0 +1,11 @@
+.language-selector {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.language-selector select {
+    padding: 0.25em;
+    font-size: 1em;
+}
