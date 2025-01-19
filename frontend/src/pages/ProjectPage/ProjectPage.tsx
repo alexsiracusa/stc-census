@@ -12,7 +12,7 @@ const ProjectPage = () => {
         return (
             <div className='project-page'>
                 <ProjectSidebar id={Number(id)}/>
-                <ProjectView id={Number(id)}/>
+                <ProjectView project_id={Number(id)}/>
             </div>
         )
     } else {

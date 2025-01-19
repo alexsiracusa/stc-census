@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const TaskList = () => {
+const TaskList = (props: TabProps) => {
     return (
-        <div>Task List</div>
+        <div>Task List {props.project_id}</div>
     )
 };
 

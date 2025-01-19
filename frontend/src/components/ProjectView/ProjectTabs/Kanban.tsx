@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const Kanban = () => {
+const Kanban = (props: TabProps) => {
     return (
-        <div>Kanban</div>
+        <div>Kanban {props.project_id}</div>
     )
 };
 

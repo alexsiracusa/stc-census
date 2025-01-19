@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const GanttChart = () => {
+const GanttChart = (props: TabProps) => {
     return (
-        <div>GanttChart</div>
+        <div>GanttChart {props.project_id}</div>
     )
 };
 

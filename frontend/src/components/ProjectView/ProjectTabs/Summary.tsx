@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const Summary = () => {
+const Summary = (props: TabProps) => {
     return (
-        <div>Summary</div>
+        <div>Summary {props.project_id}</div>
     )
 };
 

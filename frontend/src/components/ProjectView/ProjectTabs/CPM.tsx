@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const CPM = () => {
+const CPM = (props: TabProps) => {
     return (
-        <div>CPM</div>
+        <div>CPM {props.project_id}</div>
     )
 };
 

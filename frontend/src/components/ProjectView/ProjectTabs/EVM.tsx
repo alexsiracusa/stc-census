@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const EVM = () => {
+const EVM = (props: TabProps) => {
     return (
-        <div>EVM</div>
+        <div>EVM {props.project_id}</div>
     )
 };
 

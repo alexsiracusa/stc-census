@@ -1,7 +1,8 @@
+import TabProps from "./TabProps.ts";
 
-const Calendar = () => {
+const Calendar = (props: TabProps) => {
     return (
-        <div>Calendar</div>
+        <div>Calendar {props.project_id}</div>
     )
 };
 
