@@ -2,19 +2,21 @@ from fastapi import APIRouter, Response, status
 from ..database import data
 
 router = APIRouter(
-    prefix="/projects",
-    tags=["projects"],
+    prefix="/project",
+    tags=["project"],
     responses={404: {"description": "Not found"}},
 )
 
+
 @router.get("/")
-async def get_projects(
+async def get_project(
     response: Response,
+    project_id: int
 ):
     try:
-        projects = await data.get_projects()
+        project = await data.get_project_by_id(project_id)
         response.status_code = status.HTTP_200_OK
-        return projects
+        return project
 
     except Exception as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
