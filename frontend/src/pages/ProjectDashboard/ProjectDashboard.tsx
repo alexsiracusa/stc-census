@@ -2,6 +2,7 @@ import './ProjectDashboard.css'
 
 import {Link} from "react-router";
 import {useState, useEffect} from 'react';
+import ProjectRow from "../../components/ProjectRow/ProjectRow.tsx";
 
 
 const ProjectDashboard = () => {
@@ -23,12 +24,7 @@ const ProjectDashboard = () => {
                 <ul>
                     {projects.map((project) => (
                         <li key={project['id']}>
-                            <Link
-                                to={`/project/${project['id']}/summary`}
-                                className='project-row'
-                            >
-                                {project['name']}
-                            </Link>
+                            <ProjectRow project={project}/>
                         </li>
                     ))}
                 </ul>
