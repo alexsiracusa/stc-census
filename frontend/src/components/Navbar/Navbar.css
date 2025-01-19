@@ -38,3 +38,28 @@
 .navbar a:hover {
   text-decoration: underline;
 }
+
+.language-selector {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.language-selector select {
+    padding: 0.25em;
+    font-size: 1em;
+}
+
+.profile-icon img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 40px;
+    align-content: center;
+}
+
+.profile-icon a {
+    display: block;
+}
