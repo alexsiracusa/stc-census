@@ -39,4 +39,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN
     RETURN FALSE;
 END;
-$$
+$$;
+
+CREATE DOMAIN timezone AS TEXT
+CHECK ( is_timezone( value ) );

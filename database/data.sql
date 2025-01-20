@@ -5,7 +5,7 @@ INSERT INTO Project (id, parent, name) VALUES
 (-3, -1, 'Create Poster');
 
 
-INSERT INTO Task (id, parent, name, planned_start_date, planned_completion_date) VALUES
+INSERT INTO Task (id, parent, name, target_start_date, target_completion_date) VALUES
 (-1, -1, 'Create supply list', '2025-03-14', '2025-03-15'),
 (-2, -1, 'Buy supplies', '2025-03-15', '2025-03-16'),
 (-3, -1, 'Set up venue', '2025-03-16', '2025-03-18'),

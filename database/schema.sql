@@ -19,8 +19,6 @@ DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'on-hold', 'complete');
 CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'on-hold', 'complete');
 
-CREATE DOMAIN timezone AS TEXT
-CHECK ( is_timezone( value ) );
 
 -- ===================================
 -- Table Definitions
@@ -71,20 +69,11 @@ CREATE TABLE Task (
     actual_cost     DECIMAL(2),
 
     start_date              DATE,
-    start_time              TIME WITHOUT TIME ZONE,
-    start_tz                TIMEZONE,
-
     completion_date         DATE,
-    completion_time         TIME WITHOUT TIME ZONE,
-    completion_tz           TIMEZONE,
 
-    planned_start_date      DATE,
-    planned_start_time      TIME WITHOUT TIME ZONE,
-    planned_start_tz        TIMEZONE,
-
-    planned_completion_date DATE,
-    planned_completion_time TIME WITHOUT TIME ZONE,
-    planned_completion_tz   TIMEZONE
+    target_start_date       DATE,
+    target_completion_date  DATE,
+    target_days_to_complete DECIMAL(2)
 );
 
 
