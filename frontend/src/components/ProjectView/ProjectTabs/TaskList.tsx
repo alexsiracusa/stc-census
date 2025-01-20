@@ -8,7 +8,7 @@ const TaskList = (props: TabProps) => {
     const host = import.meta.env.VITE_BACKEND_HOST;
 
     useEffect(() => {
-        fetch(`${host}/project/?project_id=${props.project_id}`)
+        fetch(`${host}/project/${props.project_id}`)
             .then(response => response.json())
             .then(json => {
                 setProject(json)
