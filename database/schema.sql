@@ -91,15 +91,15 @@ CREATE TABLE Task_Depends_On (
 -- ===================================
 
 CREATE VIEW Project_Path AS (
-    WITH RECURSIVE project_cte(id, name, parent, depth, path) AS (
+    WITH RECURSIVE project_cte(id,path) AS (
         SELECT
-            Project.id, Project.name, Project.parent, 1::INT AS depth,
+            Project.id,
             ARRAY[jsonb_build_object('id', Project.id, 'name', Project.name)]::JSONB[] AS path
         FROM Project
         WHERE Project.parent IS NULL
     UNION ALL
         SELECT
-            Project.id, Project.name, Project.parent, project_cte.depth + 1 AS depth,
+            Project.id,
             array_append(project_cte.path, jsonb_build_object('id', Project.id, 'name', Project.name))
         FROM project_cte, Project
         WHERE Project.parent = project_cte.id
