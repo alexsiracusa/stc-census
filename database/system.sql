@@ -25,3 +25,18 @@ BEGIN
     );
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION is_timezone( tz TEXT )
+    RETURNS BOOLEAN
+    LANGUAGE plpgsql STABLE
+    AS
+$$
+DECLARE
+    date TIMESTAMPTZ;
+BEGIN
+    date := now() AT TIME ZONE tz;
+    RETURN TRUE;
+EXCEPTION WHEN OTHERS THEN
+    RETURN FALSE;
+END;
+$$

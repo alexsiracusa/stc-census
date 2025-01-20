@@ -16,10 +16,11 @@ DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 -- Type Definitions
 -- ===================================
 
-CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
-CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'complete');
+CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'on-hold', 'complete');
+CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'on-hold', 'complete');
 
-
+CREATE DOMAIN timezone AS TEXT
+CHECK ( is_timezone( value ) );
 
 -- ===================================
 -- Table Definitions
@@ -51,15 +52,39 @@ CREATE TABLE Project (
     id              SERIAL          PRIMARY KEY,
     parent          INT             REFERENCES Project(id),
     name            TEXT            NOT NULL,
-    status          PROJECT_STATUS  NOT NULL DEFAULT 'not_started'
+    description     TEXT,
+    status          PROJECT_STATUS  NOT NULL DEFAULT 'not_started',
+    budget          DECIMAL(2),
+    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
 CREATE TABLE Task (
-    id              SERIAL      PRIMARY KEY ,
+    id              SERIAL      PRIMARY KEY,
     parent          INT         NOT NULL REFERENCES Project(id),
     name            TEXT        NOT NULL,
-    status          TASK_STATUS NOT NULL DEFAULT 'not_started'
+    description     TEXT,
+    status          TASK_STATUS NOT NULL DEFAULT 'not_started',
+    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    expected_cost   DECIMAL(2),
+    actual_cost     DECIMAL(2),
+
+    start_date              DATE,
+    start_time              TIME WITHOUT TIME ZONE,
+    start_tz                TIMEZONE,
+
+    completion_date         DATE,
+    completion_time         TIME WITHOUT TIME ZONE,
+    completion_tz           TIMEZONE,
+
+    planned_start_date      DATE,
+    planned_start_time      TIME WITHOUT TIME ZONE,
+    planned_start_tz        TIMEZONE,
+
+    planned_completion_date DATE,
+    planned_completion_time TIME WITHOUT TIME ZONE,
+    planned_completion_tz   TIMEZONE
 );
 
 
