@@ -6,7 +6,7 @@
 --
 -- ===================================
 
-DROP VIEW IF EXISTS Project_Path;
+DROP VIEW IF EXISTS Project_Path, Task_Node, Project_Children;
 DROP TABLE IF EXISTS Account, Session, Project, Task, Task_Depends_On;
 DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 
@@ -102,9 +102,39 @@ CREATE VIEW Project_Path AS (
             Project.id, Project.name, Project.parent, project_cte.depth + 1 AS depth,
             array_append(project_cte.path, jsonb_build_object('id', Project.id, 'name', Project.name))
         FROM project_cte, Project
-        WHERE Project.parent = project_cte.id)
+        WHERE Project.parent = project_cte.id
+    )
     SELECT *
     FROM project_cte
+);
+
+CREATE VIEW Project_Children AS (
+    WITH RECURSIVE project_tree(parent, child) AS (
+        SELECT
+            Project.id as parent,
+            Project.id as child
+        FROM Project
+    UNION ALL
+        SELECT
+            project_tree.parent,
+            Project.id
+        FROM Project
+        INNER JOIN project_tree ON Project.parent = project_tree.child
+    )
+    SELECT
+        parent AS id,
+        ARRAY_AGG(child) AS children
+    FROM project_tree
+    GROUP BY parent
+);
+
+CREATE VIEW Task_Node AS (
+    SELECT
+        Task.*,
+        array_remove(array_agg(Task_Depends_On.depends_id), NULL) AS depends_on
+    FROM TASK
+    LEFT JOIN Task_Depends_On ON Task.id = Task_Depends_On.task_id
+    GROUP BY Task.id
 );
 
 

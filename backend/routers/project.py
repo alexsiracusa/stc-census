@@ -23,13 +23,13 @@ async def get_project(
         return {"error": str(error)}
 
 
-@router.get("/all-tasks")
+@router.get("/{project_id}/all-tasks")
 async def get_project(
     response: Response,
     project_id: int
 ):
     try:
-        project = await data.get_project_by_id(project_id)
+        project = await data.get_all_project_tasks(project_id)
         response.status_code = status.HTTP_200_OK
         return project
 
