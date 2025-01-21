@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Node, Edge, useNodesState, useEdgesState } from 'reactflow';
 import { Task } from './Task';
 
-interface UseCPMDataReturn {
+interface UseGraphProcessorReturn {
     nodes: Node[];
     edges: Edge[];
     setNodes: (nodes: Node[]) => void;
@@ -11,20 +11,15 @@ interface UseCPMDataReturn {
     onEdgesChange: (changes: any) => void;
 }
 
-export const useCPMData = (projectId: string): UseCPMDataReturn => {
+export const useGraphProcessor = (tasks: Task[]): UseGraphProcessorReturn => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const host = import.meta.env.VITE_BACKEND_HOST;
 
-    // Fetch tasks effect
     useEffect(() => {
-        fetch(`${host}/project/${projectId}/all-tasks`)
-            .then(response => response.json())
-            .then(json => {
-                processTasksIntoGraph(json);
-            })
-            .catch(error => console.error(error));
-    }, [projectId, host]);
+        if (tasks.length > 0) {
+            processTasksIntoGraph(tasks);
+        }
+    }, [tasks]);
 
     const processTasksIntoGraph = (tasks: Task[]) => {
         const newNodes = tasks.map((task) => ({
