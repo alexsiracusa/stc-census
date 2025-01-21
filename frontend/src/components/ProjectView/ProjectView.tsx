@@ -6,7 +6,7 @@ import TaskList from "./ProjectTabs/TaskList/TaskList.tsx";
 import Kanban from "./ProjectTabs/Kanban.tsx";
 import GanttChart from "./ProjectTabs/GanttChart.tsx";
 import Calendar from "./ProjectTabs/Calendar.tsx";
-import CPM from "./ProjectTabs/CPM.tsx";
+import CPM from "./ProjectTabs/CPM/CPM.tsx";
 import EVM from "./ProjectTabs/EVM.tsx";
 
 import ProjectPath from "../ProjectPath/ProjectPath.tsx";
