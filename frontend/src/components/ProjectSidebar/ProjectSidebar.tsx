@@ -1,5 +1,7 @@
 import './ProjectSidebar.css'
 import Ring from '../../assets/Icons/Ring.svg'
+import KanbanIcon from '../../assets/Icons/Kanban.svg'
+import TaskListIcon from '../../assets/Icons/TaskList.svg'
 
 type ProjectSidebarProps = {
     project_id: number
@@ -17,13 +19,13 @@ const ProjectSidebar = (props: ProjectSidebarProps) => {
                 </li>
                 <li>
                     <a href={`/project/${props.project_id}/task-list`}>
-                        <img src={Ring} alt={''}/>
+                        <img src={TaskListIcon} alt={''}/>
                         Task List
                     </a>
                 </li>
                 <li>
                     <a href={`/project/${props.project_id}/kanban`}>
-                        <img src={Ring} alt={''}/>
+                        <img src={KanbanIcon} alt={''}/>
                         Kanban
                     </a>
                 </li>
