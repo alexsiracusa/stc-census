@@ -1,4 +1,6 @@
-import TabProps from "./TabProps.ts";
+import './Calendar.css'
+
+import TabProps from "../TabProps.ts";
 
 const Calendar = (props: TabProps) => {
     return (

@@ -1,13 +1,13 @@
 import './ProjectView.css'
 import {Route, Routes, Navigate} from "react-router-dom";
 
-import Summary from "./ProjectTabs/Summary.tsx";
+import Summary from "./ProjectTabs/Summary/Summary.tsx";
 import TaskList from "./ProjectTabs/TaskList/TaskList.tsx";
 import Kanban from "./ProjectTabs/Kanban.tsx";
-import GanttChart from "./ProjectTabs/GanttChart.tsx";
-import Calendar from "./ProjectTabs/Calendar.tsx";
+import GanttChart from "./ProjectTabs/GanttChart/GanttChart.tsx";
+import Calendar from "./ProjectTabs/Calendar/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM/CPM.tsx";
-import EVM from "./ProjectTabs/EVM.tsx";
+import EVM from "./ProjectTabs/EVM/EVM.tsx";
 
 import ProjectPath from "../ProjectPath/ProjectPath.tsx";
 import {useEffect, useState} from "react";
