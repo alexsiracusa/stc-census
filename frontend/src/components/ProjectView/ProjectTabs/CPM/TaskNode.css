@@ -1,0 +1,20 @@
+/* TaskNode.css */
+.task-node {
+    /* Add your node styling here */
+}
+
+.handle {
+    background: #555;
+}
+
+.handle-target {
+    /* Additional target handle specific styling if needed */
+}
+
+.handle-source {
+    /* Additional source handle specific styling if needed */
+}
+
+.task-content {
+    /* Styling for the content div */
+}

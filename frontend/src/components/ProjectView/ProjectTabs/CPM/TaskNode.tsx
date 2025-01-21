@@ -1,26 +1,24 @@
 // TaskNode.tsx
 import { Handle, Position } from 'reactflow';
+import './TaskNode.css'; // Add this import
 
 const TaskNode = ({ data }) => {
     return (
         <div className="task-node">
-            {/* Input handle - where edges can connect TO this node */}
             <Handle
                 type="target"
                 position={Position.Top}
                 id={`target-${data.id}`}
-                style={{ background: '#555' }}
+                className="handle handle-target"
             />
 
-            {/* Your node content */}
-            <div>{data.name}</div>
+            <div className="task-content">{data.name}</div>
 
-            {/* Output handle - where edges can connect FROM this node */}
             <Handle
                 type="source"
                 position={Position.Bottom}
                 id={`source-${data.id}`}
-                style={{ background: '#555' }}
+                className="handle handle-source"
             />
         </div>
     );
