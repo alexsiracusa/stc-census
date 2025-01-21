@@ -1,6 +1,8 @@
-import TabProps from "./TabProps.ts";
-import AddTask from "./KanbanComponents/AddTask.tsx";
-import TaskRow from "../../TaskRow/TaskRow.tsx";
+import './Kanban.css'
+
+import TabProps from "../TabProps.ts";
+import AddTask from "./AddTask.tsx";
+import TaskRow from "../../../TaskRow/TaskRow.tsx";
 
 const Kanban = (props: TabProps) => {
     const project = props.project;

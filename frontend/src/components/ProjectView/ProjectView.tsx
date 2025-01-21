@@ -3,7 +3,7 @@ import {Route, Routes, Navigate} from "react-router-dom";
 
 import Summary from "./ProjectTabs/Summary/Summary.tsx";
 import TaskList from "./ProjectTabs/TaskList/TaskList.tsx";
-import Kanban from "./ProjectTabs/Kanban.tsx";
+import Kanban from "./ProjectTabs/Kanban/Kanban.tsx";
 import GanttChart from "./ProjectTabs/GanttChart/GanttChart.tsx";
 import Calendar from "./ProjectTabs/Calendar/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM/CPM.tsx";
