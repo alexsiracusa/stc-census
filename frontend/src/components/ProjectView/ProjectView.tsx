@@ -20,13 +20,18 @@ const ProjectView = (props: ProjectViewProps) => {
     const [project, setProject] = useState(null);
     const host = import.meta.env.VITE_BACKEND_HOST;
 
-    useEffect(() => {
-        fetch(`${host}/project/${props.project_id}`)
-            .then(response => response.json())
-            .then(json => {
+    useEffect(() =>  {
+        (async () => {
+            try {
+                const response = await fetch(`${host}/project/${props.project_id}`);
+                const json = await response.json()
+                if (!response.ok) return console.error(json['error']);
                 setProject(json)
-            })
-            .catch(error => console.error(error));
+            }
+            catch (error) {
+                console.error(error)
+            }
+        })();
     }, []);
 
     if (project === null) {
