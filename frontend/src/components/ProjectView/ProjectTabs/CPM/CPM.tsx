@@ -31,8 +31,9 @@ const CPM = (props: TabProps) => {
             const newNodes = tasks.map((task, index) => ({
                 id: `node-${task.id}`,
                 type: 'task',
-                position: [Math.random() * 500, Math.random() * 500],
+                position: { x: 0, y: 0 }, // Default position will be handled by layout
                 data: task,
+                className: 'cpm-node'
             }));
 
             const newEdges = tasks.reduce((acc, task) => {
@@ -43,6 +44,7 @@ const CPM = (props: TabProps) => {
                             id: `edge-${task.id}-${dependency}`,
                             source: `node-${dependencyTask.id}`,
                             target: `node-${task.id}`,
+                            className: 'cpm-edge'
                         });
                     }
                 });
@@ -62,6 +64,7 @@ const CPM = (props: TabProps) => {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
+                className='cpm-flow'
             />
         </div>
     )
