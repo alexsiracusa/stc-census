@@ -1,5 +1,7 @@
-import TabProps from "./TabProps.ts";
-import {useState, useEffect} from 'react';
+// CPM.tsx
+import TabProps from "../TabProps.ts";
+import { useState, useEffect } from 'react';
+import TaskNode from './TaskNode';
 
 interface Task {
     id: number;
@@ -32,7 +34,13 @@ const CPM = (props: TabProps) => {
     }, []);
 
     return (
-        <div>CPM {props.project['id']}</div>
+        <div>
+            <h1>CPM {props.project['id']}</h1>
+            {tasks && tasks.map(task => (
+                <TaskNode key={task.id} task={task} />
+            ))}
+            {!tasks && <p>Loading tasks...</p>}
+        </div>
     )
 };
 
