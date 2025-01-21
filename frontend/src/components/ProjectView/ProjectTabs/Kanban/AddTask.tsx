@@ -6,6 +6,7 @@ const AddTask = () => {
     const [task, setTask] = useState({
         name: '',
         description: '',
+        status: ''
     });
 
     const handleChange = (e) => {
@@ -20,7 +21,7 @@ const AddTask = () => {
         setAddPopup(false);
         e.preventDefault();
         // API call to add task
-        setTask({name: '', description: ''})
+        setTask({name: '', description: '', status: ''})
     }
 
     return (
@@ -68,6 +69,20 @@ const AddTask = () => {
                                         rows={3}
                                         placeholder='Description'
                                         value={task.description}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className='label' htmlFor='name'>
+                                        Task status
+                                    </label>
+                                    <input
+                                        className='input-field'
+                                        id='status'
+                                        type='text'
+                                        placeholder='Task status'
+                                        value={task.status}
                                         onChange={handleChange}
                                     />
                                 </div>

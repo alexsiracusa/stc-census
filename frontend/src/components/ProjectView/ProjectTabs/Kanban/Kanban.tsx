@@ -2,38 +2,46 @@ import './Kanban.css'
 
 import TabProps from "../TabProps.ts";
 import AddTask from "./AddTask.tsx";
-import TaskRow from "../../../TaskRow/TaskRow.tsx";
+
+import KanbanTask from './KanbanTask.tsx';
 
 const Kanban = (props: TabProps) => {
     const project = props.project;
 
+    const groupedTasks = project.tasks.reduce((acc, task) => {
+        const status = task.status || 'not_started';
+        if (!acc[status]) {
+            acc[status] = [];
+        }
+        acc[status].push(task);
+        return acc;
+    }, {});
+
+    const statuses = ["not_started", "in_progress", "finished", "1", "2"];
+
     return (
-        <div>Kanban {props.project['id']}
-            <div>
-                <AddTask></AddTask>
+        <div>
+            <h1>Kanban{project['id']}</h1>
+            <AddTask />
 
-                <div className='task-list'>
-                    <>
-                        {project['tasks'].length > 0 &&
-                            <div className='tasks'>
-                                <h3>Tasks</h3>
-                                <ul>
-                                    {project['tasks'].map((task) => (
-                                        <li key={task.id}>
-                                            <TaskRow task={task} />
-                                        </li>
-                                    ))}
-                                </ul>
+            {project['tasks'].length > 0 && (
+                <div className="kanban-board">
+                    {statuses.map((status) => (
+                        <div key={status} className="kanban-column">
+                            <div className="column-header">
+                                <h3>{status}</h3>
                             </div>
-                        }
-                    </>
+                            <div className="tasks-container">
+                                {groupedTasks[status]?.map((task) => (
+                                    <KanbanTask key={task.id} task={task} />
+                                )) || <p>No tasks</p>}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            </div>
+            )}
         </div>
-
-
-
-    )
+    );
 };
 
 export default Kanban;
