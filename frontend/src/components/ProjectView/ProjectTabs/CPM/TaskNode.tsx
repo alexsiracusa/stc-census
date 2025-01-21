@@ -19,24 +19,24 @@ interface Task {
 }
 
 interface TaskNodeProps {
-    task: Task;
+    data: Task;
 }
 
-const TaskNode: React.FC<TaskNodeProps> = ({ task }) => {
+const TaskNode: React.FC<TaskNodeProps> = ({ data }) => {
     return (
-        <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-            <h4>Task {task.id}: {task.name}</h4>
-            <p>Status: {task.status}</p>
-            <p>Created At: {task.created_at}</p>
-            <p>Start Date: {task.start_date || 'Not set'}</p>
-            <p>Completion Date: {task.completion_date || 'Not set'}</p>
-            <p>Target Start Date: {task.target_start_date || 'Not set'}</p>
-            <p>Target Completion Date: {task.target_completion_date || 'Not set'}</p>
-            <p>Target Days to Complete: {task.target_days_to_complete || 'Not set'}</p>
-            <p>Actual Cost: {task.actual_cost || 'Not set'}</p>
-            <p>Expected Cost: {task.expected_cost || 'Not set'}</p>
-            <p>Depends On: {task.depends_on.join(', ') || 'None'}</p>
-            {task.description && <p>Description: {task.description}</p>}
+        <div style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '10px' }}>
+            <h4>Task {data.id}: {data.name}</h4>
+            <p>Status: {data.status}</p>
+            <p>Created At: {data.created_at}</p>
+            <p>Start Date: {data.start_date || 'Not set'}</p>
+            <p>Completion Date: {data.completion_date || 'Not set'}</p>
+            <p>Target Start Date: {data.target_start_date || 'Not set'}</p>
+            <p>Target Completion Date: {data.target_completion_date || 'Not set'}</p>
+            <p>Target Days to Complete: {data.target_days_to_complete || 'Not set'}</p>
+            <p>Actual Cost: {data.actual_cost || 'Not set'}</p>
+            <p>Expected Cost: {data.expected_cost || 'Not set'}</p>
+            <p>Depends On: {data.depends_on.join(', ') || 'None'}</p>
+            {data.description && <p>Description: {data.description}</p>}
         </div>
     );
 };
