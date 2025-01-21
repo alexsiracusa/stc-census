@@ -2,6 +2,7 @@ import './ProjectSidebar.css'
 import Ring from '../../assets/Icons/Ring.svg'
 import KanbanIcon from '../../assets/Icons/Kanban.svg'
 import TaskListIcon from '../../assets/Icons/TaskList.svg'
+import GanttChartIcon from '../../assets/Icons/GanttChart.svg'
 
 type ProjectSidebarProps = {
     project_id: number
@@ -31,7 +32,7 @@ const ProjectSidebar = (props: ProjectSidebarProps) => {
                 </li>
                 <li>
                     <a href={`/project/${props.project_id}/gantt-chart`}>
-                        <img src={Ring} alt={''}/>
+                        <img src={GanttChartIcon} alt={''}/>
                         Gantt Chart
                     </a>
                 </li>
