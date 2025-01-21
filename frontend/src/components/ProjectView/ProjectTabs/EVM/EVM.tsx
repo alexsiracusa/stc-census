@@ -1,4 +1,6 @@
-import TabProps from "./TabProps.ts";
+import './EVM.css'
+
+import TabProps from "../TabProps.ts";
 
 const EVM = (props: TabProps) => {
     return (

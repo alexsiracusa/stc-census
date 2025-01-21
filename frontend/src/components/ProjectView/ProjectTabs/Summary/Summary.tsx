@@ -1,4 +1,6 @@
-import TabProps from "./TabProps.ts";
+import './Summary.css'
+
+import TabProps from "../TabProps.ts";
 
 const Summary = (props: TabProps) => {
     return (
