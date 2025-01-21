@@ -1,5 +1,46 @@
-
 .cpm {
     height: 100%;
     flex-grow: 1;
+    position: relative;
+}
+
+.cpm-flow {
+    width: 80%;
+    height: 100%;
+}
+
+.cpm-node {
+    /* Add any specific node styling here */
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 150px; /* Add this line to control node width */
+    max-width: 150px; /* Add this to ensure content doesn't overflow */
+}
+
+.cpm-edge {
+    /* Add any specific edge styling here */
+    stroke: #888;
+    stroke-width: 2px;
+}
+
+/* For the container that holds the entire flow */
+.react-flow {
+    background-color: #f8f8f8;
+}
+
+/* For the pane that allows panning and zooming */
+.react-flow__pane {
+    cursor: grab;
+}
+
+/* When panning */
+.react-flow__pane:active {
+    cursor: grabbing;
+}
+
+/* For the viewport */
+.react-flow__viewport {
+    transform-origin: 0 0;
 }
