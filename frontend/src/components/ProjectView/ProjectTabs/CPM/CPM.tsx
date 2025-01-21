@@ -1,5 +1,5 @@
 // CPM.tsx
-import TabProps from "./TabProps.ts";
+import TabProps from "../TabProps.ts";
 import { useState, useEffect } from 'react';
 import { ReactFlow, useNodesState, useEdgesState } from 'reactflow';
 import TaskNode from './TaskNode';
@@ -20,6 +20,11 @@ interface Task {
     expected_cost: null | number;
     depends_on: number[];
 }
+
+// Define nodeTypes outside the component
+const nodeTypes = {
+    task: TaskNode,
+};
 
 const CPM = (props: TabProps) => {
     const [tasks, setTasks] = useState<Task[] | null>(null);
@@ -72,9 +77,7 @@ const CPM = (props: TabProps) => {
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
-                nodeTypes={{
-                    task: TaskNode,
-                }}
+                nodeTypes={nodeTypes}
             />
         </div>
     )
