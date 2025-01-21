@@ -25,7 +25,7 @@ export const useGraphProcessor = (tasks: Task[]): UseGraphProcessorReturn => {
         const newNodes = tasks.map((task) => ({
             id: `node-${task.id}`,
             type: 'task',
-            position: { x: 0, y: 0 }, // Default position will be handled by layout
+            position: { x: 0, y: 0 },
             data: task,
             className: 'cpm-node'
         }));
