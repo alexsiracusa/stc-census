@@ -1,28 +1,9 @@
-import './CPM.css'
-
 import TabProps from "../TabProps.ts";
-import { useState, useEffect } from 'react';
-import { ReactFlow, useNodesState, useEdgesState } from 'reactflow';
+import {useEffect, useState} from 'react';
+import {ReactFlow, useEdgesState, useNodesState} from 'reactflow';
 import TaskNode from './TaskNode';
+import {Task} from "./Task.tsx";
 
-interface Task {
-    id: number;
-    parent: number;
-    name: string;
-    description: null | string;
-    status: string;
-    created_at: string;
-    start_date: null | string;
-    completion_date: null | string;
-    target_start_date: null | string;
-    target_completion_date: null | string;
-    target_days_to_complete: null | number;
-    actual_cost: null | number;
-    expected_cost: null | number;
-    depends_on: number[];
-}
-
-// Define nodeTypes outside the component
 const nodeTypes = {
     task: TaskNode,
 };
@@ -72,7 +53,7 @@ const CPM = (props: TabProps) => {
     }, [tasks]);
 
     return (
-        <div className='cpm'>
+        <div style={{ height: '100vh', width: '100vw' }}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
