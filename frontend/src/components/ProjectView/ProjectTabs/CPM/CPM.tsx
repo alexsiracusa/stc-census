@@ -1,4 +1,5 @@
-// CPM.tsx
+import './CPM.css'
+
 import TabProps from "../TabProps.ts";
 import { useState, useEffect } from 'react';
 import { ReactFlow, useNodesState, useEdgesState } from 'reactflow';
@@ -71,7 +72,7 @@ const CPM = (props: TabProps) => {
     }, [tasks]);
 
     return (
-        <div style={{ height: '100vh', width: '100vw' }}>
+        <div className='cpm'>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
