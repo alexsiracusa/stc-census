@@ -2,4 +2,10 @@
 .project-path {
     display: flex;
     flex-direction: row;
+    gap: 0.25em;
+}
+
+.project-path .link {
+    font-size: 0.95em;
+    color: black;
 }
