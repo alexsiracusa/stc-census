@@ -1,6 +1,6 @@
 
 type TabProps = {
-    project_id: number
+    project: object
 }
 
 export default TabProps

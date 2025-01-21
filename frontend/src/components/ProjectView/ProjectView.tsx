@@ -9,21 +9,41 @@ import Calendar from "./ProjectTabs/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM.tsx";
 import EVM from "./ProjectTabs/EVM.tsx";
 
+import ProjectPath from "../ProjectPath/ProjectPath.tsx";
+import {useEffect, useState} from "react";
+
 type ProjectViewProps = {
     project_id: number
 }
 
 const ProjectView = (props: ProjectViewProps) => {
+    const [project, setProject] = useState(null);
+    const host = import.meta.env.VITE_BACKEND_HOST;
+
+    useEffect(() => {
+        fetch(`${host}/project/${props.project_id}`)
+            .then(response => response.json())
+            .then(json => {
+                setProject(json)
+            })
+            .catch(error => console.error(error));
+    }, []);
+
+    if (project === null) {
+        return <div>Loading</div>
+    }
+
     return (
         <div className='project-view'>
+            <ProjectPath path={project['path']}/>
             <Routes>
-                <Route path="/summary" element={<Summary project_id={props.project_id}/>}/>
-                <Route path="/task-list" element={<TaskList project_id={props.project_id}/>}/>
-                <Route path="/kanban" element={<Kanban project_id={props.project_id}/>}/>
-                <Route path="/gantt-chart" element={<GanttChart project_id={props.project_id}/>}/>
-                <Route path="/calendar" element={<Calendar project_id={props.project_id}/>}/>
-                <Route path="/cpm" element={<CPM project_id={props.project_id}/>}/>
-                <Route path="/evm" element={<EVM project_id={props.project_id}/>}/>
+                <Route path="/summary" element={<Summary project={project}/>}/>
+                <Route path="/task-list" element={<TaskList project={project}/>}/>
+                <Route path="/kanban" element={<Kanban project={project}/>}/>
+                <Route path="/gantt-chart" element={<GanttChart project={project}/>}/>
+                <Route path="/calendar" element={<Calendar project={project}/>}/>
+                <Route path="/cpm" element={<CPM project={project}/>}/>
+                <Route path="/evm" element={<EVM project={project}/>}/>
                 <Route path="/*" element={<Navigate to={`/project/${props.project_id}/summary`} replace/>}/>
             </Routes>
         </div>
