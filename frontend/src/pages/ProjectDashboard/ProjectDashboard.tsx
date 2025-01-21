@@ -1,6 +1,5 @@
 import './ProjectDashboard.css'
 
-import {Link} from "react-router";
 import {useState, useEffect} from 'react';
 import ProjectRow from "../../components/ProjectRow/ProjectRow.tsx";
 
@@ -20,8 +19,10 @@ const ProjectDashboard = () => {
 
     return (
         <div className='project-dashboard'>
+            <h3>Project Dashboard</h3>
+
             {projects !== null && (
-                <ul>
+                <ul className='project-list'>
                     {projects.map((project) => (
                         <li key={project['id']}>
                             <ProjectRow project={project}/>

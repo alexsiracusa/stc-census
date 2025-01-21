@@ -1,5 +1,5 @@
 
-.project-row {
+.task-row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -11,10 +11,10 @@
     color: black
 }
 
-.project-row .project-id {
+.task-row .task-id {
 
 }
 
-.project-row .project-name {
+.task-row .task-name {
 
 }

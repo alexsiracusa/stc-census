@@ -1,3 +1,5 @@
+import './ProjectRow.css'
+
 import {Link} from "react-router";
 
 type ProjectRowProps = {
@@ -13,7 +15,8 @@ const ProjectRow = (props: ProjectRowProps) => {
             to={`/project/${project['id']}/task-list`}
             className='project-row'
         >
-            {project['name']}
+            <div className='project-id'>P{project['id']}</div>
+            <div className='project-name'>{project['name']}</div>
         </Link>
     )
 };
