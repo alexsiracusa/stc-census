@@ -2,10 +2,16 @@
 .project-path {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 0.25em;
 }
 
 .project-path .link {
     font-size: 0.95em;
     color: black;
+}
+
+.project-path img {
+    width: 0.5em;
+    height: 0.5em;
 }
