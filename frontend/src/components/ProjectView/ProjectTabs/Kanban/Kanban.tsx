@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import TabProps from "../TabProps.ts";
 import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 
-import KanbanTask from './KanbanTask.tsx';
+import TaskCard from './TaskCard/TaskCard.tsx';
 
 const Kanban = (props: TabProps) => {
     const {t} = useTranslation();
@@ -61,7 +61,7 @@ const Kanban = (props: TabProps) => {
 
                             <div className="task-container">
                                 {groupedTasks[status.name]?.map((task) => (
-                                    <KanbanTask key={task.id} task={task}/>
+                                    <TaskCard key={task.id} task={task}/>
                                 )) || <p>No tasks</p>}
                             </div>
                         </div>

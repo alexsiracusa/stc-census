@@ -1,4 +1,4 @@
-import './KanbanTask.css'
+import './TaskCard.css'
 
 import { Link } from "react-router";
 
@@ -6,7 +6,7 @@ type KanbanTaskProps = {
     task: object
 }
 
-const KanbanTask = (props: KanbanTaskProps) => {
+const TaskCard = (props: KanbanTaskProps) => {
     const task = props.task;
 
     return (
@@ -25,4 +25,4 @@ const KanbanTask = (props: KanbanTaskProps) => {
     )
 };
 
-export default KanbanTask;
+export default TaskCard;
