@@ -2,11 +2,13 @@ import './ProjectDashboard.css'
 
 import {useState, useEffect} from 'react';
 import ProjectRow from "../../components/ProjectRow/ProjectRow.tsx";
+import { useTranslation } from "react-i18next";
 
 
 const ProjectDashboard = () => {
     const [projects, setProjects] = useState(null);
     const host = import.meta.env.VITE_BACKEND_HOST;
+    const { t } = useTranslation();
 
     useEffect(() =>  {
         (async () => {
@@ -24,7 +26,7 @@ const ProjectDashboard = () => {
 
     return (
         <div className='project-dashboard'>
-            <h3>Project Dashboard</h3>
+            <h3>{t('projectDashboard.title')}</h3>
 
             {projects !== null && (
                 <ul className='project-list'>

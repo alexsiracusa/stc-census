@@ -3,6 +3,7 @@ import './ProjectPath.css'
 import {Link} from "react-router";
 import {Fragment} from "react";
 import ChevronRight from "../../assets/Icons/ChevronRight.svg";
+import { useTranslation } from 'react-i18next';
 
 type ProjectPathProps = {
     path: [object]
@@ -10,6 +11,7 @@ type ProjectPathProps = {
 
 const ProjectPath = (props: ProjectPathProps) => {
     const path = props.path;
+    const { t } = useTranslation();
 
     return (
         <div className='project-path'>
