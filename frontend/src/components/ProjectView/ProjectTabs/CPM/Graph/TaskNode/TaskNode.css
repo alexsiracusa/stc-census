@@ -1,6 +1,24 @@
-/* TaskNode.css */
 .task-node {
-    /* Add your node styling here */
+    /* Base styling for the node */
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* Status-specific colors */
+.task-node.status-not_started {
+    background-color: #e0e0e0;  /* Light grey */
+}
+
+.task-node.status-in_progress {
+    background-color: #90caf9;  /* Light blue */
+}
+
+.task-node.status-on-hold {
+    background-color: #ffb74d;  /* Light orange */
+}
+
+.task-node.status-complete {
+    background-color: #a5d6a7;  /* Light green */
 }
 
 .handle {

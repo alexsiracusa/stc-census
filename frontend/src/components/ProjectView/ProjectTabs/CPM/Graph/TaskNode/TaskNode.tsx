@@ -6,7 +6,7 @@ import { Task } from './../../Data/Task.tsx';
 
 const TaskNode = ({ data }: {data:Task}) => {
     return (
-        <div className="task-node">
+        <div className={`task-node status-${data.status}`}>
             <Handle
                 type="target"
                 position={Position.Left}
