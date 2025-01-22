@@ -3,9 +3,9 @@ import '@xyflow/react/dist/style.css';
 
 import TabProps from "../TabProps";
 import { ReactFlow } from '@xyflow/react';
-import TaskNode from './TaskNode';
-import { useTasksFetcher } from './useTasksFetcher';
-import { useGraphProcessor } from './processDataIntoGraph';
+import TaskNode from './Graph/TaskNode/TaskNode.tsx';
+import { useTasksFetcher } from './Data/useTasksFetcher.ts';
+import { useGraphProcessor } from './Graph/processDataIntoGraph.ts';
 
 const nodeTypes = {
     task: TaskNode,

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Node, Edge, useNodesState, useEdgesState } from '@xyflow/react';
-import { Task } from './Task';
+import { Task } from '../Data/Task.tsx';
 
 interface UseGraphProcessorReturn {
     nodes: Node[];

@@ -10,17 +10,15 @@
 }
 
 .cpm-node {
-    /* Add any specific node styling here */
     padding: 10px;
     border-radius: 4px;
     background-color: #fff;
     border: 1px solid #ddd;
-    width: 150px; /* Add this line to control node width */
-    max-width: 150px; /* Add this to ensure content doesn't overflow */
+    width: 150px;
+    max-width: 150px;
 }
 
 .cpm-edge {
-    /* Add any specific edge styling here */
     stroke: #888;
     stroke-width: 2px;
 }
