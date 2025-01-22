@@ -55,29 +55,6 @@ i18n
                     }
                 },
             },
-            tcn: {
-                translation: {
-                    navbar: {
-                        home: '主頁',
-                        menu: '菜單',
-                        project: '項目',
-                    },
-                    greeting: '您好，歡迎光臨！',
-                    projectRow: '項目',
-                    projectDashboard: {
-                        title: '項目儀表板',
-                    },
-                    sidebar: {
-                        summary: '摘要',
-                        taskList: '任務列表',
-                        kanban: '看板',
-                        ganttChart: '甘特圖',
-                        calendar: '日曆',
-                        CPM: '關鍵路徑法',
-                        EVM: '賺值管理',
-                    }
-                },
-            },
         },
         interpolation: {
             escapeValue: false,

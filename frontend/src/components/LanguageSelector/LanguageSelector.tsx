@@ -21,7 +21,6 @@ const LanguageSelector: React.FC = () => {
             >
                 <option value="en">English</option>
                 <option value="scn">普通话</option>
-                <option value="tcn">廣州話</option>
             </select>
         </div>
     );
