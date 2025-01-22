@@ -1,10 +1,15 @@
 import './Calendar.css'
+import { useTranslation } from 'react-i18next';
 
 import TabProps from "../TabProps.ts";
 
 const Calendar = (props: TabProps) => {
+    const { t } = useTranslation();
+
     return (
-        <div>Calendar {props.project['id']}</div>
+        <div>
+            {t('calendar.title')} {props.project['id']}
+        </div>
     )
 };
 

@@ -1,5 +1,6 @@
 import './ProjectView.css'
 import {Route, Routes, Navigate} from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Summary from "./ProjectTabs/Summary/Summary.tsx";
 import TaskList from "./ProjectTabs/TaskList/TaskList.tsx";
@@ -19,6 +20,7 @@ type ProjectViewProps = {
 const ProjectView = (props: ProjectViewProps) => {
     const [project, setProject] = useState(null);
     const host = import.meta.env.VITE_BACKEND_HOST;
+    const { t } = useTranslation();
 
     useEffect(() =>  {
         (async () => {
@@ -35,7 +37,7 @@ const ProjectView = (props: ProjectViewProps) => {
     }, []);
 
     if (project === null) {
-        return <div>Loading</div>
+        return <div>{t('projectView.loading')}</div>
     }
 
     return (

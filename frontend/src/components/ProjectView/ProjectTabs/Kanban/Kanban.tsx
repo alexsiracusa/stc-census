@@ -1,4 +1,5 @@
 import './Kanban.css'
+import { useTranslation } from 'react-i18next';
 
 import TabProps from "../TabProps.ts";
 import AddTask from "./AddTask.tsx";
@@ -6,6 +7,7 @@ import AddTask from "./AddTask.tsx";
 import KanbanTask from './KanbanTask.tsx';
 
 const Kanban = (props: TabProps) => {
+    const { t } = useTranslation();
     const project = props.project;
 
     const groupedTasks = project.tasks.reduce((acc, task) => {
@@ -21,7 +23,8 @@ const Kanban = (props: TabProps) => {
 
     return (
         <div>
-            <h1>Kanban{project['id']}</h1>
+            <h1>{t('kanban.title')} {props.project['id']}</h1>
+
             <AddTask />
 
             {project['tasks'].length > 0 && (

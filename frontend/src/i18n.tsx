@@ -16,10 +16,17 @@ i18n
                         menu: 'Menu',
                         project: 'Project',
                     },
-                    greeting: 'Hello, Welcome!',
-                    projectRow: 'Projects',
+                    projectRow: {
+                        projectName: 'Projects',
+                    },
                     projectDashboard: {
                         title: 'Project Dashboard',
+                    },
+                    projectPath: {
+                        title: 'Projects'
+                    },
+                    projectView: {
+                        loading: 'Loading',
                     },
                     sidebar: {
                         summary: 'Summary',
@@ -29,7 +36,29 @@ i18n
                         calendar: 'Calendar',
                         CPM: 'CPM',
                         EVM: 'EVM',
-                    }
+                    },
+                    calendar: {
+                        title: 'Calendar',
+                    },
+                    CPM: {
+                        title: 'CPM',
+                    },
+                    EVM: {
+                        title: 'EVM',
+                    },
+                    ganttChart: {
+                        title: 'GanttChart',
+                    },
+                    kanban: {
+                        title: 'Kanban',
+                    },
+                    summary: {
+                        title: 'Summary',
+                    },
+                    taskList: {
+                        tasks: 'Tasks',
+                        subProjects: 'Sub Projects',
+                    },
                 },
             },
             scn: {
@@ -39,10 +68,17 @@ i18n
                         menu: '菜单',
                         project: '项目',
                     },
-                    greeting: '您好，欢迎光临！',
-                    projectRow: '项目',
+                    projectRow: {
+                        projectName: '项目',
+                    },
                     projectDashboard: {
                         title: '项目仪表板',
+                    },
+                    projectPath: {
+                        title: '项目'
+                    },
+                    projectView: {
+                        loading: '加载中'
                     },
                     sidebar: {
                         summary: '摘要',
@@ -52,7 +88,29 @@ i18n
                         calendar: '日历',
                         CPM: '关键路径法',
                         EVM: '挣值管理',
-                    }
+                    },
+                    calendar: {
+                        title: '日历',
+                    },
+                    CPM: {
+                        title: '关键路径法',
+                    },
+                    EVM: {
+                        title: '挣值管理',
+                    },
+                    ganttChart: {
+                        title: '甘特图',
+                    },
+                    kanban: {
+                        title: '看板',
+                    },
+                    summary: {
+                        title: '摘要',
+                    },
+                    taskList: {
+                        tasks: '任务',
+                        subProjects: '子项目',
+                    },
                 },
             },
         },

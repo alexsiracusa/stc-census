@@ -21,7 +21,7 @@ const ProjectPath = (props: ProjectPathProps) => {
                 className='link'
                 key='projects'
             >
-                Projects
+                {t('projectPath.title')}
             </Link>
             <img src={ChevronRight}/>
 
