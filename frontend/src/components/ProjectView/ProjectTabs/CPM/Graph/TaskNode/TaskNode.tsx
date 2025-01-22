@@ -2,8 +2,9 @@ import './TaskNode.css';
 import '@xyflow/react/dist/style.css';
 
 import { Handle, Position } from '@xyflow/react';
+import { Task } from './../../Data/Task.tsx';
 
-const TaskNode = ({ data }) => {
+const TaskNode = ({ data }: {data:Task}) => {
     return (
         <div className="task-node">
             <Handle
@@ -13,7 +14,7 @@ const TaskNode = ({ data }) => {
                 className="handle handle-target"
             />
 
-            <div className="task-content">{data.name}</div>
+            <div className="task-content">{ data.name } {data.status}</div>
 
             <Handle
                 type="source"
