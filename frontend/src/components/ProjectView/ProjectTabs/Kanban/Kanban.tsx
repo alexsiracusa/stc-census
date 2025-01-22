@@ -2,7 +2,7 @@ import './Kanban.css'
 import {useTranslation} from 'react-i18next';
 
 import TabProps from "../TabProps.ts";
-import {DragDropContext, Droppable} from "@hello-pangea/dnd";
+import {DragDropContext, Draggable, Droppable} from "@hello-pangea/dnd";
 
 import TaskCard from './TaskCard/TaskCard.tsx';
 
@@ -53,23 +53,40 @@ const Kanban = (props: TabProps) => {
 
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="kanban-board">
-                    {statuses.map((status) => (
+                    {statuses.map((status, index) => (
                         <div key={status.name} className="kanban-column">
                             <div className="column-header">
                                 <h3>{status.display_name.toUpperCase()}</h3>
                             </div>
 
-                            <div className="task-container">
-                                {groupedTasks[status.name]?.map((task) => (
-                                    <TaskCard key={task.id} task={task}/>
-                                )) || <p>No tasks</p>}
-                            </div>
+                            <Droppable
+                                droppableId={status.name}
+                                direction="vertical"
+                            >
+                                {provided => (
+                                    <div
+                                        className="task-container"
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                    >
+                                        {groupedTasks[status.name]?.map((task, index) => (
+                                            <TaskCard
+                                                key={index}
+                                                task={task}
+                                                index={index}
+                                            />
+                                        ))}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
                         </div>
                     ))}
                 </div>
             </DragDropContext>
         </div>
-    );
+    )
+        ;
 };
 
 export default Kanban;
