@@ -1,6 +1,8 @@
-import './CPM.css'
+import './CPM.css';
+import '@xyflow/react/dist/style.css';
+
 import TabProps from "../TabProps";
-import { ReactFlow } from 'reactflow';
+import { ReactFlow } from '@xyflow/react';
 import TaskNode from './TaskNode';
 import { useTasksFetcher } from './useTasksFetcher';
 import { useGraphProcessor } from './processDataIntoGraph';

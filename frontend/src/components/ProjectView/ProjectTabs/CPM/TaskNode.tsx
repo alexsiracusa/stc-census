@@ -1,13 +1,14 @@
-// TaskNode.tsx
-import { Handle, Position } from 'reactflow';
-import './TaskNode.css'; // Add this import
+import './TaskNode.css';
+import '@xyflow/react/dist/style.css';
+
+import { Handle, Position } from '@xyflow/react';
 
 const TaskNode = ({ data }) => {
     return (
         <div className="task-node">
             <Handle
                 type="target"
-                position={Position.Top}
+                position={Position.Left}
                 id={`target-${data.id}`}
                 className="handle handle-target"
             />
@@ -16,7 +17,7 @@ const TaskNode = ({ data }) => {
 
             <Handle
                 type="source"
-                position={Position.Bottom}
+                position={Position.Right}
                 id={`source-${data.id}`}
                 className="handle handle-source"
             />
