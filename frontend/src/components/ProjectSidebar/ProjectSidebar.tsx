@@ -3,6 +3,8 @@ import Ring from '../../assets/Icons/Ring.svg'
 import KanbanIcon from '../../assets/Icons/Kanban.svg'
 import TaskListIcon from '../../assets/Icons/TaskList.svg'
 import GanttChartIcon from '../../assets/Icons/GanttChart.svg'
+import CalendarIcon from '../../assets/Icons/Calendar.svg'
+import CPMIcon from '../../assets/Icons/CPM.svg'
 
 type ProjectSidebarProps = {
     project_id: number
@@ -38,13 +40,13 @@ const ProjectSidebar = (props: ProjectSidebarProps) => {
                 </li>
                 <li>
                     <a href={`/project/${props.project_id}/calendar`}>
-                        <img src={Ring} alt={''}/>
+                        <img src={CalendarIcon} alt={''}/>
                         Calendar
                     </a>
                 </li>
                 <li>
                     <a href={`/project/${props.project_id}/cpm`}>
-                        <img src={Ring} alt={''}/>
+                        <img src={CPMIcon} alt={''}/>
                         CPM
                     </a>
                 </li>
