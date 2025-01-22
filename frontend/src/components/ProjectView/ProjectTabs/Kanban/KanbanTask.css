@@ -3,38 +3,19 @@
     flex-direction: column;
     justify-items: start;
     justify-content: start;
-    background-color: azure;
-    margin-top: 16px;
-    margin-bottom: 16px;
-    margin-left: 24px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    padding-left: 24px;
-    padding-right: 24px;
-    width: 75%;
-    max-width: 512px;
-    border-radius: 10px;
-    border: 1px solid #E5E6E9;
-    box-shadow: 2px 2px;
+
+    padding: 10px;
+
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #dedede;
 }
 
 .task-header {
-    font-weight: bold;
-    font-size: larger;
     display: flex;
-    gap: 20px;
-    align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    color: #555;
-}
+    flex-direction: row;
+    gap: 10px;
 
-.task-description {
-    font-size: 14px;
-    color: #555;
-    margin-top: 8px;
-    line-height: 1.5;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    font-size: 0.9em;
+    color: black;
 }

@@ -19,7 +19,24 @@ const Kanban = (props: TabProps) => {
         return acc;
     }, {});
 
-    const statuses = ["to_do", "in_progress", "finished", "on_hold"];
+    const statuses = [
+        {
+            'name': 'to_do',
+            'display_name': 'To Do'
+        },
+        {
+            'name': 'in_progress',
+            'display_name': 'In Progress'
+        },
+        {
+            'name': 'done',
+            'display_name': 'Done'
+        },
+        {
+            'name': 'on_hold',
+            'display_name': 'On Hold'
+        }
+    ];
 
     function onDragEnd(result: any): void { // eslint-disable-line
         const {source, destination} = result;
@@ -37,13 +54,13 @@ const Kanban = (props: TabProps) => {
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="kanban-board">
                     {statuses.map((status) => (
-                        <div key={status} className="kanban-column">
+                        <div key={status.name} className="kanban-column">
                             <div className="column-header">
-                                <h3>{status}</h3>
+                                <h3>{status.display_name.toUpperCase()}</h3>
                             </div>
 
                             <div className="task-container">
-                                {groupedTasks[status]?.map((task) => (
+                                {groupedTasks[status.name]?.map((task) => (
                                     <KanbanTask key={task.id} task={task}/>
                                 )) || <p>No tasks</p>}
                             </div>

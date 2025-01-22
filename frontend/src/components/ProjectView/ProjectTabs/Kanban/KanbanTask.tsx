@@ -20,7 +20,6 @@ const KanbanTask = (props: KanbanTaskProps) => {
                     <div>{task['name']}</div>
                 </div>
 
-                <div className='task-description'>{task['description']}</div>
             </Link>
         </div>
     )
