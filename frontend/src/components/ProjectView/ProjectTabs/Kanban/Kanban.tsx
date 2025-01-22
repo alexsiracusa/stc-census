@@ -1,13 +1,13 @@
 import './Kanban.css'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 import TabProps from "../TabProps.ts";
-import AddTask from "./AddTask.tsx";
+import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 
 import KanbanTask from './KanbanTask.tsx';
 
 const Kanban = (props: TabProps) => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const project = props.project;
 
     const groupedTasks = project.tasks.reduce((acc, task) => {
@@ -19,30 +19,38 @@ const Kanban = (props: TabProps) => {
         return acc;
     }, {});
 
-    const statuses = ["not_started", "in_progress", "finished", "1", "2"];
+    const statuses = ["to_do", "in_progress", "finished", "on_hold"];
+
+    function onDragEnd(result: any): void { // eslint-disable-line
+        const {source, destination} = result;
+
+        // dropped outside the list
+        if (!destination) {
+            return;
+        }
+    }
 
     return (
-        <div>
-            <h1>{t('kanban.title')} {props.project['id']}</h1>
+        <div className="kanban">
+            <h2>{t('kanban.title')}</h2>
 
-            <AddTask />
-
-            {project['tasks'].length > 0 && (
+            <DragDropContext onDragEnd={onDragEnd}>
                 <div className="kanban-board">
                     {statuses.map((status) => (
                         <div key={status} className="kanban-column">
                             <div className="column-header">
                                 <h3>{status}</h3>
                             </div>
-                            <div className="tasks-container">
+
+                            <div className="task-container">
                                 {groupedTasks[status]?.map((task) => (
-                                    <KanbanTask key={task.id} task={task} />
+                                    <KanbanTask key={task.id} task={task}/>
                                 )) || <p>No tasks</p>}
                             </div>
                         </div>
                     ))}
                 </div>
-            )}
+            </DragDropContext>
         </div>
     );
 };

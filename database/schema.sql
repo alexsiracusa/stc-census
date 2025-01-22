@@ -16,8 +16,8 @@ DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 -- Type Definitions
 -- ===================================
 
-CREATE TYPE TASK_STATUS AS ENUM ('not_started', 'in_progress', 'on-hold', 'complete');
-CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'on-hold', 'complete');
+CREATE TYPE TASK_STATUS AS ENUM ('to_do', 'in_progress', 'on_hold', 'done');
+CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'on_hold', 'complete');
 
 
 -- ===================================
@@ -62,7 +62,7 @@ CREATE TABLE Task (
     parent          INT         NOT NULL REFERENCES Project(id),
     name            TEXT        NOT NULL,
     description     TEXT,
-    status          TASK_STATUS NOT NULL DEFAULT 'not_started',
+    status          TASK_STATUS NOT NULL DEFAULT 'to_do',
     created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     expected_cost   DECIMAL(2),
