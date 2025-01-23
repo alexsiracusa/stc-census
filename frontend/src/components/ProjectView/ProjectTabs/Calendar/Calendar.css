@@ -47,6 +47,8 @@
     justify-content: center;
     align-items: center;
     font-size: 2rem;
+    border: 0.1rem solid #0066cc;
+    color: #0066cc;
     cursor: pointer;
 }
 
