@@ -116,9 +116,13 @@
     box-shadow: 0 0 1.5rem 1rem rgba(0, 163, 255, 0.2);
 }
 
-.time-input input[type='number']::-webkit-inner-spin-button,
-.time-input input[type='number']::-webkit-outer-spin-button {
+.time-input input[type='number']::-webkit-outer-spin-button,
+.time-input input[type='number']::-webkit-inner-spin-button {
     appearance: none;
+}
+
+.time-input input[type='number'] {
+    -moz-appearance: textfield;
 }
 
 .event-popup textarea {

@@ -69,6 +69,7 @@ i18n
                             placeholder: 'Enter Event Text (Maximum 60 Characters)',
                             addButton: 'Add Event',
                             removeButton: 'Remove Event',
+                            updateButton: 'Update Event',
                         },
                         eventButtons: {
                             edit: 'Edit',
@@ -161,6 +162,7 @@ i18n
                             placeholder: '输入事件文字（最多60个字符）',
                             addButton: '添加事件',
                             removeButton: '关闭',
+                            updateButton: '更新事件',
                         },
                         eventButtons: {
                             edit: '编辑',
