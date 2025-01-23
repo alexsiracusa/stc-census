@@ -138,9 +138,11 @@ const Calendar = (props: TabProps) => {
                 <div className="navigate-date">
                     <h2 className="month">{monthsOfYear[currentMonth]}</h2>
                     <h2 className="year">{currentYear}</h2>
-                    <div className="buttons">
+                    <div className="button-left">
                         <BiChevronLeft size={24} onClick={() => navigateMonth(-1)} />
-                        <BiChevronRight size={24} onClick={() => navigateMonth(1)} />
+                    </div>
+                    <div className="button-right">
+                    <BiChevronRight size={24} onClick={() => navigateMonth(1)} />
                     </div>
                 </div>
 
