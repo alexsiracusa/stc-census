@@ -101,16 +101,20 @@
     width: clamp(25rem, 21cqi, 40rem);
     aspect-ratio: 10 / 9;
     border-radius: 1rem;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     row-gap: 2rem;
-    display: none;
+    background-color: #0A3254;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
 }
 
 .time-input {
     display: flex;
+    justify-content: center;
     column-gap: 1rem;
+    align-items: center;
 }
 
 .event-popup-time {
@@ -122,6 +126,7 @@
     letter-spacing: 0.1rem;
     background-color: #00a3ff;
     align-items: center;
+    box-shadow: 0 0 1.5rem 1rem rgba(0, 163, 255, 0.2);
 }
 
 .time-input input[type='number']::-webkit-inner-spin-button,
@@ -133,16 +138,16 @@
     width: clamp(15rem, 15cqi, 25rem);
     aspect-ratio: 5 / 2;
     resize: none;
-    background-color: #242424;
+    background-color: #0f1319;
     border: none;
     padding: 1rem;
     border-radius: 0.5rem;
-    color: #fff;
+    color: #78879e;
     transition: border 0.5s;
 }
 
 .event-popup textarea:focus {
-    border: 0.1rem solid #ff1;
+    border: 0.1rem solid #0A3254;
 }
 
 .event-popup textarea::placeholder {
@@ -152,7 +157,7 @@
 .event-popup textarea:focus::placeholder {
     width: clamp(15rem, 15cqi, 25rem);
     height: 4rem;
-    background-color: #ff1;
+    background-color: #fff;
     color: #fff;
     font-size: clamp(1.5rem, 1.5cqi, 2.2rem);
     letter-spacing: 0.1rem;
@@ -181,8 +186,8 @@
 .time-input input {
     background-color: transparent;
     border: none;
-    border-top: .2rem solid #0A3254;
-    border-bottom: .2rem solid #0A3254;
+    border-top: .2rem solid #00a3ff;
+    border-bottom: .2rem solid #00a3ff;
     color: #fff;
     width: clamp(4rem, 4cqi, 7rem);
     height: 4rem;
@@ -197,7 +202,7 @@
     height: 7rem;
     padding: 1.5rem 0;
     border-radius: 1rem;
-    background-color: #00a3ff;
+    background-color: #0A3254;
     display: flex;
     align-items: center;
     margin-bottom: 2rem;

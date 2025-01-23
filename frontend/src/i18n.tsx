@@ -67,6 +67,7 @@ i18n
                             hours: 'Hours',
                             minutes: 'Minutes',
                             placeholder: 'Enter Event Text (Maximum 60 Characters)',
+                            enterTime: 'Enter Time',
                             addButton: 'Add Event',
                             removeButton: 'Remove Event',
                         },
@@ -74,6 +75,7 @@ i18n
                             edit: 'Edit',
                             delete: 'Delete',
                         },
+                        addEventButton: 'Add Event',
                     },
                     CPM: {
                         title: 'CPM',
@@ -158,6 +160,7 @@ i18n
                             hours: '小时',
                             minutes: '分钟',
                             placeholder: '输入事件文字（最多60个字符）',
+                            enterTime: 'Enter Time',
                             addButton: '添加事件',
                             removeButton: '关闭',
                         },
@@ -165,6 +168,7 @@ i18n
                             edit: '编辑',
                             delete: '删除',
                         },
+                        addEventButton: '添加事件',
                     },
                     CPM: {
                         title: '关键路径法',

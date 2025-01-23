@@ -1,7 +1,11 @@
 import './Calendar.css';
 import { useTranslation } from 'react-i18next';
 import TabProps from "../TabProps.ts";
-import {useState} from "react";
+import { useState } from "react";
+import { HiPencilAlt } from "react-icons/hi";
+import { AiOutlineClose } from "react-icons/ai";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { BsBoxArrowInRight } from "react-icons/bs";
 
 type Event = {
     date: string;
@@ -42,9 +46,8 @@ const Calendar = (props: TabProps) => {
     const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
     const [selectedDate, setSelectedDate] = useState<Date>(currentDate);
     const [events, setEvents] = useState<Array<Event>>([]);
-
     const [showPopup, setShowPopup] = useState(false);
-    const [popupInput, setPopupInput] = useState({ time: '', text: '' });
+    const [popupInput, setPopupInput] = useState({ time: '', text: '', editIndex: -1 });
 
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -68,17 +71,33 @@ const Calendar = (props: TabProps) => {
     const handleDayClick = (day: number) => {
         const clickedDate = new Date(currentYear, currentMonth, day);
         setSelectedDate(clickedDate);
+        const eventToEdit = events.find(event => event.date === `${clickedDate.getFullYear()}-${clickedDate.getMonth() + 1}-${clickedDate.getDate()}`);
+        if (eventToEdit) {
+            setPopupInput({ time: eventToEdit.time, text: eventToEdit.text, editIndex: events.indexOf(eventToEdit) });
+        } else {
+            setPopupInput({ time: '', text: '', editIndex: -1 });
+        }
+        setShowPopup(true);
     };
 
     const handleAddEvent = () => {
         if (popupInput.text.trim() && popupInput.time.trim()) {
             const eventDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
-            setEvents(prevEvents => [
-                ...prevEvents,
-                { date: eventDate, time: popupInput.time, text: popupInput.text },
-            ]);
+            if (popupInput.editIndex >= 0) {
+                const updatedEvents = events.map((event, index) =>
+                    index === popupInput.editIndex
+                        ? { ...event, time: popupInput.time, text: popupInput.text }
+                        : event
+                );
+                setEvents(updatedEvents);
+            } else {
+                setEvents(prevEvents => [
+                    ...prevEvents,
+                    { date: eventDate, time: popupInput.time, text: popupInput.text },
+                ]);
+            }
             setShowPopup(false);
-            setPopupInput({ time: '', text: '' });
+            setPopupInput({ time: '', text: '', editIndex: -1 });
         }
     };
 
@@ -102,8 +121,8 @@ const Calendar = (props: TabProps) => {
                     <h2 className="month">{monthsOfYear[currentMonth]}</h2>
                     <h2 className="year">{currentYear}</h2>
                     <div className="buttons">
-                        <i className="bx bx-chevron-left" onClick={() => navigateMonth(-1)}></i>
-                        <i className="bx bx-chevron-right" onClick={() => navigateMonth(1)}></i>
+                        <BiChevronLeft size={24} onClick={() => navigateMonth(-1)} />
+                        <BiChevronRight size={24} onClick={() => navigateMonth(1)} />
                     </div>
                 </div>
 
@@ -133,7 +152,11 @@ const Calendar = (props: TabProps) => {
             </div>
 
             <div className="events">
-                <button className="add-event-button" onClick={() => setShowPopup(true)}>
+                <button className="add-event-button" onClick={() => {
+                    setSelectedDate(currentDate);
+                    setPopupInput({ time: '', text: '', editIndex: -1 });
+                    setShowPopup(true);
+                }}>
                     {t('calendar.addEventButton')}
                 </button>
 
@@ -147,7 +170,11 @@ const Calendar = (props: TabProps) => {
                             </div>
                             <div className="event-text">{event.text}</div>
                             <div className="event-buttons">
-                                <i className="bx bxs-message-alt-x" onClick={() => handleEventDelete(index)}></i>
+                                <HiPencilAlt className="edit-icon" onClick={() => {
+                                    setPopupInput({ time: event.time, text: event.text, editIndex: index });
+                                    setShowPopup(true);
+                                }} />
+                                <AiOutlineClose className='delete-icon' onClick={() => handleEventDelete(index)} />
                             </div>
                         </div>
                     ))}
@@ -172,14 +199,14 @@ const Calendar = (props: TabProps) => {
                             onChange={e => setPopupInput({ ...popupInput, text: e.target.value })}
                         />
                         <button className="event-popup-btn" onClick={handleAddEvent}>
-                            {t('calendar.eventPopup.addButton')}
+                            {popupInput.editIndex >= 0 ? t('calendar.eventPopup.updateButton') : t('calendar.eventPopup.addButton')}
                         </button>
                         <button
                             className="close-event-popup"
                             onClick={() => setShowPopup(false)}
                             aria-label={t('calendar.eventPopup.closeButton')}
                         >
-                            <i className="bx bx-x"></i>
+                            <BsBoxArrowInRight size={24} />
                         </button>
                     </div>
                 )}
