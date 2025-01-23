@@ -1,252 +1,243 @@
 import './Calendar.css';
-import { useTranslation } from 'react-i18next';
-import TabProps from "../TabProps.ts";
-import { useState } from "react";
-import { HiPencilAlt } from "react-icons/hi";
-import { AiOutlineClose } from "react-icons/ai";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-import { BsBoxArrowInRight } from "react-icons/bs";
+import { useState } from 'react';
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { BsPlusCircle } from 'react-icons/bs';
 
 type Event = {
     date: string;
-    time: string;
+    startTime: string;
+    endTime: string;
     text: string;
+    calendar: string;
 };
 
-type PopupInput = {
-    hour: string;
-    minute: string;
-    text: string;
-    editIndex: number;
-};
-
-const Calendar = (props: TabProps) => {
-    const { t } = useTranslation();
-
-    const daysOfWeek: Array<string> = [
-        t('calendar.days.sun'),
-        t('calendar.days.mon'),
-        t('calendar.days.tue'),
-        t('calendar.days.wed'),
-        t('calendar.days.thu'),
-        t('calendar.days.fri'),
-        t('calendar.days.sat'),
-    ];
-
-    const monthsOfYear: Array<string> = [
-        t('calendar.months.january'),
-        t('calendar.months.february'),
-        t('calendar.months.march'),
-        t('calendar.months.april'),
-        t('calendar.months.may'),
-        t('calendar.months.june'),
-        t('calendar.months.july'),
-        t('calendar.months.august'),
-        t('calendar.months.september'),
-        t('calendar.months.october'),
-        t('calendar.months.november'),
-        t('calendar.months.december'),
-    ];
-
-    const currentDate = new Date();
-    const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
-    const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
-    const [selectedDate, setSelectedDate] = useState<Date>(currentDate);
-    const [events, setEvents] = useState<Array<Event>>([]);
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupInput, setPopupInput] = useState<PopupInput>({
-        hour: '',
-        minute: '',
+const Calendar = () => {
+    const [currentWeek, setCurrentWeek] = useState(new Date());
+    const [selectedCalendars, setSelectedCalendars] = useState<string[]>(['My Calendar']);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [showEventForm, setShowEventForm] = useState(false);
+    const [newEvent, setNewEvent] = useState<Event>({
+        date: '',
+        startTime: '',
+        endTime: '',
         text: '',
-        editIndex: -1
+        calendar: 'My Calendar',
     });
 
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-
-    const navigateMonth = (direction: number) => {
-        let newMonth = currentMonth + direction;
-        let newYear = currentYear;
-
-        if (newMonth > 11) {
-            newMonth = 0;
-            newYear += 1;
-        } else if (newMonth < 0) {
-            newMonth = 11;
-            newYear -= 1;
-        }
-
-        setCurrentMonth(newMonth);
-        setCurrentYear(newYear);
+    const getStartOfWeek = (date: Date) => {
+        const copy = new Date(date);
+        const day = copy.getDay();
+        const diff = copy.getDate() - day;
+        return new Date(copy.setDate(diff));
     };
 
-    const handleDayClick = (day: number) => {
-        const clickedDate = new Date(currentYear, currentMonth, day);
-        setSelectedDate(clickedDate);
-        const eventToEdit = events.find(event => event.date === `${clickedDate.getFullYear()}-${clickedDate.getMonth() + 1}-${clickedDate.getDate()}`);
-        if (eventToEdit) {
-            setPopupInput({
-                hour: eventToEdit.time.split(':')[0],
-                minute: eventToEdit.time.split(':')[1],
-                text: eventToEdit.text,
-                editIndex: events.indexOf(eventToEdit)
-            });
+    const startOfWeek = getStartOfWeek(currentWeek);
+    const daysInWeek = Array.from({ length: 7 }, (_, i) => {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        return day;
+    });
+
+    const formatDate = (date: Date) => {
+        return date.toISOString().split('T')[0];
+    };
+
+    const handleNavigateWeek = (direction: number) => {
+        const newDate = new Date(currentWeek);
+        newDate.setDate(currentWeek.getDate() + direction * 7);
+        setCurrentWeek(newDate);
+    };
+
+    const handleNavigateToDate = (date: Date) => {
+        setCurrentWeek(new Date(date));
+    };
+
+    const isToday = (date: Date) => {
+        const today = new Date();
+        return formatDate(date) === formatDate(today);
+    };
+
+    const isCurrentHour = (hour: number) => {
+        const now = new Date();
+        return now.getHours() === hour && isToday(now);
+    };
+
+    const handleSelectCalendar = (calendar: string) => {
+        if (selectedCalendars.includes(calendar)) {
+            setSelectedCalendars(selectedCalendars.filter((c) => c !== calendar));
         } else {
-            setPopupInput({ hour: '', minute: '', text: '', editIndex: -1 });
+            setSelectedCalendars([...selectedCalendars, calendar]);
         }
-        setShowPopup(true);
     };
 
     const handleAddEvent = () => {
-        if (popupInput.text.trim() && popupInput.hour.trim() && popupInput.minute.trim()) {
-            const eventDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
-            const time = `${popupInput.hour}:${popupInput.minute}`;
-            if (popupInput.editIndex >= 0) {
-                const updatedEvents = events.map((event, index) =>
-                    index === popupInput.editIndex
-                        ? { ...event, time: time, text: popupInput.text }
-                        : event
-                );
-                setEvents(updatedEvents);
-            } else {
-                setEvents(prevEvents => [
-                    ...prevEvents,
-                    { date: eventDate, time: time, text: popupInput.text },
-                ]);
-            }
-            setShowPopup(false);
-            setPopupInput({ hour: '', minute: '', text: '', editIndex: -1 });
+        if (newEvent.text && newEvent.date && newEvent.startTime && newEvent.endTime) {
+            setEvents([...events, newEvent]);
+            setNewEvent({ date: '', startTime: '', endTime: '', text: '', calendar: 'My Calendar' });
+            setShowEventForm(false);
         }
-    };
-
-    const handleEventDelete = (index: number) => {
-        setEvents(prevEvents => prevEvents.filter((_, i) => i !== index));
-    };
-
-    const isEventOnDay = (day: number) => {
-        const dateToCheck = `${currentYear}-${currentMonth + 1}-${day}`;
-        return events.some(event => event.date === dateToCheck);
     };
 
     return (
         <div className="calendar-app">
-            <div className="calendar">
-                <h1 className="heading">
-                    {t('calendar.title')} {props.project['id']}
-                </h1>
-
-                <div className="navigate-date">
-                    <h2 className="month">{monthsOfYear[currentMonth]}</h2>
-                    <h2 className="year">{currentYear}</h2>
-                    <div className="button-left">
-                        <BiChevronLeft size={24} onClick={() => navigateMonth(-1)} />
+            <aside className="sidebar">
+                <div className="sidebar-header">
+                    <h2>Calendar</h2>
+                    <button
+                        className="create-event-button"
+                        onClick={() => setShowEventForm(true)}
+                        aria-label="Create new event"
+                    >
+                        <BsPlusCircle size={20} /> Create
+                    </button>
+                </div>
+                <div className="calendar-mini">
+                    <div className="mini-current-month">
+                        {startOfWeek.toLocaleString('default', { month: 'long' })} {startOfWeek.getFullYear()}
                     </div>
-                    <div className="button-right">
-                    <BiChevronRight size={24} onClick={() => navigateMonth(1)} />
+                    <div className="mini-grid">
+                        {Array.from({ length: 31 }, (_, i) => {
+                            const day = i + 1;
+                            return (
+                                <div
+                                    key={day}
+                                    className={`mini-date ${
+                                        isToday(new Date(currentWeek.getFullYear(), currentWeek.getMonth(), day)) ? 'today' : ''
+                                    }`}
+                                    onClick={() => handleNavigateToDate(new Date(currentWeek.getFullYear(), currentWeek.getMonth(), day))}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label={`Go to date ${new Date(currentWeek.getFullYear(), currentWeek.getMonth(), day).toLocaleDateString()}`}
+                                >
+                                    {day}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
-
-                <div className="weekdays">
-                    {daysOfWeek.map((day, index) => (
-                        <span key={index}>{day}</span>
-                    ))}
-                </div>
-
-                <div className="days">
-                    {Array(firstDayOfMonth).fill(null).map((_, i) => (
-                        <span key={`empty-${i}`} className="empty-day"></span>
-                    ))}
-                    {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
-                        <span
-                            key={day}
-                            className={`
-                                ${selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth ? 'current-day' : ''}
-                                ${isEventOnDay(day) ? 'has-event' : ''}
-                            `}
-                            onClick={() => handleDayClick(day)}
-                        >
-                            {day}
-                        </span>
-                    ))}
-                </div>
-            </div>
-
-            <div className="events">
-                <button className="add-event-button" onClick={() => {
-                    setSelectedDate(currentDate);
-                    setPopupInput({ hour: '', minute: '', text: '', editIndex: -1 });
-                    setShowPopup(true);
-                }}>
-                    {t('calendar.addEventButton')}
-                </button>
-
-                {events
-                    .filter(event => event.date === `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`)
-                    .map((event, index) => (
-                        <div className="event" key={index}>
-                            <div className="event-date-wrapper">
-                                <div className="event-date">{event.date}</div>
-                                <div className="event-time">{event.time}</div>
-                            </div>
-                            <div className="event-text">{event.text}</div>
-                            <div className="event-buttons">
-                                <HiPencilAlt className="edit-icon" onClick={() => {
-                                    setPopupInput({
-                                        hour: event.time.split(':')[0],
-                                        minute: event.time.split(':')[1],
-                                        text: event.text,
-                                        editIndex: index
-                                    });
-                                    setShowPopup(true);
-                                }} />
-                                <AiOutlineClose className='delete-icon' onClick={() => handleEventDelete(index)} />
-                            </div>
-                        </div>
-                    ))}
-
-                {showPopup && (
-                    <div className="event-popup">
-                        <div className="time-input">
-                            <div className="event-popup-time">{t('calendar.eventPopup.time')}</div>
-                            <input
-                                type="number"
-                                name="hours"
-                                value={popupInput.hour}
-                                onChange={e => setPopupInput({ ...popupInput, hour: e.target.value })}
-                                className="hours"
-                                min="0"
-                                max="23"
-                            />
-                            <input
-                                type="number"
-                                name="minutes"
-                                value={popupInput.minute}
-                                onChange={e => setPopupInput({ ...popupInput, minute: e.target.value })}
-                                className="minutes"
-                                min="0"
-                                max="59"
-                            />
-                        </div>
-
-                        <textarea
-                            placeholder={t('calendar.eventPopup.placeholder')}
-                            maxLength={60}
-                            value={popupInput.text}
-                            onChange={e => setPopupInput({ ...popupInput, text: e.target.value })}
+                <div className="calendar-list">
+                    <h3>My Calendars</h3>
+                    <div className="calendar-item">
+                        <input
+                            type="checkbox"
+                            checked={selectedCalendars.includes('My Calendar')}
+                            onChange={() => handleSelectCalendar('My Calendar')}
                         />
-                        <button className="event-popup-btn" onClick={handleAddEvent}>
-                            {popupInput.editIndex >= 0 ? t('calendar.eventPopup.updateButton') : t('calendar.eventPopup.addButton')}
-                        </button>
-                        <button
-                            className="close-event-popup"
-                            onClick={() => setShowPopup(false)}
-                            aria-label={t('calendar.eventPopup.closeButton')}
-                        >
-                            <BsBoxArrowInRight size={24} />
-                        </button>
+                        My Calendar
                     </div>
-                )}
-            </div>
+                    <h3>Other Calendars</h3>
+                    <div className="calendar-item">
+                        <input
+                            type="checkbox"
+                            checked={selectedCalendars.includes('Holidays')}
+                            onChange={() => handleSelectCalendar('Holidays')}
+                        />
+                        Holidays
+                    </div>
+                </div>
+            </aside>
+
+            <main className="calendar-container">
+                <div className="calendar-header">
+                    <button onClick={() => setCurrentWeek(new Date())} className="today-button" aria-label="Go to today">
+                        Today
+                    </button>
+                    <div className="navigate-controls">
+                        <BiChevronLeft size={24} onClick={() => handleNavigateWeek(-1)} aria-label="Previous week" />
+                        <BiChevronRight size={24} onClick={() => handleNavigateWeek(1)} aria-label="Next week" />
+                    </div>
+                    <div className="current-week-display">
+                        {`${startOfWeek.toLocaleString('default', { month: 'long' })} ${startOfWeek.getFullYear()}`}
+                    </div>
+                </div>
+                <div className="calendar-grid">
+                    <div className="time-label-column">
+                        {Array.from({ length: 24 }, (_, i) => (
+                            <div key={i} className="time-label">
+                                {i > 12 ? `${i - 12} PM` : `${i || 12} AM`}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="week-column-header">
+                        {daysInWeek.map((day, index) => (
+                            <div key={index} className={`day-header ${isToday(day) ? 'today' : ''}`}>
+                                <div className="day-name">{day.toLocaleString('default', { weekday: 'short' }).toUpperCase()}</div>
+                                <div className="day-number">{day.getDate()}</div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="week-columns">
+                        {daysInWeek.map((day, dayIndex) => (
+                            <div key={dayIndex} className={`day-column ${isToday(day) ? 'highlight-today' : ''}`}>
+                                {Array.from({ length: 24 }, (_, hour) => (
+                                    <div
+                                        key={hour}
+                                        className={`time-slot ${isCurrentHour(hour) ? 'current-hour' : ''}`}
+                                        title={`No events for ${hour}:00`}
+                                    >
+                                        {events
+                                            .filter(
+                                                (event) =>
+                                                    event.date === formatDate(day) &&
+                                                    parseInt(event.startTime.split(':')[0]) === hour
+                                            )
+                                            .map((event, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={`event ${
+                                                        selectedCalendars.includes(event.calendar) ? '' : 'hidden'
+                                                    }`}
+                                                >
+                                                    {event.text}
+                                                </div>
+                                            ))}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </main>
+
+            {showEventForm && (
+                <div className="overlay">
+                    <div className="event-form">
+                        <h3>Create Event</h3>
+                        <input
+                            type="date"
+                            value={newEvent.date}
+                            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+                        />
+                        <input
+                            type="time"
+                            value={newEvent.startTime}
+                            onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
+                        />
+                        <input
+                            type="time"
+                            value={newEvent.endTime}
+                            onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Event Title"
+                            value={newEvent.text}
+                            onChange={(e) => setNewEvent({ ...newEvent, text: e.target.value })}
+                        />
+                        <select
+                            value={newEvent.calendar}
+                            onChange={(e) => setNewEvent({ ...newEvent, calendar: e.target.value })}
+                        >
+                            <option value="My Calendar">My Calendar</option>
+                            <option value="Holidays">Holidays</option>
+                        </select>
+                        <button onClick={handleAddEvent}>Add Event</button>
+                        <button onClick={() => setShowEventForm(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
