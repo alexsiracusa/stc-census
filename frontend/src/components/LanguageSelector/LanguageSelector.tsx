@@ -19,8 +19,8 @@ const LanguageSelector: React.FC = () => {
                 value={language}
                 onChange={(e) => changeLanguage(e.target.value)}
             >
-                <option value="en">English</option>
-                <option value="scn">简体中文</option>
+                <option value="en">En</option>
+                <option value="scn">简</option>
             </select>
         </div>
     );

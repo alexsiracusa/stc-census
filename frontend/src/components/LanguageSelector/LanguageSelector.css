@@ -8,4 +8,13 @@
 .language-selector select {
     padding: 0.25em;
     font-size: 1em;
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+    text-align: center;
+    border: 0.1rem solid #003366;
+    color: #003366;
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
 }
