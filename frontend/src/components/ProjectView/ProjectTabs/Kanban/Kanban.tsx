@@ -10,33 +10,35 @@ const Kanban = (props: TabProps) => {
     const {t} = useTranslation();
     const project = props.project;
 
-    const groupedTasks = project.tasks.reduce((acc, task) => {
-        const status = task.status || 'not_started';
-        if (!acc[status]) {
-            acc[status] = [];
-        }
-        acc[status].push(task);
-        return acc;
-    }, {});
-
     const statuses = [
         {
             'name': 'to_do',
-            'display_name': 'To Do'
+            'display_name': 'To Do',
+            'tasks': project.tasks.filter((task) => task.status === 'to_do')
         },
         {
             'name': 'in_progress',
-            'display_name': 'In Progress'
+            'display_name': 'In Progress',
+            'tasks': project.tasks.filter((task) => task.status === 'in_progress')
         },
         {
             'name': 'done',
-            'display_name': 'Done'
+            'display_name': 'Done',
+            'tasks': project.tasks.filter((task) => task.status === 'done')
         },
         {
             'name': 'on_hold',
-            'display_name': 'On Hold'
+            'display_name': 'On Hold',
+            'tasks': project.tasks.filter((task) => task.status === 'on_hold')
         }
     ];
+
+    const index_map = {
+        'to_do': 0,
+        'in_progress': 1,
+        'done': 2,
+        'on_hold': 3
+    };
 
     function onDragEnd(result: any): void { // eslint-disable-line
         const {source, destination} = result;
@@ -45,6 +47,12 @@ const Kanban = (props: TabProps) => {
         if (!destination) {
             return;
         }
+
+        const source_list = statuses[index_map[source.droppableId]];
+        const destination_list = statuses[index_map[destination.droppableId]];
+
+        const [removed] = source_list.tasks.splice(source.index, 1);
+        destination_list.tasks.splice(destination.index, 0, removed);
     }
 
     return (
@@ -53,7 +61,7 @@ const Kanban = (props: TabProps) => {
 
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="kanban-board">
-                    {statuses.map((status, index) => (
+                    {statuses.map((status) => (
                         <div key={status.name} className="kanban-column">
                             <div className="column-header">
                                 <h3>{status.display_name.toUpperCase()}</h3>
@@ -69,7 +77,7 @@ const Kanban = (props: TabProps) => {
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
                                     >
-                                        {groupedTasks[status.name]?.map((task, index) => (
+                                        {status.tasks?.map((task, index) => (
                                             <TaskCard
                                                 key={index}
                                                 task={task}
