@@ -42,8 +42,7 @@
     overflow-y: auto;
     flex-grow: 1;
 
-    padding: 5px;
-    gap: 5px;
+    padding: 5px 5px 0 5px;
 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
