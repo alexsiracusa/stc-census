@@ -13,6 +13,13 @@ type Event = {
     text: string;
 };
 
+type PopupInput = {
+    hour: string;
+    minute: string;
+    text: string;
+    editIndex: number;
+};
+
 const Calendar = (props: TabProps) => {
     const { t } = useTranslation();
 
@@ -47,7 +54,12 @@ const Calendar = (props: TabProps) => {
     const [selectedDate, setSelectedDate] = useState<Date>(currentDate);
     const [events, setEvents] = useState<Array<Event>>([]);
     const [showPopup, setShowPopup] = useState(false);
-    const [popupInput, setPopupInput] = useState({ time: '', text: '', editIndex: -1 });
+    const [popupInput, setPopupInput] = useState<PopupInput>({
+        hour: '',
+        minute: '',
+        text: '',
+        editIndex: -1
+    });
 
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -73,31 +85,37 @@ const Calendar = (props: TabProps) => {
         setSelectedDate(clickedDate);
         const eventToEdit = events.find(event => event.date === `${clickedDate.getFullYear()}-${clickedDate.getMonth() + 1}-${clickedDate.getDate()}`);
         if (eventToEdit) {
-            setPopupInput({ time: eventToEdit.time, text: eventToEdit.text, editIndex: events.indexOf(eventToEdit) });
+            setPopupInput({
+                hour: eventToEdit.time.split(':')[0],
+                minute: eventToEdit.time.split(':')[1],
+                text: eventToEdit.text,
+                editIndex: events.indexOf(eventToEdit)
+            });
         } else {
-            setPopupInput({ time: '', text: '', editIndex: -1 });
+            setPopupInput({ hour: '', minute: '', text: '', editIndex: -1 });
         }
         setShowPopup(true);
     };
 
     const handleAddEvent = () => {
-        if (popupInput.text.trim() && popupInput.time.trim()) {
+        if (popupInput.text.trim() && popupInput.hour.trim() && popupInput.minute.trim()) {
             const eventDate = `${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}`;
+            const time = `${popupInput.hour}:${popupInput.minute}`;
             if (popupInput.editIndex >= 0) {
                 const updatedEvents = events.map((event, index) =>
                     index === popupInput.editIndex
-                        ? { ...event, time: popupInput.time, text: popupInput.text }
+                        ? { ...event, time: time, text: popupInput.text }
                         : event
                 );
                 setEvents(updatedEvents);
             } else {
                 setEvents(prevEvents => [
                     ...prevEvents,
-                    { date: eventDate, time: popupInput.time, text: popupInput.text },
+                    { date: eventDate, time: time, text: popupInput.text },
                 ]);
             }
             setShowPopup(false);
-            setPopupInput({ time: '', text: '', editIndex: -1 });
+            setPopupInput({ hour: '', minute: '', text: '', editIndex: -1 });
         }
     };
 
@@ -154,7 +172,7 @@ const Calendar = (props: TabProps) => {
             <div className="events">
                 <button className="add-event-button" onClick={() => {
                     setSelectedDate(currentDate);
-                    setPopupInput({ time: '', text: '', editIndex: -1 });
+                    setPopupInput({ hour: '', minute: '', text: '', editIndex: -1 });
                     setShowPopup(true);
                 }}>
                     {t('calendar.addEventButton')}
@@ -171,7 +189,12 @@ const Calendar = (props: TabProps) => {
                             <div className="event-text">{event.text}</div>
                             <div className="event-buttons">
                                 <HiPencilAlt className="edit-icon" onClick={() => {
-                                    setPopupInput({ time: event.time, text: event.text, editIndex: index });
+                                    setPopupInput({
+                                        hour: event.time.split(':')[0],
+                                        minute: event.time.split(':')[1],
+                                        text: event.text,
+                                        editIndex: index
+                                    });
                                     setShowPopup(true);
                                 }} />
                                 <AiOutlineClose className='delete-icon' onClick={() => handleEventDelete(index)} />
@@ -184,14 +207,25 @@ const Calendar = (props: TabProps) => {
                         <div className="time-input">
                             <div className="event-popup-time">{t('calendar.eventPopup.time')}</div>
                             <input
-                                type="text"
-                                name="time"
-                                value={popupInput.time}
-                                onChange={e => setPopupInput({ ...popupInput, time: e.target.value })}
-                                placeholder={t('calendar.eventPopup.enterTime')}
-                                className="time"
+                                type="number"
+                                name="hours"
+                                value={popupInput.hour}
+                                onChange={e => setPopupInput({ ...popupInput, hour: e.target.value })}
+                                className="hours"
+                                min="0"
+                                max="23"
+                            />
+                            <input
+                                type="number"
+                                name="minutes"
+                                value={popupInput.minute}
+                                onChange={e => setPopupInput({ ...popupInput, minute: e.target.value })}
+                                className="minutes"
+                                min="0"
+                                max="59"
                             />
                         </div>
+
                         <textarea
                             placeholder={t('calendar.eventPopup.placeholder')}
                             maxLength={60}
