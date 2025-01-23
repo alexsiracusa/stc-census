@@ -13,7 +13,6 @@ class PostgresClient:
         self._cursor = None
 
         self._connection_pool = None
-        self.con = None
 
     async def connect(self):
         if not self._connection_pool:
@@ -34,32 +33,27 @@ class PostgresClient:
                 raise
 
     async def fetch(self, query: str, *args):
-        async def fetch():
-            return await self.con.fetch(query, *args)
-        return await self._execute(fetch)
+        return await self._execute('fetch', query, *args)
 
     async def fetch_row(self, query: str, *args):
-        async def fetch_row():
-            return await self.con.fetchrow(query, *args)
-        return await self._execute(fetch_row)
+        return await self._execute('fetchrow', query, *args)
 
     async def execute(self, query: str, *args):
-        async def execute():
-            return await self.con.execute(query, *args)
-        return await self._execute(execute)
+        return await self._execute('execute', query, *args)
 
-    async def _execute(self, get_result):
+    async def _execute(self, fn_name, query, *args):
         if not self._connection_pool:
             await self.connect()
 
-        self.con = await self._connection_pool.acquire()
+        con = await self._connection_pool.acquire()
         try:
-            result = await get_result()
+            fn = getattr(con, fn_name)
+            result = await fn(query, *args)
             return result
         except Exception:
             raise
         finally:
-            await self._connection_pool.release(self.con)
+            await self._connection_pool.release(con)
 
     @staticmethod
     async def _setup_json_codec(conn):

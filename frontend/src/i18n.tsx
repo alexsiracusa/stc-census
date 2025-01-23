@@ -51,6 +51,10 @@ i18n
                     },
                     kanban: {
                         title: 'Kanban',
+                        toDo: 'To Do',
+                        inProgress: 'In Progress',
+                        done: 'Done',
+                        onHold: 'On Hold',
                     },
                     summary: {
                         title: 'Summary',
@@ -103,6 +107,10 @@ i18n
                     },
                     kanban: {
                         title: '看板',
+                        toDo: '待办',
+                        inProgress: '进行中',
+                        done: '搁置',
+                        onHold: '完成',
                     },
                     summary: {
                         title: '摘要',

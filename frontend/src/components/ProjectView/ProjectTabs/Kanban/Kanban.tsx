@@ -2,7 +2,7 @@ import './Kanban.css'
 import {useTranslation} from 'react-i18next';
 
 import TabProps from "../TabProps.ts";
-import {DragDropContext, Draggable, Droppable} from "@hello-pangea/dnd";
+import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 
 import TaskCard from './TaskCard/TaskCard.tsx';
 
@@ -13,22 +13,22 @@ const Kanban = (props: TabProps) => {
     const statuses = [
         {
             'name': 'to_do',
-            'display_name': 'To Do',
+            'display_name': t('kanban.toDo', 'To Do'),
             'tasks': project.tasks.filter((task) => task.status === 'to_do')
         },
         {
             'name': 'in_progress',
-            'display_name': 'In Progress',
+            'display_name': t('kanban.inProgress', 'To Do'),
             'tasks': project.tasks.filter((task) => task.status === 'in_progress')
         },
         {
             'name': 'done',
-            'display_name': 'Done',
+            'display_name': t('kanban.done', 'To Do'),
             'tasks': project.tasks.filter((task) => task.status === 'done')
         },
         {
             'name': 'on_hold',
-            'display_name': 'On Hold',
+            'display_name': t('kanban.onHold', 'To Do'),
             'tasks': project.tasks.filter((task) => task.status === 'on_hold')
         }
     ];
