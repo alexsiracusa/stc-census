@@ -20,7 +20,6 @@
 .kanban-column {
     display: flex;
     flex-direction: column;
-    max-height: 100%;
 
     width: 16em;
     min-width: 16em;
@@ -33,7 +32,7 @@
 .column-header {
     text-align: left;
     font-size: 0.8em;
-    margin: 10px;
+    margin: 10px 10px 5px 10px;
     color: #6b6b6b;
 }
 
@@ -43,13 +42,18 @@
     overflow-y: auto;
     flex-grow: 1;
 
-    padding: 0 5px;
+    padding: 5px;
     gap: 5px;
 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
 }
 
-.task-container::-webkit-scrollbar {
+.task-container, .kanban-board {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.task-container::-webkit-scrollbar, .kanban-board::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
 }

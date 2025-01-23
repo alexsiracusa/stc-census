@@ -17,7 +17,7 @@
 }
 
 #root {
-    margin-top: var(--navbar-height);
+    padding-top: var(--navbar-height);
 
     width: 100vw;
     height: 100vh;
