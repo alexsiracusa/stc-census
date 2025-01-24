@@ -1,240 +1,172 @@
-import './Calendar.css';
 import { useState } from 'react';
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
-import { BsPlusCircle } from 'react-icons/bs';
+import './Calendar.css';
 
 type Event = {
+    id: string;
+    title: string;
     date: string;
-    startTime: string;
-    endTime: string;
-    text: string;
-    calendar: string;
+    time?: string;
+    color: string;
 };
 
 const Calendar = () => {
-    const [currentWeek, setCurrentWeek] = useState(new Date());
-    const [selectedCalendars, setSelectedCalendars] = useState<string[]>(['My Calendar']);
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [events, setEvents] = useState<Event[]>([]);
-    const [showEventForm, setShowEventForm] = useState(false);
-    const [newEvent, setNewEvent] = useState<Event>({
-        date: '',
-        startTime: '',
-        endTime: '',
-        text: '',
-        calendar: 'My Calendar',
-    });
+    const [isEventFormOpen, setIsEventFormOpen] = useState(false);
+    const [newEventTitle, setNewEventTitle] = useState('');
+    const [newEventColor, setNewEventColor] = useState('#4CAF50');
+    const [newEventTime, setNewEventTime] = useState('');
 
-    const getStartOfWeek = (date: Date) => {
-        const copy = new Date(date);
-        const day = copy.getDay();
-        const diff = copy.getDate() - day;
-        return new Date(copy.setDate(diff));
+    const getStartOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
+    const getEndOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    const handleNavigate = (direction: number) => {
+        const newDate = new Date(currentMonth);
+        newDate.setMonth(newDate.getMonth() + direction);
+        setCurrentMonth(newDate);
     };
 
-    const startOfWeek = getStartOfWeek(currentWeek);
-    const daysInWeek = Array.from({ length: 7 }, (_, i) => {
-        const day = new Date(startOfWeek);
-        day.setDate(startOfWeek.getDate() + i);
-        return day;
-    });
+    const generateCalendarDays = (): { date: Date; isCurrentMonth: boolean }[] => {
+        const startOfMonth = getStartOfMonth(currentMonth);
+        const endOfMonth = getEndOfMonth(currentMonth);
 
-    const formatDate = (date: Date) => {
-        return date.toISOString().split('T')[0];
-    };
+        const days: { date: Date; isCurrentMonth: boolean }[] = [];
+        const firstDayOfWeek = startOfMonth.getDay();
 
-    const handleNavigateWeek = (direction: number) => {
-        const newDate = new Date(currentWeek);
-        newDate.setDate(currentWeek.getDate() + direction * 7);
-        setCurrentWeek(newDate);
-    };
-
-    const handleNavigateToDate = (date: Date) => {
-        setCurrentWeek(new Date(date));
-    };
-
-    const isToday = (date: Date) => {
-        const today = new Date();
-        return formatDate(date) === formatDate(today);
-    };
-
-    const isCurrentHour = (hour: number) => {
-        const now = new Date();
-        return now.getHours() === hour && isToday(now);
-    };
-
-    const handleSelectCalendar = (calendar: string) => {
-        if (selectedCalendars.includes(calendar)) {
-            setSelectedCalendars(selectedCalendars.filter((c) => c !== calendar));
-        } else {
-            setSelectedCalendars([...selectedCalendars, calendar]);
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            const previousDay = new Date(startOfMonth);
+            previousDay.setDate(previousDay.getDate() - firstDayOfWeek + i);
+            days.push({ date: previousDay, isCurrentMonth: false });
         }
+
+        for (let i = 1; i <= endOfMonth.getDate(); i++) {
+            days.push({
+                date: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i),
+                isCurrentMonth: true,
+            });
+        }
+
+        const remainingDays = 7 - (days.length % 7);
+        if (remainingDays < 7) {
+            const lastDay = new Date(endOfMonth);
+            for (let i = 1; i <= remainingDays; i++) {
+                const nextDay = new Date(lastDay);
+                nextDay.setDate(lastDay.getDate() + i);
+                days.push({ date: nextDay, isCurrentMonth: false });
+            }
+        }
+
+        return days;
     };
 
-    const handleAddEvent = () => {
-        if (newEvent.text && newEvent.date && newEvent.startTime && newEvent.endTime) {
+    const calendarDays = generateCalendarDays();
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
+    const openEventForm = (date: Date) => {
+        setSelectedDate(date);
+        setIsEventFormOpen(true);
+    };
+
+    const closeEventForm = () => {
+        setIsEventFormOpen(false);
+        setSelectedDate(null);
+        setNewEventTitle('');
+        setNewEventTime('');
+        setNewEventColor('#4CAF50');
+    };
+
+    const saveEvent = () => {
+        if (selectedDate && newEventTitle) {
+            const newEvent: Event = {
+                id: Math.random().toString(36).substr(2, 9),
+                title: newEventTitle,
+                date: formatDate(selectedDate),
+                time: newEventTime,
+                color: newEventColor,
+            };
             setEvents([...events, newEvent]);
-            setNewEvent({ date: '', startTime: '', endTime: '', text: '', calendar: 'My Calendar' });
-            setShowEventForm(false);
         }
+        closeEventForm();
     };
 
     return (
-        <div className="calendar-app">
-            <aside className="sidebar">
-                <div className="sidebar-header">
-                    <h2>Calendar</h2>
-                    <button
-                        className="create-event-button"
-                        onClick={() => setShowEventForm(true)}
-                        aria-label="Create new event"
+        <div className="calendar-container">
+            <header className="calendar-header">
+                <button className="nav-button" onClick={() => handleNavigate(-1)}>
+                    <span className="arrow">←</span> Previous
+                </button>
+                <h2>
+                    {currentMonth.toLocaleString('default', { month: 'long' })}{' '}
+                    {currentMonth.getFullYear()}
+                </h2>
+                <button className="nav-button" onClick={() => handleNavigate(1)}>
+                    Next <span className="arrow">→</span>
+                </button>
+            </header>
+
+            <div className="calendar-grid">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                    <div key={day} className="weekday">
+                        {day}
+                    </div>
+                ))}
+                {calendarDays.map(({ date, isCurrentMonth }, index) => (
+                    <div
+                        key={index}
+                        className={`day-cell ${isCurrentMonth ? '' : 'other-month'}`}
+                        onClick={() => openEventForm(date)}
                     >
-                        <BsPlusCircle size={20} /> Create
-                    </button>
-                </div>
-                <div className="calendar-mini">
-                    <div className="mini-current-month">
-                        {startOfWeek.toLocaleString('default', { month: 'long' })} {startOfWeek.getFullYear()}
-                    </div>
-                    <div className="mini-grid">
-                        {Array.from({ length: 31 }, (_, i) => {
-                            const day = i + 1;
-                            return (
-                                <div
-                                    key={day}
-                                    className={`mini-date ${
-                                        isToday(new Date(currentWeek.getFullYear(), currentWeek.getMonth(), day)) ? 'today' : ''
-                                    }`}
-                                    onClick={() => handleNavigateToDate(new Date(currentWeek.getFullYear(), currentWeek.getMonth(), day))}
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label={`Go to date ${new Date(currentWeek.getFullYear(), currentWeek.getMonth(), day).toLocaleDateString()}`}
-                                >
-                                    {day}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-                <div className="calendar-list">
-                    <h3>My Calendars</h3>
-                    <div className="calendar-item">
-                        <input
-                            type="checkbox"
-                            checked={selectedCalendars.includes('My Calendar')}
-                            onChange={() => handleSelectCalendar('My Calendar')}
-                        />
-                        My Calendar
-                    </div>
-                    <h3>Other Calendars</h3>
-                    <div className="calendar-item">
-                        <input
-                            type="checkbox"
-                            checked={selectedCalendars.includes('Holidays')}
-                            onChange={() => handleSelectCalendar('Holidays')}
-                        />
-                        Holidays
-                    </div>
-                </div>
-            </aside>
-
-            <main className="calendar-container">
-                <div className="calendar-header">
-                    <button onClick={() => setCurrentWeek(new Date())} className="today-button" aria-label="Go to today">
-                        Today
-                    </button>
-                    <div className="navigate-controls">
-                        <BiChevronLeft size={24} onClick={() => handleNavigateWeek(-1)} aria-label="Previous week" />
-                        <BiChevronRight size={24} onClick={() => handleNavigateWeek(1)} aria-label="Next week" />
-                    </div>
-                    <div className="current-week-display">
-                        {`${startOfWeek.toLocaleString('default', { month: 'long' })} ${startOfWeek.getFullYear()}`}
-                    </div>
-                </div>
-                <div className="calendar-grid">
-                    <div className="time-label-column">
-                        {Array.from({ length: 24 }, (_, i) => (
-                            <div key={i} className="time-label">
-                                {i > 12 ? `${i - 12} PM` : `${i || 12} AM`}
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="week-column-header">
-                        {daysInWeek.map((day, index) => (
-                            <div key={index} className={`day-header ${isToday(day) ? 'today' : ''}`}>
-                                <div className="day-name">{day.toLocaleString('default', { weekday: 'short' }).toUpperCase()}</div>
-                                <div className="day-number">{day.getDate()}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="week-columns">
-                        {daysInWeek.map((day, dayIndex) => (
-                            <div key={dayIndex} className={`day-column ${isToday(day) ? 'highlight-today' : ''}`}>
-                                {Array.from({ length: 24 }, (_, hour) => (
+                        <div className="day-number">{date.getDate()}</div>
+                        <div className="event-list">
+                            {events
+                                .filter((event) => event.date === formatDate(date))
+                                .map((event) => (
                                     <div
-                                        key={hour}
-                                        className={`time-slot ${isCurrentHour(hour) ? 'current-hour' : ''}`}
-                                        title={`No events for ${hour}:00`}
+                                        key={event.id}
+                                        className="event-block"
+                                        style={{ backgroundColor: event.color }}
                                     >
-                                        {events
-                                            .filter(
-                                                (event) =>
-                                                    event.date === formatDate(day) &&
-                                                    parseInt(event.startTime.split(':')[0]) === hour
-                                            )
-                                            .map((event, index) => (
-                                                <div
-                                                    key={index}
-                                                    className={`event ${
-                                                        selectedCalendars.includes(event.calendar) ? '' : 'hidden'
-                                                    }`}
-                                                >
-                                                    {event.text}
-                                                </div>
-                                            ))}
+                                        {event.time ? `${event.time} - ` : ''} {event.title}
                                     </div>
                                 ))}
-                            </div>
-                        ))}
+                        </div>
                     </div>
-                </div>
-            </main>
+                ))}
+            </div>
 
-            {showEventForm && (
-                <div className="overlay">
+            {isEventFormOpen && (
+                <div className="event-form-overlay">
                     <div className="event-form">
-                        <h3>Create Event</h3>
-                        <input
-                            type="date"
-                            value={newEvent.date}
-                            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-                        />
-                        <input
-                            type="time"
-                            value={newEvent.startTime}
-                            onChange={(e) => setNewEvent({ ...newEvent, startTime: e.target.value })}
-                        />
-                        <input
-                            type="time"
-                            value={newEvent.endTime}
-                            onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Event Title"
-                            value={newEvent.text}
-                            onChange={(e) => setNewEvent({ ...newEvent, text: e.target.value })}
-                        />
-                        <select
-                            value={newEvent.calendar}
-                            onChange={(e) => setNewEvent({ ...newEvent, calendar: e.target.value })}
-                        >
-                            <option value="My Calendar">My Calendar</option>
-                            <option value="Holidays">Holidays</option>
-                        </select>
-                        <button onClick={handleAddEvent}>Add Event</button>
-                        <button onClick={() => setShowEventForm(false)}>Cancel</button>
+                        <h3>Add Event</h3>
+                        <label>
+                            Title:
+                            <input
+                                type="text"
+                                value={newEventTitle}
+                                onChange={(e) => setNewEventTitle(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Time:
+                            <input
+                                type="time"
+                                value={newEventTime}
+                                onChange={(e) => setNewEventTime(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Color:
+                            <input
+                                type="color"
+                                value={newEventColor}
+                                onChange={(e) => setNewEventColor(e.target.value)}
+                            />
+                        </label>
+                        <div className="form-actions">
+                            <button onClick={closeEventForm}>Cancel</button>
+                            <button onClick={saveEvent}>Save</button>
+                        </div>
                     </div>
                 </div>
             )}
