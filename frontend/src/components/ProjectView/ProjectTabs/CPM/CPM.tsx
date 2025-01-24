@@ -1,10 +1,9 @@
-import './CPM.css';
-
 import TabProps from "../TabProps";
-import { useTasksFetcher } from './Data/useTasksFetcher';
+import { useTasksFetcher } from './hooks/useTasksFetcher.ts';
 import TaskGraph from './TaskGraph';
 
 const CPM = (props: TabProps) => {
+    // Load task data
     const { tasks } = useTasksFetcher(props.project.id);
 
     // Add loading state

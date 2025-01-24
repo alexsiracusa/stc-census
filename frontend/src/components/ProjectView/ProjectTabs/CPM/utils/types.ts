@@ -1,6 +1,6 @@
 // TypeScript interfaces
 import React from "react";
-import {Task} from "../Data/Task.tsx";
+import {Task} from "./task.ts";
 
 export interface TaskNode {
     id: string;
@@ -18,3 +18,5 @@ export interface TaskGraphProps {
     style?: React.CSSProperties;
     tasks?: Task[]; // Add tasks prop
 }
+
+export type { Task };

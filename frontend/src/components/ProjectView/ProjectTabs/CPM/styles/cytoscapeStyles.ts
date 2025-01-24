@@ -5,10 +5,10 @@ export const cytoscapeStyles = [
         style: {
             'label': 'data(label)',
             'text-wrap': 'wrap',
-            'text-max-width': '80px',
-            'width': '100px',
-            'height': '100px',
-            'font-size': '12px',
+            'text-max-width': '100%',
+            'width': '120%',
+            'height': '50%',
+            'font-size': '15%',
             'text-valign': 'center',
             'text-halign': 'center',
             'background-color': '#666',
@@ -31,13 +31,14 @@ export const cytoscapeStyles = [
     {
         selector: 'node[status = "on_hold"]',
         style: {
-            'background-color': '#FFC107'
+            'background-color': '#dfa100',
+            'color': '#000'
         }
     },
     {
         selector: 'edge',
         style: {
-            'width': 2,
+            'width': 3,
             'line-color': '#999',
             'target-arrow-color': '#999',
             'target-arrow-shape': 'triangle',
