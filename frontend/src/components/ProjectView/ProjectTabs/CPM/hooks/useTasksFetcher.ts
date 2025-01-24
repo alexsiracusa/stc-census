@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Task } from './Task.tsx';
+import { Task } from '../utils/task.ts';
 
 interface UseTasksFetcherReturn {
     tasks: Task[];
