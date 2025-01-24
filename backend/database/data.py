@@ -1,4 +1,5 @@
 import backend.client as client
+from fastapi import HTTPException
 
 
 async def get_projects():
@@ -41,23 +42,54 @@ async def get_task(task_id):
      """, task_id)
 
 
-async def update_task(task_id, fields):
-    query_parts = []
-    values = []
+async def update_task(task_id, fields: dict):
+    if fields.get('id') is not None:
+        raise HTTPException(status_code=400, detail="Task id cannot be updated")
 
-    for idx, (field, value) in enumerate(fields.items()):
-        query_parts.append(f"{field} = ${idx + 1}")
-        values.append(value)
+    depends_on = None
+    if fields.get('depends_on') is not None:
+        depends_on = fields['depends_on']
+        del fields['depends_on']
 
-    values.append(task_id)
+    async with await client.postgres_client.get_con() as con:
+        async with con.transaction():
 
-    return await client.postgres_client.execute_many_in_transaction([
-        ("execute", "SELECT * FROM Task", []),
-        ("fetch", f"""
+            query_parts = []
+            values = []
+
+            for index, (field, value) in enumerate(fields.items()):
+                query_parts.append(f"{field} = ${index + 1}")
+                values.append(value)
+
+            values.append(task_id)
+
+            result = await con.fetch(f"""
                 UPDATE Task
                 SET {', '.join(query_parts)}
                 WHERE id = ${len(values)}
                 RETURNING id
-        """, values)
-    ])
+            """, *values)
+
+            # if task does not exist or don't need to update depends_on, return
+            if not result or depends_on is None:
+                return result
+
+            query_parts = []
+            values = []
+
+            for index, depends_id in enumerate(depends_on):
+                query_parts.append(f"(${index * 2 + 1}, ${index * 2 + 2})")
+                values.extend([task_id, depends_id])
+
+            await con.execute("""
+                DELETE FROM Task_Depends_On
+                WHERE task_id = $1
+            """, task_id)
+
+            await con.execute(f"""
+                INSERT INTO Task_Depends_On(task_id, depends_id)
+                VALUES {', '.join(query_parts)};
+            """, *values)
+
+            return result
 
