@@ -144,7 +144,7 @@ CREATE VIEW Task_Node AS (
             'project_id', Task_Depends_On.depends_project_id)
         )), NULL) AS depends_on
     FROM TASK
-    LEFT JOIN Task_Depends_On ON Task.id = Task_Depends_On.task_id
+    LEFT JOIN Task_Depends_On ON Task.project_id = Task_Depends_On.project_id AND Task.id = Task_Depends_On.task_id
     GROUP BY Task.id, Task.project_id
 );
 
