@@ -46,23 +46,13 @@ async def update_task(project_id, task_id, fields: dict):
     if fields.get('id') is not None:
         raise HTTPException(status_code=400, detail="Task id cannot be updated")
 
-    depends_on = None
-    if fields.get('depends_on') is not None:
-        depends_on = fields['depends_on']
-        del fields['depends_on']
+    depends_on = fields.pop('depends_on', None)
 
     async with await client.postgres_client.get_con() as con:
         async with con.transaction():
 
-            query_parts = []
-            values = []
-
-            for index, (field, value) in enumerate(fields.items()):
-                query_parts.append(f"{field} = ${index + 1}")
-                values.append(value)
-
-            values.append(project_id)
-            values.append(task_id)
+            query_parts = [f"{field} = ${i + 1}" for i, field in enumerate(fields.keys())]
+            values = list(fields.values()) + [project_id, task_id]
 
             result = await con.fetch(f"""
                 UPDATE Task
@@ -71,10 +61,11 @@ async def update_task(project_id, task_id, fields: dict):
                 RETURNING id
             """, *values)
 
-            # if task does not exist or don't need to update depends_on, return
+            # If task does not exist or doesn't require updating depends_on, return
             if not result or depends_on is None:
                 return result
 
+            # TODO make the rest of this function not shit
             query_parts = []
             values = []
 
@@ -82,7 +73,7 @@ async def update_task(project_id, task_id, fields: dict):
                 if not isinstance(depends_on, dict) or depends_on.get('task_id') is None or depends_on.get('project_id') is None:
                     raise HTTPException(
                         status_code=400,
-                        detail="depends on must include 'task_id': int and 'depends_on': int"
+                        detail="depends on must include 'task_id': int and 'project_id': int"
                     )
 
                 start = index * 4
