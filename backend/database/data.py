@@ -33,3 +33,27 @@ async def get_all_project_tasks(project_id):
             WHERE id = $1
         )
     """, project_id)
+
+
+async def get_task(task_id):
+    return await client.postgres_client.fetch_row(f"""
+        SELECT * FROM Task_Node WHERE id = $1
+     """, task_id)
+
+
+async def update_task(task_id, fields):
+    query_parts = []
+    values = []
+
+    for idx, (field, value) in enumerate(fields.items()):
+        query_parts.append(f"{field} = ${idx + 1}")
+        values.append(value)
+
+    values.append(task_id)
+
+    return await client.postgres_client.execute(f"""
+        UPDATE Task
+        SET {', '.join(query_parts)}
+        WHERE id = ${len(values)}
+    """, *values)
+
