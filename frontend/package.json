@@ -11,14 +11,16 @@
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
-    "@xyflow/react": "*",
     "cors": "^2.8.5",
     "i18next-browser-languagedetector": "^8.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.4.0",
     "react-icons": "^5.4.0",
-    "react-router-dom": "^7.1.1"
+    "react-router-dom": "^7.1.1",
+    "cytoscape": "*",
+    "cytoscape-dagre": "*",
+    "@types/cytoscape": "*"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

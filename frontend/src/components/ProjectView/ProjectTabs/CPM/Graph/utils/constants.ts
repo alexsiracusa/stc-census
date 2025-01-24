@@ -1,3 +1,0 @@
-export const NODE_HORIZONTAL_SPACING = 200;
-export const NODE_VERTICAL_SPACING = 100;
-export const GROUP_VERTICAL_SPACING = 100;
