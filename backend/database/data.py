@@ -51,10 +51,13 @@ async def update_task(task_id, fields):
 
     values.append(task_id)
 
-    return await client.postgres_client.fetch(f"""
-        UPDATE Task
-        SET {', '.join(query_parts)}
-        WHERE id = ${len(values)}
-        RETURNING id
-    """, *values)
+    return await client.postgres_client.execute_many_in_transaction([
+        ("execute", "SELECT * FROM Task", []),
+        ("fetch", f"""
+                UPDATE Task
+                SET {', '.join(query_parts)}
+                WHERE id = ${len(values)}
+                RETURNING id
+        """, values)
+    ])
 

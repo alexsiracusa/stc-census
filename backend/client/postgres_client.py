@@ -41,19 +41,29 @@ class PostgresClient:
     async def execute(self, query: str, *args):
         return await self._execute('execute', query, *args)
 
+    # executes all query tuples in the form of (fn_name, query, args) as a single transaction
+    # fn_name: 'fetch', 'fetchrow', 'execute' ... any valid function of an asyncpg connection
+    # returns the result of the last query
+    async def execute_many_in_transaction(self, queries_and_args):
+        if not self._connection_pool:
+            await self.connect()
+
+        async with self._connection_pool.acquire() as con:
+            async with con.transaction():
+                for index, (fn_name, query, args) in enumerate(queries_and_args):
+                    fn = getattr(con, fn_name)
+                    result = await fn(query, *args)
+                    if index == len(queries_and_args) - 1:
+                        return result
+
     async def _execute(self, fn_name, query, *args):
         if not self._connection_pool:
             await self.connect()
 
-        con = await self._connection_pool.acquire()
-        try:
+        async with self._connection_pool.acquire() as con:
             fn = getattr(con, fn_name)
             result = await fn(query, *args)
             return result
-        except Exception:
-            raise
-        finally:
-            await self._connection_pool.release(con)
 
     @staticmethod
     async def _setup_json_codec(conn):
