@@ -97,9 +97,12 @@ async def update_task(project_id, task_id, fields: dict):
                 WHERE task_id = $1
             """, task_id)
 
+            if len(depends_on) == 0:
+                return result
+
             await con.execute(f"""
                 INSERT INTO Task_Depends_On(task_id, project_id, depends_task_id, depends_project_id)
-                VALUES {', '.join(query_parts)};
+                VALUES {', '.join(query_parts)}
             """, *values)
 
             return result
