@@ -169,6 +169,14 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER project_parent_immutable
 AFTER UPDATE OF parent ON Project
-FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Project', 'parent')
+FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Project', 'parent');
+
+CREATE TRIGGER project_id_immutable
+AFTER UPDATE OF id ON Project
+FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Project', 'id');
+
+CREATE TRIGGER task_id_immutable
+AFTER UPDATE OF id ON Task
+FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Task', 'id');
 
 
