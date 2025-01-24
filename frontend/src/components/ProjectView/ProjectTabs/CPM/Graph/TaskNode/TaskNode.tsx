@@ -14,7 +14,7 @@ const TaskNode = ({ data }: {data:Task}) => {
                 className="handle handle-target"
             />
 
-            <div className="task-content">{ data.name } {data.status}</div>
+            <div className="task-content">{ data.name }</div>
 
             <Handle
                 type="source"
