@@ -12,8 +12,8 @@ export const convertTasksToNodes = (tasks: Task[]): TaskNode[] => {
 export const convertTasksToEdges = (tasks: Task[]): TaskEdge[] => {
     return tasks.flatMap(task => {
         const dependencies = task.depends_on || [];
-        return dependencies.map(dependencyId => ({
-            source: String(dependencyId),
+        return dependencies.map(dependency => ({
+            source: String(dependency.task_id),
             target: String(task.id)
         }));
     });
