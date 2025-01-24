@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Response, Body, status
+from fastapi import APIRouter, HTTPException, Response, Body, status
 from typing import Any
 from ..database import data
+import asyncpg
 
 router = APIRouter(
     prefix="/task",
@@ -30,10 +31,13 @@ async def update_task(
     fields: Any = Body(None)
 ):
     try:
-        await data.update_task(task_id, fields)
-        response.status_code = status.HTTP_200_OK
-        return {'message': 'update successful'}
+        updated_task = await data.update_task(task_id, fields)
 
-    except Exception as error:
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return {"error": str(error)}
+        if not updated_task:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        response.status_code = status.HTTP_200_OK
+        return {'message': "task updated successfully"}
+
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")

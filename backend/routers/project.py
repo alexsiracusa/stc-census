@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, HTTPException, Response, status
 from ..database import data
+import asyncpg
 
 router = APIRouter(
     prefix="/project",
@@ -15,12 +16,14 @@ async def get_project(
 ):
     try:
         project = await data.get_project_by_id(project_id)
+        if not project:
+            raise HTTPException(status_code=404, detail="Project not found")
+
         response.status_code = status.HTTP_200_OK
         return project
 
-    except Exception as error:
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return {"error": str(error)}
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
 @router.get("/{project_id}/all-tasks")
@@ -33,6 +36,5 @@ async def get_project(
         response.status_code = status.HTTP_200_OK
         return project
 
-    except Exception as error:
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return {"error": str(error)}
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")

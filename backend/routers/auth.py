@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Response, Request, status
+from fastapi import APIRouter, HTTPException, Response, Request, status
 from ..database import AccountInfo, InvalidCredentials, admin
+import asyncpg
 
 # Get TLS certificate from here for deploying
 # https://letsencrypt.org/
@@ -23,7 +24,7 @@ async def register(
         response.status_code = status.HTTP_201_CREATED
         return {"message": f"Account created successfully"}
 
-    except Exception as error:
+    except asyncpg.exceptions.PostgresError as error:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {"error": str(error)}
 
@@ -44,9 +45,9 @@ async def login(
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"error": str(error)}
 
-    except Exception as error:
+    except asyncpg.exceptions.PostgresError as error:
         response.status_code = status.HTTP_400_BAD_REQUEST
-        return {"error": str(error)}
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
 @router.get("/ping/")
