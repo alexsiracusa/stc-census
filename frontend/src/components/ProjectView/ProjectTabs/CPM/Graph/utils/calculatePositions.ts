@@ -1,9 +1,5 @@
-import { Task } from '../../Data/Task';
-import {
-    NODE_HORIZONTAL_SPACING,
-    NODE_VERTICAL_SPACING,
-    GROUP_VERTICAL_SPACING
-} from './constants';
+import {Task} from '../../Data/Task';
+import {GROUP_VERTICAL_SPACING, NODE_HORIZONTAL_SPACING, NODE_VERTICAL_SPACING} from './constants';
 
 export const calculatePositions = (
     tasks: Task[],
@@ -14,12 +10,10 @@ export const calculatePositions = (
     let currentGroupOffset = 0;
 
     taskGroups.forEach(group => {
-        const groupTasks = tasks.filter(task => group.includes(task.id));
         const levelGroups = new Map<number, number[]>();
 
         // Group tasks by level
         group.forEach(taskId => {
-            const task = tasks.find(t => t.id === taskId)!;
             const level = levels.get(taskId) || 0;
 
             if (!levelGroups.has(level)) {
@@ -41,8 +35,7 @@ export const calculatePositions = (
                         .filter(y => y !== undefined) as number[];
 
                     if (dependencyPositions.length > 0) {
-                        const avgY = dependencyPositions.reduce((a, b) => a + b, 0) / dependencyPositions.length;
-                        yPos = avgY;
+                        yPos = dependencyPositions.reduce((a, b) => a + b, 0) / dependencyPositions.length;
                     }
                 }
 
