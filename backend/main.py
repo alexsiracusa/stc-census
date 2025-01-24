@@ -1,14 +1,13 @@
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from .database import admin, InvalidCredentials
-from .routers import auth, project, projects, task
+from .routers import auth, project, projects
 import backend.client as client
 
 app = FastAPI()
 app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(project.router)
-app.include_router(task.router)
 
 origins = [
     "http://localhost:5173"

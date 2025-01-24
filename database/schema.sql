@@ -58,8 +58,8 @@ CREATE TABLE Project (
 
 
 CREATE TABLE Task (
-    id              SERIAL      PRIMARY KEY,
-    parent          INT         NOT NULL REFERENCES Project(id),
+    id              INT         NOT NULL,
+    project_id      INT         NOT NULL REFERENCES Project(id),
     name            TEXT        NOT NULL,
     description     TEXT,
     status          TASK_STATUS NOT NULL DEFAULT 'to_do',
@@ -73,15 +73,23 @@ CREATE TABLE Task (
 
     target_start_date       DATE,
     target_completion_date  DATE,
-    target_days_to_complete DECIMAL(2)
+    target_days_to_complete DECIMAL(2),
+
+    PRIMARY KEY (project_id, id)
 );
 
 
 CREATE TABLE Task_Depends_On (
-    task_id         INT         REFERENCES Task(id),
-    depends_id      INT         REFERENCES Task(id),
+    task_id             INT,
+    project_id          INT,
 
-    PRIMARY KEY (task_id, depends_id)
+    depends_task_id     INT,
+    depends_project_id  INT,
+
+    FOREIGN KEY (project_id, task_id) REFERENCES Task (project_id, id),
+    FOREIGN KEY (depends_project_id, depends_task_id) REFERENCES Task (project_id, id),
+
+    PRIMARY KEY (task_id, project_id, depends_task_id, depends_project_id)
 );
 
 
@@ -131,10 +139,13 @@ CREATE VIEW Project_Children AS (
 CREATE VIEW Task_Node AS (
     SELECT
         Task.*,
-        array_remove(array_agg(Task_Depends_On.depends_id), NULL) AS depends_on
+        array_remove(array_agg(json_object_nullif(jsonb_build_object(
+            'task_id', Task_Depends_On.depends_task_id,
+            'project_id', Task_Depends_On.depends_project_id)
+        )), NULL) AS depends_on
     FROM TASK
     LEFT JOIN Task_Depends_On ON Task.id = Task_Depends_On.task_id
-    GROUP BY Task.id
+    GROUP BY Task.id, Task.project_id
 );
 
 
@@ -166,6 +177,13 @@ BEGIN
     RAISE EXCEPTION 'UPDATE not allowed on %(%)', TG_ARGV[0], TG_ARGV[1];
 END
 $$ LANGUAGE plpgsql;
+
+-- sets task ids automatically
+CREATE TRIGGER set_task_id
+BEFORE INSERT ON Task
+FOR EACH ROW
+WHEN (NEW.id IS NULL)
+EXECUTE FUNCTION generate_task_id();
 
 CREATE TRIGGER project_parent_immutable
 AFTER UPDATE OF parent ON Project

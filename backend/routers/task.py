@@ -4,7 +4,7 @@ from ..database import data
 import asyncpg
 
 router = APIRouter(
-    prefix="/task",
+    prefix="/{project_id}/task",
     tags=["task"],
     responses={404: {"description": "Not found"}},
 )
@@ -12,10 +12,11 @@ router = APIRouter(
 @router.get("/{task_id}/")
 async def get_task(
     response: Response,
+    project_id: int,
     task_id: int,
 ):
     try:
-        task =  await data.get_task(task_id)
+        task =  await data.get_task(project_id, task_id)
         response.status_code = status.HTTP_200_OK
         return task
 
@@ -27,11 +28,12 @@ async def get_task(
 @router.put("/{task_id}/update")
 async def update_task(
     response: Response,
+    project_id: int,
     task_id: int,
     fields: Any = Body(None)
 ):
     try:
-        updated_task = await data.update_task(task_id, fields)
+        updated_task = await data.update_task(project_id, task_id, fields)
 
         if not updated_task:
             raise HTTPException(status_code=404, detail="Task not found")

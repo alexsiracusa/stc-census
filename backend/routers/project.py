@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Response, status
 from ..database import data
+from .task import router as task_router
 import asyncpg
 
 router = APIRouter(
@@ -7,6 +8,8 @@ router = APIRouter(
     tags=["project"],
     responses={404: {"description": "Not found"}},
 )
+
+router.include_router(task_router)
 
 
 @router.get("/{project_id}")

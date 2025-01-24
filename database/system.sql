@@ -43,3 +43,46 @@ $$;
 
 CREATE DOMAIN timezone AS TEXT
 CHECK ( is_timezone( value ) );
+
+CREATE OR REPLACE FUNCTION generate_task_id()
+RETURNS TRIGGER AS $$
+DECLARE
+    next_task_id INT;
+    sequence_name TEXT := 'task_seq_' || NEW.project_id;
+BEGIN
+    -- Check if a sequence exists for the project_id
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_class c
+        JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE c.relkind = 'S' AND c.relname = sequence_name
+    ) THEN
+        -- If the sequence doesn't exist, create it
+        EXECUTE format('CREATE SEQUENCE %I START 1', sequence_name);
+    END IF;
+
+    -- Get the next value from the sequence
+    EXECUTE format('SELECT nextval(%L)', sequence_name) INTO next_task_id;
+
+    -- Assign the task_id to the new row
+    NEW.id := next_task_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION json_object_nullif(
+    _data JSONB
+)
+RETURNS JSONB
+AS $$
+    SELECT nullif(jsonb_strip_nulls(_data)::TEXT, '{}')::JSONB
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION json_array_nullif(
+    _data JSONB
+)
+RETURNS JSONB
+AS $$
+    SELECT nullif(_data::TEXT, '[null]')::JSONB
+$$ LANGUAGE sql;
