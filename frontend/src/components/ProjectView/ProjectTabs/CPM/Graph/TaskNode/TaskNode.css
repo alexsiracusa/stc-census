@@ -5,7 +5,7 @@
 }
 
 /* Status-specific colors */
-.task-node.status-not_started {
+.task-node.status-todo {
     background-color: #e0e0e0;  /* Light grey */
 }
 
@@ -13,11 +13,11 @@
     background-color: #90caf9;  /* Light blue */
 }
 
-.task-node.status-on-hold {
+.task-node.status-on_hold {
     background-color: #ffb74d;  /* Light orange */
 }
 
-.task-node.status-complete {
+.task-node.status-done {
     background-color: #a5d6a7;  /* Light green */
 }
 

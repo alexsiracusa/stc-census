@@ -3,7 +3,7 @@ export interface Task {
     parent: number;
     name: string;
     description: null | string;
-    status: 'not_started' | 'in_progress' |'on-hold' | 'complete';
+    status: 'todo' | 'in_progress' |'on_hold' | 'done';
     created_at: string;
     start_date: null | string;
     completion_date: null | string;
