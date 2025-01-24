@@ -4,7 +4,7 @@ import TaskGraph from './TaskGraph';
 
 const CPM = (props: TabProps) => {
     // Load task data
-    const { tasks } = useTasksFetcher(props.project.id);
+    const { tasks } = useTasksFetcher(props.project['id']);
 
     // Add loading state
     if (!tasks || tasks.length === 0) {
