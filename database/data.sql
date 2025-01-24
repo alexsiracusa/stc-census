@@ -21,7 +21,7 @@ INSERT INTO Task (id, parent, name, target_start_date, target_completion_date) V
 (12, 3, 'Print poster', '2025-03-14', '2025-03-17');
 ALTER SEQUENCE task_id_seq RESTART WITH 13;
 
-UPDATE Task SET status = 'complete' WHERE id = 1;
+UPDATE Task SET status = 'done' WHERE id = 1;
 UPDATE Task SET status = 'in_progress' WHERE id = 2;
 UPDATE Task SET status = 'on_hold' WHERE id = 4;
 
