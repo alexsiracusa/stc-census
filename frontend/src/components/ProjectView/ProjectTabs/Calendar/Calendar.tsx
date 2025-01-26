@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import './Calendar.css';
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 type Event = {
     id: string;
@@ -10,6 +13,7 @@ type Event = {
 };
 
 const Calendar = () => {
+    const { t } = useTranslation();
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [events, setEvents] = useState<Event[]>([]);
@@ -90,34 +94,52 @@ const Calendar = () => {
         closeEventForm();
     };
 
+    const resetToToday = () => {
+        setCurrentMonth(new Date());
+    };
+
+    const isToday = (date: Date) => {
+        const today = new Date();
+        return date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+    };
+
     return (
         <div className="calendar-container">
             <header className="calendar-header">
-                <button className="nav-button" onClick={() => handleNavigate(-1)}>
-                    <span className="arrow">←</span> Previous
+                <button className="today-button" onClick={resetToToday}>
+                    {t('calendar.today')}
                 </button>
+                <div className="nav-buttons">
+                    <button className="nav-button" onClick={() => handleNavigate(-1)}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </button>
+
+                    <button className="nav-button" onClick={() => handleNavigate(1)}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
+                </div>
                 <h2>
-                    {currentMonth.toLocaleString('default', { month: 'long' })}{' '}
+                    {t(`calendar.months.${currentMonth.toLocaleString('default', { month: 'long' }).toLowerCase()}`)}{' '}
                     {currentMonth.getFullYear()}
                 </h2>
-                <button className="nav-button" onClick={() => handleNavigate(1)}>
-                    Next <span className="arrow">→</span>
-                </button>
             </header>
-
             <div className="calendar-grid">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                    <div key={day} className="weekday">
-                        {day}
+                {['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map((dayKey) => (
+                    <div key={dayKey} className="weekday">
+                        {t(`calendar.days.${dayKey}`)}
                     </div>
                 ))}
                 {calendarDays.map(({ date, isCurrentMonth }, index) => (
                     <div
                         key={index}
-                        className={`day-cell ${isCurrentMonth ? '' : 'other-month'}`}
+                        className={`day-cell ${isCurrentMonth ? '' : 'other-month'} ${isToday(date) ? 'today' : ''}`}
                         onClick={() => openEventForm(date)}
                     >
-                        <div className="day-number">{date.getDate()}</div>
+                        <div className={`day-number ${isToday(date) ? 'today' : ''}`}>
+                            {date.getDate()}
+                        </div>
                         <div className="event-list">
                             {events
                                 .filter((event) => event.date === formatDate(date))
@@ -134,21 +156,21 @@ const Calendar = () => {
                     </div>
                 ))}
             </div>
-
             {isEventFormOpen && (
                 <div className="event-form-overlay">
                     <div className="event-form">
-                        <h3>Add Event</h3>
+                        <h3>{t('calendar.eventPopup.addButton')}</h3>
                         <label>
-                            Title:
+                            {t('calendar.eventPopup.placeholder')}:
                             <input
                                 type="text"
                                 value={newEventTitle}
+                                placeholder={t('calendar.eventPopup.placeholder')}
                                 onChange={(e) => setNewEventTitle(e.target.value)}
                             />
                         </label>
                         <label>
-                            Time:
+                            {t('calendar.eventPopup.time')}:
                             <input
                                 type="time"
                                 value={newEventTime}
@@ -156,7 +178,7 @@ const Calendar = () => {
                             />
                         </label>
                         <label>
-                            Color:
+                            {t('calendar.eventPopup.placeholder')}:
                             <input
                                 type="color"
                                 value={newEventColor}
@@ -164,8 +186,8 @@ const Calendar = () => {
                             />
                         </label>
                         <div className="form-actions">
-                            <button onClick={closeEventForm}>Cancel</button>
-                            <button onClick={saveEvent}>Save</button>
+                            <button onClick={closeEventForm}>{t('calendar.eventPopup.removeButton')}</button>
+                            <button onClick={saveEvent}>{t('calendar.eventPopup.updateButton')}</button>
                         </div>
                     </div>
                 </div>

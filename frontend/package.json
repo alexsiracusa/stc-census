@@ -10,17 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@hello-pangea/dnd": "^17.0.0",
+    "@types/cytoscape": "*",
     "cors": "^2.8.5",
+    "cytoscape": "*",
+    "cytoscape-dagre": "*",
     "i18next-browser-languagedetector": "^8.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.4.0",
     "react-icons": "^5.4.0",
-    "react-router-dom": "^7.1.1",
-    "cytoscape": "*",
-    "cytoscape-dagre": "*",
-    "@types/cytoscape": "*"
+    "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

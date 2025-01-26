@@ -76,6 +76,7 @@ i18n
                             delete: 'Delete',
                         },
                         addEventButton: 'Add Event',
+                        today: 'Today',
                     },
                     CPM: {
                         title: 'CPM',
@@ -169,6 +170,7 @@ i18n
                             delete: '删除',
                         },
                         addEventButton: '添加事件',
+                        today: '今天',
                     },
                     CPM: {
                         title: '关键路径法',
