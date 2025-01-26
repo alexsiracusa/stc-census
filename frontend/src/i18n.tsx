@@ -70,6 +70,7 @@ i18n
                             addButton: 'Add Event',
                             removeButton: 'Remove Event',
                             updateButton: 'Update Event',
+                            color: 'Color',
                         },
                         eventButtons: {
                             edit: 'Edit',
@@ -164,6 +165,7 @@ i18n
                             addButton: '添加事件',
                             removeButton: '关闭',
                             updateButton: '更新事件',
+                            color: '颜色',
                         },
                         eventButtons: {
                             edit: '编辑',

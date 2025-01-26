@@ -130,6 +130,7 @@ body {
     flex-direction: column;
     gap: 0.3rem;
     margin-top: 0.5rem;
+    width: 100%;
 }
 
 .event-block {
@@ -200,9 +201,89 @@ body {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: blue;
+    background-color: #003366;
     top: 5px;
     left: 50%;
     transform: translateX(-50%);
 }
+
+.more-events {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #555;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.more-events:hover {
+    background-color: #e0e0e0;
+}
+
+.event-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.event-popup {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    max-width: 90%;
+}
+
+.event-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.event-popup-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.close-popup {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.event-popup-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.popup-event-block {
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+}
+
+
 

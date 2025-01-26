@@ -21,6 +21,7 @@ const Calendar = () => {
     const [newEventTitle, setNewEventTitle] = useState('');
     const [newEventColor, setNewEventColor] = useState('#4CAF50');
     const [newEventTime, setNewEventTime] = useState('');
+    const [popupDate, setPopupDate] = useState<Date | null>(null);
 
     const getStartOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
     const getEndOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -115,7 +116,6 @@ const Calendar = () => {
                     <button className="nav-button" onClick={() => handleNavigate(-1)}>
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
-
                     <button className="nav-button" onClick={() => handleNavigate(1)}>
                         <FontAwesomeIcon icon={faChevronRight} />
                     </button>
@@ -135,7 +135,15 @@ const Calendar = () => {
                     <div
                         key={index}
                         className={`day-cell ${isCurrentMonth ? '' : 'other-month'} ${isToday(date) ? 'today' : ''}`}
-                        onClick={() => openEventForm(date)}
+                        onClick={(e) => {
+                            if (
+                                e.target instanceof HTMLElement &&
+                                e.target.classList.contains('more-events')
+                            ) {
+                                return;
+                            }
+                            openEventForm(date);
+                        }}
                     >
                         <div className={`day-number ${isToday(date) ? 'today' : ''}`}>
                             {date.getDate()}
@@ -143,10 +151,50 @@ const Calendar = () => {
                         <div className="event-list">
                             {events
                                 .filter((event) => event.date === formatDate(date))
+                                .slice(0, 3)
                                 .map((event) => (
                                     <div
                                         key={event.id}
                                         className="event-block"
+                                        style={{ backgroundColor: event.color }}
+                                    >
+                                        {event.title}
+                                    </div>
+                                ))}
+                            {events.filter((event) => event.date === formatDate(date)).length > 3 && (
+                                <button
+                                    className="more-events"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setPopupDate(date);
+                                    }}
+                                >
+                                    {`+${events.filter((event) => event.date === formatDate(date)).length - 3} more`}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+            {popupDate && (
+                <div className="event-popup-overlay" onClick={() => setPopupDate(null)}>
+                    <div className="event-popup" onClick={(e) => e.stopPropagation()}>
+                        <div className="event-popup-header">
+                            <h3>
+                                {popupDate.toLocaleString('default', { weekday: 'long' })}{' '}
+                                {popupDate.getDate()}
+                            </h3>
+                            <button className="close-popup" onClick={() => setPopupDate(null)}>
+                                &times;
+                            </button>
+                        </div>
+                        <div className="event-popup-body">
+                            {events
+                                .filter((event) => event.date === formatDate(popupDate))
+                                .map((event) => (
+                                    <div
+                                        className="popup-event-block"
+                                        key={event.id}
                                         style={{ backgroundColor: event.color }}
                                     >
                                         {event.time ? `${event.time} - ` : ''} {event.title}
@@ -154,8 +202,8 @@ const Calendar = () => {
                                 ))}
                         </div>
                     </div>
-                ))}
-            </div>
+                </div>
+            )}
             {isEventFormOpen && (
                 <div className="event-form-overlay">
                     <div className="event-form">
@@ -178,7 +226,7 @@ const Calendar = () => {
                             />
                         </label>
                         <label>
-                            {t('calendar.eventPopup.placeholder')}:
+                            {t('calendar.eventPopup.color')}:
                             <input
                                 type="color"
                                 value={newEventColor}
