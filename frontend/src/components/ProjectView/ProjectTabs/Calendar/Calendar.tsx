@@ -30,7 +30,8 @@ const Calendar = () => {
     const [showTimeFields, setShowTimeFields] = useState(false);
     const [newEventColor, setNewEventColor] = useState('#4CAF50');
     const [description, setDescription] = useState('');
-    const [repeatOption] = useState('Does not repeat');
+    const [repeatOption] = useState(t('calendar.repeatNo'));
+    const [eventBeingEdited, setEventBeingEdited] = useState<Event | null>(null);
 
     const getStartOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
     const getEndOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -79,11 +80,25 @@ const Calendar = () => {
         return date.toLocaleDateString('en-CA');
     };
 
-    const openEventForm = (date: Date) => {
+    const openEventForm = (date: Date, eventToEdit?: Event) => {
         setSelectedDate(date);
         const formattedDate = formatDate(date);
-        setNewEventStartDate(formattedDate);
-        setNewEventEndDate(formattedDate);
+
+        if (eventToEdit) {
+            setNewEventTitle(eventToEdit.title);
+            setNewEventStartDate(eventToEdit.startTime ? formatDate(new Date(eventToEdit.startTime)) : formattedDate);
+            setNewEventEndDate(eventToEdit.endTime ? formatDate(new Date(eventToEdit.endTime)) : formattedDate);
+            setNewStartTime(eventToEdit.startTime || '');
+            setNewEndTime(eventToEdit.endTime || '');
+            setEventBeingEdited(eventToEdit);
+        } else {
+            setNewEventStartDate(formattedDate);
+            setNewEventEndDate(formattedDate);
+            setNewStartTime('');
+            setNewEndTime('');
+            setEventBeingEdited(null);
+        }
+
         setIsEventFormOpen(true);
     };
 
@@ -99,6 +114,7 @@ const Calendar = () => {
         setShowTimeFields(false);
         setNewEventColor('#4CAF50');
         setDescription('');
+        setEventBeingEdited(null);
     };
 
     const openAllEventsOverlay = (date: Date) => {
@@ -118,7 +134,7 @@ const Calendar = () => {
     const saveEvent = () => {
         if (selectedDate && newEventTitle) {
             const newEvent: Event = {
-                id: Math.random().toString(36).substr(2, 9),
+                id: eventBeingEdited ? eventBeingEdited.id : Math.random().toString(36).substr(2, 9),
                 title: newEventTitle,
                 date: newEventStartDate,
                 startTime: newStartTime,
@@ -126,7 +142,12 @@ const Calendar = () => {
                 color: newEventColor,
                 repeat: repeatOption,
             };
-            setEvents([...events, newEvent]);
+
+            if (eventBeingEdited) {
+                setEvents(events.map(event => event.id === newEvent.id ? newEvent : event));
+            } else {
+                setEvents([...events, newEvent]);
+            }
         }
         closeEventForm();
     };
@@ -157,7 +178,7 @@ const Calendar = () => {
                     </button>
                 </div>
                 <h2>
-                    {t(`calendar.months.${currentMonth.toLocaleString('default', { month: 'long' }).toLowerCase()}`)}{' '}
+                    {t(`calendar.months.${currentMonth.toLocaleString('default', { month: 'long' }).toLowerCase()}`)} {' '}
                     {currentMonth.getFullYear()}
                 </h2>
             </header>
@@ -190,6 +211,7 @@ const Calendar = () => {
                                         key={event.id}
                                         className="event-block"
                                         style={{ backgroundColor: event.color }}
+                                        onClick={() => openEventForm(date, event)}
                                     >
                                         {event.title}
                                     </div>
@@ -202,7 +224,7 @@ const Calendar = () => {
                                         openAllEventsOverlay(date);
                                     }}
                                 >
-                                    {`${events.filter((event) => event.date === formatDate(date)).length - 4} more`}
+                                    {`${events.filter((event) => event.date === formatDate(date)).length - 4} ${t('calendar.more')}`}
                                 </button>
                             )}
                         </div>
@@ -221,11 +243,11 @@ const Calendar = () => {
                                 type="text"
                                 value={newEventTitle}
                                 onChange={(e) => setNewEventTitle(e.target.value)}
-                                placeholder="Add title"
+                                placeholder={t('calendar.addTitle')}
                             />
                             <div className="event-form-tabs">
-                                <button className="tab-active">Event</button>
-                                <button className="tab">Task</button>
+                                <button className="tab-active">{t('calendar.event')}</button>
+                                <button className="tab">{t('calendar.task')}</button>
                             </div>
                             <div className="event-date-range">
                                 <FontAwesomeIcon icon={faClock} className="time-icon" />
@@ -266,13 +288,13 @@ const Calendar = () => {
                                 <textarea
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="Add description"
+                                    placeholder={t('calendar.addDescription')}
                                 />
                             </div>
                             <div className="form-footer">
                                 <div className="form-actions">
                                     <button className="save-button" onClick={saveEvent}>
-                                        Save
+                                        {t('calendar.save')}
                                     </button>
                                 </div>
                             </div>
@@ -284,7 +306,14 @@ const Calendar = () => {
                 <div className="all-events-overlay">
                     <div className="all-events-content">
                         <div className="all-events-header">
-                            <h3>{selectedDate.toDateString()}</h3>
+                            <h3>
+                                {t('calendar.day_month_year', {
+                                    day: t(`calendar.currentDay.${selectedDate.toLocaleDateString('en-CA', { weekday: 'short' }).toLowerCase()}`),
+                                    month: t(`calendar.currentMonth.${selectedDate.toLocaleDateString('en-CA', { month: 'short' }).toLowerCase()}`),
+                                    date: selectedDate.getDate(),
+                                    year: selectedDate.getFullYear(),
+                                })}
+                            </h3>
                             <button className="close-button" onClick={closeAllEventsOverlay}>
                                 &times;
                             </button>

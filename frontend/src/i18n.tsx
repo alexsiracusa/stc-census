@@ -39,7 +39,17 @@ i18n
                     },
                     calendar: {
                         title: 'Calendar',
+                        day_month_year: "{{day}} {{month}} {{date}} {{year}}",
                         days: {
+                            sun: 'Sun',
+                            mon: 'Mon',
+                            tue: 'Tue',
+                            wed: 'Wed',
+                            thu: 'Thu',
+                            fri: 'Fri',
+                            sat: 'Sat',
+                        },
+                        currentDay: {
                             sun: 'Sun',
                             mon: 'Mon',
                             tue: 'Tue',
@@ -62,6 +72,20 @@ i18n
                             november: 'November',
                             december: 'December',
                         },
+                        currentMonth: {
+                            jan: 'Jan',
+                            feb: 'Feb',
+                            mar: 'Mar',
+                            april: 'April',
+                            may: 'May',
+                            jun: 'Jun',
+                            jul: 'Jul',
+                            aug: 'Aug',
+                            sep: 'Sep',
+                            oct: 'Oct',
+                            nov: 'Nov',
+                            dec: 'Dec',
+                        },
                         eventPopup: {
                             time: 'Time',
                             hours: 'Hours',
@@ -70,7 +94,6 @@ i18n
                             addButton: 'Add Event',
                             removeButton: 'Remove Event',
                             updateButton: 'Update Event',
-                            color: 'Color',
                         },
                         eventButtons: {
                             edit: 'Edit',
@@ -78,6 +101,13 @@ i18n
                         },
                         addEventButton: 'Add Event',
                         today: 'Today',
+                        event: 'Event',
+                        task: 'Task',
+                        addTitle: 'Add Title',
+                        addDescription: 'Add Description',
+                        save: 'Save',
+                        more: 'More',
+                        repeatNo: 'Does not repeat',
                     },
                     CPM: {
                         title: 'CPM',
@@ -134,18 +164,19 @@ i18n
                     },
                     calendar: {
                         title: '日历',
-                        days: {
-                            sun: '日',
-                            mon: '一',
-                            tue: '二',
-                            wed: '三',
-                            thu: '四',
-                            fri: '五',
-                            sat: '六',
+                        day_month_year: "{{year}}年{{month}}{{date}}日 {{day}}",
+                        currentDay: {
+                            "sun": "日",
+                            "mon": "一",
+                            "tue": "二",
+                            "wed": "三",
+                            "thu": "四",
+                            "fri": "五",
+                            "sat": "六"
                         },
                         months: {
                             january: '一月',
-                            february: '一月',
+                            february: '二月',
                             march: '三月',
                             april: '四月',
                             may: '五月',
@@ -157,6 +188,20 @@ i18n
                             november: '十一月',
                             december: '十二月',
                         },
+                        currentMonth: {
+                            jan: "一月",
+                            feb: "二月",
+                            mar: "三月",
+                            apr: "四月",
+                            may: "五月",
+                            jun: "六月",
+                            jul: "七月",
+                            aug: "八月",
+                            sep: "九月",
+                            oct: "十月",
+                            nov: "十一月",
+                            dec: "十二月"
+                        },
                         eventPopup: {
                             time: '时间',
                             hours: '小时',
@@ -165,7 +210,6 @@ i18n
                             addButton: '添加事件',
                             removeButton: '关闭',
                             updateButton: '更新事件',
-                            color: '颜色',
                         },
                         eventButtons: {
                             edit: '编辑',
@@ -173,6 +217,14 @@ i18n
                         },
                         addEventButton: '添加事件',
                         today: '今天',
+                        event: '事件',
+                        task: '任务',
+                        addTitle: '添加标题',
+                        addDescription: '添加描述',
+                        save: '保存',
+                        more: '更多',
+                        repeatNo: '不重复',
+                        eventsOnDate: "{{date}}"
                     },
                     CPM: {
                         title: '关键路径法',
