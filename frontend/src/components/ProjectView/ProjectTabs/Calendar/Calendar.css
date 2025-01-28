@@ -157,11 +157,104 @@ body {
 }
 
 .event-form {
-    background: white;
-    padding: 2rem;
+    background: #ffffff;
+    width: 500px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    position: relative;
+}
+
+.event-form-body {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.event-date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.repeat-text {
+    font-size: 14px;
+    color: #555;
+    padding-top: 5px;
+}
+
+.add-time-button {
+    margin-bottom: 25px;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: black;
+    padding: 10px
+}
+
+.save-button {
+    background: #003366;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #0055A5;
+}
+
+.event-title-input {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    border-radius: 6px;
+    background-color: transparent;
+    color: black;
+}
+
+.event-time-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.event-time-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.event-form-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.event-form-header {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
+    justify-content: flex-end;
 }
 
 .event-form label {
@@ -169,12 +262,42 @@ body {
     margin-top: 1rem;
 }
 
-.event-form input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
+.tab-active {
+    background: transparent;
+    color: black;
+    border: none;
+}
+
+.tab {
+    background: transparent;
+    color: black;
+    border: none;
+    margin-left: 5px;
+}
+
+.all-day-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timezone-button{
+    background-color: transparent;
+    color: black;
+}
+
+.event-form input,
+.event-form textarea,
+.event-form select {
+    background-color: transparent;
+    color: black;
     border: 1px solid #ddd;
     border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
 .form-actions {
@@ -191,11 +314,6 @@ body {
     cursor: pointer;
 }
 
-.form-actions button:hover {
-    background-color: #1976d2;
-    color: white;
-}
-
 .today-indicator {
     position: absolute;
     width: 25px;
@@ -208,14 +326,17 @@ body {
 }
 
 .more-events {
-    margin-top: 0.3rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #555;
     background-color: transparent;
     border: none;
     cursor: pointer;
     border-radius: 4px;
+    text-align: left;
+    padding: 0.3rem 0.5rem;
+    width: 100%;
+    margin-top: 0.1rem;
 }
 
 .more-events:hover {
@@ -235,37 +356,143 @@ body {
     z-index: 100;
 }
 
+/* Updated styling for the popup */
 .event-popup {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 320px;
     max-width: 90%;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .event-popup-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    border-bottom: 1px solid #e4e4e4;
+    padding-bottom: 0.5rem;
 }
 
 .event-popup-header h3 {
     margin: 0;
-    color: #333;
     font-size: 1.25rem;
+    color: black;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-.close-popup {
+.event-date-large {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: black;
+    margin: 0.5rem 0;
+}
+
+.event-popup-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.popup-event-block {
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: #ddeeff;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.close-form {
     background: none;
     border: none;
     font-size: 1.5rem;
     color: #666;
     cursor: pointer;
+    position: absolute;
 }
 
-.event-popup-body {
+.all-events-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.all-events-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 360px;
+    max-width: 90%;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+}
+
+.all-events-header {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 0.5rem;
+    position: relative;
+    width: 100%;
+}
+
+.all-events-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.all-events-date {
+    font-size: 2rem;
+    font-weight: bold;
+    color: black;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s;
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.all-events-body {
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -273,17 +500,41 @@ body {
     overflow-y: auto;
 }
 
-.popup-event-block {
-    padding: 0.5rem;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: default;
+.all-events-body::-webkit-scrollbar {
+    width: 6px;
 }
 
+.all-events-body::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 4px;
+}
+
+.all-events-body::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+}
+
+.event-item {
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: #4CAF50;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.event-item:hover {
+    background-color: #003366;
+}
+
+.event-time {
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #f1f1f1;
+    display: block;
+    margin-top: 0.2rem;
+}
 
 

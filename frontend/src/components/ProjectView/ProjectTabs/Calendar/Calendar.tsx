@@ -2,14 +2,16 @@ import { useState } from 'react';
 import './Calendar.css';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faClock, faAlignLeft } from '@fortawesome/free-solid-svg-icons';
 
 type Event = {
     id: string;
     title: string;
     date: string;
-    time?: string;
+    startTime?: string;
+    endTime?: string;
     color: string;
+    repeat?: string;
 };
 
 const Calendar = () => {
@@ -18,10 +20,17 @@ const Calendar = () => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [events, setEvents] = useState<Event[]>([]);
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
+    const [isAllEventsOverlayOpen, setIsAllEventsOverlayOpen] = useState(false);
+    const [allEventsForDate, setAllEventsForDate] = useState<Event[]>([]);
     const [newEventTitle, setNewEventTitle] = useState('');
+    const [newEventStartDate, setNewEventStartDate] = useState(new Date().toLocaleDateString('en-CA'));
+    const [newEventEndDate, setNewEventEndDate] = useState(new Date().toLocaleDateString('en-CA'));
+    const [newStartTime, setNewStartTime] = useState('');
+    const [newEndTime, setNewEndTime] = useState('');
+    const [showTimeFields, setShowTimeFields] = useState(false);
     const [newEventColor, setNewEventColor] = useState('#4CAF50');
-    const [newEventTime, setNewEventTime] = useState('');
-    const [popupDate, setPopupDate] = useState<Date | null>(null);
+    const [description, setDescription] = useState('');
+    const [repeatOption] = useState('Does not repeat');
 
     const getStartOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
     const getEndOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -35,7 +44,6 @@ const Calendar = () => {
     const generateCalendarDays = (): { date: Date; isCurrentMonth: boolean }[] => {
         const startOfMonth = getStartOfMonth(currentMonth);
         const endOfMonth = getEndOfMonth(currentMonth);
-
         const days: { date: Date; isCurrentMonth: boolean }[] = [];
         const firstDayOfWeek = startOfMonth.getDay();
 
@@ -66,10 +74,16 @@ const Calendar = () => {
     };
 
     const calendarDays = generateCalendarDays();
-    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
+    const formatDate = (date: Date): string => {
+        return date.toLocaleDateString('en-CA');
+    };
 
     const openEventForm = (date: Date) => {
         setSelectedDate(date);
+        const formattedDate = formatDate(date);
+        setNewEventStartDate(formattedDate);
+        setNewEventEndDate(formattedDate);
         setIsEventFormOpen(true);
     };
 
@@ -77,8 +91,28 @@ const Calendar = () => {
         setIsEventFormOpen(false);
         setSelectedDate(null);
         setNewEventTitle('');
-        setNewEventTime('');
+        setNewStartTime('');
+        setNewEndTime('');
+        const today = new Date().toLocaleDateString('en-CA');
+        setNewEventStartDate(today);
+        setNewEventEndDate(today);
+        setShowTimeFields(false);
         setNewEventColor('#4CAF50');
+        setDescription('');
+    };
+
+    const openAllEventsOverlay = (date: Date) => {
+        const formattedDate = formatDate(date);
+        const eventsForDate = events.filter((event) => event.date === formattedDate);
+        setAllEventsForDate(eventsForDate);
+        setSelectedDate(date);
+        setIsAllEventsOverlayOpen(true);
+    };
+
+    const closeAllEventsOverlay = () => {
+        setIsAllEventsOverlayOpen(false);
+        setSelectedDate(null);
+        setAllEventsForDate([]);
     };
 
     const saveEvent = () => {
@@ -86,9 +120,11 @@ const Calendar = () => {
             const newEvent: Event = {
                 id: Math.random().toString(36).substr(2, 9),
                 title: newEventTitle,
-                date: formatDate(selectedDate),
-                time: newEventTime,
+                date: newEventStartDate,
+                startTime: newStartTime,
+                endTime: newEndTime,
                 color: newEventColor,
+                repeat: repeatOption,
             };
             setEvents([...events, newEvent]);
         }
@@ -136,10 +172,7 @@ const Calendar = () => {
                         key={index}
                         className={`day-cell ${isCurrentMonth ? '' : 'other-month'} ${isToday(date) ? 'today' : ''}`}
                         onClick={(e) => {
-                            if (
-                                e.target instanceof HTMLElement &&
-                                e.target.classList.contains('more-events')
-                            ) {
+                            if (e.target instanceof HTMLElement && e.target.classList.contains('more-events')) {
                                 return;
                             }
                             openEventForm(date);
@@ -151,7 +184,7 @@ const Calendar = () => {
                         <div className="event-list">
                             {events
                                 .filter((event) => event.date === formatDate(date))
-                                .slice(0, 3)
+                                .slice(0, 4)
                                 .map((event) => (
                                     <div
                                         key={event.id}
@@ -161,81 +194,112 @@ const Calendar = () => {
                                         {event.title}
                                     </div>
                                 ))}
-                            {events.filter((event) => event.date === formatDate(date)).length > 3 && (
+                            {events.filter((event) => event.date === formatDate(date)).length > 4 && (
                                 <button
                                     className="more-events"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setPopupDate(date);
+                                        openAllEventsOverlay(date);
                                     }}
                                 >
-                                    {`+${events.filter((event) => event.date === formatDate(date)).length - 3} more`}
+                                    {`${events.filter((event) => event.date === formatDate(date)).length - 4} more`}
                                 </button>
                             )}
                         </div>
                     </div>
                 ))}
             </div>
-            {popupDate && (
-                <div className="event-popup-overlay" onClick={() => setPopupDate(null)}>
-                    <div className="event-popup" onClick={(e) => e.stopPropagation()}>
-                        <div className="event-popup-header">
-                            <h3>
-                                {popupDate.toLocaleString('default', { weekday: 'long' })}{' '}
-                                {popupDate.getDate()}
-                            </h3>
-                            <button className="close-popup" onClick={() => setPopupDate(null)}>
-                                &times;
-                            </button>
+            {isEventFormOpen && (
+                <div className="event-form-overlay">
+                    <div className="event-form">
+                        <div className="event-form-header">
+                            <button className="close-form" onClick={closeEventForm}>&times;</button>
                         </div>
-                        <div className="event-popup-body">
-                            {events
-                                .filter((event) => event.date === formatDate(popupDate))
-                                .map((event) => (
-                                    <div
-                                        className="popup-event-block"
-                                        key={event.id}
-                                        style={{ backgroundColor: event.color }}
-                                    >
-                                        {event.time ? `${event.time} - ` : ''} {event.title}
+                        <div className="event-form-body" style={{ minWidth: '400px' }}>
+                            <input
+                                className="event-title-input"
+                                type="text"
+                                value={newEventTitle}
+                                onChange={(e) => setNewEventTitle(e.target.value)}
+                                placeholder="Add title"
+                            />
+                            <div className="event-form-tabs">
+                                <button className="tab-active">Event</button>
+                                <button className="tab">Task</button>
+                            </div>
+                            <div className="event-date-range">
+                                <FontAwesomeIcon icon={faClock} className="time-icon" />
+                                <div className="date-inputs">
+                                    <input
+                                        type="date"
+                                        value={newEventStartDate}
+                                        onChange={(e) => setNewEventStartDate(e.target.value)}
+                                    />
+                                    <input
+                                        type="date"
+                                        value={newEventEndDate}
+                                        onChange={(e) => setNewEventEndDate(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="event-time-display">
+                                {showTimeFields && (
+                                    <div className="event-time-container">
+                                        <input
+                                            type="time"
+                                            className="event-time-input"
+                                            value={newStartTime}
+                                            onChange={(e) => setNewStartTime(e.target.value)}
+                                        />
+                                        <span className="time-separator"> - </span>
+                                        <input
+                                            type="time"
+                                            className="event-time-input"
+                                            value={newEndTime}
+                                            onChange={(e) => setNewEndTime(e.target.value)}
+                                        />
                                     </div>
-                                ))}
+                                )}
+                            </div>
+                            <div className="event-form-field">
+                                <FontAwesomeIcon icon={faAlignLeft} />
+                                <textarea
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    placeholder="Add description"
+                                />
+                            </div>
+                            <div className="form-footer">
+                                <div className="form-actions">
+                                    <button className="save-button" onClick={saveEvent}>
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
-            {isEventFormOpen && (
-                <div className="event-form-overlay">
-                    <div className="event-form">
-                        <h3>{t('calendar.eventPopup.addButton')}</h3>
-                        <label>
-                            {t('calendar.eventPopup.placeholder')}:
-                            <input
-                                type="text"
-                                value={newEventTitle}
-                                placeholder={t('calendar.eventPopup.placeholder')}
-                                onChange={(e) => setNewEventTitle(e.target.value)}
-                            />
-                        </label>
-                        <label>
-                            {t('calendar.eventPopup.time')}:
-                            <input
-                                type="time"
-                                value={newEventTime}
-                                onChange={(e) => setNewEventTime(e.target.value)}
-                            />
-                        </label>
-                        <label>
-                            {t('calendar.eventPopup.color')}:
-                            <input
-                                type="color"
-                                value={newEventColor}
-                                onChange={(e) => setNewEventColor(e.target.value)}
-                            />
-                        </label>
-                        <div className="form-actions">
-                            <button onClick={closeEventForm}>{t('calendar.eventPopup.removeButton')}</button>
-                            <button onClick={saveEvent}>{t('calendar.eventPopup.updateButton')}</button>
+            {isAllEventsOverlayOpen && selectedDate && (
+                <div className="all-events-overlay">
+                    <div className="all-events-content">
+                        <div className="all-events-header">
+                            <h3>{selectedDate.toDateString()}</h3>
+                            <button className="close-button" onClick={closeAllEventsOverlay}>
+                                &times;
+                            </button>
+                        </div>
+                        <div className="all-events-body">
+                            {allEventsForDate.map((event) => (
+                                <div
+                                    key={event.id}
+                                    className="event-item"
+                                    style={{ backgroundColor: event.color }}
+                                >
+                                    <p>{event.title}</p>
+                                    {event.startTime && <p>{`${event.startTime} - ${event.endTime}`}</p>}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
