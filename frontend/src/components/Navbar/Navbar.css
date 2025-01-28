@@ -4,13 +4,11 @@
     left: 0;
     width: 100%;
     height: var(--navbar-height);
-
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     padding: 0 10px;
-
     background-color: #ffffff;
     border-bottom: solid #dedede 1px;
 }
@@ -20,7 +18,6 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-
     gap: 40px;
     flex-grow: 1;
 }
@@ -30,14 +27,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-
     gap: 20px;
 }
 
 .navbar .logo {
     display: flex;
     align-content: center;
-    width: 7.8em
+    width: 7.8em;
 }
 
 .navbar .logo img {
@@ -48,21 +44,69 @@
     font-size: 1.125em;
     color: #242424;
     font-weight: 500;
-
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .navbar a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
-.profile-icon img {
-    width: 32px;
-    height: 32px;
+.profile-dropdown {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+    border-radius: 50%;
+    border: 0.1rem solid #003366;
+    background-color: #fff;
+    color: #003366;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
 }
 
-.profile-icon a {
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-icon {
+    font-size: 1.5rem;
+    color: #003366;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 4rem;
+    right: 0;
+    background-color: #ffffff;
+    border: 0.1rem solid #dedede;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    color: #242424;
+    transition: background-color 0.2s;
     display: block;
+}
+
+.dropdown-item:hover {
+    background-color: #f2f2f2;
+}
+
+#file-upload {
+    display: none;
 }
