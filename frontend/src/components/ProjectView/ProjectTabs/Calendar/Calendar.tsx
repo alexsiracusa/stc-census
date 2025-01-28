@@ -28,7 +28,7 @@ const Calendar = () => {
     const [newStartTime, setNewStartTime] = useState('');
     const [newEndTime, setNewEndTime] = useState('');
     const [showTimeFields, setShowTimeFields] = useState(false);
-    const [newEventColor, setNewEventColor] = useState('#4CAF50');
+    const [newEventColor, setNewEventColor] = useState('#003366');
     const [description, setDescription] = useState('');
     const [repeatOption] = useState(t('calendar.repeatNo'));
     const [eventBeingEdited, setEventBeingEdited] = useState<Event | null>(null);
@@ -112,7 +112,7 @@ const Calendar = () => {
         setNewEventStartDate(today);
         setNewEventEndDate(today);
         setShowTimeFields(false);
-        setNewEventColor('#4CAF50');
+        setNewEventColor('#003366');
         setDescription('');
         setEventBeingEdited(null);
     };
