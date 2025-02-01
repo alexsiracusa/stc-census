@@ -1,8 +1,12 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f7f9fc;
-}
+
+
+/* commented out for now, redo some other way */
+
+/*body {*/
+/*    margin: 0;*/
+/*    font-family: Arial, sans-serif;*/
+/*    background: #f7f9fc;*/
+/*}*/
 
 .calendar-container {
     height: 100vh;
