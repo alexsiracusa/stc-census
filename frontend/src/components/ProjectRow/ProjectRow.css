@@ -4,15 +4,17 @@
     flex-direction: row;
     align-items: center;
     height: 2em;
-    padding: 0 1em;
-    gap: 20px;
+    padding: 0 0.6em;
+    gap: 0.3em;
 
     font-size: 1em;
     color: black
 }
 
 .project-row .project-id {
-
+    font-family: monospace, monospace;
+    font-size: 0.8em;
+    width: 2.25em;
 }
 
 .project-row .project-name {
