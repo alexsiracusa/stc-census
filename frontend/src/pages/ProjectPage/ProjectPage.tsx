@@ -1,5 +1,4 @@
 import './ProjectPage.css'
-import '../../styles/Gutters.css'
 
 import ProjectSidebar from "../../components/ProjectSidebar/ProjectSidebar.tsx";
 import ProjectView from "../../components/ProjectView/ProjectView.tsx";

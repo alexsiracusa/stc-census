@@ -19,7 +19,7 @@ const TaskCard = (props: KanbanTaskProps) => {
         >
             {(provided) => (
                 <div
-                    className='task'
+                    className='task-card'
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

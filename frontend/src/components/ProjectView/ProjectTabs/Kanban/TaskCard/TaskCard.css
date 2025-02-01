@@ -1,4 +1,4 @@
-.task {
+.task-card {
     display: flex;
     flex-direction: column;
     justify-items: start;
@@ -13,7 +13,7 @@
     margin-bottom: 5px;
 }
 
-.task-header {
+.task-card .task-header {
     display: flex;
     flex-direction: row;
     gap: 10px;
