@@ -1,4 +1,4 @@
-import { TaskStatus} from "../../../../../types/TaskStatuses.ts";
+import { TaskStatus} from "./TaskStatuses.ts";
 
 export interface Task {
     id: number;
@@ -14,10 +14,5 @@ export interface Task {
     target_days_to_complete: null | number;
     actual_cost: null | number;
     expected_cost: null | number;
-    depends_on: DependsOn[];
-}
-
-export interface DependsOn {
-    task_id: number;
-    project_id: number;
+    depends_on: {task_id: number, project_id: number}[];
 }

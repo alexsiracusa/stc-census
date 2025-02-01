@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Task } from '../utils/task.ts';
+import { Task } from '../../../../../types/task.ts';
 
-interface UseTasksFetcherReturn {
-    tasks: Task[];
-}
-
-export const useTasksFetcher = (projectId: string): UseTasksFetcherReturn => {
+export const useTasksFetcher = (projectId: string): Task[] => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const host = import.meta.env.VITE_BACKEND_HOST;
 
