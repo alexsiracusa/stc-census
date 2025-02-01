@@ -32,6 +32,7 @@ const CPM = (props: TabProps) => {
         <TaskGraph
             className='cpm'
             tasks={tasks}
+            currentProjectId={Number(props.project['id'])}
         />
     );
 };

@@ -10,7 +10,8 @@ cytoscape.use(dagre);
 const TaskGraph: React.FC<{
     className?: string;
     tasks?: Task[];
-}> = ({ className = '', tasks = [] }) => {
+    currentProjectId?: number; // Add current project ID prop
+}> = ({ className = '', tasks = [], currentProjectId }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
 
@@ -19,16 +20,19 @@ const TaskGraph: React.FC<{
 
         const nodes = tasks.map(task => ({
             data: {
-                id: String(task.id),
+                id: `${task.project_id}-${task.id}`, // Combine project and task IDs
                 label: task.name,
-                status: task.status
+                status: task.status,
+                project_id: task.project_id, // Add project ID to data
+                isExternalProject: task.project_id !== currentProjectId
             }
         }));
 
         const edges = tasks.flatMap(task => (task.depends_on || []).map(dependency => ({
             data: {
-                source: String(dependency.task_id),
-                target: String(task.id)
+                // Update source and target to use combined IDs
+                source: `${dependency.project_id}-${dependency.task_id}`,
+                target: `${task.project_id}-${task.id}`
             }
         })));
 
@@ -49,22 +53,38 @@ const TaskGraph: React.FC<{
                         'text-halign': 'center',
                         'background-color': '#666',
                         'shape': 'roundrectangle',
+                        'color': '#fff',
+                        'opacity': 1
+                    }
+                },
+                {
+                    // Style for external project nodes
+                    selector: 'node[?isExternalProject]',
+                    style: {
+                        'opacity': 0.6,
                         'color': '#fff'
                     }
                 },
                 {
                     selector: `node[status = "${TaskStatuses.DONE}"]`,
-                    style: { 'background-color': '#4CAF50' }
+                    style: {
+                        'background-color': '#4CAF50',
+                        'opacity': 'data(isExternalProject) ? 0.8 : 1'
+                    }
                 },
                 {
                     selector: `node[status = "${TaskStatuses.IN_PROGRESS}"]`,
-                    style: { 'background-color': '#2196F3' }
+                    style: {
+                        'background-color': '#2196F3',
+                        'opacity': 'data(isExternalProject) ? 0.8 : 1'
+                    }
                 },
                 {
                     selector: `node[status = "${TaskStatuses.ON_HOLD}"]`,
                     style: {
                         'background-color': '#dfa100',
-                        'color': '#000'
+                        'color': '#000',
+                        'opacity': 'data(isExternalProject) ? 0.8 : 1'
                     }
                 },
                 {
@@ -92,7 +112,7 @@ const TaskGraph: React.FC<{
                 cyRef.current.destroy();
             }
         };
-    }, [tasks]);
+    }, [tasks, currentProjectId]);
 
     return (
         <div
