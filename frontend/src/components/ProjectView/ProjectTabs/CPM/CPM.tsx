@@ -1,5 +1,5 @@
 import TabProps from "../TabProps";
-import TaskGraph from './TaskGraph';
+import TaskGraph from './TaskGraph/TaskGraph.tsx';
 import {Task} from "../../../../types/task.ts";
 import {useEffect, useState} from "react";
 
@@ -16,12 +16,12 @@ export const useTasksFetcher = (projectId: string): Task[] => {
             .catch(error => console.error(error));
     }, [projectId, host]);
 
-    return {tasks};
+    return tasks;
 };
 
 const CPM = (props: TabProps) => {
     // Load task data
-    const { tasks } = useTasksFetcher(props.project['id']);
+    const tasks: Task[] = useTasksFetcher(props.project['id']);
 
     // Add loading state
     if (!tasks || tasks.length === 0) {
