@@ -1,11 +1,12 @@
 // TypeScript interfaces
 import React from "react";
 import {Task} from "./task.ts";
+import {TaskStatus} from "../../../../../types/TaskStatuses.ts";
 
 export interface TaskNode {
     id: string;
     label: string;
-    status: 'todo' | 'in_progress' | 'on_hold' | 'done';
+    status: TaskStatus;
 }
 
 export interface TaskEdge {

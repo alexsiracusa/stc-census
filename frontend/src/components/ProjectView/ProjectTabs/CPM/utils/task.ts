@@ -1,9 +1,11 @@
+import { TaskStatus} from "../../../../../types/TaskStatuses.ts";
+
 export interface Task {
     id: number;
-    parent: number;
+    project_id: number;
     name: string;
     description: null | string;
-    status: 'todo' | 'in_progress' |'on_hold' | 'done';
+    status: TaskStatus;
     created_at: string;
     start_date: null | string;
     completion_date: null | string;
@@ -12,5 +14,10 @@ export interface Task {
     target_days_to_complete: null | number;
     actual_cost: null | number;
     expected_cost: null | number;
-    depends_on: number[];
+    depends_on: DependsOn[];
+}
+
+export interface DependsOn {
+    task_id: number;
+    project_id: number;
 }
