@@ -21,7 +21,7 @@ export const useTasksFetcher = (projectId: string): Task[] => {
 
 const CPM = (props: TabProps) => {
     // Load task data
-    const tasks: Task[] = useTasksFetcher(props.project['id']);
+    const tasks: Task[] = useTasksFetcher(`${props.project_id}`);
 
     // Add loading state
     if (!tasks || tasks.length === 0) {
@@ -32,7 +32,7 @@ const CPM = (props: TabProps) => {
         <TaskGraph
             className='cpm'
             tasks={tasks}
-            currentProjectId={Number(props.project['id'])}
+            currentProjectId={Number(props.project_id)}
         />
     );
 };

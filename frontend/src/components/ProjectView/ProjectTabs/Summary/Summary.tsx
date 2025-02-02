@@ -8,7 +8,7 @@ const Summary = (props: TabProps) => {
 
     return (
         <div>
-            {t('summary.title')} {props.project['id']}
+            {t('summary.title')} {props.project_id}
         </div>
     )
 };

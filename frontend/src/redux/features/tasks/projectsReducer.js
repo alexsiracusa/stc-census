@@ -6,7 +6,7 @@ Example State Structure
     projects: {
         byId: {
             "project1": {
-                byId: {
+                tasks: {
                     "task1": {
 
                     }
@@ -24,7 +24,7 @@ Example State Structure
 }
  */
 
-const tasksSlice = createSlice({
+const projectSlice = createSlice({
     name: 'projects',
     initialState: {
         byId: {},
@@ -39,32 +39,16 @@ const tasksSlice = createSlice({
                 state.allIds.push(uniqueId);
             }
         },
-        addTasks: (state, action) => {
-            const {tasks} = action.payload;
-            tasks.forEach((task) => {
-                if (!state.byId[`${task.project_id}`]) {
-                    state.byId[`${task.project_id}`] = {
-                        byId: {},
-                        allIds: []
-                    }
-                }
-
-                const project = state.byId[`${task.project_id}`]
-
-                project.byId[`${task.id}`] = task;
-                if (!project.byId[`${task.id}`]) {
-                    project.allIds.push(`${task.id}`);
-                }
-            })
-        },
         addProject: (state, action) => {
             const {project} = action.payload;
-            const tasks = project.tasks
-            delete project.tasks
-            state.byId[`${task.project_id}`] = project
-            addTasks({
-                tasks: tasks
+            state.byId[`${project.id}`] = project
+
+            project.byId = {}
+            project.tasks.forEach((task) => {
+                state.byId[`${project.id}`].byId[`${task.id}`] = task
             })
+
+            delete project.tasks
         },
         updateTaskStatus: (state, action) => {
             const {project_id, task_id, status} = action.payload;
@@ -73,6 +57,6 @@ const tasksSlice = createSlice({
     }
 });
 
-export const {addTask, addTasks, updateTaskStatus, addCommentToTask, updateCommentsForTask} = tasksSlice.actions;
+export const {addTask, addTasks, addProject, updateTaskStatus, addCommentToTask, updateCommentsForTask} = projectSlice.actions;
 
-export default tasksSlice.reducer;
+export default projectSlice.reducer;

@@ -1,13 +1,14 @@
 import './ProjectRow.css'
 
 import {Link} from "react-router";
+import {useSelector} from "react-redux";
 
 type ProjectRowProps = {
-    project: object
+    project_id: number
 }
 
 const ProjectRow = (props: ProjectRowProps) => {
-    const project = props.project;
+    const project = useSelector((state) => state.projects.byId[props.project_id]);
 
     return (
         <Link

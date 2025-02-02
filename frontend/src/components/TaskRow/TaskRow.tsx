@@ -1,17 +1,22 @@
 import './TaskRow.css'
 
-import {Task} from "../../types/Task.ts";
 import {useNavigate} from "react-router-dom";
 import TaskStatusSelector from "../TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
+import {useSelector} from "react-redux";
 
 type TaskRowProps = {
-    task: Task
+    project_id: number
+    task_id: number
 }
 
 const TaskRow = (props: TaskRowProps) => {
-    const task = props.task;
+    const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
     const navigate = useNavigate()
+
+    if (task === undefined) {
+        return <></>
+    }
 
     return (
         <div

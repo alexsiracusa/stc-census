@@ -7,7 +7,7 @@ const EVM = (props: TabProps) => {
     const {t} = useTranslation();
 
     return (
-        <div>{t('EVM.title')} {props.project['id']}</div>
+        <div>{t('EVM.title')} {props.project_id}</div>
     )
 };
 

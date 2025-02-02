@@ -8,6 +8,7 @@ type TaskIconProps = {
 
 const TaskIcon = (props: TaskIconProps) => {
     const task = useSelector((state) => state.projects.byId[props.depends_on_project].byId[props.depends_on]);
+
     if (task == null) {
         return <></>
     }

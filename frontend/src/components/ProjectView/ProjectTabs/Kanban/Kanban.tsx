@@ -5,31 +5,32 @@ import TabProps from "../TabProps.ts";
 import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 
 import TaskCard from './TaskCard/TaskCard.tsx';
+import {useSelector} from "react-redux";
 
 const Kanban = (props: TabProps) => {
+    const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const {t} = useTranslation();
-    const project = props.project;
 
     const statuses = [
         {
             'name': 'to_do',
             'display_name': t('kanban.toDo', 'To Do'),
-            'tasks': project.tasks.filter((task) => task.status === 'to_do')
+            'tasks': Object.values(tasks).filter((task) => task.status === 'to_do')
         },
         {
             'name': 'in_progress',
             'display_name': t('kanban.inProgress', 'To Do'),
-            'tasks': project.tasks.filter((task) => task.status === 'in_progress')
+            'tasks': Object.values(tasks).filter((task) => task.status === 'in_progress')
         },
         {
             'name': 'done',
             'display_name': t('kanban.done', 'To Do'),
-            'tasks': project.tasks.filter((task) => task.status === 'done')
+            'tasks': Object.values(tasks).filter((task) => task.status === 'done')
         },
         {
             'name': 'on_hold',
             'display_name': t('kanban.onHold', 'To Do'),
-            'tasks': project.tasks.filter((task) => task.status === 'on_hold')
+            'tasks': Object.values(tasks).filter((task) => task.status === 'on_hold')
         }
     ];
 

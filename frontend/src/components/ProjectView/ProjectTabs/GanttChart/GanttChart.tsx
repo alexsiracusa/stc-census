@@ -7,7 +7,7 @@ const GanttChart = (props: TabProps) => {
     const {t} = useTranslation();
 
     return (
-        <div>{t('ganttChart.title')} {props.project['id']}</div>
+        <div>{t('ganttChart.title')} {props.project_id}</div>
     )
 };
 

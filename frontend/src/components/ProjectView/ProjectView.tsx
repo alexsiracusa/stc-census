@@ -11,17 +11,17 @@ import CPM from "./ProjectTabs/CPM/CPM.tsx";
 import EVM from "./ProjectTabs/EVM/EVM.tsx";
 
 import { useSelector, useDispatch } from 'react-redux';
-import {addTasks} from "../../redux/features/tasks/projectsReducer.js";
+import {addProject } from "../../redux/features/tasks/projectsReducer.js";
 
 import ProjectPath from "../ProjectPath/ProjectPath.tsx";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 type ProjectViewProps = {
     project_id: number
 }
 
 const ProjectView = (props: ProjectViewProps) => {
-    const [project, setProject] = useState(null);
+    const project = useSelector((state) => state.projects.byId[props.project_id]);
     const host = import.meta.env.VITE_BACKEND_HOST;
     const {t} = useTranslation();
 
@@ -33,29 +33,30 @@ const ProjectView = (props: ProjectViewProps) => {
                 const response = await fetch(`${host}/project/${props.project_id}`);
                 const json = await response.json()
                 if (!response.ok) return console.error(json['error']);
-                setProject(json)
-                dispatch(addTasks({tasks: json['tasks']}))
+                dispatch(addProject({
+                    project: json
+                }))
             } catch (error) {
                 console.error(error)
             }
         })();
     }, []);
 
-    if (project === null) {
+    if (project === undefined) {
         return <div>{t('projectView.loading')}</div>
     }
 
     return (
         <div className='project-view'>
-            <ProjectPath path={project['path']}/>
+            <ProjectPath path={project.path}/>
             <Routes>
-                <Route path="/summary" element={<Summary project={project}/>}/>
-                <Route path="/task-list" element={<TaskList project={project}/>}/>
-                <Route path="/kanban" element={<Kanban project={project}/>}/>
-                <Route path="/gantt-chart" element={<GanttChart project={project}/>}/>
+                <Route path="/summary" element={<Summary project_id={props.project_id}/>}/>
+                <Route path="/task-list" element={<TaskList project_id={props.project_id}/>}/>
+                <Route path="/kanban" element={<Kanban project_id={props.project_id}/>}/>
+                <Route path="/gantt-chart" element={<GanttChart project_id={props.project_id}/>}/>
                 <Route path="/calendar" element={<Calendar project={project}/>}/>
-                <Route path="/cpm" element={<CPM project={project}/>}/>
-                <Route path="/evm" element={<EVM project={project}/>}/>
+                <Route path="/cpm" element={<CPM project_id={props.project_id}/>}/>
+                <Route path="/evm" element={<EVM project_id={props.project_id}/>}/>
                 <Route path="/*" element={<Navigate to={`/project/${props.project_id}/summary`} replace/>}/>
             </Routes>
         </div>

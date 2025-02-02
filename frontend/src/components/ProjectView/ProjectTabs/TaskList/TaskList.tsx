@@ -10,10 +10,10 @@ import {useSelector} from "react-redux";
 
 
 const TaskList = (props: TabProps) => {
-    const project = props.project;
+    const project = useSelector((state) => state.projects.byId[props.project_id]);
+    const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const { t } = useTranslation();
 
-    const tasks = useSelector((state) => state.projects.byId[project.id].byId);
     if (tasks == null) {
         return <></>
     }
@@ -27,14 +27,14 @@ const TaskList = (props: TabProps) => {
                         <ul>
                             {project['sub_projects'].map((project) => (
                                 <li key={project.id}>
-                                    <ProjectRow project={project}/>
+                                    <ProjectRow project_id={props.project_id}/>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 }
 
-                {project['tasks'].length > 0 &&
+                {Object.keys(tasks).length &&
                     <div className='tasks'>
                         <h3>{t('taskList.tasks')}</h3>
 
@@ -43,7 +43,10 @@ const TaskList = (props: TabProps) => {
                         <ul>
                             {Object.values(tasks).map((task) => (
                                 <li key={task.id}>
-                                    <TaskRow task={task}/>
+                                    <TaskRow
+                                        task_id={task.id}
+                                        project_id={task.project_id}
+                                    />
                                 </li>
                             ))}
                         </ul>

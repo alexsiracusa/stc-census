@@ -1,10 +1,6 @@
-interface Project {
-    id: string;
-    [key: string]: any; // catch-all for other unspecified properties
-}
 
 type TabProps = {
-    project: Project
+    project_id: number
 }
 
 export default TabProps
