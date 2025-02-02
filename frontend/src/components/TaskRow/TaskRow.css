@@ -1,40 +1,72 @@
 
-.task-row {
+/*TASK ROW*/
+.task-row, .task-row-header {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    height: 2em;
+
     padding: 0 0.6em;
     gap: 0.3em;
+}
 
-    font-size: 1em;
+.task-row {
+    align-items: center;
+    height: 2em;
+
     color: black;
     overflow: hidden;
 
-    font-family: Inter, sans-serif;
+    p {
+        font-family: Inter, sans-serif;
+        font-size: 1em;
+    }
 }
 
-.task-row .task-id {
-    font-family: monospace, monospace;
-    font-size: 0.8em;
+.task-row-header {
+    font-size: 1em;
+    margin: 0 1px;
+    overflow: hidden;
+
+    p {
+        font-family: Inter, sans-serif;
+        font-size: 0.8em;
+        overflow: hidden;
+        color: black;
+    }
+}
+
+
+/*TASK ID*/
+.task-row .task-id, .task-row-header .task-id-header {
     width: 2.25em;
     min-width: 2.25em;
 }
 
-.task-row .task-name {
+.task-row .task-id p {
+    font-family: monospace, monospace;
+    font-size: 0.8em;
+}
+
+/*TASK NAME*/
+.task-row .task-name, .task-row-header .task-name-header {
+    width: 30%;
+    min-width: 30%;
+    max-width: 24em;
+}
+
+.task-row .task-name p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
 
-    width: 30%;
-    max-width: 24em;
+/*TASK STATUS*/
+.task-row .task-status-container, .task-row-header .task-status-header {
+    width: 5.5em;
+    min-width: 5.5em;
 }
 
 .task-row .task-status-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-
-    width: 5.5em;
-    min-width: 5.5em;
 }

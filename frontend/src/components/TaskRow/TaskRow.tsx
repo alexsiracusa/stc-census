@@ -19,8 +19,8 @@ const TaskRow = (props: TaskRowProps) => {
                 navigate('/')
             }}
         >
-            <div className='task-id'>T{task.id}</div>
-            <div className='task-name'>{task.name}</div>
+            <div className='task-id'><p>T{task.id}</p></div>
+            <div className='task-name'><p>{task.name}</p></div>
             <div className='task-status-container'>
                 <TaskStatusSelector task={task}/>
             </div>

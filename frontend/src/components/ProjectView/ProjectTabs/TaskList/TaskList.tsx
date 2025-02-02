@@ -3,6 +3,7 @@ import './TaskList.css'
 import TabProps from "../TabProps.ts";
 import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
 import TaskRow from "../../../TaskRow/TaskRow.tsx";
+import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
 import { useTranslation } from 'react-i18next';
 
 
@@ -29,6 +30,9 @@ const TaskList = (props: TabProps) => {
                 {project['tasks'].length > 0 &&
                     <div className='tasks'>
                         <h3>{t('taskList.tasks')}</h3>
+
+                        <TaskRowHeader/>
+
                         <ul>
                             {project['tasks'].map((task) => (
                                 <li key={task.id}>

@@ -11,6 +11,12 @@
     color: black;
 }
 
+.project-path .link p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .project-path img {
     width: 0.5em;
     height: 0.5em;

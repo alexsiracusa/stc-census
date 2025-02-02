@@ -21,7 +21,7 @@ const ProjectPath = (props: ProjectPathProps) => {
                 className='link'
                 key='projects'
             >
-                {t('projectPath.title')}
+                <p>{t('projectPath.title')}</p>
             </Link>
             <img src={ChevronRight}/>
 
@@ -32,7 +32,7 @@ const ProjectPath = (props: ProjectPathProps) => {
                         to={`/project/${project['id']}/task-list`}
                         className='link'
                     >
-                        {project['name']}
+                        <p>{project['name']}</p>
                     </Link>
                     {index < path.length - 1 &&
                         <img src={ChevronRight}/>
