@@ -1,0 +1,48 @@
+
+.task-status-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    align-items: center;
+}
+
+.task-status-button .dropdown-icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    background-color: transparent;
+    border: none;
+
+    font-size: 0.8em;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
+
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.task-status-button .dropdown-icon .dropdown-icon-inner {
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.task-status-button .dropdown-icon img {
+    height: 1em;
+}
+
+.task-status-button .task-status {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 5px;
+
+    font-size: 1em;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
+}
+
+.task-status-button .task-status .task-status-inner {
+    padding: 2px 4px;
+    border-radius: 3px;
+}

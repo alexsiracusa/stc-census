@@ -1,8 +1,27 @@
-export type TaskStatus = 'to_do' | 'in_progress' | 'on_hold' | 'done';
+export const TaskStatuses = [
+    'to_do',
+    'in_progress',
+    'on_hold',
+    'done'
+];
 
-export const TaskStatuses = {
-    TODO: 'to_do' as TaskStatus,
-    IN_PROGRESS: 'in_progress' as TaskStatus,
-    ON_HOLD: 'on_hold' as TaskStatus,
-    DONE: 'done' as TaskStatus,
-} as const;
+export const TaskStatusInfo: Record<TaskStatus, { name: string, color: string }> = {
+    'to_do': {
+        name: 'Todo',
+        color: '#919191'
+    },
+    'in_progress': {
+        name: 'In Progress',
+        color: '#0053ba'
+    },
+    'on_hold': {
+        name: 'On Hold',
+        color: '#e0b000'
+    },
+    'done': {
+        name: 'Done',
+        color: '#008a1e'
+    }
+}
+
+export type TaskStatus = typeof TaskStatuses[number];

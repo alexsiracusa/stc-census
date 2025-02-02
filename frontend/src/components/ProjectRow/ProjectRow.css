@@ -15,8 +15,11 @@
     font-family: monospace, monospace;
     font-size: 0.8em;
     width: 2.25em;
+    min-width: 2.25em;
 }
 
 .project-row .project-name {
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

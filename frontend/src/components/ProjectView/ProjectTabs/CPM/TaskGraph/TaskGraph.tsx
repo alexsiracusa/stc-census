@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import './TaskGraph.css';
-import {Task} from "../../../../../types/task.ts";
+import {Task} from "../../../../../types/Task.ts";
 import {TaskStatuses} from "../../../../../types/TaskStatuses.ts";
 
 cytoscape.use(dagre);

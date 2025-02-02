@@ -8,15 +8,33 @@
     gap: 0.3em;
 
     font-size: 1em;
-    color: black
+    color: black;
+    overflow: hidden;
+
+    font-family: Inter, sans-serif;
 }
 
 .task-row .task-id {
     font-family: monospace, monospace;
     font-size: 0.8em;
     width: 2.25em;
+    min-width: 2.25em;
 }
 
 .task-row .task-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
+    width: 30%;
+    max-width: 24em;
+}
+
+.task-row .task-status-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    width: 5.5em;
+    min-width: 5.5em;
 }

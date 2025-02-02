@@ -1,6 +1,6 @@
 import TabProps from "../TabProps";
 import TaskGraph from './TaskGraph/TaskGraph.tsx';
-import {Task} from "../../../../types/task.ts";
+import {Task} from "../../../../types/Task.ts";
 import {useEffect, useState} from "react";
 
 export const useTasksFetcher = (projectId: string): Task[] => {
