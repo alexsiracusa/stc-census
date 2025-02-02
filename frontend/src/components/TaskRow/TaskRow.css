@@ -30,6 +30,7 @@
         font-family: Inter, sans-serif;
         font-size: 0.8em;
         overflow: hidden;
+        white-space: nowrap;
         color: black;
     }
 }
@@ -61,7 +62,7 @@
 
 /*TASK STATUS*/
 .task-row .task-status-container, .task-row-header .task-status-header {
-    width: 5.5em;
+    width: 15%;
     min-width: 5.5em;
 }
 
@@ -69,4 +70,12 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+}
+
+/* TASK DEPENDS LIST */
+.task-row .task-depends-list-container, .task-row-header .task-depends-list-header {
+    width: 50%;
+}
+.task-row .task-depends-list-container {
+    height: 60%;
 }
