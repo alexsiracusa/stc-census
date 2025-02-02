@@ -6,7 +6,7 @@ Example State Structure
     projects: {
         byId: {
             "project1": {
-                tasks: {
+                byId: {
                     "task1": {
 
                     }
@@ -24,21 +24,13 @@ Example State Structure
 }
  */
 
-const projectSlice = createSlice({
+export const projectSlice = createSlice({
     name: 'projects',
     initialState: {
         byId: {},
         allIds: []
     },
     reducers: {
-        addTask: (state, action) => {
-            const {project_id, task_id, status, comments} = action.payload;
-            const uniqueId = `${project_id}_${task_id}`;
-            if (!state.byId[uniqueId]) {
-                state.byId[uniqueId] = {project_id, task_id, status, comments: comments || []};
-                state.allIds.push(uniqueId);
-            }
-        },
         addProject: (state, action) => {
             const {project} = action.payload;
             state.byId[`${project.id}`] = project
@@ -57,6 +49,9 @@ const projectSlice = createSlice({
     }
 });
 
-export const {addTask, addTasks, addProject, updateTaskStatus, addCommentToTask, updateCommentsForTask} = projectSlice.actions;
+export const {
+    addProject,
+    updateTaskStatus,
+} = projectSlice.actions;
 
 export default projectSlice.reducer;

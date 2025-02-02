@@ -10,41 +10,21 @@ import Calendar from "./ProjectTabs/Calendar/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM/CPM.tsx";
 import EVM from "./ProjectTabs/EVM/EVM.tsx";
 
-import { useSelector, useDispatch } from 'react-redux';
-import {addProject } from "../../redux/features/tasks/projectsReducer.js";
-
+import { useSelector } from 'react-redux';
 import ProjectPath from "../ProjectPath/ProjectPath.tsx";
-import {useEffect} from "react";
+import useFetchProject from "../../hooks/useFetchProject.ts";
 
 type ProjectViewProps = {
     project_id: number
 }
 
 const ProjectView = (props: ProjectViewProps) => {
+    const { loading, error } = useFetchProject(props.project_id);
     const project = useSelector((state) => state.projects.byId[props.project_id]);
-    const host = import.meta.env.VITE_BACKEND_HOST;
     const {t} = useTranslation();
 
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await fetch(`${host}/project/${props.project_id}`);
-                const json = await response.json()
-                if (!response.ok) return console.error(json['error']);
-                dispatch(addProject({
-                    project: json
-                }))
-            } catch (error) {
-                console.error(error)
-            }
-        })();
-    }, []);
-
-    if (project === undefined) {
-        return <div>{t('projectView.loading')}</div>
-    }
+    if (error) return <p>Error: {error.toString()}</p>;
+    if (loading || project === undefined) return <p>{t('projectView.loading')}</p>;
 
     return (
         <div className='project-view'>

@@ -1,38 +1,28 @@
 import './ProjectDashboard.css'
 
-import {useState, useEffect} from 'react';
 import ProjectRow from "../../components/ProjectRow/ProjectRow.tsx";
 import { useTranslation } from "react-i18next";
+import {useSelector} from "react-redux";
+import useFetchDashboard from "../../hooks/useFetchDashboard.ts";
 
 
 const ProjectDashboard = () => {
-    const [projects, setProjects] = useState(null);
-    const host = import.meta.env.VITE_BACKEND_HOST;
+    const {loading, error } = useFetchDashboard()
+    const project_ids = useSelector((state) => state.projectDashboard.list);
     const { t } = useTranslation();
 
-    useEffect(() =>  {
-        (async () => {
-            try {
-                const response = await fetch(`${host}/projects/`);
-                const json = await response.json()
-                if (!response.ok) return console.error(json['error']);
-                setProjects(json)
-            }
-            catch (error) {
-                console.error(error)
-            }
-        })();
-    }, []);
+    if (error) return <p>Error: {error.toString()}</p>;
+    if (loading || project_ids === undefined) return <p>{t('projectView.loading')}</p>;
 
     return (
         <div className='project-dashboard'>
             <h3>{t('projectDashboard.title')}</h3>
 
-            {projects !== null && (
+            {project_ids !== null && (
                 <ul className='project-list'>
-                    {projects.map((project) => (
-                        <li key={project['id']}>
-                            <ProjectRow project={project}/>
+                    {project_ids.map((project_id) => (
+                        <li key={project_id}>
+                            <ProjectRow project_id={project_id}/>
                         </li>
                     ))}
                 </ul>

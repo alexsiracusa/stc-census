@@ -10,6 +10,14 @@ async def get_projects():
     """)
 
 
+async def get_project_summary(project_id):
+    return await client.postgres_client.fetch_row("""
+        SELECT * 
+        FROM Project
+        WHERE id = $1
+    """, project_id)
+
+
 async def get_project_by_id(project_id):
     return await client.postgres_client.fetch_row("""
         SELECT 

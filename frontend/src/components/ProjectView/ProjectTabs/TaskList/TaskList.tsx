@@ -27,7 +27,7 @@ const TaskList = (props: TabProps) => {
                         <ul>
                             {project['sub_projects'].map((project) => (
                                 <li key={project.id}>
-                                    <ProjectRow project_id={props.project_id}/>
+                                    <ProjectRow project_id={project.id}/>
                                 </li>
                             ))}
                         </ul>
