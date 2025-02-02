@@ -6,10 +6,17 @@ import TaskRow from "../../../TaskRow/TaskRow.tsx";
 import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
 import { useTranslation } from 'react-i18next';
 
+import {useSelector} from "react-redux";
+
 
 const TaskList = (props: TabProps) => {
     const project = props.project;
     const { t } = useTranslation();
+
+    const tasks = useSelector((state) => state.projects.byId[project.id].byId);
+    if (tasks == null) {
+        return <></>
+    }
 
     return (
         <div className='task-list'>
@@ -34,7 +41,7 @@ const TaskList = (props: TabProps) => {
                         <TaskRowHeader/>
 
                         <ul>
-                            {project['tasks'].map((task) => (
+                            {Object.values(tasks).map((task) => (
                                 <li key={task.id}>
                                     <TaskRow task={task}/>
                                 </li>

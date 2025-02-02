@@ -2,11 +2,12 @@ import './TaskStatusSelector.css'
 
 import {TaskStatusInfo, TaskStatuses} from "../../types/TaskStatuses.ts";
 import {Task} from "../../types/Task.ts";
+import { useDispatch } from 'react-redux';
 
 import Dropdown from "../Dropdown/Dropdown.tsx";
 import DropDownRow from "../Dropdown/DropdownRow.tsx";
 import {useState} from "react";
-import TriangleDown from '../../assets/Icons/TriangleDown.svg';
+import {updateTaskStatus} from "../../redux/features/tasks/projectsReducer.js";
 
 type TaskStatusSelectorProps = {
     task: Task
@@ -14,9 +15,15 @@ type TaskStatusSelectorProps = {
 
 const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
     const [status, setStatus] = useState(props.task.status)
+    const dispatch = useDispatch();
 
     async function setValue(newValue: string) {
         setStatus(newValue)
+        dispatch(updateTaskStatus({
+            project_id: props.task.project_id,
+            task_id: props.task.id,
+            status: newValue
+        }))
     }
 
     return (
@@ -46,8 +53,8 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
                         <div
                             className="task-status-inner"
                             style={{
-                            backgroundColor: TaskStatusInfo[status].color + '45',
-                            color: TaskStatusInfo[status].color
+                                backgroundColor: TaskStatusInfo[status].color + '45',
+                                color: TaskStatusInfo[status].color
                             }}
                         >
                             {`${TaskStatusInfo[status].name}`}

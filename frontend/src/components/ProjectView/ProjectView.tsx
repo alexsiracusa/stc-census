@@ -1,6 +1,6 @@
 import './ProjectView.css'
 import {Route, Routes, Navigate} from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 import Summary from "./ProjectTabs/Summary/Summary.tsx";
 import TaskList from "./ProjectTabs/TaskList/TaskList.tsx";
@@ -9,6 +9,9 @@ import GanttChart from "./ProjectTabs/GanttChart/GanttChart.tsx";
 import Calendar from "./ProjectTabs/Calendar/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM/CPM.tsx";
 import EVM from "./ProjectTabs/EVM/EVM.tsx";
+
+import { useSelector, useDispatch } from 'react-redux';
+import {addTasks} from "../../redux/features/tasks/projectsReducer.js";
 
 import ProjectPath from "../ProjectPath/ProjectPath.tsx";
 import {useEffect, useState} from "react";
@@ -20,17 +23,19 @@ type ProjectViewProps = {
 const ProjectView = (props: ProjectViewProps) => {
     const [project, setProject] = useState(null);
     const host = import.meta.env.VITE_BACKEND_HOST;
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
-    useEffect(() =>  {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
         (async () => {
             try {
                 const response = await fetch(`${host}/project/${props.project_id}`);
                 const json = await response.json()
                 if (!response.ok) return console.error(json['error']);
                 setProject(json)
-            }
-            catch (error) {
+                dispatch(addTasks({tasks: json['tasks']}))
+            } catch (error) {
                 console.error(error)
             }
         })();
