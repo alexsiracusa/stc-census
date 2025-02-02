@@ -2,24 +2,37 @@ import {createSlice} from '@reduxjs/toolkit';
 
 /*
 Example State Structure
+
 {
     projects: {
         byId: {
-            "project1": {
+            "1": {
                 byId: {
-                    "task1": {
-
+                    "1": {
+                        "id" 1,
+                        "name": "Create supply list"
+                        "status": "done"
+                        ...
                     }
+                    "2": {
+                        "id" 2,
+                        "name": "Get design approved",
+                        "status": "to_do"
+                        ...
+                    }
+                    ...
                 }
-                allIds: ["task1"]
             },
-            "project1_task2": {
-                project_id: "project1",
-                task_id: "task2",
-                status: "completed"
+            "2": {
+                "byId": {
+                    "1": {
+                        ...
+                    }
+                    ...
+                }
             }
-        },
-        allIds: ["project1_task1", "project1_task2"]
+            ...
+        }
     }
 }
  */
@@ -28,7 +41,6 @@ export const projectSlice = createSlice({
     name: 'projects',
     initialState: {
         byId: {},
-        allIds: []
     },
     reducers: {
         addProject: (state, action) => {

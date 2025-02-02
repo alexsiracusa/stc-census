@@ -1,7 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {projectSummarySlice} from "./projectSummaryReducer.js";
 
+/*
+Example State Structure
 
+{
+    "projectDashboard": [1, 2, 3, 4... ]
+}
+ */
 export const projectDashboardSlice = createSlice({
     name: 'projectDashboard',
     initialState: {},
