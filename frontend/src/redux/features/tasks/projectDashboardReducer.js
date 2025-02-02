@@ -8,6 +8,7 @@ Example State Structure
     "projectDashboard": [1, 2, 3, 4... ]
 }
  */
+
 export const projectDashboardSlice = createSlice({
     name: 'projectDashboard',
     initialState: {},
