@@ -1,5 +1,4 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {projectSummarySlice} from "./projectSummaryReducer.js";
 
 /*
 Example State Structure
@@ -47,14 +46,20 @@ export const projectSlice = createSlice({
     reducers: {
         addProject: (state, action) => {
             const {project} = action.payload;
-            state.byId[`${project.id}`] = project
+            const oldProject = state.byId[`${project.id}`]
 
-            project.byId = {}
-            project.tasks.forEach((task) => {
-                state.byId[`${project.id}`].byId[`${task.id}`] = task
+            // combine old project with new project
+            state.byId[`${project.id}`] = {...oldProject, ...project}
+            const newProject = state.byId[`${project.id}`]
+
+            if (newProject.tasks === undefined) { return }
+
+            newProject.byId = {}
+            newProject.tasks.forEach((task) => {
+                state.byId[`${newProject.id}`].byId[`${task.id}`] = task
             })
 
-            delete project.tasks
+            delete newProject.tasks
         },
         updateTaskStatus: (state, action) => {
             const {project_id, task_id, status} = action.payload;
@@ -66,7 +71,7 @@ export const projectSlice = createSlice({
             state.dashboard = projects.map((project) => project.id)
 
             projects.forEach((project) => {
-                projectSummarySlice.caseReducers.addProjectSummary(state, {
+                projectSlice.caseReducers.addProject(state, {
                     payload: { project: project }
                 })
             })

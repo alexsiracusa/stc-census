@@ -10,7 +10,7 @@ type ProjectRowProps = {
 
 const ProjectRow = (props: ProjectRowProps) => {
     const { loading, error } = useFetchProjectSummary(props.project_id);
-    const project = useSelector((state) => state.projectSummaries[props.project_id]);
+    const project = useSelector((state) => state.projects.byId[props.project_id]);
 
     if (error) return <p>Error: {error.toString()}</p>;
     if (loading || project === undefined) return <p>Loading</p>;

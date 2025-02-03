@@ -23,7 +23,7 @@ const ProjectView = (props: ProjectViewProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const {t} = useTranslation();
 
-    if (error) return <p>Error: {error.toString()}</p>;
+    if (error) return <p>Project View Error: {error.toString()}</p>;
     if (loading || project === undefined) return <p>{t('projectView.loading')}</p>;
 
     return (

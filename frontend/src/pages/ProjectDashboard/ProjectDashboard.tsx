@@ -11,7 +11,7 @@ const ProjectDashboard = () => {
     const project_ids = useSelector((state) => state.projects.dashboard);
     const { t } = useTranslation();
 
-    if (error) return <p>Error: {error.toString()}</p>;
+    if (error) return <p>Project Dashboard Error: {error.toString()}</p>;
     if (loading || project_ids === undefined) return <p>{t('projectView.loading')}</p>;
 
     return (
