@@ -28,10 +28,10 @@ const TaskRow = (props: TaskRowProps) => {
             <div className='task-id'><p>T{task.id}</p></div>
             <div className='task-name'><p>{task.name}</p></div>
             <div className='task-status-container'>
-                <TaskStatusSelector task={task}/>
+                <TaskStatusSelector project_id={props.project_id} task_id={props.task_id}/>
             </div>
             <div className='task-depends-list-container'>
-                <TaskDependsList task={task}/>
+                <TaskDependsList project_id={props.project_id} task_id={props.task_id}/>
             </div>
         </div>
     )

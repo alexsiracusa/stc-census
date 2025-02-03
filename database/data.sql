@@ -32,8 +32,8 @@ UPDATE Task SET status = 'on_hold' WHERE id = 4 AND project_id = 1;
 INSERT INTO Task_Depends_On (task_id, project_id, depends_task_id, depends_project_id) VALUES
 (3, 1, 4, 1),
 (3, 1, 2, 1),
-(2, 1, 1,1 ),
-(6, 1, 5,1 ),
+(2, 1, 1, 1),
+(6, 1, 5, 1),
 
 (3, 2, 2, 2),
 (2, 2, 1, 2),
