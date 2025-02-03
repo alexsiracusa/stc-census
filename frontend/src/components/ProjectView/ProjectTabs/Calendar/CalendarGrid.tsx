@@ -18,10 +18,6 @@ const isToday = (date: Date): boolean => {
     );
 };
 
-const formatDate = (date: Date): string => {
-    return date.toISOString().split('T')[0];
-};
-
 const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openEventForm, openAllEventsOverlay }) => {
     return (
         <div className="calendar-grid">
@@ -44,7 +40,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openE
                     <div className={`day-number ${isToday(date) ? 'today' : ''}`}>{date.getDate()}</div>
                     <div className="event-list">
                         {events
-                            .filter((event) => event.date === formatDate(date))
+                            .filter((event) => {
+                                const eventDate = new Date(event.date);
+                                return eventDate.getFullYear() === date.getFullYear() &&
+                                    eventDate.getMonth() === date.getMonth() &&
+                                    eventDate.getDate() === date.getDate();
+                            })
                             .slice(0, 4)
                             .map((event) => (
                                 <div
@@ -56,7 +57,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openE
                                     {event.title}
                                 </div>
                             ))}
-                        {events.filter((event) => event.date === formatDate(date)).length > 4 && (
+                        {events.filter((event) => {
+                            const eventDate = new Date(event.date);
+                            return eventDate.getFullYear() === date.getFullYear() &&
+                                eventDate.getMonth() === date.getMonth() &&
+                                eventDate.getDate() === date.getDate();
+                        }).length > 4 && (
                             <button
                                 className="more-events"
                                 onClick={(e) => {
@@ -64,7 +70,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openE
                                     openAllEventsOverlay(date);
                                 }}
                             >
-                                {`+ ${events.filter((event) => event.date === formatDate(date)).length - 4} more`}
+                                {`+ ${events.filter((event) => {
+                                    const eventDate = new Date(event.date);
+                                    return eventDate.getFullYear() === date.getFullYear() &&
+                                        eventDate.getMonth() === date.getMonth() &&
+                                        eventDate.getDate() === date.getDate();
+                                }).length - 4} more`}
                             </button>
                         )}
                     </div>
