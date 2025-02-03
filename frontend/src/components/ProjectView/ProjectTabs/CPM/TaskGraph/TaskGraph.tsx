@@ -3,7 +3,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import './TaskGraph.css';
 import {Task} from "../../../../../types/Task.ts";
-import {TaskStatuses} from "../../../../../types/TaskStatuses.ts";
+import {TaskStatusInfo} from "../../../../../types/TaskStatuses.ts";
 
 cytoscape.use(dagre);
 
@@ -20,17 +20,16 @@ const TaskGraph: React.FC<{
 
         const nodes = tasks.map(task => ({
             data: {
-                id: `${task.project_id}-${task.id}`, // Combine project and task IDs
+                id: `${task.project_id}-${task.id}`,
                 label: task.name,
                 status: task.status,
-                project_id: task.project_id, // Add project ID to data
+                project_id: task.project_id,
                 isExternalProject: task.project_id !== currentProjectId
             }
         }));
 
         const edges = tasks.flatMap(task => (task.depends_on || []).map(dependency => ({
             data: {
-                // Update source and target to use combined IDs
                 source: `${dependency.project_id}-${dependency.task_id}`,
                 target: `${task.project_id}-${task.id}`
             }
@@ -51,14 +50,13 @@ const TaskGraph: React.FC<{
                         'font-size': '15%',
                         'text-valign': 'center',
                         'text-halign': 'center',
-                        'background-color': '#666',
+                        'background-color': TaskStatusInfo['to_do'].color,
                         'shape': 'roundrectangle',
                         'color': '#fff',
                         'opacity': 1
                     }
                 },
                 {
-                    // Style for external project nodes
                     selector: 'node[?isExternalProject]',
                     style: {
                         'opacity': 0.6,
@@ -66,23 +64,23 @@ const TaskGraph: React.FC<{
                     }
                 },
                 {
-                    selector: `node[status = "${TaskStatuses.DONE}"]`,
+                    selector: `node[status = "done"]`,
                     style: {
-                        'background-color': '#4CAF50',
+                        'background-color': TaskStatusInfo['done'].color,
                         'opacity': 'data(isExternalProject) ? 0.8 : 1'
                     }
                 },
                 {
-                    selector: `node[status = "${TaskStatuses.IN_PROGRESS}"]`,
+                    selector: `node[status = "in_progress"]`,
                     style: {
-                        'background-color': '#2196F3',
+                        'background-color': TaskStatusInfo['in_progress'].color,
                         'opacity': 'data(isExternalProject) ? 0.8 : 1'
                     }
                 },
                 {
-                    selector: `node[status = "${TaskStatuses.ON_HOLD}"]`,
+                    selector: `node[status = "on_hold"]`,
                     style: {
-                        'background-color': '#dfa100',
+                        'background-color': TaskStatusInfo['on_hold'].color,
                         'color': '#000',
                         'opacity': 'data(isExternalProject) ? 0.8 : 1'
                     }
