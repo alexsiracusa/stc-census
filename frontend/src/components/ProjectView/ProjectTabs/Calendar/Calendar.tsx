@@ -52,6 +52,13 @@ const Calendar: React.FC = () => {
         return days;
     };
 
+    const formatDateToLocalString = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const handleSaveEvent = () => {
         if (eventTitle && selectedDate) {
             setEvents((prev) => [
@@ -63,7 +70,7 @@ const Calendar: React.FC = () => {
     };
 
     const handleOpenEventForm = (date: Date) => {
-        setSelectedDate(date.toISOString().split('T')[0]);
+        setSelectedDate(formatDateToLocalString(date));
         setEventTitle('');
         setEventDescription('');
         setIsEventFormOpen(true);
