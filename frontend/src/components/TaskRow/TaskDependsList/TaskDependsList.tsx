@@ -1,14 +1,15 @@
 import './TaskDependsList.css'
 import {Task} from "../../../types/Task.ts";
-import {TaskStatusInfo} from "../../../types/TaskStatuses.ts";
 import TaskIcon from "./TaskIcon.tsx";
+import {useSelector} from "react-redux";
 
 type TaskDependsListProps = {
-    task: Task
+    project_id: number
+    task_id: number
 }
 
 const TaskDependsList = (props: TaskDependsListProps) => {
-    const task = props.task
+    const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
 
     return (
         <div className="task-depends-list">

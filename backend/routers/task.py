@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Response, Body, status
 from typing import Any
 from ..database import data
 import asyncpg
+import json
 
 router = APIRouter(
     prefix="/{project_id}/task",
@@ -33,6 +34,8 @@ async def update_task(
     fields: Any = Body(None)
 ):
     try:
+        if isinstance(fields, bytes):
+            fields = json.loads(fields.decode("utf-8"))
         updated_task = await data.update_task(project_id, task_id, fields)
 
         if not updated_task:

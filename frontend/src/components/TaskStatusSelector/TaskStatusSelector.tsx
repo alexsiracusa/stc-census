@@ -1,30 +1,27 @@
 import './TaskStatusSelector.css'
 
 import {TaskStatusInfo, TaskStatuses} from "../../types/TaskStatuses.ts";
-import {Task} from "../../types/Task.ts";
-import { useDispatch } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Dropdown from "../Dropdown/Dropdown.tsx";
 import DropDownRow from "../Dropdown/DropdownRow.tsx";
-import {useState} from "react";
-import {updateTaskStatus} from "../../redux/features/tasks/projectsReducer.js";
+import { useRef } from "react";
+import useUpdateTaskStatus from "../../hooks/useUpdateTaskStatus.ts";
 
 type TaskStatusSelectorProps = {
-    task: Task
+    project_id: number
+    task_id: number
 }
 
 const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
-    const [status, setStatus] = useState(props.task.status)
-    const dispatch = useDispatch();
+    const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
+    const {updateTaskStatus, loading, error, data} = useUpdateTaskStatus();
+    // const isMounted = useRef(true)
 
-    async function setValue(newValue: string) {
-        setStatus(newValue)
-        dispatch(updateTaskStatus({
-            project_id: props.task.project_id,
-            task_id: props.task.id,
-            status: newValue
-        }))
-    }
+    // set isMounted to false when we unmount the component
+    const handleUpdate = (status) => {
+        updateTaskStatus(props.project_id, props.task_id, status);
+    };
 
     return (
         <div className="task-status-button">
@@ -33,18 +30,18 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
                     <div
                         className="dropdown-icon-inner"
                         style={{
-                            backgroundColor: TaskStatusInfo[status].color + '45',
-                            color: TaskStatusInfo[status].color
+                            backgroundColor: TaskStatusInfo[task.status].color + '45',
+                            color: TaskStatusInfo[task.status].color
                         }}
                     >
-                        {TaskStatusInfo[status].name}
+                        {TaskStatusInfo[task.status].name}
                     </div>
                 }
                 className="dropdown-icon"
                 title="Status"
-                onChange={setValue}
+                onChange={handleUpdate}
             >
-                { TaskStatuses.map((status: string) => (
+                {TaskStatuses.map((status: string) => (
                     <DropDownRow
                         value={status}
                         className="task-status"
