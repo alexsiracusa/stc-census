@@ -1,39 +1,10 @@
-import {useDispatch} from "react-redux";
-const host = import.meta.env.VITE_BACKEND_HOST;
-import {useEffect, useState} from "react";
+import useFetch from "./useFetch.ts";
 import {addProject} from "../redux/features/tasks/projectsReducer.js";
 
 const useFetchProjectSummary = (project_id) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        const fetchProjects = async () => {
-            setLoading(true);
-            setError(null);
-
-            try {
-                const response = await fetch(`${host}/project/${project_id}/summary`);
-                const json = await response.json()
-                if (!response.ok) {
-                    setError(json['error']);
-                    console.error(json['error']);
-                    return;
-                }
-                dispatch(addProject({ project: json }));
-            } catch (error) {
-                setError(error);
-                console.error('Failed to fetch projects:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProjects();
-    }, [dispatch]);
-
-    return { loading, error };
+    const host = import.meta.env.VITE_BACKEND_HOST;
+    const url = `${host}/project/${project_id}/summary`;
+    return useFetch(url, addProject);
 };
 
 export default useFetchProjectSummary;

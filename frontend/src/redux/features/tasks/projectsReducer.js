@@ -50,7 +50,7 @@ export const projectSlice = createSlice({
     },
     reducers: {
         addProject: (state, action) => {
-            const {project} = action.payload;
+            const project = action.payload.json;
             const oldProject = state.byId[`${project.id}`]
 
             // combine old project with new project
@@ -71,13 +71,13 @@ export const projectSlice = createSlice({
             state.byId[`${project_id}`].byId[`${task_id}`].status = status
         },
         setDashboard: (state, action) => {
-            const {projects} = action.payload;
+            const projects = action.payload.json;
 
             state.dashboard = projects.map((project) => project.id)
 
             projects.forEach((project) => {
                 projectSlice.caseReducers.addProject(state, {
-                    payload: { project: project }
+                    payload: { json: project }
                 })
             })
         }
