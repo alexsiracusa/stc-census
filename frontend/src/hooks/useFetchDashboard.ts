@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 const host = import.meta.env.VITE_BACKEND_HOST;
 import {useEffect, useState} from "react";
-import {addProjects} from "../redux/features/tasks/projectDashboardReducer.js";
+import {setDashboard} from "../redux/features/tasks/projectsReducer.js";
 
 const useFetchDashboard = () => {
     const [loading, setLoading] = useState(false);
@@ -9,7 +9,7 @@ const useFetchDashboard = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchDashboard = async () => {
             setLoading(true);
             setError(null);
 
@@ -21,7 +21,7 @@ const useFetchDashboard = () => {
                     console.error(json['error']);
                     return;
                 }
-                dispatch(addProjects({ projects: json }));
+                dispatch(setDashboard({ projects: json }));
             } catch (error) {
                 setError(error);
                 console.error('Failed to fetch projects:', error);
@@ -30,7 +30,7 @@ const useFetchDashboard = () => {
             }
         };
 
-        fetchProjects();
+        fetchDashboard();
     }, [dispatch]);
 
     return { loading, error };

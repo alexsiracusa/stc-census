@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {projectSummarySlice} from "./projectSummaryReducer.js";
 
 /*
 Example State Structure
@@ -33,6 +34,7 @@ Example State Structure
             }
             ...
         }
+        "dashboard": [1, 2, 3... ]
     }
 }
  */
@@ -58,12 +60,24 @@ export const projectSlice = createSlice({
             const {project_id, task_id, status} = action.payload;
             state.byId[`${project_id}`].byId[`${task_id}`].status = status
         },
+        setDashboard: (state, action) => {
+            const {projects} = action.payload;
+
+            state.dashboard = projects.map((project) => project.id)
+
+            projects.forEach((project) => {
+                projectSummarySlice.caseReducers.addProjectSummary(state, {
+                    payload: { project: project }
+                })
+            })
+        }
     }
 });
 
 export const {
     addProject,
     updateTaskStatus,
+    setDashboard,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

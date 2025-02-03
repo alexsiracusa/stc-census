@@ -8,7 +8,7 @@ import useFetchDashboard from "../../hooks/useFetchDashboard.ts";
 
 const ProjectDashboard = () => {
     const {loading, error } = useFetchDashboard()
-    const project_ids = useSelector((state) => state.projectDashboard.list);
+    const project_ids = useSelector((state) => state.projects.dashboard);
     const { t } = useTranslation();
 
     if (error) return <p>Error: {error.toString()}</p>;
