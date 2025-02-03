@@ -2,29 +2,36 @@ import TabProps from "../TabProps";
 import TaskGraph from './TaskGraph/TaskGraph.tsx';
 import {Task} from "../../../../types/Task.ts";
 import {useEffect, useState} from "react";
+import useCpmData from "../../../../hooks/useCpmData.ts";
 
-export const useTasksFetcher = (projectId: string): Task[] => {
+export const useTasksFetcher = (projectId: string): [Task[], boolean] => {
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [loading, setLoading] = useState(true);
     const host = import.meta.env.VITE_BACKEND_HOST;
 
     useEffect(() => {
+        setLoading(true);
         fetch(`${host}/project/${projectId}/all-tasks`)
             .then(response => response.json())
             .then(json => {
                 setTasks(json);
+                setLoading(false);
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                setLoading(false);
+            });
     }, [projectId, host]);
 
-    return tasks;
+    return [tasks, loading];
 };
 
 const CPM = (props: TabProps) => {
-    // Load task data
-    const tasks: Task[] = useTasksFetcher(`${props.project_id}`);
+    const projectId = Number(props.project_id);
+    const [tasks, loading] = useTasksFetcher(`${projectId}`);
+    const cpmData = useCpmData(projectId);
 
-    // Add loading state
-    if (!tasks || tasks.length === 0) {
+    if (loading) {
         return <div className="cpm">Loading tasks...</div>;
     }
 
@@ -32,7 +39,8 @@ const CPM = (props: TabProps) => {
         <TaskGraph
             className='cpm'
             tasks={tasks}
-            currentProjectId={Number(props.project_id)}
+            currentProjectId={projectId}
+            cpmData={cpmData}
         />
     );
 };

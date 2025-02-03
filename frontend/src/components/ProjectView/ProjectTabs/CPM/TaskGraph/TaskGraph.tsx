@@ -11,7 +11,8 @@ const TaskGraph: React.FC<{
     className?: string;
     tasks?: Task[];
     currentProjectId?: number;
-}> = ({ className = '', tasks = [], currentProjectId }) => {
+    cpmData?: Record<number, any>;
+}> = ({ className = '', tasks = [], currentProjectId, cpmData = {} }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
 
@@ -21,10 +22,11 @@ const TaskGraph: React.FC<{
         const nodes = tasks.map(task => ({
             data: {
                 id: `${task.project_id}-${task.id}`,
-                label: task.name,
+                label: formatNodeLabel(task, cpmData[task.id]),
                 status: task.status,
                 project_id: task.project_id,
-                isExternalProject: task.project_id !== currentProjectId
+                isExternalProject: task.project_id !== currentProjectId,
+                isCritical: cpmData[task.id]?.critical
             }
         }));
 
@@ -35,17 +37,28 @@ const TaskGraph: React.FC<{
             }
         })));
 
+        const updatedStyles = [
+            ...taskGraphStyles,
+            {
+                selector: 'node[isCritical]',
+                style: {
+                    'border-width': '5%',
+                    'border-color': '#ff0000'
+                }
+            }
+        ];
+
         cyRef.current = cytoscape({
             container: containerRef.current,
-            elements: { nodes, edges },
-            style: taskGraphStyles,
+            elements: {nodes, edges},
             layout: {
                 name: 'dagre',
                 rankDir: 'LR',
                 padding: 0,
                 spacingFactor: 1.5,
                 nodeDimensionsIncludeLabels: true
-            }
+            },
+            style: updatedStyles
         });
 
         return () => {
@@ -54,6 +67,15 @@ const TaskGraph: React.FC<{
             }
         };
     }, [tasks, currentProjectId]);
+
+    const formatNodeLabel = (task: Task, cpm: any) => {
+        if (!cpm) return task.name;
+
+        return `${task.name}
+                ES: ${cpm.es} | EF: ${cpm.ef}
+                LS: ${cpm.ls} | LF: ${cpm.lf}
+                Slack: ${cpm.slack} ${cpm.critical ? '⏰' : ''}`;
+    };
 
     return (
         <div

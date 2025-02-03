@@ -44,6 +44,28 @@ async def get_all_project_tasks(project_id):
     """, project_id)
 
 
+# this is for the cpm algorithm to compute cpm stats
+async def get_all_project_tasks_with_dependencies(project_id: int):
+    query = """
+    SELECT
+            t.id,
+            t.target_days_to_complete,
+            COALESCE(json_agg(
+                json_build_object(
+                    'task_id', d.depends_task_id,
+                    'project_id', d.depends_project_id
+                )
+            ) FILTER (WHERE d.depends_task_id IS NOT NULL), '[]') as depends_on
+        FROM Task_Node t
+        LEFT JOIN Task_Depends_On d ON t.id = d.task_id
+        WHERE t.project_id = $1
+        GROUP BY t.id, t.target_days_to_complete
+        ORDER BY t.id;
+    """
+    return await client.postgres_client.fetch(query, project_id)
+
+
+
 async def get_task(project_id, task_id):
     return await client.postgres_client.fetch_row(f"""
         SELECT * FROM Task_Node WHERE project_id = $1 AND id = $2
