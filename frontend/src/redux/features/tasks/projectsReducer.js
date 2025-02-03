@@ -7,6 +7,9 @@ Example State Structure
     projects: {
         byId: {
             "1": {
+                "id": 1,
+                "name": "Awards Ceremony",
+                ...
                 byId: {
                     "1": {
                         "id" 1,
@@ -24,6 +27,8 @@ Example State Structure
                 }
             },
             "2": {
+                "id": 2,
+                ...
                 "byId": {
                     "1": {
                         ...
