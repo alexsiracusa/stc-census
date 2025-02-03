@@ -71,10 +71,7 @@ const TaskGraph: React.FC<{
     const formatNodeLabel = (task: Task, cpm: any) => {
         if (!cpm) return task.name;
 
-        return `${task.name}
-                ES: ${cpm.es} | EF: ${cpm.ef}
-                LS: ${cpm.ls} | LF: ${cpm.lf}
-                Slack: ${cpm.slack} ${cpm.critical ? '⏰' : ''}`;
+        return `${task.name}\nES: ${cpm.es} | EF: ${cpm.ef}\nLS: ${cpm.ls} | LF: ${cpm.lf}\nSlack: ${cpm.slack} ${cpm.critical ? '⏰' : ''}`;
     };
 
     return (

@@ -9,6 +9,18 @@ Example State Structure
             "1": {
                 "id": 1,
                 "name": "Awards Ceremony",
+                "cpm": [
+                    {
+                        "task_id": 1,
+                        "es": 0,
+                        "ef": 0,
+                        "ls": 0,
+                        "lf": 0,
+                        "slack": 0,
+                        "critical": true
+                    },
+                    ...
+                ],
                 ...
                 byId: {
                     "1": {
@@ -77,10 +89,10 @@ export const projectSlice = createSlice({
 
             projects.forEach((project) => {
                 projectSlice.caseReducers.addProject(state, {
-                    payload: { json: project }
+                    payload: {json: project}
                 })
             })
-        }
+        },
     }
 });
 

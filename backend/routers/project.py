@@ -85,7 +85,12 @@ async def get_cpm_analysis(project_id: int, response: Response):
 
         # Compute CPM
         df = compute_cpm(cpm_input)
-        return df.to_dict(orient="records")
+        # Create the final dictionary with the desired structure
+        result = {
+            "id": project_id,
+            "cpm": df.to_dict(orient="records")
+        }
+        return result
 
     except Exception as e:
         raise HTTPException(

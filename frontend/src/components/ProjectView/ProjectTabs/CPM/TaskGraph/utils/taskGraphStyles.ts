@@ -8,7 +8,7 @@ export const taskGraphStyles = [
         style: {
             'label': 'data(label)',
             'text-wrap': 'wrap',
-            'text-max-width': '100%',
+            'text-max-width': '150%',
             'width': '160%',
             'height': '70%',
             'font-size': '12%',
