@@ -17,7 +17,6 @@ const GanttChart = (props: TabProps) => {
     return (
         <div>
             {t('ganttChart.title')} {props.project_id}
-            <GanttBody data={sortedTasks} />
             <div className="chart-legend">
                 <ul>
                     <div className="legend-container">
@@ -30,6 +29,7 @@ const GanttChart = (props: TabProps) => {
                     </div>
                 </ul>
             </div>
+            <GanttBody data={sortedTasks} />
         </div>
 
     )
