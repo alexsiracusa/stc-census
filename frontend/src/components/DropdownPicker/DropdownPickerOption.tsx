@@ -5,7 +5,7 @@ type DropdownRowProps = {
     className: string
 }
 
-const DropdownRow = (props: PropsWithChildren<DropdownRowProps>) => {
+const DropdownPickerOption = (props: PropsWithChildren<DropdownRowProps>) => {
     return (
         <div className={props.className}>
             {Children.map(props.children, child =>
@@ -17,4 +17,4 @@ const DropdownRow = (props: PropsWithChildren<DropdownRowProps>) => {
     )
 }
 
-export default DropdownRow;
+export default DropdownPickerOption;

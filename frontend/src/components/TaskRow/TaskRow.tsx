@@ -3,6 +3,7 @@ import './TaskRow.css'
 import {useNavigate} from "react-router-dom";
 import TaskStatusSelector from "../TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
+import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
 import {useSelector} from "react-redux";
 import { format } from 'date-fns';
 
@@ -40,7 +41,10 @@ const TaskRow = (props: TaskRowProps) => {
                 <TaskDependsList project_id={props.project_id} task_id={props.task_id}/>
             </div>
             <div className='task-start-date'><p>{formatDate(task.target_start_date)}</p></div>
-            <div className='task-end-date'><p>{formatDate(task.target_completion_date)}</p></div>
+
+            <TaskDatePicker project_id={props.project_id} task_id={props.task_id}/>
+
+            {/*<div className='task-end-date'><p>{formatDate(task.target_completion_date)}</p></div>*/}
         </div>
     )
 };

@@ -1,0 +1,15 @@
+
+.dropdown-row-picker-content button {
+    aspect-ratio: auto;
+    height: 100%;
+
+    border-radius: 0;
+    border: none;
+    padding: 0;
+
+    background-color: white;
+}
+
+.dropdown-row-picker-content button:hover {
+    background-color: #00000020;
+}

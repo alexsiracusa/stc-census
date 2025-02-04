@@ -3,8 +3,8 @@ import './TaskStatusSelector.css'
 import {TaskStatusInfo, TaskStatuses} from "../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
-import Dropdown from "../Dropdown/Dropdown.tsx";
-import DropDownRow from "../Dropdown/DropdownRow.tsx";
+import DropdownRowPicker from "../DropdownRowPicker/DropdownRowPicker.tsx";
+import DropdownPickerOption from "../DropdownPicker/DropdownPickerOption.tsx";
 import { useRef } from "react";
 import useUpdateTaskStatus from "../../hooks/useUpdateTaskStatus.ts";
 
@@ -25,7 +25,7 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
 
     return (
         <div className="task-status-button">
-            <Dropdown
+            <DropdownRowPicker
                 icon={
                     <div
                         className="dropdown-icon-inner"
@@ -42,7 +42,7 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
                 onChange={handleUpdate}
             >
                 {TaskStatuses.map((status: string) => (
-                    <DropDownRow
+                    <DropdownPickerOption
                         value={status}
                         className="task-status"
                         key={status}
@@ -56,9 +56,9 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
                         >
                             {`${TaskStatusInfo[status].name}`}
                         </div>
-                    </DropDownRow>
+                    </DropdownPickerOption>
                 ))}
-            </Dropdown>
+            </DropdownRowPicker>
         </div>
     )
 };
