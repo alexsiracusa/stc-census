@@ -14,32 +14,60 @@ type DropdownProps = {
     setIsVisible: (boolean) => void
 }
 
+const findNearestScrollableParent = (element) => {
+    let parent = element.parentNode;
+
+    while (parent) {
+        const style = window.getComputedStyle(parent);
+
+        const overflowY = style.overflowY;
+        const overflowX = style.overflowX;
+
+        const isScrollableY = (overflowY === 'auto' || overflowY === 'scroll') && parent.scrollHeight > parent.clientHeight;
+        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll') && parent.scrollWidth > parent.clientWidth;
+
+        if (isScrollableY || isScrollableX) {
+            return parent;
+        }
+
+        parent = parent.parentNode; // Step up to the next parent
+    }
+
+    return null; // No scrollable parent found
+};
+
 
 const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
     const [fixedPosition, setFixedPosition] = useState(0); // Initial position
     const ref = useRef(null);
+
+    useEffect(() => {
+        if (ref.current) {
+            // Find the nearest scrollable parent dynamically
+            const scrollableParent = findNearestScrollableParent(ref.current);
+
+            if (scrollableParent) {
+
+                // Optionally, listen to scroll events on the scrollable parent
+                const handleScroll = () => {
+                    setFixedPosition(scrollableParent.scrollLeft)
+                    // console.log('ScrollTop:', scrollableParent.scrollTop, 'ScrollLeft:', scrollableParent.scrollLeft);
+                };
+
+                scrollableParent.addEventListener('scroll', handleScroll);
+
+                return () => {
+                    scrollableParent.removeEventListener('scroll', handleScroll); // Cleanup on unmount
+                };
+            }
+        }
+    }, []);
 
     const closeDropdown = () => {
         props.setIsVisible(false);
     }
 
     useOutsideAlerter(ref, closeDropdown);
-    const handleScroll = () => {
-        console.log("handle scroll")
-        if (ref.current) {
-            const rect = ref.current.getBoundingClientRect()
-            console.log(rect.x, rect.y, rect.top, rect.bottom)
-            setFixedPosition(rect.x);
-        }
-    };
-
-    useEffect(() => {
-        const scrollContainer = ref.current;
-        scrollContainer.addEventListener('scroll', handleScroll);
-        return () => {
-            scrollContainer.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
 
     return (
         <div
@@ -72,7 +100,7 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
                 >
                     <div
                         className={`dropdown-content ${props.contentClassName}`}
-                        style={{ offset: `0 ${fixedPosition}px` }}
+                        style={{ transform: `translate(-${fixedPosition}px, 0)` }}
                     >
                         {Children.map(props.children, child => {
                             return child
