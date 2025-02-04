@@ -1,6 +1,6 @@
 import './TaskDependsList.css'
-import {Task} from "../../../types/Task.ts";
 import TaskIcon from "./TaskIcon.tsx";
+import AddDependencyButton from "./AddDependencyButton.tsx";
 import {useSelector} from "react-redux";
 
 type TaskDependsListProps = {
@@ -10,6 +10,10 @@ type TaskDependsListProps = {
 
 const TaskDependsList = (props: TaskDependsListProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
+
+    if (task == null || task.depends_on == null) {
+        return <></>
+    }
 
     return (
         <div className="task-depends-list">
@@ -22,6 +26,7 @@ const TaskDependsList = (props: TaskDependsListProps) => {
                     />
                 )
             })}
+            <AddDependencyButton project_id={props.project_id} task_id={props.task_id}/>
         </div>
     )
 }

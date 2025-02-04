@@ -53,7 +53,14 @@ CREATE TABLE Project (
     description     TEXT,
     status          PROJECT_STATUS  NOT NULL DEFAULT 'not_started',
     budget          DECIMAL(2),
-    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    requested_by    TEXT,
+    date_requested  DATE,
+    date_due        DATE,
+    date_started    DATE,
+
+    archived        BOOLEAN         NOT NULL DEFAULT false
 );
 
 

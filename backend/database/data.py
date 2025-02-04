@@ -84,16 +84,24 @@ async def update_task(project_id, task_id, fields: dict):
             query_parts = [f"{field} = ${i + 1}" for i, field in enumerate(fields.keys())]
             values = list(fields.values()) + [project_id, task_id]
 
-            result = await con.fetch(f"""
-                UPDATE Task
-                SET {', '.join(query_parts)}
-                WHERE project_id = ${len(values) - 1} AND id = ${len(values)}
-                RETURNING id
-            """, *values)
+            if len(fields.keys()) != 0:
+                result = await con.fetch(f"""
+                    UPDATE Task
+                    SET {', '.join(query_parts)}
+                    WHERE project_id = ${len(values) - 1} AND id = ${len(values)}
+                    RETURNING id
+                """, *values)
 
-            # If task does not exist or doesn't require updating depends_on, return
-            if not result or depends_on is None:
-                return result
+                # If task does not exist or doesn't require updating depends_on, return
+                if not result or depends_on is None:
+                    return result
+            else:
+                # ensure the task actually exists before changing dependencies
+                result = await con.execute("""
+                    SELECT id 
+                    FROM Task
+                    WHERE project_id = $1 AND id = $2
+                """, project_id, task_id)
 
             # TODO make the rest of this function not shit
             query_parts = []
@@ -115,8 +123,8 @@ async def update_task(project_id, task_id, fields: dict):
 
             await con.execute("""
                 DELETE FROM Task_Depends_On
-                WHERE task_id = $1
-            """, task_id)
+                WHERE project_id = $1 AND task_id = $2
+            """, project_id, task_id)
 
             if len(depends_on) == 0:
                 return result

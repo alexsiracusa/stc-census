@@ -23,7 +23,7 @@ const useUpdate = () => {
             const json = await response.json();
             if (!response.ok) {
                 setError(json.error || "Unable to update data");
-                console.error(json.error || "Update error");
+                console.error(json || "Update error");
                 return;
             }
 

@@ -26,7 +26,7 @@ const useFetch = (url, actionCreator, options = {}) => {
                 const json = await response.json();
                 if (!response.ok) {
                     setError(json.error || "Unable to fetch data");
-                    console.error(json.error || "Fetch error");
+                    console.error(json || "Fetch error");
                     return;
                 }
 

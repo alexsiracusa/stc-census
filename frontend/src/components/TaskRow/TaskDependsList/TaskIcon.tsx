@@ -1,3 +1,5 @@
+import './TaskDependsList.css'
+
 import {TaskStatusInfo} from "../../../types/TaskStatuses.ts";
 import {useSelector} from "react-redux";
 
@@ -15,8 +17,8 @@ const TaskIcon = (props: TaskIconProps) => {
 
     return (
         <div
-            className='depends-task-id'
-            title={`${task.id}`}
+            className='task-icon'
+            title={`P${task.project_id} T${task.id}`}
             key={task.id}
             style={{
                 backgroundColor: TaskStatusInfo[task.status].color + '45',
