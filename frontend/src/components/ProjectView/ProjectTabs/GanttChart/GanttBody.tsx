@@ -92,9 +92,10 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                 stacked: true,
             },
             y: {
-                stacked: true,
+                display: false,
             },
         },
+
         plugins: {
             tooltip: {
                 callbacks: {
@@ -163,34 +164,14 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                         anchor: "start",
                         font: { size: 12, weight: 400, lineHeight: 1.7 },
                         formatter(value: { EventName: string; x: string[] }) {
-                            if (!value.EventName || !value.x || value.x.length !== 2) {
+                            if (!value.EventName) {
                                 throw new Error(
                                     "GanttBody: value is null or undefined or does not contain the required properties"
                                 );
                             }
 
-                            const startDate = new Date(value.x[0]);
-
-                            if (isNaN(startDate.getTime())) {
-                                throw new Error(
-                                    "GanttBody: value.x[0] is not a valid date"
-                                );
-                            }
-
-                            const endDate = new Date(value.x[1]);
-
-                            if (isNaN(endDate.getTime())) {
-                                throw new Error(
-                                    "GanttBody: value.x[1] is not a valid date"
-                                );
-                            }
-
                             return (
-                                value.EventName +
-                                "\n" +
-                                formatDateInLocal(startDate) +
-                                " - " +
-                                formatDateInLocal(endDate)
+                                value.EventName
                             );
                         },
                     },
