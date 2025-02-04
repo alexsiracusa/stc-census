@@ -18,7 +18,7 @@ const TaskIcon = (props: TaskIconProps) => {
     return (
         <div
             className='task-icon'
-            title={`P${task.project_id} T${task.id}`}
+            title={`${task.name}`}
             key={task.id}
             style={{
                 backgroundColor: TaskStatusInfo[task.status].color + '45',
