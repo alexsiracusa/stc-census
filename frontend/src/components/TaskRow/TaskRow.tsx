@@ -40,11 +40,18 @@ const TaskRow = (props: TaskRowProps) => {
             <div className='task-depends-list-container'>
                 <TaskDependsList project_id={props.project_id} task_id={props.task_id}/>
             </div>
-            <div className='task-start-date'><p>{formatDate(task.target_start_date)}</p></div>
 
-            <TaskDatePicker project_id={props.project_id} task_id={props.task_id}/>
+            <div className='task-end-date'>
+                <TaskDatePicker currentDate={task.target_start_date} onChange={(value) => {
+                    console.log(value)
+                }}/>
+            </div>
 
-            {/*<div className='task-end-date'><p>{formatDate(task.target_completion_date)}</p></div>*/}
+            <div className='task-end-date'>
+                <TaskDatePicker currentDate={task.target_completion_date} onChange={(value) => {
+                    console.log(value)
+                }}/>
+            </div>
         </div>
     )
 };

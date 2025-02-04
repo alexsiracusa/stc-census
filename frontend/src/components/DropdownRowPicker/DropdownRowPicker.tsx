@@ -1,6 +1,6 @@
 import './DropdownRowPicker.css'
 
-import React, {Children, PropsWithChildren, useRef} from "react";
+import React, { Children, PropsWithChildren } from "react";
 import DropdownPicker from "../DropdownPicker/DropdownPicker.tsx";
 
 type DropdownRowPickerProps = {

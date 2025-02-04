@@ -18,6 +18,7 @@ const findNearestScrollableParent = (element) => {
     let parent = element.parentNode;
 
     while (parent) {
+        if (!(parent instanceof Element)) { break; }
         const style = window.getComputedStyle(parent);
 
         const overflowY = style.overflowY;

@@ -5,7 +5,6 @@ import {useSelector} from 'react-redux';
 
 import DropdownRowPicker from "../DropdownRowPicker/DropdownRowPicker.tsx";
 import DropdownPickerOption from "../DropdownPicker/DropdownPickerOption.tsx";
-import { useRef } from "react";
 import useUpdateTaskStatus from "../../hooks/useUpdateTaskStatus.ts";
 
 type TaskStatusSelectorProps = {
