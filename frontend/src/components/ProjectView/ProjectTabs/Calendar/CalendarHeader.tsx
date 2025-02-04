@@ -1,7 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import './Calendar.css';
+import ChevronRight from '../../../../assets/Icons/ChevronRight.svg';
+import ChevronLeft from '../../../../assets/Icons/ChevronLeft.svg';
 
 type CalendarHeaderProps = {
     currentMonth: Date;
@@ -19,10 +19,10 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ currentMonth, onNavigat
             </button>
             <div className="nav-buttons">
                 <button className="nav-button" onClick={() => onNavigate(-1)}>
-                    <FontAwesomeIcon icon={faChevronLeft} />
+                    <img src={ChevronLeft} alt="Navigate Left" />
                 </button>
                 <button className="nav-button" onClick={() => onNavigate(1)}>
-                    <FontAwesomeIcon icon={faChevronRight} />
+                    <img src={ChevronRight} alt="Navigate Right" />
                 </button>
             </div>
             <h2>

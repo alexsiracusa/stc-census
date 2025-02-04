@@ -2,8 +2,8 @@ import './Navbar.css';
 import Logo from '../../assets/STC.png';
 import LanguageSelector from '../LanguageSelector/LanguageSelector.tsx';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef, useState } from 'react';
-import { CiUser } from "react-icons/ci";
+import React, { useEffect, useRef, useState } from 'react';
+import User from '../../assets/Icons/User.svg';
 
 const Navbar: React.FC = () => {
     const { t } = useTranslation();
@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
                     onClick={() => setIsDropdownOpen((prev) => !prev)}
                     ref={dropdownRef}
                 >
-                    <CiUser className="profile-icon" />
+                    <img src={User} alt="User" />
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
                             <a href="/profile" className="dropdown-item">Profile</a>

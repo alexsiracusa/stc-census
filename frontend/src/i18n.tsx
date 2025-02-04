@@ -32,7 +32,7 @@ i18n
                         summary: 'Summary',
                         taskList: 'Task List',
                         kanban: 'Kanban',
-                        ganttChart: 'GanttChart',
+                        ganttChart: 'Gantt Chart',
                         calendar: 'Calendar',
                         CPM: 'CPM',
                         EVM: 'EVM',
@@ -116,7 +116,7 @@ i18n
                         title: 'EVM',
                     },
                     ganttChart: {
-                        title: 'GanttChart',
+                        title: 'Gantt Chart',
                     },
                     kanban: {
                         title: 'Kanban',
