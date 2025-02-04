@@ -5,13 +5,34 @@
     gap: 1.5em;
 }
 
+.task-list .list-container {
+    display: flex;
+    flex-direction: column;
+    overflow-x: scroll;
+}
+
+
 .task-list ul {
     list-style-type: none;
-    overflow-x: hidden;
+    position: sticky;
 
-    border: solid #dedede 1px;
+    li {
+        min-width: max-content;
+        border-top: solid #dedede 1px;
+        border-left: solid #dedede 1px;
+        border-right: solid #dedede 1px;
+    }
 
-    li:not(:last-child){
+    li:last-child {
         border-bottom: solid #dedede 1px;
     }
+}
+
+.task-list .list-container {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.task-list .list-container::-webkit-scrollbar, .kanban-board::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }

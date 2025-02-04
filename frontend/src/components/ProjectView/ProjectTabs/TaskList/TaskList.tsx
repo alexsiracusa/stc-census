@@ -4,7 +4,7 @@ import TabProps from "../TabProps.ts";
 import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
 import TaskRow from "../../../TaskRow/TaskRow.tsx";
 import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 import {useSelector} from "react-redux";
 
@@ -12,7 +12,7 @@ import {useSelector} from "react-redux";
 const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     if (tasks == null) {
         return <></>
@@ -38,18 +38,19 @@ const TaskList = (props: TabProps) => {
                     <div className='tasks'>
                         <h3>{t('taskList.tasks')}</h3>
 
-                        <TaskRowHeader/>
-
-                        <ul>
-                            {Object.values(tasks).map((task) => (
-                                <li key={task.id}>
-                                    <TaskRow
-                                        task_id={task.id}
-                                        project_id={task.project_id}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
+                        <div className='list-container'>
+                            <TaskRowHeader/>
+                            <ul>
+                                {Object.values(tasks).map((task) => (
+                                    <li key={task.id}>
+                                        <TaskRow
+                                            task_id={task.id}
+                                            project_id={task.project_id}
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 }
             </>

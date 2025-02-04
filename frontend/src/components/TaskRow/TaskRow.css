@@ -3,6 +3,7 @@
 .task-row, .task-row-header {
     display: flex;
     flex-direction: row;
+    min-width: max-content;
 
     padding: 0 0.6em;
     gap: 0.3em;
@@ -13,7 +14,6 @@
     height: 2em;
 
     color: black;
-    overflow: hidden;
 
     p {
         font-family: Inter, sans-serif;
@@ -24,7 +24,6 @@
 .task-row-header {
     font-size: 1em;
     margin: 0 1px;
-    overflow: hidden;
 
     p {
         font-family: Inter, sans-serif;
@@ -49,9 +48,7 @@
 
 /*TASK NAME*/
 .task-row .task-name, .task-row-header .task-name-header {
-    width: 30%;
-    min-width: 30%;
-    max-width: 24em;
+    width: 16em;
 }
 
 .task-row .task-name p {
@@ -62,7 +59,7 @@
 
 /*TASK STATUS*/
 .task-row .task-status-container, .task-row-header .task-status-header {
-    width: 15%;
+    width: 7em;
     min-width: 5.5em;
 }
 
@@ -74,7 +71,7 @@
 
 /* TASK DEPENDS LIST */
 .task-row .task-depends-list-container, .task-row-header .task-depends-list-header {
-    width: 50%;
+    width: 6em;
 }
 .task-row .task-depends-list-container {
     height: 60%;
