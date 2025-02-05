@@ -58,10 +58,10 @@ def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
     result_df = pd.DataFrame({
         'id': df['id'],
         'project_id': df['project_id'],
-        'es': es,  # earliest start
-        'ef': ef,  # earliest finish
-        'ls': ls,  # latest start
-        'lf': lf,  # latest finish
+        'earliest_start': es,
+        'earliest_finish': ef,
+        'latest_start': ls,
+        'latest_finish': lf,
         'slack': slack,
         'critical': critical
     })
