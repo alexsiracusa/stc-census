@@ -56,6 +56,8 @@ def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
     critical = slack == 0
 
     result_df = pd.DataFrame({
+        'id': df['id'],
+        'project_id': df['project_id'],
         'es': es,  # earliest start
         'ef': ef,  # earliest finish
         'ls': ls,  # latest start
@@ -87,6 +89,6 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
     df['dependencies'] = df['dependencies'].apply(convert_to_indices)
 
-    df = df.drop(columns=['id', 'project_id', 'status', 'actual_start', 'actual_end', 'target_start', 'target_end'])
+    df = df.drop(columns=['status', 'actual_start', 'actual_end', 'target_start', 'target_end'])
 
     return df
