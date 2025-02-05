@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CalendarHeader from './CalendarHeader';
 import CalendarGrid from './CalendarGrid';
 import EventForm from './EventForm';
+import getCalendarDays from "../../../../utils/getCalendarDays.ts";
 import './Calendar.css';
 
 export type Event = {
@@ -12,45 +13,12 @@ export type Event = {
 };
 
 const Calendar: React.FC = () => {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState('');
     const [eventTitle, setEventTitle] = useState('');
     const [eventDescription, setEventDescription] = useState('');
-
-    const getStartOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
-    const getEndOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-    const generateCalendarDays = () => {
-        const startOfMonth = getStartOfMonth(currentMonth);
-        const endOfMonth = getEndOfMonth(currentMonth);
-        const days = [];
-        const firstDayOfWeek = startOfMonth.getDay();
-
-        for (let i = 0; i < firstDayOfWeek; i++) {
-            const prevDay = new Date(startOfMonth);
-            prevDay.setDate(prevDay.getDate() - firstDayOfWeek + i);
-            days.push({ date: prevDay, isCurrentMonth: false });
-        }
-
-        for (let i = 1; i <= endOfMonth.getDate(); i++) {
-            days.push({
-                date: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i),
-                isCurrentMonth: true,
-            });
-        }
-
-        const remainingDays = (7 - (days.length % 7)) % 7;
-        const lastDay = new Date(endOfMonth);
-        for (let i = 1; i <= remainingDays; i++) {
-            const nextDay = new Date(lastDay);
-            nextDay.setDate(lastDay.getDate() + i);
-            days.push({ date: nextDay, isCurrentMonth: false });
-        }
-
-        return days;
-    };
 
     const formatDateToLocalString = (date: Date) => {
         const year = date.getFullYear();
@@ -79,16 +47,16 @@ const Calendar: React.FC = () => {
     return (
         <div className="calendar-container">
             <CalendarHeader
-                currentMonth={currentMonth}
+                currentMonth={currentDate}
                 onNavigate={(dir) => {
-                    const nextMonth = new Date(currentMonth);
+                    const nextMonth = new Date(currentDate);
                     nextMonth.setMonth(nextMonth.getMonth() + dir);
-                    setCurrentMonth(nextMonth);
+                    setCurrentDate(nextMonth);
                 }}
-                onResetToToday={() => setCurrentMonth(new Date())}
+                onResetToToday={() => setCurrentDate(new Date())}
             />
             <CalendarGrid
-                calendarDays={generateCalendarDays()}
+                calendarDays={getCalendarDays(currentDate)}
                 events={events}
                 openEventForm={handleOpenEventForm}
                 openAllEventsOverlay={() => {}}
