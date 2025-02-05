@@ -5,6 +5,8 @@
     gap: 1px;
     background-color: #eeeeee;
     width: 100%;
+    position: relative;
+    border: 1px solid #ccc;
 }
 
 .calendar-grid .weekday {
@@ -25,6 +27,7 @@
     align-items: center;
     padding: 0.5rem;
     box-sizing: border-box;
+    height: 200px;
 }
 
 .calendar-grid .other-month {
@@ -46,7 +49,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.calendar-grid .day-number.today {
+.calendar-grid .day-number .today {
     background-color: #003366;
     color: white;
 }

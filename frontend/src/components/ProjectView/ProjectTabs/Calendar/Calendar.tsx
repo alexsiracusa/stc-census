@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import CalendarHeader from './CalendarHeader';
-import CalendarGrid from './CalendarGrid';
-import EventForm from './EventForm';
+import CalendarHeader from './CalendarHeader/CalendarHeader.tsx';
+import CalendarGrid from './CalendarGrid/CalendarGrid.tsx';
+import EventForm from './EventForm/EventForm.tsx';
 import getCalendarDays from '../../../../utils/getCalendarDays.ts';
 import './Calendar.css';
 

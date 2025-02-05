@@ -1,7 +1,7 @@
 import React from 'react';
 import './CalendarHeader.css';
-import ChevronRight from '../../../../assets/Icons/ChevronRight.svg';
-import ChevronLeft from '../../../../assets/Icons/ChevronLeft.svg';
+import ChevronRight from '../../../../../assets/Icons/ChevronRight.svg';
+import ChevronLeft from '../../../../../assets/Icons/ChevronLeft.svg';
 import {useTranslation} from "react-i18next";
 import {format} from "date-fns";
 

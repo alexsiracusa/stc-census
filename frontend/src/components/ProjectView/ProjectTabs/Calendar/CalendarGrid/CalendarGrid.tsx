@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Event } from './Calendar';
+import { Event } from '../Calendar.tsx';
 import { useTranslation } from "react-i18next";
 import "./CalendarGrid.css";
 import { isToday, isSameDay } from "date-fns";
-import EventPopup from "./EventPopup";
-import AllEventsPopup from "./AllEventsPopup";
+import EventPopup from "../EventPopup/EventPopup.tsx";
+import AllEventsPopup from "../AllEventsPopup/AllEventsPopup.tsx";
 
 type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
@@ -94,7 +94,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             <div className="calendar-grid">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayKey) => (
                     <div key={dayKey} className="weekday">
-                        {t(`calendar.days.${dayKey.toLowerCase()}`)} {/* Ensure translation keys exist */}
+                        {t(`calendar.days.${dayKey.toLowerCase()}`)}
                     </div>
                 ))}
 
@@ -109,7 +109,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         }}
                     >
                         <div className={`day-number ${isToday(date) ? "today" : ""}`}>
-                            {date.getDate()} {/* Display day number */}
+                            {date.getDate()}
                         </div>
                         <div className="event-list">
                             {events
@@ -153,7 +153,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                 ))}
             </div>
 
-            {/* Event Popup */}
             {isPopupOpen && selectedEvent && (
                 <EventPopup
                     isOpen={isPopupOpen}
@@ -172,7 +171,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                 />
             )}
 
-            {/* All Events Popup */}
             {allEventsDate && (
                 <AllEventsPopup
                     date={allEventsDate}

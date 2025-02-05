@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.event-form {
+.event-form-overlay .event-form {
     background: #ffffff;
     width: 500px;
     border-radius: 8px;
@@ -19,14 +19,14 @@
     position: relative;
 }
 
-.event-form-body {
+.event-form-overlay .event-form-body {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.event-form-body .event-date-inputs .event-start-date-input, .event-end-date-input {
+.event-form-overlay .event-form-body .event-date-inputs .event-start-date-input, .event-end-date-input {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -36,22 +36,22 @@
     color: black;
 }
 
-.event-date-inputs {
+.event-form-overlay .event-date-inputs {
     display: flex;
     gap: 10px;
 }
 
-.date-separator {
+.event-form-overlay .date-separator {
     display: flex;
     align-items: center;
 }
 
-.event-description-input {
+.event-form-overlay .event-description-input {
     display: flex;
     gap: 10px;
 }
 
-.event-form-body .description-input {
+.event-form-overlay .event-form-body .description-input {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -61,12 +61,12 @@
     color: black;
 }
 
-.event-organizer-input {
+.event-form-overlay .event-organizer-input {
     display: flex;
     gap: 10px;
 }
 
-.event-form-body .organizer-input {
+.event-form-overlay .event-form-body .organizer-input {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -76,11 +76,11 @@
     color: black;
 }
 
-.event-form-body img {
+.event-form-overlay .event-form-body img {
     width: 20px;
 }
 
-.event-form-body .save-button {
+.event-form-overlay .event-form-body .save-button {
     background: #003366;
     color: white;
     padding: 10px 15px;
@@ -92,11 +92,11 @@
     margin-left: auto;
 }
 
-.event-form-body .save-button:hover {
+.event-form-overlay .event-form-body .save-button:hover {
     background-color: #0055A5;
 }
 
-.event-form-body .event-title-input {
+.event-form-overlay .event-form-body .event-title-input {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -107,13 +107,13 @@
     margin-left: 30px;
 }
 
-.event-time-container {
+.event-form-overlay .event-time-container {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.event-time-container .event-time-display {
+.event-form-overlay .event-time-container .event-time-display {
     display: flex;
     align-items: center;
     gap: 10px;

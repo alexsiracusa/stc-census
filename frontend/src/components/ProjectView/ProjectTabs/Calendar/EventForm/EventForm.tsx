@@ -1,8 +1,7 @@
 import React from 'react';
 import './EventForm.css';
-import Clock from '../../../../assets/Icons/Clock.svg';
-import Text from '../../../../assets/Icons/Text.svg';
-import Organizer from '../../../../assets/Icons/Organizer.svg';
+import Clock from '../../../../../assets/Icons/Clock.svg';
+import Text from '../../../../../assets/Icons/Text.svg';
 
 type EventFormProps = {
     isOpen: boolean;
@@ -12,7 +11,6 @@ type EventFormProps = {
         startDate: string;
         endDate: string;
         description: string;
-        organizer: string;
     }) => void;
     title: string;
     setTitle: (title: string) => void;
@@ -22,8 +20,6 @@ type EventFormProps = {
     setEndDate: (date: string) => void;
     description: string;
     setDescription: (desc: string) => void;
-    organizer: string;
-    setOrganizer: (org: string) => void;
 };
 
 const EventForm: React.FC<EventFormProps> = ({
@@ -38,8 +34,6 @@ const EventForm: React.FC<EventFormProps> = ({
                                                  setEndDate,
                                                  description,
                                                  setDescription,
-                                                 organizer,
-                                                 setOrganizer,
                                              }) => {
     if (!isOpen) return null;
 
@@ -49,7 +43,6 @@ const EventForm: React.FC<EventFormProps> = ({
             startDate,
             endDate,
             description,
-            organizer,
         };
 
         onSaveEvent(eventData);
@@ -93,16 +86,6 @@ const EventForm: React.FC<EventFormProps> = ({
                             placeholder="Add Description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </div>
-                    <div className="event-organizer-input">
-                        <img src={Organizer} alt="Organizer" />
-                        <input
-                            type="text"
-                            className="organizer-input"
-                            placeholder="Add Organizer"
-                            value={organizer}
-                            onChange={(e) => setOrganizer(e.target.value)}
                         />
                     </div>
                     <button className="save-button" onClick={handleSaveEvent}>

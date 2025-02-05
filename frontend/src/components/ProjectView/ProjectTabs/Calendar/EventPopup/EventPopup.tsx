@@ -1,10 +1,10 @@
 import React from 'react';
 import './EventPopup.css';
-import Trash from '../../../../assets/Icons/Trash.svg';
-import Edit from '../../../../assets/Icons/Edit.svg';
-import Email from '../../../../assets/Icons/Email.svg';
-import Close from '../../../../assets/Icons/Close.svg';
-import ShareLink from '../../../../assets/Icons/ShareLink.svg';
+import Trash from '../../../../../assets/Icons/Trash.svg';
+import Edit from '../../../../../assets/Icons/Edit.svg';
+import Email from '../../../../../assets/Icons/Email.svg';
+import Close from '../../../../../assets/Icons/Close.svg';
+import ShareLink from '../../../../../assets/Icons/ShareLink.svg';
 
 type EventPopupProps = {
     isOpen: boolean;
@@ -14,7 +14,6 @@ type EventPopupProps = {
         startDate: string;
         endDate: string;
         description: string;
-        organizer: string;
     };
     onEdit: () => void;
     onDelete: () => void;
@@ -77,8 +76,6 @@ const EventPopup: React.FC<EventPopupProps> = ({
                     <button className="share-button" onClick={onShare}>
                         <img src={ShareLink} alt="Link" />Invite via link
                     </button>
-                    <p className="event-organizer">
-                    </p>
                 </div>
             </div>
         </div>
