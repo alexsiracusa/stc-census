@@ -6,7 +6,10 @@ import getCalendarDays from "../../utils/getCalendarDays.ts";
 import {isSameDay, format} from 'date-fns';
 
 import ChevronLeft from '../../assets/Icons/ChevronLeft.svg'
+import DoubleChevronLeft from '../../assets/Icons/DoubleChevronLeft.svg'
 import ChevronRight from '../../assets/Icons/ChevronRight.svg'
+import DoubleChevronRight from '../../assets/Icons/DoubleChevronRight.svg'
+
 
 type DropdownDatePickerProps = {
     className: string
@@ -52,6 +55,12 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
             <div className='date-picker-calendar'>
                 <div className='month-selector'>
                     <button onClick={() => {
+                        setMonth(-12)
+                    }}>
+                        <img src={DoubleChevronLeft}/>
+                    </button>
+
+                    <button onClick={() => {
                         setMonth(-1)
                     }}>
                         <img src={ChevronLeft}/>
@@ -63,6 +72,12 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                         setMonth(1)
                     }}>
                         <img src={ChevronRight}/>
+                    </button>
+
+                    <button onClick={() => {
+                        setMonth(12)
+                    }}>
+                        <img src={DoubleChevronRight}/>
                     </button>
                 </div>
                 <div className="date-picker-calendar-grid">
