@@ -16,14 +16,36 @@ export const taskGraphStyles = [
             'font-size': '12%',
             'text-valign': 'center',
             'text-halign': 'center',
-            'background-color': TaskStatusInfo['to_do'].color,
+            'background-color': '#ffffff',
             'shape': 'roundrectangle',
-            'color': '#fff',
-            'opacity': 1
+            'color': '#000',
+            'opacity': 1,
+            // Add a status indicator using background-image
+            'background-image-opacity': 1,
+            'background-image': (ele: any) => {
+                const status = ele.data('status');
+                const color = TaskStatusInfo[status]?.color || TaskStatusInfo['to_do'].color;
+                // Create a small colored square as SVG with proper encoding
+                const encodedSvg = encodeURIComponent(`
+                    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="80%" y="80%" width="15%" height="15%" fill="${color}"/>
+                    </svg>
+                `.trim());
+                return `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
+            },
+            // Ensure proper background image rendering
+            'background-fit': 'none',
+            'background-clip': 'none',
+            'background-image-containment': 'over',
+            'background-width': '100%',
+            'background-height': '100%',
+            'border-width': '1px',
+            'border-color': '#999',
+            'border-style': 'solid'
         }
     },
     {
-        // Red border for critical tasks.
+        // Red border for critical tasks
         selector: 'node[?isCritical]',
         style: {
             'border-width': '2px',
@@ -32,33 +54,11 @@ export const taskGraphStyles = [
         }
     },
     {
-        // Transparent nodes for tasks that belong to other projects.
-        // !!! Note: may need to differentiate between external tasks that do or do not belong to a subproject.
+        // Transparent nodes for tasks that belong to other projects
         selector: 'node[?isExternalProject]',
         style: {
             'opacity': OPACITY,
-        }
-    },
-    {
-        selector: `node[status = "done"]`,
-        style: {
-            'background-color': TaskStatusInfo['done'].color,
-            'opacity': `data(isExternalProject) ? ${OPACITY} : 1`
-        }
-    },
-    {
-        selector: `node[status = "in_progress"]`,
-        style: {
-            'background-color': TaskStatusInfo['in_progress'].color,
-            'opacity': `data(isExternalProject) ? ${OPACITY} : 1`
-        }
-    },
-    {
-        selector: `node[status = "on_hold"]`,
-        style: {
-            'background-color': TaskStatusInfo['on_hold'].color,
-            'color': '#000',
-            'opacity': `data(isExternalProject) ? ${OPACITY} : 1`
+            'background-image-opacity': OPACITY
         }
     },
     {
