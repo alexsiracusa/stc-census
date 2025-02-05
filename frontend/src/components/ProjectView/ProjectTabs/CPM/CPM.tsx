@@ -51,8 +51,6 @@ const CPM = (props: TabProps) => {
     const projectId = Number(props.project_id);
     const [tasks, loading] = useTasksFetcher(`${projectId}`);
     const [cpmData, cpmLoading] = useFetchCpmData(projectId);
-    console.log("hadhfdsaofdaohfidhahhljdalkjfdhdfd")
-    console.log(cpmData.cpm);
 
     if (loading) {
         return <div className="cpm">Loading tasks...</div>;
