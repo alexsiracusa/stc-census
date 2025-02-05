@@ -7,6 +7,7 @@ type CalendarGridProps = {
     events: Event[];
     openEventForm: (date: Date, eventToEdit?: Event) => void;
     openAllEventsOverlay: (date: Date) => void;
+    openEditForm: (event: Event) => void;
 };
 
 const isToday = (date: Date): boolean => {
@@ -18,7 +19,26 @@ const isToday = (date: Date): boolean => {
     );
 };
 
-const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openEventForm, openAllEventsOverlay }) => {
+const isDateInRange = (date: Date, startDate: string, endDate: string): boolean => {
+    const eventStart = new Date(startDate);
+    const eventEnd = new Date(endDate);
+    return date >= eventStart && date <= eventEnd;
+};
+
+const isSameDate = (date: Date, startDate: string): boolean => {
+    const eventStart = new Date(startDate);
+    return date.getFullYear() === eventStart.getFullYear() &&
+        date.getMonth() === eventStart.getMonth() &&
+        date.getDate() === eventStart.getDate();
+};
+
+const CalendarGrid: React.FC<CalendarGridProps> = ({
+                                                       calendarDays,
+                                                       events,
+                                                       openEventForm,
+                                                       openAllEventsOverlay,
+                                                       openEditForm,
+                                                   }) => {
     return (
         <div className="calendar-grid">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayKey) => (
@@ -26,6 +46,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openE
                     {dayKey}
                 </div>
             ))}
+
             {calendarDays.map(({ date, isCurrentMonth }, index) => (
                 <div
                     key={index}
@@ -40,29 +61,29 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openE
                     <div className={`day-number ${isToday(date) ? 'today' : ''}`}>{date.getDate()}</div>
                     <div className="event-list">
                         {events
-                            .filter((event) => {
-                                const eventDate = new Date(event.date);
-                                return eventDate.getFullYear() === date.getFullYear() &&
-                                    eventDate.getMonth() === date.getMonth() &&
-                                    eventDate.getDate() === date.getDate();
-                            })
+                            .filter(event =>
+                                isDateInRange(date, event.startDate, event.endDate) ||
+                                isSameDate(date, event.startDate)
+                            )
                             .slice(0, 4)
                             .map((event) => (
                                 <div
                                     key={event.id}
                                     className="event-block"
                                     style={{ backgroundColor: event.color }}
-                                    onClick={() => openEventForm(date, event)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        openEditForm(event);
+                                    }}
                                 >
                                     {event.title}
                                 </div>
                             ))}
-                        {events.filter((event) => {
-                            const eventDate = new Date(event.date);
-                            return eventDate.getFullYear() === date.getFullYear() &&
-                                eventDate.getMonth() === date.getMonth() &&
-                                eventDate.getDate() === date.getDate();
-                        }).length > 4 && (
+
+                        {events.filter(event =>
+                            isDateInRange(date, event.startDate, event.endDate) ||
+                            isSameDate(date, event.startDate)
+                        ).length > 4 && (
                             <button
                                 className="more-events"
                                 onClick={(e) => {
@@ -70,12 +91,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openE
                                     openAllEventsOverlay(date);
                                 }}
                             >
-                                {`+ ${events.filter((event) => {
-                                    const eventDate = new Date(event.date);
-                                    return eventDate.getFullYear() === date.getFullYear() &&
-                                        eventDate.getMonth() === date.getMonth() &&
-                                        eventDate.getDate() === date.getDate();
-                                }).length - 4} more`}
+                                {`+ ${
+                                    events.filter(event =>
+                                        isDateInRange(date, event.startDate, event.endDate) ||
+                                        isSameDate(date, event.startDate)
+                                    ).length - 4
+                                } more`}
                             </button>
                         )}
                     </div>

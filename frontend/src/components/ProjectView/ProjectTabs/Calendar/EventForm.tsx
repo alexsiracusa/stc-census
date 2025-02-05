@@ -1,20 +1,48 @@
 import React from 'react';
-import './Calendar.css'
+import './Calendar.css';
+import Clock from '../../../../assets/Icons/Clock.svg';
+import Text from '../../../../assets/Icons/Text.svg';
 
 type EventFormProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSaveEvent: () => void;
+    onSaveEvent: (eventData: { title: string; startDate: string; endDate: string; description: string }) => void;
     title: string;
     setTitle: (title: string) => void;
-    date: string;
-    setDate: (date: string) => void;
+    startDate: string;
+    setStartDate: (date: string) => void;
+    endDate: string;
+    setEndDate: (date: string) => void;
     description: string;
     setDescription: (desc: string) => void;
 };
 
-const EventForm: React.FC<EventFormProps> = ({ isOpen, onClose, onSaveEvent, title, setTitle, date, setDate, description, setDescription }) => {
+const EventForm: React.FC<EventFormProps> = ({
+                                                 isOpen,
+                                                 onClose,
+                                                 onSaveEvent,
+                                                 title,
+                                                 setTitle,
+                                                 startDate,
+                                                 setStartDate,
+                                                 endDate,
+                                                 setEndDate,
+                                                 description,
+                                                 setDescription,
+                                             }) => {
     if (!isOpen) return null;
+
+    const handleSaveEvent = () => {
+        const eventData = {
+            title: title.trim() === "" ? "(No title)" : title,
+            startDate,
+            endDate,
+            description,
+        };
+
+        onSaveEvent(eventData);
+        onClose();
+    };
 
     return (
         <div className="event-form-overlay">
@@ -30,20 +58,33 @@ const EventForm: React.FC<EventFormProps> = ({ isOpen, onClose, onSaveEvent, tit
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    <input
-                        type="date"
-                        className="event-date-input"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                    />
-                    <textarea
-                        className="event-description-input"
-                        placeholder="Add Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <button className="save-button" onClick={onSaveEvent}>
-                        Save Event
+                    <div className="event-date-inputs">
+                        <img src={Clock} alt="Clock" />
+                        <input
+                            type="date"
+                            className="event-start-date-input"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                        <span className="date-separator">-</span>
+                        <input
+                            type="date"
+                            className="event-end-date-input"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+                    </div>
+                    <div className="event-description-inputs">
+                        <img src={Text} alt="Text" />
+                        <textarea
+                            className="description-input"
+                            placeholder="Add Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </div>
+                    <button className="save-button" onClick={handleSaveEvent}>
+                        Save
                     </button>
                 </div>
             </div>

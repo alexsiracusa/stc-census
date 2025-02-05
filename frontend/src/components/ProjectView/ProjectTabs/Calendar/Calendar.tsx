@@ -8,17 +8,20 @@ import './Calendar.css';
 export type Event = {
     id: string;
     title: string;
-    date: string;
     color: string;
+    startDate: string;
+    endDate: string;
 };
 
 const Calendar: React.FC = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [eventTitle, setEventTitle] = useState('');
     const [eventDescription, setEventDescription] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const formatDateToLocalString = (date: Date) => {
         const year = date.getFullYear();
@@ -27,21 +30,66 @@ const Calendar: React.FC = () => {
         return `${year}-${month}-${day}`;
     };
 
-    const handleSaveEvent = () => {
-        if (eventTitle && selectedDate) {
-            setEvents((prev) => [
-                ...prev,
-                { id: Math.random().toString(36).substr(2, 9), title: eventTitle, date: selectedDate, color: '#003366' },
-            ]);
-            setIsEventFormOpen(false);
+    const handleSaveEvent = (eventData: { title: string; startDate: string; endDate: string; description: string }) => {
+        if (eventData.title && eventData.startDate && eventData.endDate) {
+            if (selectedEventId) {
+                setEvents(prev =>
+                    prev.map(event =>
+                        event.id === selectedEventId
+                            ? { ...event, title: eventData.title, startDate: eventData.startDate, endDate: eventData.endDate }
+                            : event
+                    )
+                );
+            } else {
+                setEvents(prev => [
+                    ...prev,
+                    {
+                        id: Math.random().toString(36).substr(2, 9),
+                        title: eventData.title,
+                        color: '#003366',
+                        startDate: eventData.startDate,
+                        endDate: eventData.endDate,
+                    },
+                ]);
+            }
+            resetForm();
         }
     };
 
-    const handleOpenEventForm = (date: Date) => {
-        setSelectedDate(formatDateToLocalString(date));
+    const resetForm = () => {
+        setIsEventFormOpen(false);
+        setSelectedEventId(null);
+        setEventTitle('');
+        setEventDescription('');
+        setStartDate('');
+        setEndDate('');
+    };
+
+    const handleOpenNewEventForm = (date: Date) => {
+        const formDate = formatDateToLocalString(date);
+        setSelectedEventId(null);
+        setStartDate(formDate);
+        setEndDate(formDate);
         setEventTitle('');
         setEventDescription('');
         setIsEventFormOpen(true);
+    };
+
+    const handleOpenEditEventForm = (event: Event) => {
+        setSelectedEventId(event.id);
+        setStartDate(event.startDate);
+        setEndDate(event.endDate);
+        setEventTitle(event.title);
+        setEventDescription('');
+        setIsEventFormOpen(true);
+    };
+
+
+    const handleOpenAllEventsOverlay = (date: Date) => {
+        const eventsOnDate = events.filter(event =>
+            new Date(event.startDate) <= date && new Date(event.endDate) >= date
+        );
+        alert(`Events on ${date.toDateString()}: ${eventsOnDate.map(e => e.title).join(', ')}`);
     };
 
     return (
@@ -58,8 +106,9 @@ const Calendar: React.FC = () => {
             <CalendarGrid
                 calendarDays={getCalendarDays(currentDate)}
                 events={events}
-                openEventForm={handleOpenEventForm}
-                openAllEventsOverlay={() => {}}
+                openEventForm={handleOpenNewEventForm}
+                openEditForm={handleOpenEditEventForm}
+                openAllEventsOverlay={handleOpenAllEventsOverlay}
             />
             <EventForm
                 isOpen={isEventFormOpen}
@@ -67,8 +116,10 @@ const Calendar: React.FC = () => {
                 onSaveEvent={handleSaveEvent}
                 title={eventTitle}
                 setTitle={setEventTitle}
-                date={selectedDate}
-                setDate={setSelectedDate}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
                 description={eventDescription}
                 setDescription={setEventDescription}
             />

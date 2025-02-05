@@ -143,6 +143,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    position: relative;
 }
 
 .event-form-overlay {
@@ -173,7 +174,32 @@
     gap: 15px;
 }
 
-.event-form-body .event-date-input {
+.event-form-body .event-date-inputs .event-start-date-input, .event-end-date-input {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    border-radius: 6px;
+    background-color: white;
+    color: black;
+}
+
+.event-date-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.date-separator {
+    display: flex;
+    align-items: center;
+}
+
+.event-description-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.event-form-body .description-input {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -183,14 +209,8 @@
     color: black;
 }
 
-.event-form-body .event-description-input {
-    font-size: 16px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    width: 100%;
-    border-radius: 6px;
-    background-color: transparent;
-    color: black;
+.event-form-body img {
+    width: 15px;
 }
 
 .event-form-body .save-button {
@@ -201,6 +221,8 @@
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
+    width: 75px;
+    margin-left: auto;
 }
 
 .event-form-body .save-button:hover {
@@ -211,10 +233,11 @@
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
-    width: 100%;
+    width: 95%;
     border-radius: 6px;
     background-color: transparent;
     color: black;
+    margin-left: 24px;
 }
 
 .event-time-container {
@@ -435,7 +458,7 @@
     cursor: pointer;
     transition: color 0.3s;
     position: absolute;
-    right: 10px;
+    right: 15px;
     top: 0;
 }
 
