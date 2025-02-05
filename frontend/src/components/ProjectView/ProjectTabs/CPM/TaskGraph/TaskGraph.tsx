@@ -35,11 +35,13 @@ const TaskGraph: React.FC<{
         const statusInfo = TaskStatusInfo[task.status as TaskStatus];
         const presentableStatus = statusInfo ? statusInfo.name : task.status;
 
+        const formatDays = (num) => `${padNumber(num)} ${num === 1 ? 'day' : 'days'}`;
+
         return [
             `Slack: ${padNumber(cpm.slack)}`,
             '',
-            `ES: ${padNumber(cpm.earliest_start)}    LS: ${padNumber(cpm.latest_start)}`,
-            `EF: ${padNumber(cpm.earliest_finish)}    LF: ${padNumber(cpm.latest_finish)}`,
+            `Earliest Start (ES): ${formatDays(cpm.earliest_start)}    Latest Start (LS): ${formatDays(cpm.latest_start)}`,
+            `Earliest Finish (EF): ${formatDays(cpm.earliest_finish)}    Latest Finish (LF): ${formatDays(cpm.latest_finish)}`,
             '',
             `Status: ${presentableStatus}`
         ].join('\n');
