@@ -10,10 +10,10 @@ cytoscape.use(dagre);
 interface CpmData {
     id: number;
     project_id: number;
-    es: number;
-    ef: number;
-    ls: number;
-    lf: number;
+    earliest_start: number;
+    earliest_finish: number;
+    latest_start: number;
+    latest_finish: number;
     slack: number;
     critical: boolean;
 }
@@ -61,7 +61,7 @@ const TaskGraph: React.FC<{
                 name: 'dagre',
                 rankDir: 'LR',
                 padding: 0,
-                spacingFactor: 1.5,
+                spacingFactor: 1,
                 nodeDimensionsIncludeLabels: true
             },
             style: taskGraphStyles
@@ -77,8 +77,19 @@ const TaskGraph: React.FC<{
     const formatNodeLabel = (task: Task, cpm?: CpmData) => {
         if (!cpm) return task.name;
 
-        return `${task.name}\nES: ${cpm.es} | LS: ${cpm.ls}\nEF: ${cpm.ef} | LF: ${cpm.lf}\nSlack: ${cpm.slack} ${cpm.critical ? '⏰' : ''}`;
+        const padNumber = (num: number): string => num.toString().padStart(2, ' ');
+
+        return [
+            task.name,
+            `Slack: ${padNumber(cpm.slack)}`,
+            '',
+            `ES: ${padNumber(cpm.earliest_start)}    LS: ${padNumber(cpm.latest_start)}`,
+            `EF: ${padNumber(cpm.earliest_finish)}    LF: ${padNumber(cpm.latest_finish)}`,
+            ''
+        ].join('\n');
     };
+
+
 
     return (
         <div
