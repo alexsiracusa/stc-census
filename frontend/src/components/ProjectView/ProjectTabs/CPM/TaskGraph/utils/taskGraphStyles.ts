@@ -1,5 +1,7 @@
 import { TaskStatusInfo } from "../../../../../../types/TaskStatuses.ts";
 
+const OPACITY = 0.7;
+
 // This is fed into the cytoscape instance to style the nodes and edges of the graph.
 // Yes, it has to be formatted like this.
 export const taskGraphStyles = [
@@ -9,8 +11,8 @@ export const taskGraphStyles = [
             'label': 'data(label)',
             'text-wrap': 'wrap',
             'text-max-width': '150%',
-            'width': '160%',
-            'height': '70%',
+            'width': '120%',
+            'height': '90%',
             'font-size': '12%',
             'text-valign': 'center',
             'text-halign': 'center',
@@ -21,24 +23,34 @@ export const taskGraphStyles = [
         }
     },
     {
+        // Red border for critical tasks.
+        selector: 'node[?isCritical]',
+        style: {
+            'border-width': '2px',
+            'border-color': '#ff0000',
+            'border-style': 'solid'
+        }
+    },
+    {
+        // Transparent nodes for tasks that belong to other projects.
+        // !!! Note: may need to differentiate between external tasks that do or do not belong to a subproject.
         selector: 'node[?isExternalProject]',
         style: {
-            'opacity': 0.6,
-            'color': '#fff'
+            'opacity': OPACITY,
         }
     },
     {
         selector: `node[status = "done"]`,
         style: {
             'background-color': TaskStatusInfo['done'].color,
-            'opacity': 'data(isExternalProject) ? 0.8 : 1'
+            'opacity': `data(isExternalProject) ? ${OPACITY} : 1`
         }
     },
     {
         selector: `node[status = "in_progress"]`,
         style: {
             'background-color': TaskStatusInfo['in_progress'].color,
-            'opacity': 'data(isExternalProject) ? 0.8 : 1'
+            'opacity': `data(isExternalProject) ? ${OPACITY} : 1`
         }
     },
     {
@@ -46,7 +58,7 @@ export const taskGraphStyles = [
         style: {
             'background-color': TaskStatusInfo['on_hold'].color,
             'color': '#000',
-            'opacity': 'data(isExternalProject) ? 0.8 : 1'
+            'opacity': `data(isExternalProject) ? ${OPACITY} : 1`
         }
     },
     {

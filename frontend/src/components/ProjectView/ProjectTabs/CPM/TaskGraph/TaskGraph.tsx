@@ -61,7 +61,7 @@ const TaskGraph: React.FC<{
                 name: 'dagre',
                 rankDir: 'LR',
                 padding: 0,
-                spacingFactor: 1.5,
+                spacingFactor: 1,
                 nodeDimensionsIncludeLabels: true
             },
             style: taskGraphStyles
@@ -77,8 +77,19 @@ const TaskGraph: React.FC<{
     const formatNodeLabel = (task: Task, cpm?: CpmData) => {
         if (!cpm) return task.name;
 
-        return `${task.name}\nES: ${cpm.es} | LS: ${cpm.ls}\nEF: ${cpm.ef} | LF: ${cpm.lf}\nSlack: ${cpm.slack} ${cpm.critical ? '⏰' : ''}`;
+        const padNumber = (num: number): string => num.toString().padStart(2, ' ');
+
+        return [
+            task.name,
+            '',
+            `ES: ${padNumber(cpm.es)}    LS: ${padNumber(cpm.ls)}`,
+            `EF: ${padNumber(cpm.ef)}    LF: ${padNumber(cpm.lf)}`,
+            '',
+            `Slack: ${padNumber(cpm.slack)}`
+        ].join('\n');
     };
+
+
 
     return (
         <div
