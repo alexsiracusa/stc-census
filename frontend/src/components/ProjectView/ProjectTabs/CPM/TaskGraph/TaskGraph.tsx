@@ -81,11 +81,11 @@ const TaskGraph: React.FC<{
 
         return [
             task.name,
+            `Slack: ${padNumber(cpm.slack)}`,
             '',
             `ES: ${padNumber(cpm.earliest_start)}    LS: ${padNumber(cpm.latest_start)}`,
             `EF: ${padNumber(cpm.earliest_finish)}    LF: ${padNumber(cpm.latest_finish)}`,
-            '',
-            `Slack: ${padNumber(cpm.slack)}`
+            ''
         ].join('\n');
     };
 
