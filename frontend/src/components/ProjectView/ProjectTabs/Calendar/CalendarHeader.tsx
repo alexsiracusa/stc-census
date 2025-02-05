@@ -1,5 +1,5 @@
 import React from 'react';
-import './Calendar.css';
+import './CalendarHeader.css';
 import ChevronRight from '../../../../assets/Icons/ChevronRight.svg';
 import ChevronLeft from '../../../../assets/Icons/ChevronLeft.svg';
 import {useTranslation} from "react-i18next";

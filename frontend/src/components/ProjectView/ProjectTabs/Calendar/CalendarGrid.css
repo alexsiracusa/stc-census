@@ -1,0 +1,97 @@
+.calendar-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: #eeeeee;
+    width: 100%;
+}
+
+.weekday {
+    text-align: center;
+    padding: 0.5rem;
+    background-color: #f9f9f9;
+    font-weight: bold;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+}
+
+.day-cell {
+    position: relative;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.other-month {
+    background-color: #fafafa;
+    color: #bbb;
+}
+
+.calendar-grid .day-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.day-number.today {
+    background-color: #003366;
+    color: white;
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.event-block {
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    background-color: #003366;
+}
+
+.event-block:hover {
+    background-color: #0055A5;
+}
+
+.calendar-grid .more-events {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #555;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-align: left;
+    padding: 0.3rem 0.5rem;
+    width: 100%;
+    margin-top: 0.1rem;
+}
+
+.calendar-grid .more-events:hover {
+    background-color: #e0e0e0;
+}

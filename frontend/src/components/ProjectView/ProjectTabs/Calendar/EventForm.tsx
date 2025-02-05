@@ -1,12 +1,19 @@
 import React from 'react';
-import './Calendar.css';
+import './EventForm.css';
 import Clock from '../../../../assets/Icons/Clock.svg';
 import Text from '../../../../assets/Icons/Text.svg';
+import Organizer from '../../../../assets/Icons/Organizer.svg';
 
 type EventFormProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSaveEvent: (eventData: { title: string; startDate: string; endDate: string; description: string }) => void;
+    onSaveEvent: (eventData: {
+        title: string;
+        startDate: string;
+        endDate: string;
+        description: string;
+        organizer: string;
+    }) => void;
     title: string;
     setTitle: (title: string) => void;
     startDate: string;
@@ -15,6 +22,8 @@ type EventFormProps = {
     setEndDate: (date: string) => void;
     description: string;
     setDescription: (desc: string) => void;
+    organizer: string;
+    setOrganizer: (org: string) => void;
 };
 
 const EventForm: React.FC<EventFormProps> = ({
@@ -29,6 +38,8 @@ const EventForm: React.FC<EventFormProps> = ({
                                                  setEndDate,
                                                  description,
                                                  setDescription,
+                                                 organizer,
+                                                 setOrganizer,
                                              }) => {
     if (!isOpen) return null;
 
@@ -38,6 +49,7 @@ const EventForm: React.FC<EventFormProps> = ({
             startDate,
             endDate,
             description,
+            organizer,
         };
 
         onSaveEvent(eventData);
@@ -74,13 +86,23 @@ const EventForm: React.FC<EventFormProps> = ({
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-                    <div className="event-description-inputs">
+                    <div className="event-description-input">
                         <img src={Text} alt="Text" />
                         <textarea
                             className="description-input"
                             placeholder="Add Description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </div>
+                    <div className="event-organizer-input">
+                        <img src={Organizer} alt="Organizer" />
+                        <input
+                            type="text"
+                            className="organizer-input"
+                            placeholder="Add Organizer"
+                            value={organizer}
+                            onChange={(e) => setOrganizer(e.target.value)}
                         />
                     </div>
                     <button className="save-button" onClick={handleSaveEvent}>

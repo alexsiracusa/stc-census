@@ -1,0 +1,113 @@
+.all-events-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.all-events-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 360px;
+    max-width: 90%;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+}
+
+.all-events-header {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 0.5rem;
+    position: relative;
+    width: 100%;
+}
+
+.all-events-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.all-events-date {
+    font-size: 2rem;
+    font-weight: bold;
+    color: black;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s;
+    position: absolute;
+    right: 15px;
+    top: 0;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.all-events-body {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.all-events-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.all-events-body::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 4px;
+}
+
+.all-events-body::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+}
+
+.event-item {
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: #003366;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.event-item:hover {
+    background-color: #0055A5;
+}
+
+.event-time {
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #f1f1f1;
+    display: block;
+    margin-top: 0.2rem;
+}

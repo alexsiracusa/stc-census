@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import CalendarHeader from './CalendarHeader';
 import CalendarGrid from './CalendarGrid';
 import EventForm from './EventForm';
-import getCalendarDays from "../../../../utils/getCalendarDays.ts";
+import getCalendarDays from '../../../../utils/getCalendarDays.ts';
 import './Calendar.css';
 
 export type Event = {
@@ -11,6 +11,8 @@ export type Event = {
     color: string;
     startDate: string;
     endDate: string;
+    description: string;
+    organizer: string;
 };
 
 const Calendar: React.FC = () => {
@@ -20,6 +22,7 @@ const Calendar: React.FC = () => {
     const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [eventTitle, setEventTitle] = useState('');
     const [eventDescription, setEventDescription] = useState('');
+    const [eventOrganizer, setEventOrganizer] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -30,18 +33,31 @@ const Calendar: React.FC = () => {
         return `${year}-${month}-${day}`;
     };
 
-    const handleSaveEvent = (eventData: { title: string; startDate: string; endDate: string; description: string }) => {
+    const handleSaveEvent = (eventData: {
+        title: string;
+        startDate: string;
+        endDate: string;
+        description: string;
+        organizer: string;
+    }) => {
         if (eventData.title && eventData.startDate && eventData.endDate) {
             if (selectedEventId) {
-                setEvents(prev =>
-                    prev.map(event =>
+                setEvents((prev) =>
+                    prev.map((event) =>
                         event.id === selectedEventId
-                            ? { ...event, title: eventData.title, startDate: eventData.startDate, endDate: eventData.endDate }
+                            ? {
+                                ...event,
+                                title: eventData.title,
+                                startDate: eventData.startDate,
+                                endDate: eventData.endDate,
+                                description: eventData.description,
+                                organizer: eventData.organizer,
+                            }
                             : event
                     )
                 );
             } else {
-                setEvents(prev => [
+                setEvents((prev) => [
                     ...prev,
                     {
                         id: Math.random().toString(36).substr(2, 9),
@@ -49,6 +65,8 @@ const Calendar: React.FC = () => {
                         color: '#003366',
                         startDate: eventData.startDate,
                         endDate: eventData.endDate,
+                        description: eventData.description,
+                        organizer: eventData.organizer,
                     },
                 ]);
             }
@@ -61,6 +79,7 @@ const Calendar: React.FC = () => {
         setSelectedEventId(null);
         setEventTitle('');
         setEventDescription('');
+        setEventOrganizer('');
         setStartDate('');
         setEndDate('');
     };
@@ -72,6 +91,7 @@ const Calendar: React.FC = () => {
         setEndDate(formDate);
         setEventTitle('');
         setEventDescription('');
+        setEventOrganizer('');
         setIsEventFormOpen(true);
     };
 
@@ -80,7 +100,8 @@ const Calendar: React.FC = () => {
         setStartDate(event.startDate);
         setEndDate(event.endDate);
         setEventTitle(event.title);
-        setEventDescription('');
+        setEventDescription(event.description);
+        setEventOrganizer(event.organizer);
         setIsEventFormOpen(true);
     };
 
@@ -90,10 +111,10 @@ const Calendar: React.FC = () => {
     }
 
     const handleOpenAllEventsOverlay = (date: Date) => {
-        const eventsOnDate = events.filter(event =>
-            new Date(event.startDate) <= date && new Date(event.endDate) >= date
+        const eventsOnDate = events.filter(
+            (event) => new Date(event.startDate) <= date && new Date(event.endDate) >= date
         );
-        alert(`Events on ${date.toDateString()}: ${eventsOnDate.map(e => e.title).join(', ')}`);
+        alert(`Events on ${date.toDateString()}: ${eventsOnDate.map((e) => e.title).join(', ')}`);
     };
 
     return (
@@ -106,6 +127,7 @@ const Calendar: React.FC = () => {
             <CalendarGrid
                 calendarDays={getCalendarDays(currentMonth)}
                 events={events}
+                setEvents={setEvents}
                 openEventForm={handleOpenNewEventForm}
                 openEditForm={handleOpenEditEventForm}
                 openAllEventsOverlay={handleOpenAllEventsOverlay}
@@ -122,6 +144,8 @@ const Calendar: React.FC = () => {
                 setEndDate={setEndDate}
                 description={eventDescription}
                 setDescription={setEventDescription}
+                organizer={eventOrganizer}
+                setOrganizer={setEventOrganizer}
             />
         </div>
     );

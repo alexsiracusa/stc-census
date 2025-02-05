@@ -1,0 +1,120 @@
+.event-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-form {
+    background: #ffffff;
+    width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    position: relative;
+}
+
+.event-form-body {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.event-form-body .event-date-inputs .event-start-date-input, .event-end-date-input {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    border-radius: 6px;
+    background-color: white;
+    color: black;
+}
+
+.event-date-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.date-separator {
+    display: flex;
+    align-items: center;
+}
+
+.event-description-input {
+    display: flex;
+    gap: 10px;
+}
+
+.event-form-body .description-input {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    border-radius: 6px;
+    background-color: transparent;
+    color: black;
+}
+
+.event-organizer-input {
+    display: flex;
+    gap: 10px;
+}
+
+.event-form-body .organizer-input {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    border-radius: 6px;
+    background-color: transparent;
+    color: black;
+}
+
+.event-form-body img {
+    width: 20px;
+}
+
+.event-form-body .save-button {
+    background: #003366;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 75px;
+    margin-left: auto;
+}
+
+.event-form-body .save-button:hover {
+    background-color: #0055A5;
+}
+
+.event-form-body .event-title-input {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 432px;
+    border-radius: 6px;
+    background-color: transparent;
+    color: black;
+    margin-left: 30px;
+}
+
+.event-time-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.event-time-container .event-time-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

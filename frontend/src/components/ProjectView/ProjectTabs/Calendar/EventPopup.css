@@ -1,0 +1,124 @@
+.event-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.event-popup {
+    background: #f9fbfe;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    width: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-popup-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.color-indicator {
+    width: 15px;
+    height: 15px;
+    background-color: #003366;
+    border-radius: 30%;
+}
+
+.event-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.event-date {
+    font-size: 14px;
+    color: #555;
+}
+
+.event-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    color: #555;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.icon-button:hover {
+    background: #f0f0f0;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.icon-button:hover {
+    color: #2196f3;
+}
+
+.event-popup-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.share-button {
+    background: #ffffff;
+    color: #242424;
+    border: 1px solid #003366;
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    width: 32%;
+}
+
+.share-button:hover {
+    background: rgba(33, 150, 243, 0.1);
+}
+
+.share-button img {
+    margin-right: 8px;
+}
+
+.event-organizer {
+    display: flex;
+    align-items: center;
+    color: #555;
+    font-size: 14px;
+}
+
+.event-organizer i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.close-form:hover {
+    color: #000;
+}
+
