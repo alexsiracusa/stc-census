@@ -28,7 +28,7 @@ export const taskGraphStyles = [
                 // Create a small colored square as SVG with proper encoding
                 const encodedSvg = encodeURIComponent(`
                     <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="80%" y="80%" width="15%" height="15%" fill="${color}"/>
+                        <rect x="80%" y="80%" width="15%" height="15%" rx="2" ry="2" fill="${color}"/>
                     </svg>
                 `.trim());
                 return `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
