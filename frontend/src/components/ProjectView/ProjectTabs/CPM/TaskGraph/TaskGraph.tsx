@@ -4,6 +4,7 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import './TaskGraph.css';
 import { Task } from "../../../../../types/Task.ts";
+import {TaskStatus, TaskStatusInfo} from "../../../../../types/TaskStatuses.ts";
 import { taskGraphStyles } from "./utils/taskGraphStyles.ts";
 
 cytoscape.use(dagre);
@@ -29,14 +30,18 @@ const TaskGraph: React.FC<{
     const cyRef = useRef<any>(null);
 
     const formatTooltip = (task: Task, cpm: CpmData) => {
-        // note: it says 'task is not used' but we could use it here in the future...
         const padNumber = (num: number): string => num.toString().padStart(2, ' ');
+
+        const statusInfo = TaskStatusInfo[task.status as TaskStatus];
+        const presentableStatus = statusInfo ? statusInfo.name : task.status;
+
         return [
             `Slack: ${padNumber(cpm.slack)}`,
-            '', // spacer line
+            '',
             `ES: ${padNumber(cpm.earliest_start)}    LS: ${padNumber(cpm.latest_start)}`,
             `EF: ${padNumber(cpm.earliest_finish)}    LF: ${padNumber(cpm.latest_finish)}`,
-            ''
+            '',
+            `Status: ${presentableStatus}`
         ].join('\n');
     };
 
