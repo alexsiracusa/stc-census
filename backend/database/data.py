@@ -1,5 +1,6 @@
 import backend.client as client
 from fastapi import HTTPException
+from datetime import datetime
 
 
 async def get_projects():
@@ -72,8 +73,10 @@ async def update_task(project_id, task_id, fields: dict):
     async with await client.postgres_client.get_con() as con:
         async with con.transaction():
 
+            keys = list(fields.keys())
             query_parts = [f"{field} = ${i + 1}" for i, field in enumerate(fields.keys())]
-            values = list(fields.values()) + [project_id, task_id]
+            values = [datetime.strptime(value, "%Y-%m-%d").date() if 'date' in keys[i] else value for i, value in enumerate(fields.values())]
+            values = values + [project_id, task_id]
 
             if len(fields.keys()) != 0:
                 result = await con.fetch(f"""

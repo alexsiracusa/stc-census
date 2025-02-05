@@ -1,11 +1,11 @@
 import './TaskStatusSelector.css'
 
-import {TaskStatusInfo, TaskStatuses} from "../../types/TaskStatuses.ts";
+import {TaskStatusInfo, TaskStatuses} from "../../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
-import DropdownRowPicker from "../DropdownRowPicker/DropdownRowPicker.tsx";
-import DropdownPickerOption from "../DropdownPicker/DropdownPickerOption.tsx";
-import useUpdateTaskStatus from "../../hooks/useUpdateTaskStatus.ts";
+import DropdownRowPicker from "../../DropdownRowPicker/DropdownRowPicker.tsx";
+import DropdownPickerOption from "../../DropdownPicker/DropdownPickerOption.tsx";
+import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 
 type TaskStatusSelectorProps = {
     project_id: number
@@ -14,12 +14,10 @@ type TaskStatusSelectorProps = {
 
 const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
-    const {updateTaskStatus, loading, error, data} = useUpdateTaskStatus();
-    // const isMounted = useRef(true)
+    const {updateTask, loading, error, data} = useUpdateTask();
 
-    // set isMounted to false when we unmount the component
     const handleUpdate = (status) => {
-        updateTaskStatus(props.project_id, props.task_id, status);
+        updateTask(props.project_id, props.task_id, {status: status});
     };
 
     return (
@@ -37,7 +35,7 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
                     </div>
                 }
                 className="dropdown-icon"
-                title="Status"
+                title="Edit Status"
                 onChange={handleUpdate}
             >
                 {TaskStatuses.map((status: string) => (
