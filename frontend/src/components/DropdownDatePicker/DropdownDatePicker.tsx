@@ -4,6 +4,7 @@ import React, {Children, PropsWithChildren, useState} from "react";
 import DropdownPicker from "../DropdownPicker/DropdownPicker.tsx";
 import getCalendarDays from "../../utils/getCalendarDays.ts";
 import {isSameDay, format} from 'date-fns';
+import {useTranslation} from "react-i18next";
 
 import ChevronLeft from '../../assets/Icons/ChevronLeft.svg'
 import DoubleChevronLeft from '../../assets/Icons/DoubleChevronLeft.svg'
@@ -23,6 +24,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
     const [isVisible, setIsVisible] = React.useState(false);
     const [currentMonth, setCurrentMonth] = useState(props.currentDate);
     const calendarDays = getCalendarDays(currentMonth)
+    const {t} = useTranslation();
 
     const icon = <>{
         Children.map(props.children, child => {
@@ -31,8 +33,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
     }</>
 
     const setMonth = (dir: number) => {
-        const nextMonth = new Date(currentMonth);
-        nextMonth.setMonth(nextMonth.getMonth() + dir);
+        const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + dir, 1);
         setCurrentMonth(nextMonth);
     }
 
@@ -66,7 +67,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                         <img src={ChevronLeft}/>
                     </button>
 
-                    <p>{format(currentMonth, 'MMMM yy')}</p>
+                    <p>{`${t('calendar.months.' + format(currentMonth, 'MMMM').toLowerCase())} ${format(currentMonth, 'yy')}`}</p>
 
                     <button onClick={() => {
                         setMonth(1)
@@ -81,9 +82,9 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                     </button>
                 </div>
                 <div className="date-picker-calendar-grid">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayKey) => (
-                        <div key={dayKey} className="weekday">
-                            <p>{dayKey}</p>
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                        <div key={day} className="weekday">
+                            <p>{t(`calendar.days.${day.toLowerCase()}`)}</p>
                         </div>
                     ))}
                     {calendarDays.map(({date, isCurrentMonth}, index) => (
@@ -96,6 +97,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                                 onClick={() => {
                                     props.onChange(format(date, 'yyyy-MM-dd'))
                                     setIsVisible(false)
+                                    setCurrentMonth(date)
                                 }}
                             >
                                 <p>{date.getDate()}</p>

@@ -84,6 +84,10 @@ const Calendar: React.FC = () => {
         setIsEventFormOpen(true);
     };
 
+    const setMonth = (dir: number) => {
+        const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + dir, 1);
+        setCurrentMonth(nextMonth);
+    }
 
     const handleOpenAllEventsOverlay = (date: Date) => {
         const eventsOnDate = events.filter(event =>
@@ -96,11 +100,7 @@ const Calendar: React.FC = () => {
         <div className="calendar-container">
             <CalendarHeader
                 currentMonth={currentMonth}
-                onNavigate={(dir) => {
-                    const nextMonth = new Date(currentMonth);
-                    nextMonth.setMonth(nextMonth.getMonth() + dir);
-                    setCurrentMonth(nextMonth);
-                }}
+                onNavigate={setMonth}
                 onResetToToday={() => setCurrentMonth(new Date())}
             />
             <CalendarGrid
