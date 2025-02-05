@@ -1,0 +1,52 @@
+
+.date-picker-calendar {
+    display: flex;
+    flex-direction: column;
+    padding: 0.25em;
+}
+
+.date-picker-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: white;
+    width: 14em;
+}
+
+.date-picker-calendar-grid .weekday, .date-picker-calendar-grid .day-cell {
+    text-align: center;
+    color: #555;
+    width: 2em;
+    height: 1.3em;
+}
+
+.date-picker-calendar-grid .weekday p {
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.date-picker-calendar-grid .day-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+}
+
+.date-picker-calendar-grid .other-month p {
+    color: #bbb;
+}
+
+.date-picker-calendar-grid .day-cell p {
+    font-family: monospace, monospace;
+    font-size: 0.9em;
+}
+
+.date-picker-calendar-grid .day-cell .day-number {
+    aspect-ratio: 1.0;
+    border-radius: 99px;
+    text-align: center;
+}
+
+.date-picker-calendar-grid .day-cell .selected {
+    background-color: #003366;
+    color: white;
+}
