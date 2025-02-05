@@ -38,6 +38,7 @@ export const taskGraphStyles = [
             'text-valign': 'center',
             'text-wrap': 'wrap',
             'width': '120%',
+            'tooltip': 'data(tooltipText)'
         }
     },
     {

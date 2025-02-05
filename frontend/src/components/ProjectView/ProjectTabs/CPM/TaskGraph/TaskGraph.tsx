@@ -1,3 +1,4 @@
+/* TaskGraph.tsx */
 import React, { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
@@ -27,15 +28,29 @@ const TaskGraph: React.FC<{
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
 
+    const formatTooltip = (task: Task, cpm: CpmData) => {
+        // note: it says 'task is not used' but we could use it here in the future...
+        const padNumber = (num: number): string => num.toString().padStart(2, ' ');
+        return [
+            `Slack: ${padNumber(cpm.slack)}`,
+            '', // spacer line
+            `ES: ${padNumber(cpm.earliest_start)}    LS: ${padNumber(cpm.latest_start)}`,
+            `EF: ${padNumber(cpm.earliest_finish)}    LF: ${padNumber(cpm.latest_finish)}`,
+            ''
+        ].join('\n');
+    };
+
     useEffect(() => {
         if (!containerRef.current) return;
 
         const nodes = tasks.map(task => {
             const cpm = cpmData.find(c => c.id === task.id && c.project_id === task.project_id);
+            const tooltip = cpm ? formatTooltip(task, cpm) : '';
             return {
                 data: {
                     id: `${task.project_id}-${task.id}`,
-                    label: formatNodeLabel(task, cpm),
+                    label: task.name,
+                    tooltip,
                     status: task.status,
                     project_id: task.project_id,
                     isExternalProject: task.project_id !== currentProjectId,
@@ -53,7 +68,6 @@ const TaskGraph: React.FC<{
             }))
         );
 
-
         cyRef.current = cytoscape({
             container: containerRef.current,
             elements: { nodes, edges },
@@ -67,29 +81,25 @@ const TaskGraph: React.FC<{
             style: taskGraphStyles
         });
 
+        cyRef.current.on('mouseover', 'node', (event) => {
+            const node = event.target;
+            if (containerRef.current && node.data('tooltip')) {
+                containerRef.current.setAttribute('title', node.data('tooltip'));
+            }
+        });
+
+        cyRef.current.on('mouseout', 'node', () => {
+            if (containerRef.current) {
+                containerRef.current.removeAttribute('title');
+            }
+        });
+
         return () => {
             if (cyRef.current) {
                 cyRef.current.destroy();
             }
         };
     }, [tasks, currentProjectId, cpmData]);
-
-    const formatNodeLabel = (task: Task, cpm?: CpmData) => {
-        if (!cpm) return task.name;
-
-        const padNumber = (num: number): string => num.toString().padStart(2, ' ');
-
-        return [
-            task.name,
-            `Slack: ${padNumber(cpm.slack)}`,
-            '',
-            `ES: ${padNumber(cpm.earliest_start)}    LS: ${padNumber(cpm.latest_start)}`,
-            `EF: ${padNumber(cpm.earliest_finish)}    LF: ${padNumber(cpm.latest_finish)}`,
-            ''
-        ].join('\n');
-    };
-
-
 
     return (
         <div
