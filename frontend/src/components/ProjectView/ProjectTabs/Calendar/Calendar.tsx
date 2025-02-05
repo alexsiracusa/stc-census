@@ -89,7 +89,6 @@ const Calendar: React.FC = () => {
         setCurrentMonth(nextMonth);
     }
 
-
     const handleOpenAllEventsOverlay = (date: Date) => {
         const eventsOnDate = events.filter(event =>
             new Date(event.startDate) <= date && new Date(event.endDate) >= date
