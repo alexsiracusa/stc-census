@@ -12,7 +12,6 @@ export type Event = {
     startDate: string;
     endDate: string;
     description: string;
-    organizer: string;
 };
 
 const Calendar: React.FC = () => {
@@ -22,7 +21,6 @@ const Calendar: React.FC = () => {
     const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [eventTitle, setEventTitle] = useState('');
     const [eventDescription, setEventDescription] = useState('');
-    const [eventOrganizer, setEventOrganizer] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -38,7 +36,6 @@ const Calendar: React.FC = () => {
         startDate: string;
         endDate: string;
         description: string;
-        organizer: string;
     }) => {
         if (eventData.title && eventData.startDate && eventData.endDate) {
             if (selectedEventId) {
@@ -51,7 +48,6 @@ const Calendar: React.FC = () => {
                                 startDate: eventData.startDate,
                                 endDate: eventData.endDate,
                                 description: eventData.description,
-                                organizer: eventData.organizer,
                             }
                             : event
                     )
@@ -66,7 +62,6 @@ const Calendar: React.FC = () => {
                         startDate: eventData.startDate,
                         endDate: eventData.endDate,
                         description: eventData.description,
-                        organizer: eventData.organizer,
                     },
                 ]);
             }
@@ -79,7 +74,6 @@ const Calendar: React.FC = () => {
         setSelectedEventId(null);
         setEventTitle('');
         setEventDescription('');
-        setEventOrganizer('');
         setStartDate('');
         setEndDate('');
     };
@@ -91,7 +85,6 @@ const Calendar: React.FC = () => {
         setEndDate(formDate);
         setEventTitle('');
         setEventDescription('');
-        setEventOrganizer('');
         setIsEventFormOpen(true);
     };
 
@@ -101,7 +94,6 @@ const Calendar: React.FC = () => {
         setEndDate(event.endDate);
         setEventTitle(event.title);
         setEventDescription(event.description);
-        setEventOrganizer(event.organizer);
         setIsEventFormOpen(true);
     };
 
@@ -144,8 +136,6 @@ const Calendar: React.FC = () => {
                 setEndDate={setEndDate}
                 description={eventDescription}
                 setDescription={setEventDescription}
-                organizer={eventOrganizer}
-                setOrganizer={setEventOrganizer}
             />
         </div>
     );

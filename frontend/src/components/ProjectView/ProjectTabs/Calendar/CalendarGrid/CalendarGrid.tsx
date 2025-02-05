@@ -162,7 +162,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         startDate: selectedEvent.startDate,
                         endDate: selectedEvent.endDate,
                         description: selectedEvent.description || "(No description)",
-                        organizer: selectedEvent.organizer || "Unknown",
                     }}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
