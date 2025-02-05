@@ -2,6 +2,7 @@ import React from 'react';
 import {Event} from './Calendar';
 import './Calendar.css';
 import {isToday, isSameDay} from "date-fns";
+import {useTranslation} from "react-i18next";
 
 type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
@@ -27,11 +28,13 @@ const CalendarGrid: React.FC<CalendarGridProps> = (
         openEditForm,
     }) =>
 {
+    const {t} = useTranslation();
+
     return (
         <div className="calendar-grid">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayKey) => (
                 <div key={dayKey} className="weekday">
-                    {dayKey}
+                    {t(`calendar.days.${dayKey.toLowerCase()}`)}
                 </div>
             ))}
 

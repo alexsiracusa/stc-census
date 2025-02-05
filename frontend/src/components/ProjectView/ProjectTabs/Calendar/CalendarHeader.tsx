@@ -2,6 +2,8 @@ import React from 'react';
 import './Calendar.css';
 import ChevronRight from '../../../../assets/Icons/ChevronRight.svg';
 import ChevronLeft from '../../../../assets/Icons/ChevronLeft.svg';
+import {useTranslation} from "react-i18next";
+import {format} from "date-fns";
 
 type CalendarHeaderProps = {
     currentMonth: Date;
@@ -10,7 +12,7 @@ type CalendarHeaderProps = {
 };
 
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({ currentMonth, onNavigate, onResetToToday }) => {
-    const currentMonthName = currentMonth.toLocaleString('default', { month: 'long' });
+    const {t} = useTranslation();
 
     return (
         <header className="calendar-header">
@@ -26,7 +28,8 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ currentMonth, onNavigat
                 </button>
             </div>
             <h2>
-                {currentMonthName} {currentMonth.getFullYear()}
+                {t('calendar.months.' + format(currentMonth, 'MMMM').toLowerCase())}
+                {' '} {currentMonth.getFullYear()}
             </h2>
         </header>
     );
