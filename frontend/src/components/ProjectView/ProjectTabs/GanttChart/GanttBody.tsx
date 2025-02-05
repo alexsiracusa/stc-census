@@ -69,6 +69,26 @@ const GanttBody = ({ data }: { data: Task[] }) => {
         );
     }
 
+    const todayLine = {
+        id: 'todayLine',
+        afterDatasetsDraw(chart, args, pluginOptions) {
+            const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y
+            } } = chart;
+
+            ctx.save();
+
+            ctx.beginPath();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'rgba(255, 26, 104, 1)';
+            ctx.setLineDash([6, 6]);
+            ctx.moveTo(x.getPixelForValue(new Date()), top);
+            ctx.lineTo(x.getPixelForValue(new Date()), bottom);
+            ctx.stroke();
+
+            ctx.setLineDash ([]);
+        }
+    }
+
     const baseOptions: ChartOptions<"bar"> = {
         indexAxis: "y",
         resizeDelay: 20,
@@ -90,8 +110,10 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                 min: startDate,
                 max: endDate,
                 stacked: true,
+                offset: false,
             },
             y: {
+                stacked: true,
                 display: false,
             },
         },
@@ -156,12 +178,15 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                 display: false,
             },
             datalabels: {
+                display: true,
                 labels: {
                     index: {
                         color: "#1c1c1c",
                         backgroundColor: "rgba(255,255,255, 0.1)",
                         align: "right",
                         anchor: "start",
+                        offset: 10,
+                        padding: { top: 10 },
                         font: { size: 12, weight: 400, lineHeight: 1.7 },
                         formatter(value: { EventName: string; x: string[] }) {
                             if (!value.EventName) {
@@ -181,10 +206,10 @@ const GanttBody = ({ data }: { data: Task[] }) => {
     };
 
     return (
-        <div style={{ height: '600px', width: '100%', overflow: 'auto' }}>
+        <div style={{ minHeight: '600px', width: '100%', overflow: 'auto' }}>
             <div style={{ minWidth: '1200px' }}>
                 <h4>Timeline</h4>
-                <Bar data={formattedData} options={baseOptions} />
+                <Bar data={formattedData} options={baseOptions} plugins={[todayLine]} />
             </div>
         </div>
     );
