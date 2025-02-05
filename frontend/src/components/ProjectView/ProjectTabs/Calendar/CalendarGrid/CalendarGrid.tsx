@@ -116,7 +116,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                 .filter((event) =>
                                     isDateInRange(date, event.startDate, event.endDate) || isSameDay(date, new Date(event.startDate))
                                 )
-                                .slice(0, 4)
+                                .slice(0, 2)
                                 .map((event) => (
                                     <div
                                         key={event.id}
@@ -132,7 +132,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
                             {events.filter((event) =>
                                 isDateInRange(date, event.startDate, event.endDate) || isSameDay(date, new Date(event.startDate))
-                            ).length > 4 && (
+                            ).length > 2 && (
                                 <button
                                     className="more-events"
                                     onClick={(e) => {
@@ -144,7 +144,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                         events.filter((event) =>
                                             isDateInRange(date, event.startDate, event.endDate) ||
                                             isSameDay(date, new Date(event.startDate))
-                                        ).length - 4
+                                        ).length - 2
                                     } more`}
                                 </button>
                             )}
