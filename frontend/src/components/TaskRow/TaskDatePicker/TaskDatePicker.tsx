@@ -5,6 +5,7 @@ import {format} from "date-fns";
 
 type TaskDatePickerProps = {
     currentDate: string
+    title: string
     onChange: (arg0: any) => void
 }
 
@@ -14,7 +15,7 @@ const TaskDatePicker = (props: TaskDatePickerProps) => {
     return (
         <DropdownDatePicker
             className='task-date-picker'
-            title=''
+            title={props.title}
             currentDate={date}
             onChange={props.onChange}
         >

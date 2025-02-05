@@ -1,7 +1,7 @@
 import './TaskRow.css'
 
 import {useNavigate} from "react-router-dom";
-import TaskStatusSelector from "../TaskStatusSelector/TaskStatusSelector.tsx";
+import TaskStatusSelector from "./TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
 import {useSelector} from "react-redux";
@@ -38,16 +38,24 @@ const TaskRow = (props: TaskRowProps) => {
                 <TaskDependsList project_id={props.project_id} task_id={props.task_id}/>
             </div>
 
-            <div className='task-end-date'>
-                <TaskDatePicker currentDate={task.target_start_date} onChange={(value) => {
-                    updateTask(props.project_id, props.task_id, {target_start_date: value})
-                }}/>
+            <div className='task-start-date'>
+                <TaskDatePicker
+                    currentDate={task.target_start_date}
+                    title='Edit Start Date'
+                    onChange={(value) => {
+                        updateTask(props.project_id, props.task_id, {target_start_date: value})
+                    }}
+                />
             </div>
 
             <div className='task-end-date'>
-                <TaskDatePicker currentDate={task.target_completion_date} onChange={(value) => {
-                    updateTask(props.project_id, props.task_id, {target_completion_date: value})
-                }}/>
+                <TaskDatePicker
+                    currentDate={task.target_completion_date}
+                    title='Edit End Date'
+                    onChange={(value) => {
+                        updateTask(props.project_id, props.task_id, {target_completion_date: value})
+                    }}
+                />
             </div>
         </div>
     )
