@@ -165,7 +165,7 @@ i18n
                     calendar: {
                         title: '日历',
                         day_month_year: "{{year}}年{{month}}{{date}}日 {{day}}",
-                        currentDay: {
+                        days: {
                             "sun": "日",
                             "mon": "一",
                             "tue": "二",
