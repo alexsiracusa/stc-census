@@ -1,74 +1,92 @@
 import pandas as pd
 from collections import deque
+import ast
 
-def compute_cpm(tasks):
-    df = pd.DataFrame(tasks)
-    df["du"] = df["du"].fillna(0)
+def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
+    df = prepare_data(df)
+    # assumption: df contains columns 'target_duration', 'dependencies'
+    n = len(df)
+    if n == 0:
+        return pd.DataFrame(columns=['es', 'ef', 'ls', 'lf', 'slack'])
 
-    # Add End node
-    terminal_tasks = df[~df["ac"].isin(df["pr"].str.split(",").explode().dropna())]
-    end_predecessors = ",".join(terminal_tasks["ac"]) if not terminal_tasks.empty else "-"
-    df = pd.concat([df, pd.DataFrame([{
-        "ac": "End",
-        "pr": end_predecessors,
-        "du": 0
-    }])], ignore_index=True)
+    # build successors list
+    successors = [[] for _ in range(n)]
+    for i in df.index:
+        for predecessor in df.loc[i, 'dependencies']:
+            successors[predecessor].append(i)
 
-    # Create mappings
-    task_to_idx = {task: i for i, task in enumerate(df["ac"])}
-    idx_to_task = {i: task for task, i in task_to_idx.items()}
+    # compute in-degree for each node
+    in_degree = df['dependencies'].apply(len).to_numpy()
 
-    # Build graph
-    graph = [[] for _ in range(len(df))]
-    for _, row in df.iterrows():
-        if row["pr"] != "-":
-            for predecessor in row["pr"].split(","):
-                graph[task_to_idx[predecessor]].append(task_to_idx[row["ac"]])
-
-    # Topological sort
-    in_degree = [0] * len(graph)
-    for u in range(len(graph)):
-        for v in graph[u]:
-            in_degree[v] += 1
-
-    queue = deque([u for u in range(len(graph)) if in_degree[u] == 0])
-    topo_order = []
+    # Kahn's algorithm for topological sort
+    top_order = []
+    queue = deque([i for i in df.index if in_degree[i] == 0])
 
     while queue:
-        u = queue.popleft()
-        topo_order.append(u)
-        for v in graph[u]:
-            in_degree[v] -= 1
-            if in_degree[v] == 0:
-                queue.append(v)
+        node = queue.popleft()
+        top_order.append(node)
+        for successor in successors[node]:
+            in_degree[successor] -= 1
+            if in_degree[successor] == 0:
+                queue.append(successor)
 
-    # Forward pass
-    es, ef = [0] * len(df), [0] * len(df)
-    for u in topo_order:
-        if df.iloc[u]["pr"] != "-":
-            es[u] = max(ef[task_to_idx[p]] for p in df.iloc[u]["pr"].split(","))
-        ef[u] = es[u] + df.iloc[u]["du"]
+    # forward pass to compute ES and EF
+    es = pd.Series(0, index=df.index)
+    ef = pd.Series(0, index=df.index)
+    for node in top_order:
+        deps = df.loc[node, 'dependencies']
+        es[node] = max(ef[p] for p in deps) if deps else 0
+        ef[node] = es[node] + df.loc[node, 'target_duration']
 
-    # Backward pass
-    lf, ls = [ef[-1]] * len(df), [0] * len(df)
-    for u in reversed(topo_order):
-        if graph[u]:
-            lf[u] = min(ls[v] for v in graph[u])
-        ls[u] = lf[u] - df.iloc[u]["du"]
+    project_duration = ef.max()
 
-    # Create results
-    results = []
-    for i in range(len(df)):
-        if df.iloc[i]["ac"] == "End":
-            continue
-        results.append({
-            "task_id": int(df.iloc[i]["ac"]),
-            "es": es[i],
-            "ef": ef[i],
-            "ls": ls[i],
-            "lf": lf[i],
-            "slack": lf[i] - ef[i],
-            "critical": (lf[i] - ef[i]) == 0
-        })
+    # backward pass to compute LS and LF
+    lf = pd.Series(0, index=df.index)
+    ls = pd.Series(0, index=df.index)
+    for node in reversed(top_order):
+        node_successors = successors[node]
+        if not node_successors:
+            lf[node] = project_duration
+        else:
+            lf[node] = min(ls[s] for s in node_successors)
+        ls[node] = lf[node] - df.loc[node, 'target_duration']
 
-    return pd.DataFrame(results)
+    # compute slack and whether the task is critical
+    slack = ls - es
+    critical = slack == 0
+
+    result_df = pd.DataFrame({
+        'es': es,  # earliest start
+        'ef': ef,  # earliest finish
+        'ls': ls,  # latest start
+        'lf': lf,  # latest finish
+        'slack': slack,
+        'critical': critical
+    })
+
+    return result_df
+
+# helper function to prepare data
+def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
+    df.columns = ['id', 'project_id', 'status',
+                      'actual_start', 'actual_end',
+                      'target_start', 'target_end', 'target_duration', 'dependencies']
+
+    def convert_dependencies(dep_str):
+        if dep_str == '[]':
+            return []
+        dep_list = ast.literal_eval(dep_str)
+        return [tuple(d.values()) for d in dep_list]
+
+    df['dependencies'] = df['dependencies'].apply(str).apply(convert_dependencies)
+
+    id_to_index = df.reset_index().set_index(['id', 'project_id'])['index'].to_dict()
+
+    def convert_to_indices(dep_list):
+       return [id_to_index.get((id_, proj_id)) for id_, proj_id in dep_list]
+
+    df['dependencies'] = df['dependencies'].apply(convert_to_indices)
+
+    df = df.drop(columns=['id', 'project_id', 'status', 'actual_start', 'actual_end', 'target_start', 'target_end'])
+
+    return df

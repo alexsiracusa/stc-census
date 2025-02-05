@@ -66,25 +66,9 @@ async def get_project(
 async def get_cpm_analysis(project_id: int, response: Response):
     try:
         # Get all tasks with dependencies for the project
-        tasks = await data.get_all_project_tasks_with_dependencies(project_id)
-
-        # Convert to CPM input format
-        cpm_input = []
-        for task in tasks:
-            # Get predecessors from same project
-            predecessors = [
-                str(dep["task_id"])
-                for dep in task["depends_on"]
-                if dep["project_id"] == project_id
-            ]
-            cpm_input.append({
-                "ac": str(task["id"]),
-                "pr": ",".join(predecessors) if predecessors else "-",
-                "du": task["target_days_to_complete"] or 0
-            })
-
-        # Compute CPM
-        df = compute_cpm(cpm_input)
+        tasks = await data.get_all_project_tasks_cpm(project_id)
+        df = pd.DataFrame(tasks)
+        df = compute_cpm(df)
         # Create the final dictionary with the desired structure
         result = {
             "id": project_id,
