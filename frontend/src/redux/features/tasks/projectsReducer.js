@@ -83,10 +83,6 @@ export const projectSlice = createSlice({
             const task = state.byId[`${project_id}`].byId[`${task_id}`]
             state.byId[`${project_id}`].byId[`${task_id}`] = {...task, ...body}
         },
-        updateTaskDependencies: (state, action) => {
-            const {project_id, task_id, depends_on} = action.payload
-            state.byId[`${project_id}`].byId[`${task_id}`].depends_on = depends_on
-        },
         setDashboard: (state, action) => {
             const projects = action.payload.json;
 
@@ -104,7 +100,6 @@ export const projectSlice = createSlice({
 export const {
     addProject,
     setDashboard,
-    updateTaskDependencies,
     updateTask,
 } = projectSlice.actions;
 
