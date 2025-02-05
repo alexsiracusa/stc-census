@@ -1,30 +1,28 @@
 import useUpdate from "./useUpdate.ts";
 import {useCallback} from "react";
-import {updateTaskStatus as updateTaskStatusRedux} from "../redux/features/tasks/projectsReducer.js";
+import {updateTask as updateTaskRedux} from "../redux/features/tasks/projectsReducer.js";
 
 
-const useUpdateTaskStatus = () => {
+const useUpdateTask = () => {
     const { updateData, loading, error, data } = useUpdate();
 
     // Prepare a base URL for status updates
     const getUrl = (project_id, task_id) => `${import.meta.env.VITE_BACKEND_HOST}/project/${project_id}/task/${task_id}/update`;
 
     // Create a callback to update task status
-    const updateTaskStatus = useCallback((project_id, task_id, status) => {
+    const updateTask = useCallback((project_id, task_id, body) => {
         const url = getUrl(project_id, task_id);
         const options = {
             method: 'PUT',
-            body: JSON.stringify({
-                status: status
-            })
+            body: JSON.stringify(body)
         };
         const update = () => {
-            return updateTaskStatusRedux({project_id, task_id, status})
+            return updateTaskRedux({project_id, task_id, body})
         }
         updateData(url, update, options);
     }, [updateData]);
 
-    return { updateTaskStatus, loading, error, data };
+    return { updateTask, loading, error, data };
 };
 
-export default useUpdateTaskStatus;
+export default useUpdateTask;

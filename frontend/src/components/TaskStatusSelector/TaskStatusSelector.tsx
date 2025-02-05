@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 
 import DropdownRowPicker from "../DropdownRowPicker/DropdownRowPicker.tsx";
 import DropdownPickerOption from "../DropdownPicker/DropdownPickerOption.tsx";
-import useUpdateTaskStatus from "../../hooks/useUpdateTaskStatus.ts";
+import useUpdateTask from "../../hooks/useUpdateTask.ts";
 
 type TaskStatusSelectorProps = {
     project_id: number
@@ -14,12 +14,12 @@ type TaskStatusSelectorProps = {
 
 const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
-    const {updateTaskStatus, loading, error, data} = useUpdateTaskStatus();
+    const {updateTask, loading, error, data} = useUpdateTask();
     // const isMounted = useRef(true)
 
     // set isMounted to false when we unmount the component
     const handleUpdate = (status) => {
-        updateTaskStatus(props.project_id, props.task_id, status);
+        updateTask(props.project_id, props.task_id, {status: status});
     };
 
     return (

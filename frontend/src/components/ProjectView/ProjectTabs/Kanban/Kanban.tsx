@@ -6,11 +6,11 @@ import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 
 import TaskCard from './TaskCard/TaskCard.tsx';
 import {useSelector} from "react-redux";
-import useUpdateTaskStatus from "../../../../hooks/useUpdateTaskStatus.ts";
+import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
 
 const Kanban = (props: TabProps) => {
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
-    const {updateTaskStatus, loading, error, data} = useUpdateTaskStatus();
+    const {updateTask, loading, error, data} = useUpdateTask();
     const {t} = useTranslation();
 
     const statuses = [
@@ -56,7 +56,7 @@ const Kanban = (props: TabProps) => {
 
         const [removed] = source_list.tasks.splice(source.index, 1);
         destination_list.tasks.splice(destination.index, 0, removed);
-        updateTaskStatus(removed.project_id, removed.id, destination.droppableId)
+        updateTask(removed.project_id, removed.id, {status: destination.droppableId})
     }
 
     return (

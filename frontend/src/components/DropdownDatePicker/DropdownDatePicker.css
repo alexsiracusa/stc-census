@@ -5,6 +5,35 @@
     padding: 0.25em;
 }
 
+.date-picker-calendar .month-selector {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    padding: 0 0.2em;
+
+    p {
+        flex-grow: 1;
+        text-align: center;
+        font-size: 1em;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        aspect-ratio: 1.0;
+        border-radius: 3px;
+        height: 1.2em;
+
+        img {
+            height: 0.65em;
+        }
+    }
+}
+
 .date-picker-calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);

@@ -5,7 +5,7 @@ import TaskStatusSelector from "../TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
 import {useSelector} from "react-redux";
-import { format } from 'date-fns';
+import useUpdateTask from "../../hooks/useUpdateTask.ts";
 
 type TaskRowProps = {
     project_id: number
@@ -14,15 +14,12 @@ type TaskRowProps = {
 
 const TaskRow = (props: TaskRowProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
+    const {updateTask, loading, error, data} = useUpdateTask();
+
     const navigate = useNavigate()
 
     if (task === undefined) {
         return <></>
-    }
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return format(date, 'dd-MM-yy')
     }
 
     return (
@@ -43,13 +40,13 @@ const TaskRow = (props: TaskRowProps) => {
 
             <div className='task-end-date'>
                 <TaskDatePicker currentDate={task.target_start_date} onChange={(value) => {
-                    console.log(value)
+                    updateTask(props.project_id, props.task_id, {target_start_date: value})
                 }}/>
             </div>
 
             <div className='task-end-date'>
                 <TaskDatePicker currentDate={task.target_completion_date} onChange={(value) => {
-                    console.log(value)
+                    updateTask(props.project_id, props.task_id, {target_completion_date: value})
                 }}/>
             </div>
         </div>

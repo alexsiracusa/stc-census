@@ -78,9 +78,10 @@ export const projectSlice = createSlice({
 
             delete newProject.tasks
         },
-        updateTaskStatus: (state, action) => {
-            const {project_id, task_id, status} = action.payload;
-            state.byId[`${project_id}`].byId[`${task_id}`].status = status
+        updateTask: (state, action) => {
+            const {project_id, task_id, body} = action.payload;
+            const task = state.byId[`${project_id}`].byId[`${task_id}`]
+            state.byId[`${project_id}`].byId[`${task_id}`] = {...task, ...body}
         },
         updateTaskDependencies: (state, action) => {
             const {project_id, task_id, depends_on} = action.payload
@@ -102,9 +103,9 @@ export const projectSlice = createSlice({
 
 export const {
     addProject,
-    updateTaskStatus,
     setDashboard,
     updateTaskDependencies,
+    updateTask,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;
