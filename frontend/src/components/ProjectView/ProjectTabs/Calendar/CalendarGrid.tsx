@@ -1,21 +1,13 @@
 import React from 'react';
 import { Event } from './Calendar';
 import './Calendar.css';
+import {isToday} from "date-fns";
 
 type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
     events: Event[];
     openEventForm: (date: Date, eventToEdit?: Event) => void;
     openAllEventsOverlay: (date: Date) => void;
-};
-
-const isToday = (date: Date): boolean => {
-    const today = new Date();
-    return (
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear()
-    );
 };
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({ calendarDays, events, openEventForm, openAllEventsOverlay }) => {

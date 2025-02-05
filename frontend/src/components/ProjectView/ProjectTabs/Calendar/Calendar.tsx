@@ -13,7 +13,7 @@ export type Event = {
 };
 
 const Calendar: React.FC = () => {
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentMonth, setCurrentMonth] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState('');
@@ -47,16 +47,16 @@ const Calendar: React.FC = () => {
     return (
         <div className="calendar-container">
             <CalendarHeader
-                currentMonth={currentDate}
+                currentMonth={currentMonth}
                 onNavigate={(dir) => {
-                    const nextMonth = new Date(currentDate);
+                    const nextMonth = new Date(currentMonth);
                     nextMonth.setMonth(nextMonth.getMonth() + dir);
-                    setCurrentDate(nextMonth);
+                    setCurrentMonth(nextMonth);
                 }}
-                onResetToToday={() => setCurrentDate(new Date())}
+                onResetToToday={() => setCurrentMonth(new Date())}
             />
             <CalendarGrid
-                calendarDays={getCalendarDays(currentDate)}
+                calendarDays={getCalendarDays(currentMonth)}
                 events={events}
                 openEventForm={handleOpenEventForm}
                 openAllEventsOverlay={() => {}}
