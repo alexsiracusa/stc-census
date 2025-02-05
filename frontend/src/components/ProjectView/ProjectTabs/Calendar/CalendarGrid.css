@@ -7,7 +7,7 @@
     width: 100%;
 }
 
-.weekday {
+.calendar-grid .weekday {
     text-align: center;
     padding: 0.5rem;
     background-color: #f9f9f9;
@@ -16,7 +16,7 @@
     border-bottom: 1px solid #ddd;
 }
 
-.day-cell {
+.calendar-grid .day-cell {
     position: relative;
     background-color: white;
     display: flex;
@@ -27,7 +27,7 @@
     box-sizing: border-box;
 }
 
-.other-month {
+.calendar-grid .other-month {
     background-color: #fafafa;
     color: #bbb;
 }
@@ -46,12 +46,12 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.day-number.today {
+.calendar-grid .day-number.today {
     background-color: #003366;
     color: white;
 }
 
-.event-list {
+.calendar-grid .event-list {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
@@ -61,7 +61,7 @@
     border-radius: 6px;
 }
 
-.event-block {
+.calendar-grid .event-block {
     padding: 0.3rem 0.5rem;
     border-radius: 4px;
     color: white;
@@ -74,7 +74,7 @@
     background-color: #003366;
 }
 
-.event-block:hover {
+.calendar-grid .event-block:hover {
     background-color: #0055A5;
 }
 
