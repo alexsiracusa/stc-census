@@ -10,8 +10,11 @@ const formatGanttData = (tasks: Task[]) => {
   const taskArray = Object.values(tasks);
 
   taskArray.forEach((task) => {
-    const startDate = task.target_start_date;
-    const endDate = task.target_completion_date;
+    const startDate = new Date(task.target_start_date);
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(task.target_completion_date);
+    endDate.setHours(23, 59, 59, 999);
 
     formattedData.labels.push(task.name);
 
@@ -56,7 +59,7 @@ const formatGanttData = (tasks: Task[]) => {
       borderWidth: 1,
       borderSkipped: false,
       borderRadius: 5,
-      barPercentage: 2,
+      barPercentage: 0.5,
       minBarLength: 10,
     };
 
