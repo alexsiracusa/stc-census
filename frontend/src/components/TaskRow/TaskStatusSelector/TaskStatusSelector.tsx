@@ -31,7 +31,7 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
                             color: TaskStatusInfo[task.status].color
                         }}
                     >
-                        {TaskStatusInfo[task.status].name}
+                        <p>{TaskStatusInfo[task.status].name}</p>
                     </div>
                 }
                 className="dropdown-icon"
