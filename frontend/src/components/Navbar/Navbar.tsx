@@ -31,15 +31,16 @@ const Navbar: React.FC = () => {
     return (
         <header className="navbar">
             <nav className="left">
-                <a href="/" className="logo">
-                    <img src={Logo} alt="logo" />
+                <a href="/projects" className="logo">
+                    <img src={Logo} alt="logo"/>
                 </a>
-                <a href="/">{t('navbar.home', 'Home')}</a>
-                <a href="/menu">{t('navbar.menu', 'Menu')}</a>
                 <a href="/projects">{t('navbar.project', 'Project')}</a>
+                <a href="/user-guide">User Guide</a>
+                <a href="/documentation">Documentation</a>
+                {/*<a href="/menu">{t('navbar.menu', 'Menu')}</a>*/}
             </nav>
             <nav className="right">
-                <LanguageSelector />
+                <LanguageSelector/>
                 <div
                     className="profile-dropdown"
                     onClick={() => setIsDropdownOpen((prev) => !prev)}
