@@ -6,3 +6,19 @@
     gap: 6px;
 }
 
+.task-depends-list .square-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+
+    aspect-ratio: 1.0;
+    height: 100%;
+
+    border: none;
+    background-color: transparent;
+}
+
+.task-depends-list .square-button:hover {
+    background-color: #00000020;
+}

@@ -1,24 +1,6 @@
 
-
-.task-depends-list .add-dependency-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 3px;
-
+.add-dependency-button img {
+    width: 40%;
+    height: 40%;
     aspect-ratio: 1.0;
-    height: 100%;
-
-    border: none;
-    background-color: transparent;
-
-    img {
-        width: 40%;
-        height: 40%;
-        aspect-ratio: 1.0;
-    }
-}
-
-.task-depends-list .add-dependency-button:hover {
-    background-color: #00000020;
 }

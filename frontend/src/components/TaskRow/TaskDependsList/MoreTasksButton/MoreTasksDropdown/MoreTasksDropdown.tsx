@@ -1,12 +1,11 @@
-import './AddDependencyPicker.css'
+import './MoreTasksDropdown.css'
 
 import DropdownPicker from "../../../../Dropdowns/DropdownPicker/DropdownPicker.tsx";
 import React, {Children, PropsWithChildren} from "react";
 import {useSelector} from "react-redux";
-import TaskIcon from "../../TaskIcon/TaskIcon.tsx";
 import useUpdateTask from "../../../../../hooks/useUpdateTask.ts";
 
-type AddDependencyPickerProps = {
+type MoreTasksDropdownProps = {
     className: string
     title: string
 
@@ -14,7 +13,7 @@ type AddDependencyPickerProps = {
     task_id: number
 }
 
-const AddDependencyPicker = (props: PropsWithChildren<AddDependencyPickerProps>) => {
+const MoreTasksDropdown = (props: PropsWithChildren<MoreTasksDropdownProps>) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const {updateTask, loading, error, data} = useUpdateTask();
@@ -33,39 +32,18 @@ const AddDependencyPicker = (props: PropsWithChildren<AddDependencyPickerProps>)
         <DropdownPicker
             icon={icon}
             buttonClassName={props.className}
-            contentClassName='add-dependency-picker-content'
-            containerAlignment='center'
-            contentAlignment='center'
+            contentClassName='more-tasks-dropdown-container'
+            containerAlignment='flex-end'
+            contentAlignment='flex-end'
             title={props.title}
             isVisible={isVisible}
             setIsVisible={(value) => {
                 setIsVisible(value)
             }}
         >
-            {options.map((option) => (
-                <button
-                    className='task-icon-container'
-                    key={option.id}
-                    onClick={() => {
-                        console.log(task.depends_on)
-                        updateTask(props.project_id, props.task_id, {
-                            depends_on: [...task.depends_on, {
-                                project_id: option.project_id,
-                                task_id: option.id
-                            }]
-                        })
-                        setIsVisible(false)
-                    }}
-                >
-                    <TaskIcon
-                        key={option.id}
-                        project_id={option.project_id}
-                        task_id={option.id}
-                    />
-                </button>
-            ))}
+            Dropdown aa
         </DropdownPicker>
     )
 }
 
-export default AddDependencyPicker;
+export default MoreTasksDropdown;

@@ -18,19 +18,10 @@ const AddTaskDependencyButton = (props: AddTaskDependencyButtonProps) => {
         return <></>
     }
 
-    const handleUpdate = () => {
-        const depends_on = task.depends_on.concat([{
-            "task_id": 2,
-            "project_id": 1
-        }])
-        updateTask(props.project_id, props.task_id, {depends_on: depends_on});
-    };
-
     return (
         <AddDependencyPicker
-            className='add-dependency-button'
+            className='square-button add-dependency-button'
             title={'Add Dependency'}
-            onChange={() => {}}
             project_id={props.project_id}
             task_id={props.task_id}
         >
