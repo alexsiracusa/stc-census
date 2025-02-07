@@ -1,0 +1,32 @@
+
+.add-dependency-picker-content {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background-color: white;
+
+    width: 8em;
+    padding: 0.5em;
+    gap: 0.25em;
+
+    max-height: 12em;
+    overflow-y: scroll;
+}
+
+.add-dependency-picker-content .task-icon-container {
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 3px;
+
+    font-size: 1em;
+    border: none;
+    padding: 0;
+}
+
+.add-dependency-picker-content {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.add-dependency-picker-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}

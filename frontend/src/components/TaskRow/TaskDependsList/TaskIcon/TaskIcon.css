@@ -1,0 +1,20 @@
+
+.task-depends-list .task-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+
+    aspect-ratio: 1.0;
+    height: 100%;
+
+    cursor: pointer;
+
+    p {
+        font-family: monospace, monospace;
+        font-size: 0.6em;
+        overflow: hidden;
+        color: black;
+        font-weight: bolder;
+    }
+}

@@ -1,4 +1,17 @@
 
+.dropdown-date-picker-content button {
+    border-radius: 0;
+    border: none;
+    padding: 0;
+    height: 100%;
+
+    background-color: white;
+}
+
+.dropdown-date-picker-content button:hover {
+    background-color: #00000020;
+}
+
 .date-picker-calendar {
     display: flex;
     flex-direction: column;

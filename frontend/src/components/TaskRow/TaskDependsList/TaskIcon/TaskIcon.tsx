@@ -1,17 +1,18 @@
-import './TaskDependsList.css'
+import './TaskIcon.css'
 
-import {TaskStatusInfo} from "../../../types/TaskStatuses.ts";
+import {TaskStatusInfo} from "../../../../types/TaskStatuses.ts";
 import {useSelector} from "react-redux";
 
 type TaskIconProps = {
-    depends_on: number,
-    depends_on_project: number
+    project_id: number,
+    task_id: number
 }
 
 const TaskIcon = (props: TaskIconProps) => {
-    const task = useSelector((state) => state.projects.byId[props.depends_on_project].byId[props.depends_on]);
+    const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
 
     if (task == null) {
+        console.log(task, props.project_id, props.task_id)
         return <></>
     }
 

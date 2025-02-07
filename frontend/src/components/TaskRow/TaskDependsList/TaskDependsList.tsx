@@ -1,6 +1,6 @@
 import './TaskDependsList.css'
-import TaskIcon from "./TaskIcon.tsx";
-import AddDependencyButton from "./AddDependencyButton.tsx";
+import TaskIcon from "./TaskIcon/TaskIcon.tsx";
+import AddDependencyButton from "./AddDependencyButton/AddDependencyButton.tsx";
 import {useSelector} from "react-redux";
 
 type TaskDependsListProps = {
@@ -21,8 +21,8 @@ const TaskDependsList = (props: TaskDependsListProps) => {
                 return (
                     <TaskIcon
                         key={`${depends_on.project_id}_${depends_on.task_id}`}
-                        depends_on={depends_on.task_id}
-                        depends_on_project={depends_on.project_id}
+                        project_id={depends_on.project_id}
+                        task_id={depends_on.task_id}
                     />
                 )
             })}

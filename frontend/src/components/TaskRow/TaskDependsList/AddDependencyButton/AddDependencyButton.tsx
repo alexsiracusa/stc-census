@@ -1,8 +1,9 @@
-import './TaskDependsList.css'
+import './AddDependencyButton.css'
 
-import PlusIcon from '../../../assets/Icons/Plus.svg'
+import PlusIcon from '../../../../assets/Icons/Plus.svg'
 import {useSelector} from "react-redux";
-import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
+import AddDependencyPicker from "./AddDependencyPicker/AddDependencyPicker.tsx";
 
 type AddTaskDependencyButtonProps = {
     project_id: number
@@ -26,17 +27,15 @@ const AddTaskDependencyButton = (props: AddTaskDependencyButtonProps) => {
     };
 
     return (
-        <button
+        <AddDependencyPicker
             className='add-dependency-button'
-            title={`Add Dependency`}
-            key={task.id}
-            onClick={(event) => {
-                event.stopPropagation()
-                handleUpdate()
-            }}
+            title={'Add Dependency'}
+            onChange={() => {}}
+            project_id={props.project_id}
+            task_id={props.task_id}
         >
             <img src={PlusIcon}/>
-        </button>
+        </AddDependencyPicker>
     )
 }
 

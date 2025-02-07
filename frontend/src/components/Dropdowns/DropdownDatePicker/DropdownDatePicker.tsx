@@ -41,7 +41,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
         <DropdownPicker
             icon={icon}
             buttonClassName={props.className}
-            contentClassName='dropdown-row-picker-content'
+            contentClassName='dropdown-date-picker-content'
             containerAlignment='center'
             contentAlignment='center'
             title={props.title}
