@@ -1,7 +1,8 @@
 import './DropdownPicker.css'
 
-import React, {Children, PropsWithChildren, useRef, useState, useEffect} from "react";
+import React, {PropsWithChildren, useRef, useState, useEffect} from "react";
 import useOutsideAlerter from "../../../hooks/useOutsideAlerter.ts";
+import DropdownPickerContent from "./DropdownPickerContent.tsx";
 
 type DropdownProps = {
     icon: React.Element
@@ -41,9 +42,8 @@ const findNearestScrollableParent = (element) => {
 
 
 const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
-    const [fixedPosition, setFixedPosition] = useState(0); // Initial position
+    const [fixedPosition, setFixedPosition] = useState({x: 0, y: 0}); // Initial position
     const ref = useRef(null);
-    const divRef = useRef(null);
 
     useEffect(() => {
         if (ref.current) {
@@ -54,7 +54,7 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
 
                 // Optionally, listen to scroll events on the scrollable parent
                 const handleScroll = () => {
-                    setFixedPosition(scrollableParent.scrollLeft)
+                    setFixedPosition({x: scrollableParent.scrollLeft, y: scrollableParent.scrollTop})
                     // console.log('ScrollTop:', scrollableParent.scrollTop, 'ScrollLeft:', scrollableParent.scrollLeft);
                 };
 
@@ -73,51 +73,6 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
 
     useOutsideAlerter(ref, closeDropdown);
 
-    const checkAndAdjustPosition = () => {
-        if (divRef.current) {
-            const rect = divRef.current.getBoundingClientRect();
-
-            // Get viewport dimensions
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-
-            console.log('checking bounds')
-
-            let newTop = rect.top;
-            let newLeft = rect.left;
-
-            // Check if the div is outside the viewport and adjust
-            if (rect.top < 0) {
-                newTop = 0; // Bring into view from top
-            }
-            if (rect.left < 0) {
-                newLeft = 0; // Bring into view from left
-            }
-            if (rect.bottom > viewportHeight) {
-                newTop = viewportHeight - rect.height; // Bring into view from bottom
-            }
-            if (rect.right > viewportWidth) {
-                newLeft = viewportWidth - rect.width; // Bring into view from right
-            }
-
-            // Apply new position if needed
-            divRef.current.style.top = `${newTop}px`;
-            divRef.current.style.left = `${newLeft}px`;
-        }
-    };
-
-    useEffect(() => {
-        // Check on mount
-        checkAndAdjustPosition();
-
-        // Optional: Check on window resize
-        window.addEventListener("resize", checkAndAdjustPosition);
-
-        return () => {
-            window.removeEventListener("resize", checkAndAdjustPosition);
-        };
-    }, []);
-
     return (
         <div
             className="dropdown"
@@ -132,32 +87,18 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
                 onClick={(event) => {
                     event.stopPropagation()
                     props.setIsVisible(!props.isVisible)
-                    checkAndAdjustPosition()
                 }}
             >
                 {props.icon}
             </button>
 
             {props.isVisible && (
-                <div
-                    className="dropdown-container"
-                    style={{
-                        justifyContent: props.contentAlignment
-                    }}
-                    onClick={(event) => {
-                        event.stopPropagation()
-                    }}
-                >
-                    <div
-                        className={`dropdown-content ${props.contentClassName}`}
-                        style={{transform: `translate(-${fixedPosition}px, 0)`}}
-                        ref={divRef}
-                    >
-                        {Children.map(props.children, child => {
-                            return child
-                        })}
-                    </div>
-                </div>
+                <DropdownPickerContent
+                    contentAlignment={props.contentAlignment}
+                    contentClassName={props.contentClassName}
+                    fixedPosition={fixedPosition}
+                    children={props.children}
+                />
             )}
         </div>
     )
