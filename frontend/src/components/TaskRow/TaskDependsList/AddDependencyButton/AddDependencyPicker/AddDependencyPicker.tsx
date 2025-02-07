@@ -45,7 +45,6 @@ const AddDependencyPicker = (props: PropsWithChildren<AddDependencyPickerProps>)
                     className='task-icon-container'
                     key={option.id}
                     onClick={() => {
-                        console.log(task.depends_on)
                         updateTask(props.project_id, props.task_id, {
                             depends_on: [...task.depends_on, {
                                 project_id: option.project_id,

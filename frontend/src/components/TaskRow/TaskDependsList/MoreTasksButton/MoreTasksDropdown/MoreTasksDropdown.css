@@ -1,5 +1,70 @@
 
 .more-tasks-dropdown-content {
-    width: 16em;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+
+    width: 18em;
     height: 20em;
+    padding: 0.25em;
+
+    .more-tasks-dropdown-header {
+        font-family: Inter, sans-serif;
+        font-size: 0.8em;
+        overflow: hidden;
+        white-space: nowrap;
+        color: black;
+        padding: 0 0.25em;
+    }
+
+    .more-tasks-dropdown-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        height: 2em;
+        padding: 0.25em;
+        gap: 0.5em;
+
+        border-radius: 3px;
+
+        .task-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+
+            height: 100%;
+            border-radius: 3px;
+            aspect-ratio: 1.0;
+            border: none;
+
+            img {
+                aspect-ratio: 1.0;
+                height: 40%;
+            }
+        }
+
+        button:hover {
+            background-color: #00000020;
+        }
+    }
 }
+
+.more-tasks-dropdown-content .list-container {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.more-tasks-dropdown-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+

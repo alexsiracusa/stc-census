@@ -9,7 +9,7 @@ type TaskIconProps = {
     task_id: number
 }
 
-const TaskIcon = (props: TaskIconProps) => {
+const MoreTaskButton = (props: TaskIconProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
 
     return (
@@ -24,4 +24,4 @@ const TaskIcon = (props: TaskIconProps) => {
     )
 }
 
-export default TaskIcon;
+export default MoreTaskButton;
