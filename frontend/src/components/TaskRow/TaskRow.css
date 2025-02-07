@@ -71,7 +71,7 @@
 
 /* TASK DEPENDS LIST */
 .task-row .task-depends-list-container, .task-row-header .task-depends-list-header {
-    width: 7em;
+    width: 7.5em;
 }
 .task-row .task-depends-list-container {
     height: 60%;
