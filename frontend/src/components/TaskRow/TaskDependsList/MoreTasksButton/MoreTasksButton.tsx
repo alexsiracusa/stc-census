@@ -12,7 +12,6 @@ type TaskIconProps = {
 const TaskIcon = (props: TaskIconProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
 
-
     return (
         <MoreTasksDropdown
             className='square-button more-tasks-button'

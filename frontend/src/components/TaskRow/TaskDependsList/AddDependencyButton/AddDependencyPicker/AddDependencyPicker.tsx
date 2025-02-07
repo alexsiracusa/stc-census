@@ -38,9 +38,7 @@ const AddDependencyPicker = (props: PropsWithChildren<AddDependencyPickerProps>)
             contentAlignment='center'
             title={props.title}
             isVisible={isVisible}
-            setIsVisible={(value) => {
-                setIsVisible(value)
-            }}
+            setIsVisible={setIsVisible}
         >
             {options.map((option) => (
                 <button

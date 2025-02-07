@@ -37,11 +37,11 @@ const MoreTasksDropdown = (props: PropsWithChildren<MoreTasksDropdownProps>) => 
             contentAlignment='flex-end'
             title={props.title}
             isVisible={isVisible}
-            setIsVisible={(value) => {
-                setIsVisible(value)
-            }}
+            setIsVisible={setIsVisible}
         >
-            Dropdown aa
+            <div className='more-tasks-dropdown-content'>
+
+            </div>
         </DropdownPicker>
     )
 }
