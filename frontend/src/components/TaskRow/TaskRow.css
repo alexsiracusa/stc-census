@@ -11,7 +11,7 @@
 
 .task-row {
     align-items: center;
-    height: 2em;
+    height: 2.25em;
 
     color: black;
 
@@ -60,7 +60,7 @@
 /*TASK STATUS*/
 .task-row .task-status-container, .task-row-header .task-status-header {
     width: 7em;
-    min-width: 5.5em;
+    height: 60%;
 }
 
 .task-row .task-status-container {
@@ -81,6 +81,7 @@
 .task-row .task-start-date, .task-row-header .task-start-date-header,
 .task-row .task-end-date, .task-row-header .task-end-date-header {
     width: 6em;
+    height: 60%;
 }
 
 .task-row .task-start-date p, .task-row .task-end-date p {

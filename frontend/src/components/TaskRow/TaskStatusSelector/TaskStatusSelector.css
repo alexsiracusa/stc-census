@@ -4,6 +4,7 @@
     border: none;
     padding: 0;
     align-items: center;
+    height: 100%;
 }
 
 .task-status-button .dropdown-icon {
@@ -20,11 +21,13 @@
 
     white-space: nowrap;
     overflow: hidden;
+    height: 100%;
 }
 
 .task-status-button .dropdown-icon .dropdown-icon-inner {
     padding: 2px 4px;
     border-radius: 3px;
+    height: 100%;
 }
 
 .task-status-button .dropdown-icon img {
