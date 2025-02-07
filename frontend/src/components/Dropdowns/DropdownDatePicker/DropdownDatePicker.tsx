@@ -2,14 +2,14 @@ import './DropdownDatePicker.css'
 
 import React, {Children, PropsWithChildren, useState} from "react";
 import DropdownPicker from "../DropdownPicker/DropdownPicker.tsx";
-import getCalendarDays from "../../utils/getCalendarDays.ts";
+import getCalendarDays from "../../../utils/getCalendarDays.ts";
 import {isSameDay, format} from 'date-fns';
 import {useTranslation} from "react-i18next";
 
-import ChevronLeft from '../../assets/Icons/ChevronLeft.svg'
-import DoubleChevronLeft from '../../assets/Icons/DoubleChevronLeft.svg'
-import ChevronRight from '../../assets/Icons/ChevronRight.svg'
-import DoubleChevronRight from '../../assets/Icons/DoubleChevronRight.svg'
+import ChevronLeft from '../../../assets/Icons/ChevronLeft.svg'
+import DoubleChevronLeft from '../../../assets/Icons/DoubleChevronLeft.svg'
+import ChevronRight from '../../../assets/Icons/ChevronRight.svg'
+import DoubleChevronRight from '../../../assets/Icons/DoubleChevronRight.svg'
 
 
 type DropdownDatePickerProps = {

@@ -3,8 +3,8 @@ import './TaskStatusSelector.css'
 import {TaskStatusInfo, TaskStatuses} from "../../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
-import DropdownRowPicker from "../../DropdownRowPicker/DropdownRowPicker.tsx";
-import DropdownPickerOption from "../../DropdownPicker/DropdownPickerOption.tsx";
+import DropdownRowPicker from "../../Dropdowns/DropdownRowPicker/DropdownRowPicker.tsx";
+import DropdownPickerOption from "../../Dropdowns/DropdownPicker/DropdownPickerOption.tsx";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 
 type TaskStatusSelectorProps = {

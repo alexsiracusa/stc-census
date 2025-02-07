@@ -1,7 +1,7 @@
 import './DropdownPicker.css'
 
 import React, {Children, PropsWithChildren, useRef, useState, useEffect} from "react";
-import useOutsideAlerter from "../../hooks/useOutsideAlerter.ts";
+import useOutsideAlerter from "../../../hooks/useOutsideAlerter.ts";
 
 type DropdownProps = {
     icon: React.Element
