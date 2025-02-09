@@ -47,13 +47,6 @@ i18n
                             linkCopied: "Event link copied to clipboard!",
                             invitationSubject: "Invitation to {{title}}",
                             invitationBody: "Please join the event: {{title}} from {{start}} to {{end}}.",
-                            sun: "Sun",
-                            mon: "Mon",
-                            tue: "Tue",
-                            wed: "Wed",
-                            thu: "Thu",
-                            fri: "Fri",
-                            sat: "Sat",
                         },
                         calendarHeader: {
                             today: 'Today',

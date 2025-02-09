@@ -48,14 +48,16 @@ const EventPopup: React.FC<EventPopupProps> = ({
 
     return (
         <div className="event-popup-overlay" onClick={onClose}>
-            <div
-                className="event-popup"
-                onClick={(e) => e.stopPropagation()}
-            >
+            <div className="event-popup" onClick={(e) => e.stopPropagation()}>
                 <div className="event-popup-header">
                     <div className="color-indicator"></div>
                     <div className="event-details">
-                        <h3 className="event-title">{eventData.title || t('calendar.eventPopup.defaultTitle')}</h3> {/* Translate title */}
+                        <h3 className="event-title">
+                            {eventData.title.trim() === ''
+                                ? t('calendar.eventPopup.defaultTitle')
+                                : eventData.title
+                            }
+                        </h3>
                         <p className="event-date">
                             {formatDateRange(eventData.startDate, eventData.endDate)}
                         </p>

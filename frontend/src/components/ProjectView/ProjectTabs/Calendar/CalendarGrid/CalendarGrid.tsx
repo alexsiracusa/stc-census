@@ -11,6 +11,7 @@ type CalendarGridProps = {
     events: Event[];
     setEvents: (events: Event[]) => void;
     openEventForm: (date: Date, eventToEdit?: Event) => void;
+    openEditForm: (event: Event) => void;
 };
 
 const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boolean => {
@@ -24,6 +25,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                        events,
                                                        setEvents,
                                                        openEventForm,
+                                                       openEditForm,
                                                    }) => {
     const { t } = useTranslation();
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
@@ -62,7 +64,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
     const handleEdit = () => {
         if (selectedEvent) {
-            openEventForm(new Date(selectedEvent.startDate), selectedEvent);
+            openEditForm(selectedEvent);
             closePopup();
         }
     };
@@ -96,15 +98,13 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             <div className="calendar-grid">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayKey) => (
                     <div key={dayKey} className="weekday">
-                        {t(`calendar.calendarGrid.${dayKey.toLowerCase()}`)}
+                        {t(`calendar.days.${dayKey.toLowerCase()}`)}
                     </div>
                 ))}
                 {calendarDays.map(({ date, isCurrentMonth }, index) => (
                     <div
                         key={index}
-                        className={`day-cell ${isCurrentMonth ? "" : "other-month"} ${
-                            isToday(date) ? "today" : ""
-                        }`}
+                        className={`day-cell ${isCurrentMonth ? "" : "other-month"} ${isToday(date) ? "today" : ""}`}
                         onClick={(e) => {
                             if (!(e.target as HTMLElement).classList.contains("more-events")) {
                                 openEventForm(date);
@@ -140,11 +140,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                         openAllEvents(date);
                                     }}
                                 >
-                                    {`+ ${
-                                        events.filter((event) =>
-                                            isStartOrEndDate(date, event.startDate, event.endDate)
-                                        ).length - maxEventsPerDay
-                                    } more`}
+                                    {`+ ${events.filter((event) =>
+                                        isStartOrEndDate(date, event.startDate, event.endDate)
+                                    ).length - maxEventsPerDay} more`}
                                 </button>
                             )}
                         </div>

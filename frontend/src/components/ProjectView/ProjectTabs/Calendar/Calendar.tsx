@@ -102,13 +102,6 @@ const Calendar: React.FC = () => {
         setCurrentMonth(nextMonth);
     }
 
-    const handleOpenAllEventsOverlay = (date: Date) => {
-        const eventsOnDate = events.filter(
-            (event) => new Date(event.startDate) <= date && new Date(event.endDate) >= date
-        );
-        alert(`Events on ${date.toDateString()}: ${eventsOnDate.map((e) => e.title).join(', ')}`);
-    };
-
     return (
         <div className="calendar-container">
             <CalendarHeader
@@ -122,7 +115,6 @@ const Calendar: React.FC = () => {
                 setEvents={setEvents}
                 openEventForm={handleOpenNewEventForm}
                 openEditForm={handleOpenEditEventForm}
-                openAllEventsOverlay={handleOpenAllEventsOverlay}
             />
             <EventForm
                 isOpen={isEventFormOpen}
