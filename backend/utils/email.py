@@ -29,12 +29,15 @@ conf = ConnectionConfig(
     MAIL_USERNAME=SMTP_USER,
     MAIL_PASSWORD=SMTP_PASS,
     MAIL_FROM=SMTP_USER,
-    MAIL_PORT=int(SMTP_PORT),
-    MAIL_SERVER=SMTP_SERVER,
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.office365.com",
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
-    USE_CREDENTIALS=True
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS=True  # Add this for security
 )
+
+import ssl
 
 class EmailClient:
     async def send_notification(self, tasks: list):
@@ -53,13 +56,14 @@ class EmailClient:
             logger.info("Sending email notification...")
             await fm.send_message(message)
             logger.info("Email notification sent successfully")
+        except ssl.SSLError as ssl_err:
+            logger.error(f"SSL/TLS error: {ssl_err}")
+        except smtplib.SMTPAuthenticationError as auth_err:
+            logger.error(f"Authentication failed: {auth_err}")
         except smtplib.SMTPException as smtp_err:
-            # Catch SMTP-specific errors
             logger.error(f"SMTP error sending email: {smtp_err}")
         except Exception as e:
-            # Catch any other generic errors
             logger.error(f"General error sending email notification: {str(e)}")
-
 
 def setup_scheduler():
     scheduler = AsyncIOScheduler(timezone=timezone(TIMEZONE))
