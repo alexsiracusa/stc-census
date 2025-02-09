@@ -147,3 +147,10 @@ async def get_tasks_due_soon():
     """)
 
 # !!! NOTE: might also want to make one for tasks that are overdue
+async def get_tasks_overdue():
+    return await client.postgres_client.fetch("""
+    SELECT id, project_id, name, target_completion_date
+    FROM Task
+    WHERE target_completion_date IS NOT NULL
+    AND NOW() > target_completion_date
+    """)

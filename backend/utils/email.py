@@ -5,10 +5,11 @@ from pytz import timezone
 from datetime import datetime
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 import logging
-import os
 import smtplib
+import ssl
+import os
 
-from ..database.data import get_tasks_due_soon
+from ..database.data import get_tasks_due_soon, get_tasks_overdue
 
 # Environment setup
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,6 +17,9 @@ load_dotenv(os.path.join(parent_dir, '.env'))
 
 # Environment variables
 TIMEZONE = os.getenv('TIMEZONE')
+
+SEND_NOTIFICATIONS = os.getenv('SEND_NOTIFICATIONS')  # boolean
+
 SMTP_SERVER = os.getenv('SMTP_SERVER')
 SMTP_PORT = os.getenv('SMTP_PORT')
 SMTP_USER = os.getenv('SENDER_EMAIL')
@@ -25,7 +29,6 @@ NOTIF_EMAIL = os.getenv('RECIPIENT_EMAIL')
 logger = logging.getLogger(__name__)
 
 # Email configuration
-# THIS IS FOR GMAIL ==========================
 conf = ConnectionConfig(
     MAIL_USERNAME=SMTP_USER,
     MAIL_PASSWORD=SMTP_PASS,
@@ -38,23 +41,12 @@ conf = ConnectionConfig(
     VALIDATE_CERTS=True
 )
 
-# THIS IS FOR OUTLOOK ==========================
-# conf = ConnectionConfig(
-#     MAIL_USERNAME=SMTP_USER,
-#     MAIL_PASSWORD=SMTP_PASS,
-#     MAIL_FROM=SMTP_USER,
-#     MAIL_PORT=int(SMTP_PORT),
-#     MAIL_SERVER="smtp.office365.com",
-#     MAIL_STARTTLS=True,
-#     MAIL_SSL_TLS=False,
-#     USE_CREDENTIALS=True,
-#     VALIDATE_CERTS=True
-# )
-
-import ssl
 
 class EmailClient:
     async def send_notification(self, tasks: list):
+        if not SEND_NOTIFICATIONS:
+            logger.info("Notifications not sent, since notifications are disabled.")
+            return
         try:
             # Construct an HTML body listing the tasks
             body = "Tasks nearing deadline:<br>" + "<br>".join(
@@ -82,20 +74,36 @@ class EmailClient:
 def setup_scheduler():
     scheduler = AsyncIOScheduler(timezone=timezone(TIMEZONE))
 
-    # Add immediate check on startup
+    # Add immediate check for soon-to-be-due tasks
     scheduler.add_job(
         check_deadlines,
         'date',  # Run once immediately
         next_run_time=datetime.now(timezone(TIMEZONE))
     )
 
-    # Add recurring check
+    # Add immediate check for overdue tasks
+    scheduler.add_job(
+        check_overdue,
+        'date',  # Run once immediately
+        next_run_time=datetime.now(timezone(TIMEZONE))
+    )
+
+    # Add recurring check for soon-to-be-due tasks
     scheduler.add_job(
         check_deadlines,
         'interval',
         hours=1,
         max_instances=10,
     )
+
+    # Add recurring check for overdue tasks
+    scheduler.add_job(
+        check_overdue,
+        'interval',
+        hours=1,
+        max_instances=10,
+    )
+
     scheduler.start()
     return scheduler
 
@@ -110,5 +118,18 @@ async def check_deadlines():
             logger.info(f"Found {len(tasks)} tasks due soon")
         else:
             logger.info("No tasks due soon")
+    except Exception as e:
+        logger.error(f"Error checking deadlines: {str(e)}")
+
+async def check_overdue():
+    try:
+        tasks = await get_tasks_overdue()
+        logger.info(f"Tasks found: {tasks}")
+        if tasks:
+            email_client = EmailClient()
+            await email_client.send_notification(tasks)
+            logger.info(f"Found {len(tasks)} tasks overdue")
+        else:
+            logger.info("No tasks overdue")
     except Exception as e:
         logger.error(f"Error checking deadlines: {str(e)}")
