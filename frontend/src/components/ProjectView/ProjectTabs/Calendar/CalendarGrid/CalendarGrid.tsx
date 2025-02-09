@@ -11,14 +11,12 @@ type CalendarGridProps = {
     events: Event[];
     setEvents: (events: Event[]) => void;
     openEventForm: (date: Date, eventToEdit?: Event) => void;
-    openEditForm: (event: Event) => void;
-    openAllEventsOverlay: (date: Date) => void;
 };
 
-const isDateInRange = (date: Date, startDate: string, endDate: string): boolean => {
+const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boolean => {
     const eventStart = new Date(startDate);
     const eventEnd = new Date(endDate);
-    return date >= eventStart && date <= eventEnd;
+    return isSameDay(date, eventStart) || isSameDay(date, eventEnd);
 };
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({
@@ -50,10 +48,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     };
 
     const openAllEvents = (date: Date) => {
-        const filteredEvents = events.filter(
-            (event) =>
-                isDateInRange(date, event.startDate, event.endDate) ||
-                isSameDay(date, new Date(event.startDate))
+        const filteredEvents = events.filter((event) =>
+            isStartOrEndDate(date, event.startDate, event.endDate)
         );
         setAllEventsDate(date);
         setAllEventsForDate(filteredEvents);
@@ -83,14 +79,14 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         if (selectedEvent) {
             const shareLink = `http://localhost:5173/project/1/calendar/${selectedEvent.id}`;
             navigator.clipboard.writeText(shareLink).then(() => {
-                alert("Event link copied to clipboard!");
+                alert(t('calendar.calendarGrid.linkCopied'));
             });
         }
     };
 
     const handleEmail = () => {
         if (selectedEvent) {
-            const mailto = `mailto:?subject=Invitation to ${selectedEvent.title}&body=Please join the event: ${selectedEvent.title} from ${selectedEvent.startDate} to ${selectedEvent.endDate}`;
+            const mailto = `mailto:?subject=${t('calendar.calendarGrid.invitationSubject', { title: selectedEvent.title })}&body=${t('calendar.calendarGrid.invitationBody', { title: selectedEvent.title, start: selectedEvent.startDate, end: selectedEvent.endDate })}`;
             window.open(mailto, "_blank");
         }
     };
@@ -100,7 +96,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             <div className="calendar-grid">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayKey) => (
                     <div key={dayKey} className="weekday">
-                        {t(`calendar.days.${dayKey.toLowerCase()}`)}
+                        {t(`calendar.calendarGrid.${dayKey.toLowerCase()}`)}
                     </div>
                 ))}
                 {calendarDays.map(({ date, isCurrentMonth }, index) => (
@@ -120,10 +116,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         </div>
                         <div className="event-list">
                             {events
-                                .filter((event) =>
-                                    isDateInRange(date, event.startDate, event.endDate) ||
-                                    isSameDay(date, new Date(event.startDate))
-                                )
+                                .filter((event) => isStartOrEndDate(date, event.startDate, event.endDate))
                                 .slice(0, maxEventsPerDay)
                                 .map((event) => (
                                     <div
@@ -138,8 +131,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                     </div>
                                 ))}
                             {events.filter((event) =>
-                                isDateInRange(date, event.startDate, event.endDate) ||
-                                isSameDay(date, new Date(event.startDate))
+                                isStartOrEndDate(date, event.startDate, event.endDate)
                             ).length > maxEventsPerDay && (
                                 <button
                                     className="more-events"
@@ -150,8 +142,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                 >
                                     {`+ ${
                                         events.filter((event) =>
-                                            isDateInRange(date, event.startDate, event.endDate) ||
-                                            isSameDay(date, new Date(event.startDate))
+                                            isStartOrEndDate(date, event.startDate, event.endDate)
                                         ).length - maxEventsPerDay
                                     } more`}
                                 </button>
@@ -168,7 +159,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         title: selectedEvent.title,
                         startDate: selectedEvent.startDate,
                         endDate: selectedEvent.endDate,
-                        description: selectedEvent.description || "(No description)",
+                        description: selectedEvent.description || t('calendar.calendarGrid.noDescription'),
                     }}
                     onEdit={handleEdit}
                     onDelete={handleDelete}

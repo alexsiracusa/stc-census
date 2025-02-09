@@ -2,6 +2,8 @@ import React from 'react';
 import './EventForm.css';
 import Clock from '../../../../../assets/Icons/Clock.svg';
 import Text from '../../../../../assets/Icons/Text.svg';
+import DropdownDatePicker from '../../../../Dropdowns/DropdownDatePicker/DropdownDatePicker';
+import { useTranslation } from 'react-i18next';
 
 type EventFormProps = {
     isOpen: boolean;
@@ -22,6 +24,12 @@ type EventFormProps = {
     setDescription: (desc: string) => void;
 };
 
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+};
+
 const EventForm: React.FC<EventFormProps> = ({
                                                  isOpen,
                                                  onClose,
@@ -35,11 +43,13 @@ const EventForm: React.FC<EventFormProps> = ({
                                                  description,
                                                  setDescription,
                                              }) => {
+    const { t } = useTranslation();
+
     if (!isOpen) return null;
 
     const handleSaveEvent = () => {
         const eventData = {
-            title: title.trim() === "" ? "(No title)" : title,
+            title: title.trim() === "" ? t('calendar.eventForm.defaultTitle') : title,
             startDate,
             endDate,
             description,
@@ -47,6 +57,17 @@ const EventForm: React.FC<EventFormProps> = ({
 
         onSaveEvent(eventData);
         onClose();
+    };
+
+    const handleEndDateChange = (newEndDate: string) => {
+        const newEndDateObj = new Date(newEndDate);
+        const startDateObj = new Date(startDate);
+
+        if (newEndDateObj < startDateObj) {
+            alert(t('calendar.eventForm.endDateError'));
+            return;
+        }
+        setEndDate(newEndDate);
     };
 
     return (
@@ -59,37 +80,41 @@ const EventForm: React.FC<EventFormProps> = ({
                     <input
                         type="text"
                         className="event-title-input"
-                        placeholder="Add Title"
+                        placeholder={t('calendar.eventForm.titlePlaceholder')}
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
                     <div className="event-date-inputs">
-                        <img src={Clock} alt="Clock" />
-                        <input
-                            type="date"
-                            className="event-start-date-input"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                        />
+                        <img src={Clock} alt={t('calendar.eventForm.startDate')} />
+                        <DropdownDatePicker
+                            className="event-start-date-picker"
+                            title={t('calendar.eventForm.startDate')}
+                            currentDate={new Date(startDate)}
+                            onChange={setStartDate}
+                        >
+                            <p>{formatDate(startDate)}</p>
+                        </DropdownDatePicker>
                         <span className="date-separator">-</span>
-                        <input
-                            type="date"
-                            className="event-end-date-input"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                        />
+                        <DropdownDatePicker
+                            className="event-end-date-picker"
+                            title={t('calendar.eventForm.endDate')}
+                            currentDate={new Date(endDate)}
+                            onChange={handleEndDateChange}
+                        >
+                            <p>{formatDate(endDate)}</p>
+                        </DropdownDatePicker>
                     </div>
                     <div className="event-description-input">
-                        <img src={Text} alt="Text" />
+                        <img src={Text} alt={t('calendar.eventForm.description')} />
                         <textarea
                             className="description-input"
-                            placeholder="Add Description"
+                            placeholder={t('calendar.eventForm.descriptionPlaceholder')}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
                     <button className="save-button" onClick={handleSaveEvent}>
-                        Save
+                        {t('calendar.eventForm.saveButton')}
                     </button>
                 </div>
             </div>

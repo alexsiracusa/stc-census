@@ -5,6 +5,7 @@ import Edit from '../../../../../assets/Icons/Edit.svg';
 import Email from '../../../../../assets/Icons/Email.svg';
 import Close from '../../../../../assets/Icons/Close.svg';
 import ShareLink from '../../../../../assets/Icons/ShareLink.svg';
+import { useTranslation } from 'react-i18next';
 
 type EventPopupProps = {
     isOpen: boolean;
@@ -30,6 +31,8 @@ const EventPopup: React.FC<EventPopupProps> = ({
                                                    onShare,
                                                    onEmail,
                                                }) => {
+    const { t } = useTranslation();
+
     if (!isOpen) return null;
 
     const formatDateRange = (start: string, end: string): string => {
@@ -52,29 +55,29 @@ const EventPopup: React.FC<EventPopupProps> = ({
                 <div className="event-popup-header">
                     <div className="color-indicator"></div>
                     <div className="event-details">
-                        <h3 className="event-title">{eventData.title || "(No title)"}</h3>
+                        <h3 className="event-title">{eventData.title || t('calendar.eventPopup.defaultTitle')}</h3> {/* Translate title */}
                         <p className="event-date">
                             {formatDateRange(eventData.startDate, eventData.endDate)}
                         </p>
                     </div>
                     <div className="event-actions">
-                        <button className="icon-button" onClick={onEdit}>
-                            <img src={Edit} alt="edit" />
+                        <button className="icon-button" onClick={onEdit} title={t('calendar.eventPopup.edit')}>
+                            <img src={Edit} alt={t('calendar.eventPopup.edit')} />
                         </button>
-                        <button className="icon-button" onClick={onDelete}>
-                            <img src={Trash} alt="delete" />
+                        <button className="icon-button" onClick={onDelete} title={t('calendar.eventPopup.delete')}>
+                            <img src={Trash} alt={t('calendar.eventPopup.delete')} />
                         </button>
-                        <button className="icon-button" onClick={onEmail}>
-                            <img src={Email} alt="email" />
+                        <button className="icon-button" onClick={onEmail} title={t('calendar.eventPopup.email')}>
+                            <img src={Email} alt={t('calendar.eventPopup.email')} />
                         </button>
-                        <button className="icon-button" onClick={onClose}>
-                            <img src={Close} alt="close" />
+                        <button className="icon-button" onClick={onClose} title={t('calendar.eventPopup.close')}>
+                            <img src={Close} alt={t('calendar.eventPopup.close')} />
                         </button>
                     </div>
                 </div>
                 <div className="event-popup-body">
                     <button className="share-button" onClick={onShare}>
-                        <img src={ShareLink} alt="Link" />Invite via link
+                        <img src={ShareLink} alt={t('calendar.eventPopup.share')} /> {t('calendar.eventPopup.inviteViaLink')}
                     </button>
                 </div>
             </div>

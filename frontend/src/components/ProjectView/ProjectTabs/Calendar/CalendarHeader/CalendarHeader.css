@@ -1,8 +1,7 @@
 .calendar-header {
     display: flex;
-    padding: 1rem;
+    padding: 0 0 1rem 0;
     border-bottom: 1px solid #eeeeee;
-    justify-content: space-between;
 }
 
 .calendar-header .today-button {
@@ -19,12 +18,6 @@
     background-color: #e0e0e0;
 }
 
-.calendar-header .nav-buttons {
-    display: flex;
-    gap: 0.5rem;
-    margin-left: 1rem;
-}
-
 .calendar-header .nav-button {
     display: flex;
     align-items: center;
@@ -38,6 +31,7 @@
     cursor: pointer;
     color: black;
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    gap: 0.5rem;
 }
 
 .calendar-header .nav-button:hover {
@@ -51,11 +45,25 @@
     object-fit: contain;
 }
 
+.calendar-header .nav-button-previous-year {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.calendar-header .nav-button-previous-month {
+    margin-right: 0.5rem;
+}
+
+.calendar-header .nav-button-next-year {
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+}
 
 .calendar-header h2 {
     font-size: 1.5rem;
     font-weight: bold;
     color: black;
-    margin-right: auto;
-    padding-left: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
 }

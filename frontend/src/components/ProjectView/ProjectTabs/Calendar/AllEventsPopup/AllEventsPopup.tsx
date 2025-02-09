@@ -1,5 +1,6 @@
 import React from 'react';
 import './AllEventsPopup.css';
+import { useTranslation } from 'react-i18next';
 
 type AllEventsPopupProps = {
     date: Date;
@@ -15,6 +16,8 @@ type AllEventsPopupProps = {
 };
 
 const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, openEventDetails }) => {
+    const { t } = useTranslation();
+
     const handleEventClick = (eventId: string) => {
         openEventDetails(eventId);
         onClose();
@@ -24,7 +27,7 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
         <div className="all-events-overlay">
             <div className="all-events-content">
                 <div className="all-events-header">
-                    <h3>All Events</h3>
+                    <h3>{t('calendar.allEventsPopup.title')}</h3>
                     <p className="all-events-date">
                         {date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
                     </p>
@@ -42,13 +45,13 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
                             >
                                 <strong>{event.title}</strong>
                                 <span className="event-time">
-                                    {event.startDate} - {event.endDate}
+                                    {`${event.startDate} - ${event.endDate}`}
                                 </span>
                             </div>
                         ))
                     ) : (
-                        <p className="no-events">No events scheduled for this day.</p>
-                    )}
+                        <p className="no-events">{t('calendar.allEventsPopup.noEvents')}</p>
+                        )}
                 </div>
             </div>
         </div>
