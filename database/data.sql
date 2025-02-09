@@ -10,7 +10,7 @@ ALTER SEQUENCE task_seq_3 RESTART WITH 1;
 
 
 INSERT INTO Task (project_id, name, target_start_date, target_completion_date, target_days_to_complete) VALUES
-(1, 'Create supply list', '2025-03-14', '2025-02-10', 3),
+(1, 'Create supply list', '2025-03-14', '2025-03-15', 3),
 (1, 'Buy supplies', '2025-03-15', '2025-03-16', 4),
 (1, 'Set up venue', '2025-03-16', '2025-03-18', 2),
 (1, 'Book venue', '2025-03-14', '2025-03-16', 1),
@@ -19,7 +19,7 @@ INSERT INTO Task (project_id, name, target_start_date, target_completion_date, t
 (2, 'Design flyer', '2025-03-8', '2025-03-10', 2),
 (2, 'Get design approved', '2025-03-10', '2025-03-14', 3),
 (2, 'Print flyers', '2025-03-14', '2025-03-15', 4),
-(3, 'Design poster', '2025-03-9', '2025-03-10', 5),
+(3, 'Design poster', '2025-03-9', '2025-02-10', 5),
 (3, 'Get design approved', '2025-03-10', '2025-03-14', 7),
 (3, 'Print poster', '2025-03-14', '2025-03-17', 2);
 

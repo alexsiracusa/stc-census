@@ -1,10 +1,17 @@
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+import logging
 
 from .utils.email import setup_scheduler
 from .database import admin, InvalidCredentials
 from .routers import auth, project, projects
 import backend.client as client
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 app = FastAPI()
 app.include_router(auth.router)
@@ -23,11 +30,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+scheduler = None
 
 @app.on_event("startup")
 async def startup():
     client.postgres_client = client.PostgresClient()
-    setup_scheduler()
+    scheduler = setup_scheduler()
+
+@app.on_event("shutdown")
+async def shutdown():
+    if scheduler:
+        scheduler.shutdown()
 
 # Good tutorial on how to do authentication in fastapi:
 # https://medium.com/@marcnealer/fastapi-http-authentication-f1bb2e8c3433
