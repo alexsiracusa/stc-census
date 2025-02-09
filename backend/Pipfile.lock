@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9f5a58c726806f38621b735bf6393a13c54f3b8c66dd87ef02b7f82924563e39"
+            "sha256": "a27f0ec8e0d67a6c95a3f3986b2135c9ccc293b21892a86c9aebbf46e5ccc059"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,14 @@
         ]
     },
     "default": {
+        "aiosmtplib": {
+            "hashes": [
+                "sha256:08fd840f9dbc23258025dca229e8a8f04d2ccf3ecb1319585615bfc7933f7f47",
+                "sha256:8783059603a34834c7c90ca51103c3aa129d5922003b5ce98dbaa6d4440f10fc"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==3.0.2"
+        },
         "annotated-types": {
             "hashes": [
                 "sha256:1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53",
@@ -129,6 +137,14 @@
             "markers": "python_version >= '3.7'",
             "version": "==4.2.1"
         },
+        "blinker": {
+            "hashes": [
+                "sha256:b4ce2265a7abece45e7cc896e98dbebe6cead56bcf805a3d23136d145f5445bf",
+                "sha256:ba0efaa9080b619ff2f3459d1d500c57bddea4a6b424b60a91141db6fd2f08bc"
+            ],
+            "markers": "python_version >= '3.9'",
+            "version": "==1.9.0"
+        },
         "certifi": {
             "hashes": [
                 "sha256:3d5da6925056f6f18f119200434a4780a94263f10d1c21d032a6f6b2baa20651",
@@ -182,6 +198,15 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==0.0.7"
+        },
+        "fastapi-mail": {
+            "hashes": [
+                "sha256:04bde1005c624f42dfc0a9c1e313fcc544499fdd6b3531e606c500d80ac2ffcb",
+                "sha256:3525cf342ff91f6bcb3298570d1783498082e586957f668ee4164a0aab6ec743"
+            ],
+            "index": "pypi",
+            "markers": "python_full_version >= '3.8.1' and python_version < '4.0'",
+            "version": "==1.4.2"
         },
         "h11": {
             "hashes": [
@@ -578,6 +603,14 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==2.27.2"
+        },
+        "pydantic-settings": {
+            "hashes": [
+                "sha256:10c9caad35e64bfb3c2fbf70a078c0e25cc92499782e5200747f942a065dec93",
+                "sha256:590be9e6e24d06db33a4262829edef682500ef008565a969c73d39d5f8bfb3fd"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==2.7.1"
         },
         "pygments": {
             "hashes": [

@@ -9,6 +9,7 @@ asyncpg = "*"
 bcrypt = "*"
 pandas = "*"
 apscheduler = "*"
+fastapi-mail = "*"
 
 [dev-packages]
 

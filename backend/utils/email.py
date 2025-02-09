@@ -1,9 +1,8 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from email.mime.text import MIMEText
 from dotenv import load_dotenv
 from pytz import timezone
 from datetime import datetime
-import smtplib
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 import logging
 import os
 
@@ -22,32 +21,31 @@ NOTIF_EMAIL = os.getenv('NOTIFICATION_EMAIL')
 
 logger = logging.getLogger(__name__)
 
+conf = ConnectionConfig(
+    MAIL_USERNAME=SMTP_USER,
+    MAIL_PASSWORD=SMTP_PASS,
+    MAIL_FROM=SMTP_USER,
+    MAIL_PORT=int(SMTP_PORT),
+    MAIL_SERVER=SMTP_SERVER,
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True
+)
 
 class EmailClient:
-    def send_notification(self, tasks: list):
+    async def send_notification(self, tasks: list):
         try:
-            msg = MIMEText(
-                f"Tasks nearing deadline:\n" +
-                "\n".join([f"{t['name']} (ID:{t['id']}, Project:{t['project_id']})"
-                           for t in tasks])
+            # Construct an HTML body listing the tasks
+            body = "Tasks nearing deadline:<br>" + "<br>".join( [f"{t['name']} (ID:{t['id']}, Project:{t['project_id']})" for t in tasks] )
+            message = MessageSchema(
+                subject="Task Deadline Alert",
+                recipients=[NOTIF_EMAIL], # single or multiple recipients as a list
+                body=body,
+                subtype="html"
             )
-            msg['Subject'] = 'Task Deadline Alert'
-            msg['From'] = SMTP_USER
-            msg['To'] = NOTIF_EMAIL
-
-            print(f'AHHHHHHHHHHHHHHHHH msg:\n{msg}')
-
-            with smtplib.SMTP(SMTP_SERVER, int(SMTP_PORT)) as server:
-                print('ahhhhhhhhhhhhh smtp starting')
-                server.starttls()
-                print('ahhhhhhhhhhhhh start tls done')
-                server.login(SMTP_USER, SMTP_PASS)
-                print('ahhhhhhhhhhhhh login done')
-                server.send_message(msg)
-                logger.info("Email notification sent successfully")
-                print('ahhhhhhhhhhhhh 44444444444444')
-        except smtplib.SMTPException as e:
-            logger.error(f"SMTP error occurred: {str(e)}")
+            fm = FastMail(conf)
+            await fm.send_message(message)
+            logger.info("Email notification sent successfully")
         except Exception as e:
             logger.error(f"Error sending email notification: {str(e)}")
 
@@ -76,9 +74,10 @@ def setup_scheduler():
 async def check_deadlines():
     try:
         tasks = await get_tasks_due_soon()
-        print(f'AHHHHHHHHHHH tasks:\n{tasks}')
+        logger.info(f"Tasks found: {tasks}")
         if tasks:
-            EmailClient().send_notification(tasks)
+            email_client = EmailClient()
+            await email_client.send_notification(tasks)
             logger.info(f"Found {len(tasks)} tasks due soon")
         else:
             logger.info("No tasks due soon")
