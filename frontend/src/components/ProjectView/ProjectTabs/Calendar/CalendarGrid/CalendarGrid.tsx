@@ -142,7 +142,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                 >
                                     {`+ ${events.filter((event) =>
                                         isStartOrEndDate(date, event.startDate, event.endDate)
-                                    ).length - maxEventsPerDay} more`}
+                                    ).length - maxEventsPerDay} ${t('calendar.calendarGrid.more')}`}
                                 </button>
                             )}
                         </div>
@@ -157,7 +157,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         title: selectedEvent.title,
                         startDate: selectedEvent.startDate,
                         endDate: selectedEvent.endDate,
-                        description: selectedEvent.description || t('calendar.calendarGrid.noDescription'),
+                        note: selectedEvent.note || t('calendar.calendarGrid.noNote'),
                     }}
                     onEdit={handleEdit}
                     onDelete={handleDelete}

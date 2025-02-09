@@ -14,7 +14,7 @@ type EventPopupProps = {
         title: string;
         startDate: string;
         endDate: string;
-        description: string;
+        note: string;
     };
     onEdit: () => void;
     onDelete: () => void;

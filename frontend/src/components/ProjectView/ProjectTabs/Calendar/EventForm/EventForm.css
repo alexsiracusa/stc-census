@@ -46,12 +46,12 @@
     align-items: center;
 }
 
-.event-form-overlay .event-description-input {
+.event-form-overlay .event-note-input {
     display: flex;
     gap: 10px;
 }
 
-.event-form-overlay .event-form-body .description-input {
+.event-form-overlay .event-form-body .note-input {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;

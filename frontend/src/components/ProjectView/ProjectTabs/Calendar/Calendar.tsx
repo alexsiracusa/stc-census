@@ -11,7 +11,7 @@ export type Event = {
     color: string;
     startDate: string;
     endDate: string;
-    description: string;
+    note: string;
 };
 
 const Calendar: React.FC = () => {
@@ -20,7 +20,7 @@ const Calendar: React.FC = () => {
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
     const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [eventTitle, setEventTitle] = useState('');
-    const [eventDescription, setEventDescription] = useState('');
+    const [eventNote, setEventNote] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -35,7 +35,7 @@ const Calendar: React.FC = () => {
         title: string;
         startDate: string;
         endDate: string;
-        description: string;
+        note: string;
     }) => {
         if (eventData.title && eventData.startDate && eventData.endDate) {
             if (selectedEventId) {
@@ -47,7 +47,7 @@ const Calendar: React.FC = () => {
                                 title: eventData.title,
                                 startDate: eventData.startDate,
                                 endDate: eventData.endDate,
-                                description: eventData.description,
+                                note: eventData.note,
                             }
                             : event
                     )
@@ -61,7 +61,7 @@ const Calendar: React.FC = () => {
                         color: '#003366',
                         startDate: eventData.startDate,
                         endDate: eventData.endDate,
-                        description: eventData.description,
+                        note: eventData.note,
                     },
                 ]);
             }
@@ -73,7 +73,7 @@ const Calendar: React.FC = () => {
         setIsEventFormOpen(false);
         setSelectedEventId(null);
         setEventTitle('');
-        setEventDescription('');
+        setEventNote('');
         setStartDate('');
         setEndDate('');
     };
@@ -84,7 +84,7 @@ const Calendar: React.FC = () => {
         setStartDate(formDate);
         setEndDate(formDate);
         setEventTitle('');
-        setEventDescription('');
+        setEventNote('');
         setIsEventFormOpen(true);
     };
 
@@ -93,7 +93,7 @@ const Calendar: React.FC = () => {
         setStartDate(event.startDate);
         setEndDate(event.endDate);
         setEventTitle(event.title);
-        setEventDescription(event.description);
+        setEventNote(event.note);
         setIsEventFormOpen(true);
     };
 
@@ -126,8 +126,8 @@ const Calendar: React.FC = () => {
                 setStartDate={setStartDate}
                 endDate={endDate}
                 setEndDate={setEndDate}
-                description={eventDescription}
-                setDescription={setEventDescription}
+                note={eventNote}
+                setNote={setEventNote}
             />
         </div>
     );

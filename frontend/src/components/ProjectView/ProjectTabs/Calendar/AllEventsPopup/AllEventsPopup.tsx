@@ -32,15 +32,15 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
         return parts.map(part => {
             switch (part.type) {
                 case 'weekday':
-                    return t(`calendar.allEventsPopup.days.${part.value.toLowerCase()}`);
+                    return t(`calendar.days.${part.value.toLowerCase()}`);
                 case 'month':
-                    return t(`calendar.allEventsPopup.months.${part.value.toLowerCase()}`);
+                    return t(`calendar.months.${part.value.toLowerCase()}`);
                 case 'day':
                 case 'year':
                 default:
                     return part.value;
             }
-        }).join(' ');
+        }).join('');
     };
 
 
