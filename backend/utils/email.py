@@ -18,9 +18,9 @@ load_dotenv(os.path.join(parent_dir, '.env'))
 TIMEZONE = os.getenv('TIMEZONE')
 SMTP_SERVER = os.getenv('SMTP_SERVER')
 SMTP_PORT = os.getenv('SMTP_PORT')
-SMTP_USER = os.getenv('SMTP_USERNAME')
-SMTP_PASS = os.getenv('SMTP_PASSWORD')
-NOTIF_EMAIL = os.getenv('NOTIFICATION_EMAIL')
+SMTP_USER = os.getenv('SENDER_EMAIL')
+SMTP_PASS = os.getenv('SENDER_EMAIL_PASS')
+NOTIF_EMAIL = os.getenv('RECIPIENT_EMAIL')
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ conf = ConnectionConfig(
     MAIL_PASSWORD=SMTP_PASS,
     MAIL_FROM=SMTP_USER,
     MAIL_PORT=int(SMTP_PORT),
-    MAIL_SERVER="smtp.gmail.com",
+    MAIL_SERVER=SMTP_SERVER,
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
     USE_CREDENTIALS=True,
