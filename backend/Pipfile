@@ -8,6 +8,7 @@ fastapi = {extras = ["standard"], version = "*"}
 asyncpg = "*"
 bcrypt = "*"
 pandas = "*"
+apscheduler = "*"
 
 [dev-packages]
 
