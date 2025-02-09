@@ -12,7 +12,7 @@ type EventFormProps = {
         title: string;
         startDate: string;
         endDate: string;
-        description: string;
+        note: string;
     }) => void;
     title: string;
     setTitle: (title: string) => void;
@@ -20,8 +20,8 @@ type EventFormProps = {
     setStartDate: (date: string) => void;
     endDate: string;
     setEndDate: (date: string) => void;
-    description: string;
-    setDescription: (desc: string) => void;
+    note: string;
+    setNote: (note: string) => void;
 };
 
 const formatDate = (dateString: string) => {
@@ -40,8 +40,8 @@ const EventForm: React.FC<EventFormProps> = ({
                                                  setStartDate,
                                                  endDate,
                                                  setEndDate,
-                                                 description,
-                                                 setDescription,
+                                                 note,
+                                                 setNote: setNote,
                                              }) => {
     const { t } = useTranslation();
 
@@ -52,7 +52,7 @@ const EventForm: React.FC<EventFormProps> = ({
             title: title.trim() === "" ? t('calendar.eventForm.defaultTitle') : title,
             startDate,
             endDate,
-            description,
+            note,
         };
 
         onSaveEvent(eventData);
@@ -104,13 +104,13 @@ const EventForm: React.FC<EventFormProps> = ({
                             <p>{formatDate(endDate)}</p>
                         </DropdownDatePicker>
                     </div>
-                    <div className="event-description-input">
-                        <img src={Text} alt={t('calendar.eventForm.description')} />
+                    <div className="event-note-input">
+                        <img src={Text} alt={t('calendar.eventForm.note')} />
                         <textarea
-                            className="description-input"
-                            placeholder={t('calendar.eventForm.descriptionPlaceholder')}
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            className="note-input"
+                            placeholder={t('calendar.eventForm.notePlaceholder')}
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
                         />
                     </div>
                     <button className="save-button" onClick={handleSaveEvent}>
