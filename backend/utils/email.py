@@ -25,17 +25,31 @@ NOTIF_EMAIL = os.getenv('NOTIFICATION_EMAIL')
 logger = logging.getLogger(__name__)
 
 # Email configuration
+# THIS IS FOR GMAIL ==========================
 conf = ConnectionConfig(
     MAIL_USERNAME=SMTP_USER,
     MAIL_PASSWORD=SMTP_PASS,
     MAIL_FROM=SMTP_USER,
-    MAIL_PORT=587,
-    MAIL_SERVER="smtp.office365.com",
+    MAIL_PORT=int(SMTP_PORT),
+    MAIL_SERVER="smtp.gmail.com",
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
     USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True  # Add this for security
+    VALIDATE_CERTS=True
 )
+
+# THIS IS FOR OUTLOOK ==========================
+# conf = ConnectionConfig(
+#     MAIL_USERNAME=SMTP_USER,
+#     MAIL_PASSWORD=SMTP_PASS,
+#     MAIL_FROM=SMTP_USER,
+#     MAIL_PORT=int(SMTP_PORT),
+#     MAIL_SERVER="smtp.office365.com",
+#     MAIL_STARTTLS=True,
+#     MAIL_SSL_TLS=False,
+#     USE_CREDENTIALS=True,
+#     VALIDATE_CERTS=True
+# )
 
 import ssl
 

@@ -131,12 +131,17 @@ async def update_task(project_id, task_id, fields: dict):
             return result
 
 # for email notifications
-
 async def get_tasks_due_soon():
     return await client.postgres_client.fetch("""
-    SELECT id, project_id, name, target_completion_date
-    FROM Task
-    WHERE target_completion_date IS NOT NULL
-    AND NOW() BETWEEN (target_completion_date - INTERVAL '2 hours')
-    AND target_completion_date
-    """)
+        SELECT id, project_id, name, target_completion_date
+        FROM Task
+        WHERE target_completion_date IS NOT NULL
+        LIMIT 5
+        """)
+    # return await client.postgres_client.fetch("""
+    # SELECT id, project_id, name, target_completion_date
+    # FROM Task
+    # WHERE target_completion_date IS NOT NULL
+    # AND NOW() BETWEEN (target_completion_date - INTERVAL '2 hours')
+    # AND target_completion_date
+    # """)
