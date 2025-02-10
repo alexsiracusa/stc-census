@@ -1,12 +1,16 @@
 
-.more-tasks-button img.ellipsus {
-    width: 55%;
-    height: 55%;
-    aspect-ratio: 1.0;
-}
+.more-tasks-button {
+    img {
+        aspect-ratio: 1.0;
+    }
 
-.more-tasks-button img.plus {
-    width: 40%;
-    height: 40%;
-    aspect-ratio: 1.0;
+    .edit, .plus {
+        width: 40%;
+        height: 40%;
+    }
+
+    .ellipsus {
+        width: 55%;
+        height: 55%;
+    }
 }

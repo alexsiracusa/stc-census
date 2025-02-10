@@ -43,46 +43,54 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
             setIsVisible={setIsVisible}
         >
             <div className='more-tasks-dropdown-content'>
-                <p className='more-tasks-dropdown-header'>Depends On:</p>
-                {depends_on.map((option) => (
-                    <div className='more-tasks-dropdown-row remove-from-list'>
-                        <TaskIcon project_id={option.project_id} task_id={option.id}/>
-                        <p className='task-name'>{option.name}</p>
+                {depends_on.length != 0 &&
+                    <>
+                        <p className='more-tasks-dropdown-header'>Depends On:</p>
+                        {depends_on.length != 0 && depends_on.map((option) => (
+                            <div className='more-tasks-dropdown-row remove-from-list'>
+                                <TaskIcon project_id={option.project_id} task_id={option.id}/>
+                                <p className='task-name'>{option.name}</p>
 
-                        <button
-                            onClick={() => {
-                                updateTask(props.project_id, props.task_id, {
-                                    depends_on: task.depends_on.filter((task) => {
-                                        return task.project_id != option.project_id || task.task_id != option.id
-                                    })
-                                })
-                            }}
-                        >
-                            <img src={MinusIcon}/>
-                        </button>
-                    </div>
-                ))}
+                                <button
+                                    onClick={() => {
+                                        updateTask(props.project_id, props.task_id, {
+                                            depends_on: task.depends_on.filter((task) => {
+                                                return task.project_id != option.project_id || task.task_id != option.id
+                                            })
+                                        })
+                                    }}
+                                >
+                                    <img src={MinusIcon}/>
+                                </button>
+                            </div>
+                        ))}
+                    </>
+                }
 
-                <p className='more-tasks-dropdown-header'>Add Tasks:</p>
-                {options.map((option) => (
-                    <div className='more-tasks-dropdown-row add-to-list'>
-                        <TaskIcon project_id={option.project_id} task_id={option.id}/>
-                        <p className='task-name'>{option.name}</p>
+                {options.length != 0 &&
+                    <>
+                        <p className='more-tasks-dropdown-header'>Add Tasks:</p>
+                        {options.map((option) => (
+                            <div className='more-tasks-dropdown-row add-to-list'>
+                                <TaskIcon project_id={option.project_id} task_id={option.id}/>
+                                <p className='task-name'>{option.name}</p>
 
-                        <button
-                            onClick={() => {
-                                updateTask(props.project_id, props.task_id, {
-                                    depends_on: [...task.depends_on, {
-                                        project_id: option.project_id,
-                                        task_id: option.id
-                                    }]
-                                })
-                            }}
-                        >
-                            <img src={PlusIcon}/>
-                        </button>
-                    </div>
-                ))}
+                                <button
+                                    onClick={() => {
+                                        updateTask(props.project_id, props.task_id, {
+                                            depends_on: [...task.depends_on, {
+                                                project_id: option.project_id,
+                                                task_id: option.id
+                                            }]
+                                        })
+                                    }}
+                                >
+                                    <img src={PlusIcon}/>
+                                </button>
+                            </div>
+                        ))}
+                    </>
+                }
             </div>
         </DropdownPicker>
     )

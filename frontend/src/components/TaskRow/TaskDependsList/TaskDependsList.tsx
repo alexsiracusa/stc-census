@@ -1,7 +1,6 @@
 import './TaskDependsList.css'
 import TaskIcon from "./TaskIcon/TaskIcon.tsx";
 import EditDependenciesButton from "./EditDependenciesButton/EditDependenciesButton.tsx";
-import AddDependencyButton from "./AddDependencyButton/AddDependencyButton.tsx";
 import {useSelector} from "react-redux";
 
 type TaskDependsListProps = {
