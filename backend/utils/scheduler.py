@@ -1,42 +1,35 @@
-from functools import wraps
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from dotenv import load_dotenv
 from datetime import datetime
+from functools import wraps
 from pytz import timezone
 import logging
-import os
 
 from ..database.data import get_tasks_due_soon, get_tasks_overdue
 from .email import EmailClient
+from ..config import TIMEZONE
 
-# Environment setup
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(os.path.join(parent_dir, '.env'))
-
-TIMEZONE = os.getenv('TIMEZONE')
 logger = logging.getLogger(__name__)
-
 
 def setup_scheduler() -> AsyncIOScheduler:
     """
     Initialize scheduler and add jobs.
     :return: scheduler
     """
-    scheduler = AsyncIOScheduler(timezone=timezone(TIMEZONE))
+    current_tz = timezone(TIMEZONE.TZ)
+    scheduler = AsyncIOScheduler(timezone=current_tz)
 
     # Add immediate check for soon-to-be-due tasks
     scheduler.add_job(
         check_deadlines,
         'date',  # Run once immediately
-        next_run_time=datetime.now(timezone(TIMEZONE))
+        next_run_time=datetime.now(current_tz)
     )
 
     # Add immediate check for overdue tasks
     scheduler.add_job(
         check_overdue,
         'date',  # Run once immediately
-        next_run_time=datetime.now(timezone(TIMEZONE))
+        next_run_time=datetime.now(current_tz)
     )
 
     # Add recurring check for soon-to-be-due tasks
