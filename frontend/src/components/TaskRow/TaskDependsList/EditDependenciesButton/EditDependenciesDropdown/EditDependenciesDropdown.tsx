@@ -70,7 +70,9 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                 {options.length != 0 &&
                     <>
                         <p className='more-tasks-dropdown-header'>Add Tasks:</p>
-                        {options.map((option) => (
+                        {options
+                            .filter((option) => option.project_id != task.project_id || option.id != task.id)
+                            .map((option) => (
                             <div className='more-tasks-dropdown-row add-to-list'>
                                 <TaskIcon project_id={option.project_id} task_id={option.id}/>
                                 <p className='task-name'>{option.name}</p>

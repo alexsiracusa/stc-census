@@ -75,8 +75,6 @@ CREATE TABLE Task (
     expected_cost   DECIMAL(2),
     actual_cost     DECIMAL(2),
 
-    -- All DATE columns need to have 'date' in the name so asyncpg
-    -- knows when to convert strings to dates
     start_date              DATE,
     completion_date         DATE,
 

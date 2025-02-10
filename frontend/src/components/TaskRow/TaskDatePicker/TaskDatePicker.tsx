@@ -19,7 +19,7 @@ const TaskDatePicker = (props: TaskDatePickerProps) => {
             currentDate={date}
             onChange={props.onChange}
         >
-            {date ? <p>{format(date, 'dd-MM-yy')}</p> : <p>{'--'}</p>}
+            {date ? <p>{format(date, 'dd-MM-yy')}</p> : <p>{'-'}</p>}
         </DropdownDatePicker>
     )
 }
