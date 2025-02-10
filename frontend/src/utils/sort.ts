@@ -3,10 +3,7 @@ export interface SortOptions<T> {
     order?: 'asc' | 'desc'; // Order: 'asc' for ascending (default), 'desc' for descending
 }
 
-export function sortArray<T>(array: T[], options: [{ key: string; order: string }, (value: (((prevState: {
-    key: string;
-    order: string
-}) => { key: string; order: string }) | { key: string; order: string })) => void]): T[] {
+export function sortArray<T>(array: T[], options: SortOptions<T>): T[] {
     const {key, order = 'asc'} = options;
 
     return array.sort((a, b) => {
