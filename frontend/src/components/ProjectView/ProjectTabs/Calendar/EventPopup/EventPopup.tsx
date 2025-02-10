@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './EventPopup.css';
 import Trash from '../../../../../assets/Icons/Trash.svg';
 import Edit from '../../../../../assets/Icons/Edit.svg';
@@ -32,8 +32,35 @@ const EventPopup: React.FC<EventPopupProps> = ({
                                                    onEmail,
                                                }) => {
     const { t } = useTranslation();
+    const popupRef = useRef<HTMLDivElement>(null);
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && isOpen) {
+                onClose();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, onClose]);
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            window.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            window.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen, onClose]);
 
     const formatDateRange = (start: string, end: string): string => {
         const options: Intl.DateTimeFormatOptions = {
@@ -46,9 +73,11 @@ const EventPopup: React.FC<EventPopupProps> = ({
         return startDate === endDate ? startDate : `${startDate} – ${endDate}`;
     };
 
+    if (!isOpen) return null;
+
     return (
-        <div className="event-popup-overlay" onClick={onClose}>
-            <div className="event-popup" onClick={(e) => e.stopPropagation()}>
+        <div className="event-popup-overlay">
+            <div className="event-popup" ref={popupRef}>
                 <div className="event-popup-header">
                     <div className="color-indicator"></div>
                     <div className="event-details">

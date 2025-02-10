@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './EventForm.css';
 import Clock from '../../../../../assets/Icons/Clock.svg';
 import Text from '../../../../../assets/Icons/Text.svg';
@@ -24,10 +24,17 @@ type EventFormProps = {
     setNote: (note: string) => void;
 };
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string, t: any) => {
     const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString(undefined, options);
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    };
+
+    const locale = t('calendar.eventForm.locale') || 'en-US';
+
+    return date.toLocaleDateString(locale, options);
 };
 
 const EventForm: React.FC<EventFormProps> = ({
@@ -41,11 +48,47 @@ const EventForm: React.FC<EventFormProps> = ({
                                                  endDate,
                                                  setEndDate,
                                                  note,
-                                                 setNote: setNote,
+                                                 setNote,
                                              }) => {
     const { t } = useTranslation();
 
-    if (!isOpen) return null;
+    const formRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (!isOpen) return;
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleSaveEvent();
+            }
+
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                onClose();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, title, startDate, endDate, note]);
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (formRef.current && !formRef.current.contains(event.target as Node)) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            window.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            window.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     const handleSaveEvent = () => {
         const eventData = {
@@ -70,9 +113,11 @@ const EventForm: React.FC<EventFormProps> = ({
         setEndDate(newEndDate);
     };
 
+    if (!isOpen) return null;
+
     return (
         <div className="event-form-overlay">
-            <div className="event-form">
+            <div className="event-form" ref={formRef}>
                 <button className="close-button" onClick={onClose}>
                     ×
                 </button>
@@ -92,7 +137,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             currentDate={new Date(startDate)}
                             onChange={setStartDate}
                         >
-                            <p>{formatDate(startDate)}</p>
+                            <p>{formatDate(startDate, t)}</p>
                         </DropdownDatePicker>
                         <span className="date-separator">-</span>
                         <DropdownDatePicker
@@ -101,7 +146,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             currentDate={new Date(endDate)}
                             onChange={handleEndDateChange}
                         >
-                            <p>{formatDate(endDate)}</p>
+                            <p>{formatDate(endDate, t)}</p>
                         </DropdownDatePicker>
                     </div>
                     <div className="event-note-input">

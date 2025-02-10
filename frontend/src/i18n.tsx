@@ -12,9 +12,12 @@ i18n
             en: {
                 translation: {
                     nav: {
-                        home: 'Home',
-                        menu: 'Menu',
                         project: 'Project',
+                        userGuide: 'User Guide',
+                        documentation: 'Documentation',
+                        profile: 'Profile',
+                        settings: 'Settings',
+                        logout: 'Logout',
                     },
                     projectRow: {
                         projectName: 'Projects',
@@ -64,6 +67,7 @@ i18n
                             endDate: 'End date',
                             notePlaceholder: 'Add note',
                             saveButton: 'Save',
+                            locale: 'en-US',
                         },
                         eventPopup: {
                             defaultTitle: "(No title)",
@@ -133,9 +137,12 @@ i18n
             scn: {
                 translation: {
                     navbar: {
-                        home: '主页',
-                        menu: '菜单',
                         project: '项目',
+                        userGuide: '用户指南',
+                        documentation: '文档',
+                        profile: '轮廓',
+                        settings: '设置',
+                        logout: '退出',
                     },
                     projectRow: {
                         projectName: '项目',
@@ -183,6 +190,7 @@ i18n
                             endDate: '结束日期',
                             notePlaceholder: '添加注释',
                             saveButton: '保存',
+                            locale: 'zh-CN',
                         },
                         eventPopup: {
                             defaultTitle: "(无标题)",
