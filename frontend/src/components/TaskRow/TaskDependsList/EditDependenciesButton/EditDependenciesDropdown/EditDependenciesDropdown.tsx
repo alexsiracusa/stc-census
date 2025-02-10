@@ -47,7 +47,7 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                     <>
                         <p className='more-tasks-dropdown-header'>Depends On:</p>
                         {depends_on.length != 0 && depends_on.map((option) => (
-                            <div className='more-tasks-dropdown-row remove-from-list'>
+                            <div className='more-tasks-dropdown-row remove-from-list' key={`${option.project_id}-${option.id}`}>
                                 <TaskIcon project_id={option.project_id} task_id={option.id}/>
                                 <p className='task-name'>{option.name}</p>
 
@@ -73,7 +73,7 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                         {options
                             .filter((option) => option.project_id != task.project_id || option.id != task.id)
                             .map((option) => (
-                            <div className='more-tasks-dropdown-row add-to-list'>
+                            <div className='more-tasks-dropdown-row add-to-list' key={`${option.project_id}-${option.id}`}>
                                 <TaskIcon project_id={option.project_id} task_id={option.id}/>
                                 <p className='task-name'>{option.name}</p>
 

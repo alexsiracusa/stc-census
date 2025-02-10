@@ -5,6 +5,8 @@ import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
 import TaskRow from "../../../TaskRow/TaskRow.tsx";
 import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
 import {useTranslation} from 'react-i18next';
+import {useState} from "react";
+import {sortArray} from "../../../../utils/sort.ts";
 
 import {useSelector} from "react-redux";
 
@@ -12,7 +14,10 @@ import {useSelector} from "react-redux";
 const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
+    const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'})
     const {t} = useTranslation();
+
+    const sortedTasks = sortArray(Object.values(tasks), taskSortOptions)
 
     if (tasks == null) {
         return <></>
@@ -41,7 +46,7 @@ const TaskList = (props: TabProps) => {
                         <div className='list-container'>
                             <TaskRowHeader/>
                             <ul>
-                                {Object.values(tasks).map((task) => (
+                                {sortedTasks.map((task) => (
                                     <li key={task.id}>
                                         <TaskRow
                                             task_id={task.id}
