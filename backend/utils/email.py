@@ -1,32 +1,24 @@
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
-from dotenv import load_dotenv
 import logging
 import smtplib
 import ssl
-import os
 
-# Environment setup
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(os.path.join(parent_dir, '.env'))
-
-# Environment variables
-SEND_NOTIFICATIONS = os.getenv('SEND_NOTIFICATIONS')  # boolean
-
-SMTP_SERVER = os.getenv('SMTP_SERVER')
-SMTP_PORT = os.getenv('SMTP_PORT')
-SMTP_USER = os.getenv('SENDER_EMAIL')
-SMTP_PASS = os.getenv('SENDER_EMAIL_PASS')
-NOTIF_EMAIL = os.getenv('RECIPIENT_EMAIL')
+from ..config import EMAIL
 
 logger = logging.getLogger(__name__)
 
+email_recipients = [EMAIL.RECIPIENT_EMAILS]
+# !!! should replace this with something that fetches the relevant emails from the database
+# sidenote: the emails fetched should be related to the projects and tasks at-hand;
+# i.e., unrelated users should not have their emails fetched
+
 # Email configuration
 conf = ConnectionConfig(
-    MAIL_USERNAME=SMTP_USER,
-    MAIL_PASSWORD=SMTP_PASS,
-    MAIL_FROM=SMTP_USER,
-    MAIL_PORT=int(SMTP_PORT),
-    MAIL_SERVER=SMTP_SERVER,
+    MAIL_USERNAME=EMAIL.SENDER_EMAIL,
+    MAIL_PASSWORD=EMAIL.SENDER_PASSWORD,
+    MAIL_FROM=EMAIL.SENDER_EMAIL,
+    MAIL_PORT=EMAIL.SMTP_PORT,
+    MAIL_SERVER=EMAIL.SMTP_SERVER,
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
     USE_CREDENTIALS=True,
@@ -35,8 +27,8 @@ conf = ConnectionConfig(
 
 
 class EmailClient:
-    async def send_notification(self, tasks: list):
-        if not SEND_NOTIFICATIONS:
+    async def send_notification(self, tasks: list) -> None:
+        if not EMAIL.EMAIL_NOTIFICATIONS:
             logger.info("Notifications not sent, since notifications are disabled.")
             return
         try:
@@ -46,7 +38,7 @@ class EmailClient:
             )
             message = MessageSchema(
                 subject="Task Deadline Alert",
-                recipients=[NOTIF_EMAIL],
+                recipients=email_recipients,
                 body=body,
                 subtype="html"
             )
@@ -62,5 +54,3 @@ class EmailClient:
             logger.error(f"SMTP error sending email: {smtp_err}")
         except Exception as e:
             logger.error(f"General error sending email notification: {str(e)}")
-
-
