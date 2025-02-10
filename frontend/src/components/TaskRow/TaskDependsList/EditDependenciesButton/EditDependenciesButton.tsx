@@ -1,12 +1,14 @@
-import './MoreTasksButton.css'
+import './EditDependenciesButton.css'
 
 import {useSelector} from "react-redux";
-import MoreTasksDropdown from "./MoreTasksDropdown/MoreTasksDropdown.tsx";
+import MoreTasksDropdown from "./EditDependenciesDropdown/EditDependenciesDropdown.tsx";
 import Ellipsus from '../../../../assets/Icons/Ellipsus.svg'
+import Plus from '../../../../assets/Icons/Plus.svg'
 
 type TaskIconProps = {
     project_id: number,
-    task_id: number
+    task_id: number,
+    max_shown: number
 }
 
 const MoreTaskButton = (props: TaskIconProps) => {
@@ -19,7 +21,10 @@ const MoreTaskButton = (props: TaskIconProps) => {
             task_id={props.task_id}
             project_id={props.project_id}
         >
-            <img src={Ellipsus}/>
+            {task.depends_on.length > props.max_shown ?
+                <img src={Ellipsus} className='ellipsus'/> :
+                <img src={Plus} className='plus'/>
+            }
         </MoreTasksDropdown>
     )
 }

@@ -1,6 +1,6 @@
 import './TaskDependsList.css'
 import TaskIcon from "./TaskIcon/TaskIcon.tsx";
-import MoreTasksButton from "./MoreTasksButton/MoreTasksButton.tsx";
+import EditDependenciesButton from "./EditDependenciesButton/EditDependenciesButton.tsx";
 import AddDependencyButton from "./AddDependencyButton/AddDependencyButton.tsx";
 import {useSelector} from "react-redux";
 
@@ -28,10 +28,7 @@ const TaskDependsList = (props: TaskDependsListProps) => {
                     />
                 )
             })}
-            {task.depends_on.length <= max_shown ?
-                <AddDependencyButton project_id={props.project_id} task_id={props.task_id}/> :
-                <MoreTasksButton project_id={props.project_id} task_id={props.task_id}/>
-            }
+            <EditDependenciesButton project_id={props.project_id} task_id={props.task_id} max_shown={max_shown}/>
         </div>
     )
 }

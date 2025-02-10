@@ -1,4 +1,4 @@
-import './MoreTasksDropdown.css'
+import './EditDependenciesDropdown.css'
 
 import DropdownPicker from "../../../../Dropdowns/DropdownPicker/DropdownPicker.tsx";
 import React, {Children, PropsWithChildren} from "react";
@@ -16,7 +16,7 @@ type MoreTasksDropdownProps = {
     task_id: number
 }
 
-const MoreTasksDropdown = (props: PropsWithChildren<MoreTasksDropdownProps>) => {
+const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProps>) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const {updateTask, loading, error, data} = useUpdateTask();
@@ -52,10 +52,9 @@ const MoreTasksDropdown = (props: PropsWithChildren<MoreTasksDropdownProps>) => 
                         <button
                             onClick={() => {
                                 updateTask(props.project_id, props.task_id, {
-                                    depends_on: [...task.depends_on, {
-                                        project_id: option.project_id,
-                                        task_id: option.id
-                                    }]
+                                    depends_on: task.depends_on.filter((task) => {
+                                        return task.project_id != option.project_id || task.task_id != option.id
+                                    })
                                 })
                             }}
                         >
@@ -89,4 +88,4 @@ const MoreTasksDropdown = (props: PropsWithChildren<MoreTasksDropdownProps>) => 
     )
 }
 
-export default MoreTasksDropdown;
+export default EditDependenciesDropdown;
