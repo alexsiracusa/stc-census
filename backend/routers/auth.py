@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Response, Request, status
-from ..database import AccountInfo, InvalidCredentials, admin
 import asyncpg
+
+from ..database import AccountInfo, InvalidCredentials, admin
+
 
 # Get TLS certificate from here for deploying
 # https://letsencrypt.org/

@@ -5,7 +5,7 @@ import logging
 from .utils.scheduler import setup_scheduler
 from .database import admin, InvalidCredentials
 from .routers import auth, project, projects
-import backend.client as client
+from . import client
 
 # Configure logging
 logging.basicConfig(

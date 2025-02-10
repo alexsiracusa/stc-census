@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException, Response, status
+import pandas as pd
+import asyncpg
+
 from ..database import data
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
-import pandas as pd
-import asyncpg
+
 
 router = APIRouter(
     prefix="/project",

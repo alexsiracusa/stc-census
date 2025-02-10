@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Response, status
-from ..database import data
 import asyncpg
+
+from ..database import data
+
 
 router = APIRouter(
     prefix="/projects",

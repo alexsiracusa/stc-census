@@ -1,6 +1,7 @@
-import backend.client as client
 from fastapi import HTTPException
 from datetime import datetime
+
+from .. import client
 
 
 async def get_projects():

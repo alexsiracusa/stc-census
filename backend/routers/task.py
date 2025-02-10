@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException, Response, Body, status
 from typing import Any
-from ..database import data
 import asyncpg
 import json
+
+from ..database import data
+
 
 router = APIRouter(
     prefix="/{project_id}/task",

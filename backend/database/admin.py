@@ -1,11 +1,12 @@
 from pydantic import BaseModel
 from fastapi import Request
 from datetime import datetime, timedelta, timezone
-from backend.database.exceptions import InvalidCredentials
-
 import uuid
-import backend.database.util as util
-import backend.client as client
+
+from ..database.exceptions import InvalidCredentials
+from .. import client
+from . import util
+
 
 # https://medium.com/@marcnealer/fastapi-http-authentication-f1bb2e8c3433
 
