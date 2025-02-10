@@ -1,23 +1,15 @@
-# email.py
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from dotenv import load_dotenv
-from pytz import timezone
-from datetime import datetime
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from dotenv import load_dotenv
 import logging
 import smtplib
 import ssl
 import os
-
-from ..database.data import get_tasks_due_soon, get_tasks_overdue
 
 # Environment setup
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(parent_dir, '.env'))
 
 # Environment variables
-TIMEZONE = os.getenv('TIMEZONE')
-
 SEND_NOTIFICATIONS = os.getenv('SEND_NOTIFICATIONS')  # boolean
 
 SMTP_SERVER = os.getenv('SMTP_SERVER')
@@ -71,65 +63,4 @@ class EmailClient:
         except Exception as e:
             logger.error(f"General error sending email notification: {str(e)}")
 
-def setup_scheduler():
-    scheduler = AsyncIOScheduler(timezone=timezone(TIMEZONE))
 
-    # Add immediate check for soon-to-be-due tasks
-    scheduler.add_job(
-        check_deadlines,
-        'date',  # Run once immediately
-        next_run_time=datetime.now(timezone(TIMEZONE))
-    )
-
-    # Add immediate check for overdue tasks
-    scheduler.add_job(
-        check_overdue,
-        'date',  # Run once immediately
-        next_run_time=datetime.now(timezone(TIMEZONE))
-    )
-
-    # Add recurring check for soon-to-be-due tasks
-    scheduler.add_job(
-        check_deadlines,
-        'interval',
-        hours=1,
-        max_instances=10,
-    )
-
-    # Add recurring check for overdue tasks
-    scheduler.add_job(
-        check_overdue,
-        'interval',
-        hours=1,
-        max_instances=10,
-    )
-
-    scheduler.start()
-    return scheduler
-
-
-async def check_deadlines():
-    try:
-        tasks = await get_tasks_due_soon()
-        logger.info(f"Tasks found: {tasks}")
-        if tasks:
-            email_client = EmailClient()
-            await email_client.send_notification(tasks)
-            logger.info(f"Found {len(tasks)} tasks due soon")
-        else:
-            logger.info("No tasks due soon")
-    except Exception as e:
-        logger.error(f"Error checking deadlines: {str(e)}")
-
-async def check_overdue():
-    try:
-        tasks = await get_tasks_overdue()
-        logger.info(f"Tasks found: {tasks}")
-        if tasks:
-            email_client = EmailClient()
-            await email_client.send_notification(tasks)
-            logger.info(f"Found {len(tasks)} tasks overdue")
-        else:
-            logger.info("No tasks overdue")
-    except Exception as e:
-        logger.error(f"Error checking deadlines: {str(e)}")
