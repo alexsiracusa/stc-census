@@ -15,14 +15,14 @@ import DoubleChevronRight from '../../../assets/Icons/DoubleChevronRight.svg'
 type DropdownDatePickerProps = {
     className: string
     title: string
-    currentDate: Date
+    currentDate: Date | null
     onChange: (arg0: any) => void
 }
 
 
 const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) => {
     const [isVisible, setIsVisible] = React.useState(false);
-    const [currentMonth, setCurrentMonth] = useState(props.currentDate);
+    const [currentMonth, setCurrentMonth] = useState(props.currentDate? props.currentDate : new Date());
     const calendarDays = getCalendarDays(currentMonth)
     const {t} = useTranslation();
 
@@ -47,7 +47,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
             title={props.title}
             isVisible={isVisible}
             setIsVisible={(value) => {
-                if (!value) {
+                if (!value && props.currentDate) {
                     setCurrentMonth(props.currentDate)
                 }
                 setIsVisible(value)

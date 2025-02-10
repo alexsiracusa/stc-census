@@ -8,8 +8,13 @@
     padding: 2px 5px;
     margin-left: -4px;
 
-    font-size: 1em;
+    p {
+        font-family: Inter, sans-serif;
+        text-align: center;
+        width: 4.75em;
+    }
 }
+
 
 .task-date-picker:hover {
     background-color: #00000020;

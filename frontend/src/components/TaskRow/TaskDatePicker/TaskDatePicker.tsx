@@ -4,13 +4,13 @@ import DropdownDatePicker from "../../Dropdowns/DropdownDatePicker/DropdownDateP
 import {format} from "date-fns";
 
 type TaskDatePickerProps = {
-    currentDate: string
+    currentDate: string | null
     title: string
     onChange: (arg0: any) => void
 }
 
 const TaskDatePicker = (props: TaskDatePickerProps) => {
-    const date = new Date(props.currentDate)
+    const date = props.currentDate ? new Date(props.currentDate) : null
 
     return (
         <DropdownDatePicker
@@ -19,7 +19,7 @@ const TaskDatePicker = (props: TaskDatePickerProps) => {
             currentDate={date}
             onChange={props.onChange}
         >
-            <p>{format(date, 'dd-MM-yy')}</p>
+            {date ? <p>{format(date, 'dd-MM-yy')}</p> : <p>{'--'}</p>}
         </DropdownDatePicker>
     )
 }

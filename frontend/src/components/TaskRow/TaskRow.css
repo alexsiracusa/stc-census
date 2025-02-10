@@ -84,8 +84,3 @@
     height: 60%;
 }
 
-.task-row .task-start-date p, .task-row .task-end-date p {
-    font-family: Inter, sans-serif;
-    font-size: 0.8em;
-}
-

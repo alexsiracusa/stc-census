@@ -72,6 +72,13 @@ class PostgresClient:
             schema='pg_catalog',
             format='text'
         )
+        await conn.set_type_codec(
+            'date',
+            encoder=lambda x: x,
+            decoder=lambda x: x,
+            schema='pg_catalog',
+            format='text'
+        )
 
 
 postgres_client: PostgresClient = None
