@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 
-from .utils.email import setup_scheduler
+from .utils.scheduler import setup_scheduler
 from .database import admin, InvalidCredentials
 from .routers import auth, project, projects
 import backend.client as client
