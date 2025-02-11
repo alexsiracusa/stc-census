@@ -85,7 +85,6 @@ export const projectSlice = createSlice({
         },
         createTask: (state, action) => {
             const {project_id, task_id, body} = action.payload;
-            console.log(project_id, task_id, body)
             state.byId[`${project_id}`].byId[`${task_id}`] = body
         },
         setDashboard: (state, action) => {
