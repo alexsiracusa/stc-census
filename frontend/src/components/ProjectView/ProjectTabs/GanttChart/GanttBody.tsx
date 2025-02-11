@@ -83,8 +83,19 @@ const GanttBody = ({ data }: { data: Task[] }) => {
     let chartWidth
     if (timeRangeInDays < 20) {
         chartWidth = 1000;
-    } else {
+    } else if (timeRangeInDays <= 30) {
         chartWidth = timeRangeInDays * TIME_UNIT_WIDTH;
+    } else {
+        chartWidth = 1000;
+    }
+
+    let timeUnit: "day" | "week" | "month";
+    if (timeRangeInDays <= 30) {
+        timeUnit = "day"; // Use days for short ranges
+    } else if (timeRangeInDays <= 90) {
+        timeUnit = "week"; // Use weeks for medium ranges
+    } else {
+        timeUnit = "month"; // Use months for long ranges
     }
 
     const todayLine = {
@@ -124,7 +135,7 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                 position: "top",
                 type: "time",
                 time: {
-                    unit: "day",
+                    unit: timeUnit,
                 },
                 min: startDate,
                 max: endDate,
@@ -201,10 +212,9 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                 labels: {
                     index: {
                         color: "#1c1c1c",
-                        backgroundColor: "rgba(255,255,255, 0.1)",
-                        align: "right",
-                        anchor: "start",
-                        offset: 10,
+                        align: "bottom",
+                        anchor: "center",
+                        offset: 15,
                         padding: { top: 10 },
                         font: { size: 12, weight: 400, lineHeight: 1.7 },
                         formatter(value: { EventName: string; x: string[] }) {
