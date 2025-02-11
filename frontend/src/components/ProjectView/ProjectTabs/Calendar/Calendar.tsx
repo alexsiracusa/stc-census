@@ -6,8 +6,7 @@ import getCalendarDays from '../../../../utils/getCalendarDays.ts';
 import './Calendar.css';
 import TabProps from "../TabProps.ts";
 import { useSelector } from "react-redux";
-import {TaskStatusInfo} from "../../../../types/TaskStatuses.ts";
-import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
+import { convertTasksToEvents } from "./utils/events.ts";
 
 export type Event = {
     id: string;
@@ -29,7 +28,6 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
     const [endDate, setEndDate] = useState('');
 
     const tasks = useSelector((state) => state.projects.byId[props.project_id]?.byId || {});
-    const { updateTask, loading, error } = useUpdateTask();
 
     const formatDateToLocalString = (date: Date) => {
         const year = date.getFullYear();
@@ -39,23 +37,9 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
     };
 
     useEffect(() => {
-        console.log('Tasks:', tasks);
-
-        const taskEvents: Event[] = Object.values(tasks).map((task: any) => ({
-            id: task.id,
-            title: task.name || 'Untitled Task',
-            color: TaskStatusInfo[task.status]?.color || '#003366',
-            startDate: task.target_start_date || 'N/A',
-            endDate: task.target_completion_date || task.target_start_date || 'N/A',
-            note: `${task.description || 'No details available'} (Status: ${TaskStatusInfo[task.status]?.name || 'Unknown'})`,
-        }));
-
-        console.log('Task Events:', taskEvents);
+        const taskEvents = convertTasksToEvents(tasks);
         setEvents(taskEvents);
     }, [tasks]);
-
-
-
 
     const handleSaveEvent = (eventData: {
         title: string;
