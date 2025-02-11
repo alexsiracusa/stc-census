@@ -4,6 +4,7 @@ import ProjectRow from "../../components/ProjectRow/ProjectRow.tsx";
 import { useTranslation } from "react-i18next";
 import {useSelector} from "react-redux";
 import useFetchDashboard from "../../hooks/useFetchDashboard.ts";
+import AddProjectButton from "../../components/AddProjectButton/AddProjectButton.tsx";
 
 
 const ProjectDashboard = () => {
@@ -20,6 +21,7 @@ const ProjectDashboard = () => {
 
             {project_ids !== null && (
                 <ul className='project-list'>
+                    <AddProjectButton project_id={undefined}/>
                     {project_ids.map((project_id) => (
                         <li key={project_id}>
                             <ProjectRow project_id={project_id}/>

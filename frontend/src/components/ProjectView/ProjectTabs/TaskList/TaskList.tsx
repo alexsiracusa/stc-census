@@ -52,7 +52,7 @@ const TaskList = (props: TabProps) => {
                 <div className='list-container'>
                     <AddTaskButton project_id={props.project_id}/>
 
-                    {Object.keys(tasks).length &&
+                    {Object.keys(tasks).length > 0 &&
                         <>
                             <TaskRowHeader
                                 taskSortOptions={taskSortOptions}

@@ -3,15 +3,18 @@
     padding: 1rem 2rem;
 }
 
-.project-dashboard .project-list {
-    display: flex;
-    flex-direction: column;
+.project-dashboard ul {
     list-style-type: none;
-    gap: 0;
+    position: sticky;
 
-    border: solid #dedede 1px;
+    li {
+        min-width: max-content;
+        border-top: solid #dedede 1px;
+        border-left: solid #dedede 1px;
+        border-right: solid #dedede 1px;
+    }
 
-    li:not(:last-child){
+    li:last-child {
         border-bottom: solid #dedede 1px;
     }
 }

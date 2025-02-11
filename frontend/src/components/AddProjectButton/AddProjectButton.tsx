@@ -2,21 +2,23 @@ import './AddProjectButton.css'
 
 import Plus from '../../assets/Icons/Plus.svg'
 import {useRef, useState} from "react";
+import useCreateProject from "../../hooks/useCreateProject.ts";
 
 type AddTaskButtonProps = {
-    project_id: number
+    project_id: number | undefined
 }
 
 const AddProjectButton = (props: AddTaskButtonProps) => {
     const [name, setName] = useState("")
-    // const {createTask, loading, error, data} = useCreateTask();
+    const {createProject, loading, error, data} = useCreateProject();
     const ref = useRef(null);
 
     const enterInput = () => {
         if (name !== "") {
-            // createTask(props.project_id, {
-            //     name: name
-            // })
+            createProject({
+                parent: props.project_id,
+                name: name
+            })
             setName("")
         }
     }
