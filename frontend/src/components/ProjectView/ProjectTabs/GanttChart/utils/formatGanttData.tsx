@@ -59,8 +59,7 @@ const formatGanttData = (tasks: Task[]) => {
       borderWidth: 1,
       borderSkipped: false,
       borderRadius: 5,
-      barPercentage: 0.5,
-      barThickness: 40,
+      barThickness: 36,
     };
 
     formattedData.datasets.push(dataset);
