@@ -35,9 +35,8 @@ const Navbar: React.FC = () => {
                     <img src={Logo} alt="logo"/>
                 </a>
                 <a href="/projects">{t('navbar.project', 'Project')}</a>
-                <a href="/user-guide">User Guide</a>
-                <a href="/documentation">Documentation</a>
-                {/*<a href="/menu">{t('navbar.menu', 'Menu')}</a>*/}
+                <a href="/user-guide">{t('navbar.userGuide', 'User Guide')}</a>
+                <a href="/documentation">{t('navbar.documentation', 'Documentation')}</a>
             </nav>
             <nav className="right">
                 <LanguageSelector/>
@@ -49,9 +48,9 @@ const Navbar: React.FC = () => {
                     <img src={User} alt="User" />
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
-                            <a href="/profile" className="dropdown-item">Profile</a>
-                            <a href="/settings" className="dropdown-item">Settings</a>
-                            <a href="/logout" className="dropdown-item">Logout</a>
+                            <a href="/profile" className="dropdown-item">{t('navbar.profile', 'Profile')}</a>
+                            <a href="/settings" className="dropdown-item">{t('navbar.settings', 'Settings')}</a>
+                            <a href="/logout" className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
                         </div>
                     )}
                 </div>
