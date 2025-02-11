@@ -27,26 +27,32 @@ const TaskList = (props: TabProps) => {
 
     return (
         <div className='task-list'>
-            <>
+            <div className='sub-projects'>
+                <h3>{t('taskList.subProjects')}</h3>
+
+                <AddTaskButton project_id={props.project_id}/>
+
                 {project['sub_projects'].length > 0 &&
-                    <div className='sub-projects'>
-                        <h3>{t('taskList.subProjects')}</h3>
-                        <ul>
-                            {project['sub_projects'].map((project) => (
-                                <li key={project.id}>
-                                    <ProjectRow project_id={project.id}/>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    <ul>
+                        {project['sub_projects'].map((project) => (
+                            <li key={project.id}>
+                                <ProjectRow project_id={project.id}/>
+                            </li>
+                        ))}
+                    </ul>
                 }
+            </div>
 
 
-                <div className='tasks'>
-                    <h3>{t('taskList.tasks')}</h3>
+            <div className='tasks'>
+                <h3>{t('taskList.tasks')}</h3>
+
+
+                <div className='list-container'>
+                    <AddTaskButton project_id={props.project_id}/>
 
                     {Object.keys(tasks).length &&
-                        <div className='list-container'>
+                        <>
                             <TaskRowHeader
                                 taskSortOptions={taskSortOptions}
                                 setTaskSortOptions={setTaskSortOptions}
@@ -61,13 +67,10 @@ const TaskList = (props: TabProps) => {
                                     </li>
                                 ))}
                             </ul>
-                        </div>
+                        </>
                     }
-
-                    <AddTaskButton project_id={props.project_id}/>
                 </div>
-
-            </>
+            </div>
         </div>
     )
 };

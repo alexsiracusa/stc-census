@@ -6,10 +6,8 @@
 
     height: 2.25em;
     padding-left: 0.3em;
-
-    border-bottom: solid #dedede 1px;
-    border-left: solid #dedede 1px;
-    border-right: solid #dedede 1px;
+    margin-bottom: 0.75em;
+    border: solid #dedede 1px;
 
     .icon-container {
         display: flex;

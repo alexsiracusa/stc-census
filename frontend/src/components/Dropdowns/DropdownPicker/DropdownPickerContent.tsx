@@ -66,7 +66,7 @@ const DropdownPickerContent = (props: PropsWithChildren<DropdownPickerContentPro
         >
             <div
                 className={`dropdown-content ${props.contentClassName}`}
-                style={{transform: `translate(-${props.fixedPosition.x}px, -${props.fixedPosition.y})`}}
+                style={{transform: `translate(-${props.fixedPosition.x}px, -${props.fixedPosition.y}px)`}}
                 ref={divRef}
             >
                 {Children.map(props.children, child => {

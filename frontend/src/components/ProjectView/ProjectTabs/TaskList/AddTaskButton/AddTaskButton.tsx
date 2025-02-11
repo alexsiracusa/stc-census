@@ -1,7 +1,7 @@
 import './AddTaskButton.css'
 
 import Plus from '../../../../../assets/Icons/Plus.svg'
-import {useState} from "react";
+import {useRef, useState} from "react";
 import useCreateTask from "../../../../../hooks/useCreateTask.ts";
 
 type AddTaskButtonProps = {
@@ -11,39 +11,48 @@ type AddTaskButtonProps = {
 const AddTaskButton = (props: AddTaskButtonProps) => {
     const [name, setName] = useState("")
     const {createTask, loading, error, data} = useCreateTask();
+    const ref = useRef(null);
 
-    const handleKeyDown = (event) => {
-        if (event.key === "Enter" && name !== "") {
-            createTask(props.project_id, {
-                name: name
-            })
-            setName("")
-        }
-    };
-
-    const handleBlur = () => {
+    const enterInput = () => {
         if (name !== "") {
             createTask(props.project_id, {
                 name: name
             })
             setName("")
         }
+        ref.current.blur()
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            enterInput()
+        }
     };
+
+    const handleButton = () => {
+        if (name === "") {
+            ref.current.focus()
+        }
+    }
 
     return (
         <div className='add-task-button'>
             <div className='icon-container'>
-                <div className='icon'>
+                <div
+                    className='icon'
+                    onClick={handleButton}
+                >
                     <img src={Plus}/>
                 </div>
             </div>
             <input
+                ref={ref}
                 type="text"
                 placeholder="Add Task"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 onKeyDown={handleKeyDown}
-                onBlur={handleBlur}
+                onBlur={enterInput}
             />
         </div>
     )
