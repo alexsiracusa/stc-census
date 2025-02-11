@@ -22,9 +22,15 @@ const TaskRow = (props: TaskRowProps) => {
         return <></>
     }
 
+    const isOverdue = () => {
+        const now = new Date();
+        now.setHours(0,0,0,0);
+        return task.status !== 'done' && (new Date(task.target_completion_date) < now)
+    }
+
     return (
         <div
-            className='task-row'
+            className={'task-row ' + (isOverdue() ? 'overdue' : '')}
             onClick={() => {
                 navigate('/')
             }}

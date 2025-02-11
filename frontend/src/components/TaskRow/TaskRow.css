@@ -9,6 +9,10 @@
     gap: 0.3em;
 }
 
+.task-row.overdue {
+    background-color: #cc1b0020;
+}
+
 .task-row {
     align-items: center;
     height: 2.25em;
