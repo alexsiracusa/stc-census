@@ -36,7 +36,7 @@ const DropdownPickerContent = (props: PropsWithChildren<DropdownPickerContentPro
             }
 
             // Apply new position if needed
-            divRef.current.style.top = `${newTop + + props.fixedPosition.y}px`;
+            divRef.current.style.top = `${newTop + props.fixedPosition.y}px`;
             divRef.current.style.left = `${newLeft + props.fixedPosition.x}px`;
         }
     };

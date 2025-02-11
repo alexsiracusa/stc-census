@@ -5,8 +5,7 @@
     align-items: center;
 
     height: 2.25em;
-    padding: 0 0.6em;
-    gap: 0.3em;
+    padding-left: 0.3em;
 
     border-bottom: solid #dedede 1px;
     border-left: solid #dedede 1px;
@@ -28,7 +27,7 @@
 
             height: 100%;
             aspect-ratio: 1.0;
-            margin-left: -0.15em;
+            margin-left: 0.15em;
             border-radius: 3px;
 
             img {
@@ -40,5 +39,16 @@
         .icon:hover {
             background-color: #00000020;
         }
+    }
+
+    input {
+        height: 100%;
+        padding: 0 0.6em;
+        flex-grow: 1;
+
+        border: none;
+        z-index: 1;
+
+        font-size: 1em;
     }
 }

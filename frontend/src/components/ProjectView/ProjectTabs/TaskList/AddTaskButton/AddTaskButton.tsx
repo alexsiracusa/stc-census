@@ -1,8 +1,11 @@
 import './AddTaskButton.css'
 
 import Plus from '../../../../../assets/Icons/Plus.svg'
+import {useState} from "react";
 
 const AddTaskButton = () => {
+    const [name, setName] = useState(null as string)
+
     return (
         <div className='add-task-button'>
             <div className='icon-container'>
@@ -10,7 +13,18 @@ const AddTaskButton = () => {
                     <img src={Plus}/>
                 </div>
             </div>
-            Add Task
+            <input
+                type="text"
+                placeholder="Add Task"
+                value={name}
+                onChange={(event) => {
+                    if (event.key === 'Enter') {
+                        this.search()
+                    }
+                    setName(event.target.value)
+                }
+                }
+            />
         </div>
     )
 }
