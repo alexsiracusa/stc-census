@@ -56,6 +56,7 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
             {columns.map((column) => (
                 <div
                     className={column.className + " header"}
+                    key={column.columnName}
                     onClick={() => {
                         if (props.taskSortOptions.key === column.columnName) {
                             props.setTaskSortOptions({

@@ -47,8 +47,11 @@
         flex-grow: 1;
 
         border: none;
-        z-index: 1;
 
         font-size: 1em;
+    }
+
+    input:focus {
+        position: relative;
     }
 }

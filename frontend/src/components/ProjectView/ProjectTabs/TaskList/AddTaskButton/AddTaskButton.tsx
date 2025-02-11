@@ -4,7 +4,21 @@ import Plus from '../../../../../assets/Icons/Plus.svg'
 import {useState} from "react";
 
 const AddTaskButton = () => {
-    const [name, setName] = useState(null as string)
+    const [name, setName] = useState("")
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter" && name !== "") {
+            console.log(name)
+            setName("")
+        }
+    };
+
+    const handleBlur = () => {
+        if (name !== "") {
+            console.log(name)
+            setName("")
+        }
+    };
 
     return (
         <div className='add-task-button'>
@@ -17,13 +31,9 @@ const AddTaskButton = () => {
                 type="text"
                 placeholder="Add Task"
                 value={name}
-                onChange={(event) => {
-                    if (event.key === 'Enter') {
-                        this.search()
-                    }
-                    setName(event.target.value)
-                }
-                }
+                onChange={(event) => setName(event.target.value)}
+                onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
             />
         </div>
     )
