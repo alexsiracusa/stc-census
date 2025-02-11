@@ -68,15 +68,16 @@ i18n
                             notePlaceholder: 'Add note',
                             saveButton: 'Save',
                             locale: 'en-US',
+                            noNote: '',
                         },
                         eventPopup: {
-                            defaultTitle: "(No title)",
                             edit: "Edit",
                             delete: "Delete",
                             email: "Email",
                             close: "Close",
                             share: "Link",
-                            inviteViaLink: "Invite via link"
+                            inviteViaLink: "Invite via link",
+                            text: "Text",
                         },
                         months: {
                             january: 'January',
@@ -191,9 +192,9 @@ i18n
                             notePlaceholder: '添加注释',
                             saveButton: '保存',
                             locale: 'zh-CN',
+                            noNote: '',
                         },
                         eventPopup: {
-                            defaultTitle: "(无标题)",
                             edit: "编辑",
                             delete: "删除",
                             email: "邮件",

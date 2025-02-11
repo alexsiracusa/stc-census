@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import './EventForm.css';
-import Clock from '../../../../../assets/Icons/Clock.svg';
-import Text from '../../../../../assets/Icons/Text.svg';
-import DropdownDatePicker from '../../../../Dropdowns/DropdownDatePicker/DropdownDatePicker';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef } from "react";
+import "./EventForm.css";
+import Clock from "../../../../../assets/Icons/Clock.svg";
+import Text from "../../../../../assets/Icons/Text.svg";
+import DropdownDatePicker from "../../../../Dropdowns/DropdownDatePicker/DropdownDatePicker";
+import { useTranslation } from "react-i18next";
 
 type EventFormProps = {
     isOpen: boolean;
@@ -27,12 +27,12 @@ type EventFormProps = {
 const formatDate = (dateString: string, t: any) => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        year: "numeric",
+        month: "long",
+        day: "numeric",
     };
 
-    const locale = t('calendar.eventForm.locale') || 'en-US';
+    const locale = t("calendar.eventForm.locale") || "en-US";
 
     return date.toLocaleDateString(locale, options);
 };
@@ -58,20 +58,20 @@ const EventForm: React.FC<EventFormProps> = ({
         const handleKeyDown = (event: KeyboardEvent) => {
             if (!isOpen) return;
 
-            if (event.key === 'Enter') {
+            if (event.key === "Enter") {
                 event.preventDefault();
                 handleSaveEvent();
             }
 
-            if (event.key === 'Escape') {
+            if (event.key === "Escape") {
                 event.preventDefault();
                 onClose();
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, [isOpen, title, startDate, endDate, note]);
 
@@ -83,19 +83,19 @@ const EventForm: React.FC<EventFormProps> = ({
 
     useEffect(() => {
         if (isOpen) {
-            window.addEventListener('mousedown', handleClickOutside);
+            window.addEventListener("mousedown", handleClickOutside);
         }
         return () => {
-            window.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isOpen]);
 
     const handleSaveEvent = () => {
         const eventData = {
-            title: title.trim() === "" ? t('calendar.eventForm.defaultTitle') : title,
+            title: title.trim() === "" ? t("calendar.eventForm.defaultTitle") : title,
             startDate,
             endDate,
-            note,
+            note: note.trim() === "" ? t("calendar.eventForm.noNote") : note.trim(),
         };
 
         onSaveEvent(eventData);
@@ -107,10 +107,16 @@ const EventForm: React.FC<EventFormProps> = ({
         const startDateObj = new Date(startDate);
 
         if (newEndDateObj < startDateObj) {
-            alert(t('calendar.eventForm.endDateError'));
+            alert(t("calendar.eventForm.endDateError"));
             return;
         }
         setEndDate(newEndDate);
+    };
+
+    const getEditableTitle = (title: string): string => {
+        t("calendar.eventForm.defaultTitle");
+        const knownDefaults = ["(No title)", "(无标题)"];
+        return knownDefaults.includes(title) ? "" : title;
     };
 
     if (!isOpen) return null;
@@ -125,15 +131,21 @@ const EventForm: React.FC<EventFormProps> = ({
                     <input
                         type="text"
                         className="event-title-input"
-                        placeholder={t('calendar.eventForm.titlePlaceholder')}
-                        value={title}
+                        placeholder={t("calendar.eventForm.titlePlaceholder")}
+                        value={getEditableTitle(title)}
+                        onFocus={() => {
+                            if (title === t("calendar.eventForm.defaultTitle")) {
+                                setTitle("");
+                            }
+                        }}
                         onChange={(e) => setTitle(e.target.value)}
                     />
+
                     <div className="event-date-inputs">
-                        <img src={Clock} alt={t('calendar.eventForm.startDate')} />
+                        <img src={Clock} alt={t("calendar.eventForm.startDate")} />
                         <DropdownDatePicker
                             className="event-start-date-picker"
-                            title={t('calendar.eventForm.startDate')}
+                            title={t("calendar.eventForm.startDate")}
                             currentDate={new Date(startDate)}
                             onChange={setStartDate}
                         >
@@ -142,24 +154,26 @@ const EventForm: React.FC<EventFormProps> = ({
                         <span className="date-separator">-</span>
                         <DropdownDatePicker
                             className="event-end-date-picker"
-                            title={t('calendar.eventForm.endDate')}
+                            title={t("calendar.eventForm.endDate")}
                             currentDate={new Date(endDate)}
                             onChange={handleEndDateChange}
                         >
                             <p>{formatDate(endDate, t)}</p>
                         </DropdownDatePicker>
                     </div>
+
                     <div className="event-note-input">
-                        <img src={Text} alt={t('calendar.eventForm.note')} />
+                        <img src={Text} alt={t("calendar.eventForm.note")} />
                         <textarea
                             className="note-input"
-                            placeholder={t('calendar.eventForm.notePlaceholder')}
+                            placeholder={t("calendar.eventForm.notePlaceholder")}
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
                         />
                     </div>
+
                     <button className="save-button" onClick={handleSaveEvent}>
-                        {t('calendar.eventForm.saveButton')}
+                        {t("calendar.eventForm.saveButton")}
                     </button>
                 </div>
             </div>

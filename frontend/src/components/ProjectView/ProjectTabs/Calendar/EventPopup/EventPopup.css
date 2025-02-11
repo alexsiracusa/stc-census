@@ -17,65 +17,65 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 16px;
     width: 500px;
-    position: relative;
     display: flex;
     flex-direction: column;
 }
 
-.event-popup-overlay .event-popup-header {
+.event-popup-overlay .header-top {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 16px;
+    gap: 20px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
-.event-popup-overlay .color-indicator {
-    width: 15px;
-    height: 15px;
-    background-color: #003366;
-    border-radius: 30%;
-}
-
-.event-popup-overlay .event-title {
-    font-size: 18px;
+.event-popup-overlay .header-top .event-details .event-title {
+    font-size: 16px;
     font-weight: bold;
     color: #333;
     margin: 0;
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    cursor: pointer;
 }
 
 .event-popup-overlay .event-date {
     font-size: 14px;
     color: #555;
+    margin-top: 4px;
+    margin-bottom: 16px;
 }
 
 .event-popup-overlay .event-actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
+    margin-left: auto;
 }
 
-.event-popup-overlay .icon-button {
+.event-popup-overlay .event-popup .icon-button {
+    position: relative;
     background: transparent;
     border: none;
     cursor: pointer;
-    display: inline-flex;
-    color: #555;
-    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    color: #555;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .event-popup-overlay .icon-button:hover {
     background: #f0f0f0;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.event-popup-overlay .icon-button:hover {
     color: #2196f3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .event-popup-overlay .event-popup-body {
@@ -85,40 +85,36 @@
 }
 
 .event-popup-overlay .share-button {
-    background: #ffffff;
-    color: #242424;
-    border: 1px solid #003366;
-    border-radius: 20px;
-    padding: 6px 12px;
-    cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid #003366;
+    border-radius: 20px;
+    background: #ffffff;
+    color: #242424;
     font-size: 14px;
-    width: 32%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 31%;
 }
 
 .event-popup-overlay .share-button:hover {
     background: rgba(33, 150, 243, 0.1);
 }
 
-.event-popup-overlay .share-button img {
-    margin-right: 8px;
-}
-
-.event-popup-overlay .event-organizer {
+.event-popup-overlay .event-note {
     display: flex;
-    align-items: center;
-    color: #555;
-    font-size: 14px;
+    gap: 10px;
+    align-items: flex-start;
 }
 
-.event-popup-overlay .event-organizer i {
-    margin-right: 8px;
-    font-size: 18px;
+.event-popup-overlay .event-note img {
+    width: 20px;
 }
 
-.event-popup-overlay .close-form:hover {
-    color: #000;
+.event-popup-overlay .event-popup-subheader {
+    align-items: flex-start;
+    gap: 20px;
+    display: flex;
 }
-
