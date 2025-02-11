@@ -87,6 +87,16 @@ export const projectSlice = createSlice({
             const {project_id, task_id, body} = action.payload;
             state.byId[`${project_id}`].byId[`${task_id}`] = body
         },
+        createProject: (state, action) => {
+            const {body} = action.payload;
+            state.byId[`${body.id}`] = body
+            if (body.parent) {
+                state.byId[`${body.parent}`].sub_projects.push(body)
+            }
+            else {
+                state.dashboard.push(body.id)
+            }
+        },
         setDashboard: (state, action) => {
             const projects = action.payload.json;
 
@@ -106,6 +116,7 @@ export const {
     setDashboard,
     updateTask,
     createTask,
+    createProject,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;
