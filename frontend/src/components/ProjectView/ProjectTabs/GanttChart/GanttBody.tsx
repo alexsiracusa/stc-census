@@ -48,6 +48,12 @@ interface CustomTooltip extends TooltipPositionerMap {
     };
 };
 
+const TASK_ROW_HEIGHT = 70; // Fixed height for each task row
+const CHART_CONTAINER_HEIGHT = 690; // Fixed height for the chart container
+
+const TIME_UNIT_WIDTH = 50; // Fixed width for each time unit
+const CHART_CONTAINER_WIDTH = 1000; // Fixed width for the chart container
+
 const GanttBody = ({ data }: { data: Task[] }) => {
     if (!data) {
         throw new Error("GanttBody: data is null or undefined");
@@ -69,6 +75,18 @@ const GanttBody = ({ data }: { data: Task[] }) => {
         );
     }
 
+    const chartHeight = data.length * TASK_ROW_HEIGHT + 100;
+
+    const timeRangeInDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    // const chartWidth = timeRangeInDays * TIME_UNIT_WIDTH;
+
+    let chartWidth
+    if (timeRangeInDays < 20) {
+        chartWidth = 1000;
+    } else {
+        chartWidth = timeRangeInDays * TIME_UNIT_WIDTH;
+    }
+
     const todayLine = {
         id: 'todayLine',
         afterDatasetsDraw(chart, args, pluginOptions) {
@@ -85,7 +103,7 @@ const GanttBody = ({ data }: { data: Task[] }) => {
             ctx.lineTo(x.getPixelForValue(new Date()), bottom);
             ctx.stroke();
 
-            ctx.setLineDash ([]);
+            ctx.setLineDash([]);
         }
     }
 
@@ -93,6 +111,7 @@ const GanttBody = ({ data }: { data: Task[] }) => {
         indexAxis: "y",
         resizeDelay: 20,
         responsive: true,
+        maintainAspectRatio: false,
         layout: {
             padding: {
                 top: 30,
@@ -206,8 +225,8 @@ const GanttBody = ({ data }: { data: Task[] }) => {
     };
 
     return (
-        <div style={{ minHeight: '600px', width: '100%', overflow: 'auto' }}>
-            <div style={{ minWidth: '1200px' }}>
+        <div style={{ height: `${CHART_CONTAINER_HEIGHT}px`, width: `${CHART_CONTAINER_WIDTH}px`, overflow: 'auto' }}>
+            <div style={{ height: `${chartHeight}px`, width: `${chartWidth}px` }}>
                 <h4>Timeline</h4>
                 <Bar data={formattedData} options={baseOptions} plugins={[todayLine]} />
             </div>
