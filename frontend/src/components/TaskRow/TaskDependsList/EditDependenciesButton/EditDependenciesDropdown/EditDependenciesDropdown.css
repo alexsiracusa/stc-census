@@ -7,6 +7,7 @@
     width: 18em;
     height: 20em;
     padding: 0.25em;
+    gap: 1em;
 
     .more-tasks-dropdown-header {
         font-family: Inter, sans-serif;

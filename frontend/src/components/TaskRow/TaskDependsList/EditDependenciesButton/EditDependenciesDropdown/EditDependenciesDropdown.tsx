@@ -44,7 +44,7 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
         >
             <div className='more-tasks-dropdown-content'>
                 {depends_on.length != 0 &&
-                    <>
+                    <ul>
                         <p className='more-tasks-dropdown-header'>Depends On:</p>
                         {depends_on.length != 0 && depends_on.map((option) => (
                             <div className='more-tasks-dropdown-row remove-from-list' key={`${option.project_id}-${option.id}`}>
@@ -64,11 +64,11 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                                 </button>
                             </div>
                         ))}
-                    </>
+                    </ul>
                 }
 
                 {options.length != 0 &&
-                    <>
+                    <ul>
                         <p className='more-tasks-dropdown-header'>Add Tasks:</p>
                         {options
                             .filter((option) => option.project_id != task.project_id || option.id != task.id)
@@ -91,7 +91,7 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                                 </button>
                             </div>
                         ))}
-                    </>
+                    </ul>
                 }
             </div>
         </DropdownPicker>
