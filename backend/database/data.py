@@ -74,6 +74,7 @@ async def update_task(project_id, task_id, fields: dict):
     async with await client.postgres_client.get_con() as con:
         async with con.transaction():
 
+            # could do SQL injection with the field string here, fix
             query_parts = [f"{field} = ${i + 1}" for i, field in enumerate(fields.keys())]
             values = list(fields.values()) + [project_id, task_id]
 
@@ -129,27 +130,42 @@ async def update_task(project_id, task_id, fields: dict):
 
             return result
 
+
+async def create_task(project_id, fields: dict):
+    if fields.get('id') is not None:
+        raise HTTPException(status_code=400, detail="Task id cannot be specified")
+
+    if fields.get('depends_on') is not None:
+        raise HTTPException(status_code=400, detail="Creating a task with dependencies is not supported, please update the task dependencies after creation")
+
+    # could do SQL injection with the field string here, fix
+    column_names = ['project_id'] + list(fields.keys())
+    column_values = [project_id] + list(fields.values())
+    column_values_placeholders = [f'$1'] + [f'${i + 2}' for i in range(len(column_values) - 1)]
+
+    return await client.postgres_client.fetch_row(f"""
+        INSERT INTO Task ({', '.join(column_names)})
+        VALUES ({', '.join(column_values_placeholders)})
+        RETURNING id
+    """, *column_values)
+
+
+
 # for email notifications
 async def get_tasks_due_soon():
-    # return await client.postgres_client.fetch("""
-    #     SELECT id, project_id, name, target_completion_date
-    #     FROM Task
-    #     WHERE target_completion_date IS NOT NULL
-    #     LIMIT 5
-    #     """)
     return await client.postgres_client.fetch("""
-    SELECT id, project_id, name, target_completion_date
-    FROM Task
-    WHERE target_completion_date IS NOT NULL
-    AND NOW() BETWEEN (target_completion_date - INTERVAL '2 hours')
-    AND target_completion_date
+        SELECT id, project_id, name, target_completion_date
+        FROM Task
+        WHERE target_completion_date IS NOT NULL
+        AND NOW() BETWEEN (target_completion_date - INTERVAL '2 hours')
+        AND target_completion_date
     """)
 
 # !!! NOTE: might also want to make one for tasks that are overdue
 async def get_tasks_overdue():
     return await client.postgres_client.fetch("""
-    SELECT id, project_id, name, target_completion_date
-    FROM Task
-    WHERE target_completion_date IS NOT NULL
-    AND NOW() > target_completion_date
+        SELECT id, project_id, name, target_completion_date
+        FROM Task
+        WHERE target_completion_date IS NOT NULL
+        AND NOW() > target_completion_date
     """)
