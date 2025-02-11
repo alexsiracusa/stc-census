@@ -5,6 +5,7 @@ import asyncpg
 from ..database import data
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
+from ..utils.evm import compute_evm
 
 
 router = APIRouter(
@@ -82,4 +83,24 @@ async def get_cpm_analysis(project_id: int, response: Response):
         raise HTTPException(
             status_code=500,
             detail=f"Error calculating CPM: {str(e)}"
+        )
+
+@router.get("/{project_id}/evm")
+async def get_evm_analysis(project_id: int, response: Response):
+    try:
+        # Get all tasks for the project
+        tasks = await data.get_all_project_tasks_evm(project_id)
+        df = pd.DataFrame(tasks)
+        df = compute_evm(df)
+        # Create the final dictionary with the desired structure
+        result = {
+            "id": project_id,
+            "evm": df.to_dict(orient="records")
+        }
+        return result
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error calculating EVM: {str(e)}"
         )
