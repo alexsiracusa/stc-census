@@ -4,6 +4,7 @@ import TabProps from "../TabProps.ts";
 import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
 import TaskRow from "../../../TaskRow/TaskRow.tsx";
 import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
+import AddTaskButton from "./AddTaskButton/AddTaskButton.tsx";
 import {useTranslation} from 'react-i18next';
 import {useState} from "react";
 import {sortArray, SortOptions} from "../../../../utils/sort.ts";
@@ -40,10 +41,11 @@ const TaskList = (props: TabProps) => {
                     </div>
                 }
 
-                {Object.keys(tasks).length &&
-                    <div className='tasks'>
-                        <h3>{t('taskList.tasks')}</h3>
 
+                <div className='tasks'>
+                    <h3>{t('taskList.tasks')}</h3>
+
+                    {Object.keys(tasks).length &&
                         <div className='list-container'>
                             <TaskRowHeader
                                 taskSortOptions={taskSortOptions}
@@ -60,8 +62,11 @@ const TaskList = (props: TabProps) => {
                                 ))}
                             </ul>
                         </div>
-                    </div>
-                }
+                    }
+
+                    <AddTaskButton/>
+                </div>
+
             </>
         </div>
     )

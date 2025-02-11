@@ -54,7 +54,6 @@
 /*TASK ID*/
 .task-row .task-id, .task-row-header .task-id-header {
     width: 2.25em;
-    min-width: 2.25em;
 }
 
 .task-row .task-id p {

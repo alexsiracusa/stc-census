@@ -1,0 +1,44 @@
+
+.add-task-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    height: 2.25em;
+    padding: 0 0.6em;
+    gap: 0.3em;
+
+    border-bottom: solid #dedede 1px;
+    border-left: solid #dedede 1px;
+    border-right: solid #dedede 1px;
+
+    .icon-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        height: 60%;
+        width: 2.25em;
+
+        .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 100%;
+            aspect-ratio: 1.0;
+            margin-left: -0.15em;
+            border-radius: 3px;
+
+            img {
+                height: 40%;
+                aspect-ratio: 1.0;
+            }
+        }
+
+        .icon:hover {
+            background-color: #00000020;
+        }
+    }
+}
