@@ -128,6 +128,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                     <div
                                         key={event.id}
                                         className="event-block"
+                                        style={{ backgroundColor: event.color }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleEventClick(event);

@@ -76,5 +76,17 @@ def compute_evm(df: pd.DataFrame) -> pd.DataFrame:
     # Select the final columns
     result = result[['EV', 'PV', 'AC', 'SV', 'CV', 'SPI', 'CPI', 'EAC']]
 
+    # rename columns to their full name versions
+    result.rename(columns={
+        'EV': 'earned_value',
+        'PV': 'planned_value',
+        'AC': 'actual_cost',
+        'SV': 'schedule_variance',
+        'CV': 'cost_variance',
+        'SPI': 'schedule_performance_index',
+        'CPI': 'cost_performance_index',
+        'EAC': 'estimate_at_completion'
+    }, inplace=True)
+
     return result
 

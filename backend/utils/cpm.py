@@ -74,6 +74,9 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
                       'actual_start', 'actual_end',
                       'target_start', 'target_end', 'target_duration', 'dependencies']
 
+    df['target_duration'] = df['target_duration'].astype(float)
+    df.loc[df['status'] == 'done', 'target_duration'] = 0  # completed tasks are 'skipped'
+
     def convert_dependencies(dep_str):
         if dep_str == '[]':
             return []
@@ -82,10 +85,9 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
     df['dependencies'] = df['dependencies'].apply(str).apply(convert_dependencies)
 
-    id_to_index = df.reset_index().set_index(['id', 'project_id'])['index'].to_dict()
-
     def convert_to_indices(dep_list):
-       return [id_to_index.get((id_, proj_id)) for id_, proj_id in dep_list]
+        id_to_index = df.reset_index().set_index(['id', 'project_id'])['index'].to_dict()
+        return [id_to_index.get((id_, proj_id)) for id_, proj_id in dep_list]
 
     df['dependencies'] = df['dependencies'].apply(convert_to_indices)
 
