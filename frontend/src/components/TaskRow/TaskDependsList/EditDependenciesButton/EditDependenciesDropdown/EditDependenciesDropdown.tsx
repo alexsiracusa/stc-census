@@ -52,6 +52,7 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                                 <p className='task-name'>{option.name}</p>
 
                                 <button
+                                    title={'Remove'}
                                     onClick={() => {
                                         updateTask(props.project_id, props.task_id, {
                                             depends_on: task.depends_on.filter((task) => {
@@ -78,6 +79,7 @@ const EditDependenciesDropdown = (props: PropsWithChildren<MoreTasksDropdownProp
                                 <p className='task-name'>{option.name}</p>
 
                                 <button
+                                    title={'Add'}
                                     onClick={() => {
                                         updateTask(props.project_id, props.task_id, {
                                             depends_on: [...task.depends_on, {
