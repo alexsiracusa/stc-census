@@ -25,7 +25,7 @@ const TaskRow = (props: TaskRowProps) => {
     const isOverdue = () => {
         const now = new Date();
         now.setHours(0,0,0,0);
-        return task.status !== 'done' && (new Date(task.target_completion_date) < now)
+        return task.status !== 'done' && task.target_completion_date && (new Date(task.target_completion_date) < now)
     }
 
     return (
