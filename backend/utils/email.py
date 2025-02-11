@@ -27,19 +27,28 @@ conf = ConnectionConfig(
 
 
 class EmailClient:
-    async def send_notification(self, tasks: list) -> None:
+
+    def format_email_message(self, tasks:list, first_line: str) -> str:
+        return f"{first_line}<br>" + "<br>".join(
+            [f"{t['name']} (ID:{t['id']}, Project:{t['project_id']})" for t in tasks]
+        )
+
+    async def send_notification(self, email_subject: str, email_message: str) -> None:
+        """
+        Send an email notification to the recipients.
+        :param email_subject:
+        :param email_message: message to send (formatted in HTML).
+        :return:
+        """
         if not EMAIL.EMAIL_NOTIFICATIONS:
             logger.info("Notifications not sent, since notifications are disabled.")
             return
         try:
             # Construct an HTML body listing the tasks
-            body = "Tasks nearing deadline:<br>" + "<br>".join(
-                [f"{t['name']} (ID:{t['id']}, Project:{t['project_id']})" for t in tasks]
-            )
             message = MessageSchema(
-                subject="Task Deadline Alert",
+                subject= email_subject,
                 recipients=email_recipients,
-                body=body,
+                body=email_message,
                 subtype="html"
             )
             fm = FastMail(conf)
