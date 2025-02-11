@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import './EventPopup.css';
-import Trash from '../../../../../assets/Icons/Trash.svg';
-import Edit from '../../../../../assets/Icons/Edit.svg';
-import Email from '../../../../../assets/Icons/Email.svg';
-import Close from '../../../../../assets/Icons/Close.svg';
-import ShareLink from '../../../../../assets/Icons/ShareLink.svg';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef } from "react";
+import "./EventPopup.css";
+import Trash from "../../../../../assets/Icons/Trash.svg";
+import Edit from "../../../../../assets/Icons/Edit.svg";
+import Email from "../../../../../assets/Icons/Email.svg";
+import Close from "../../../../../assets/Icons/Close.svg";
+import ShareLink from "../../../../../assets/Icons/ShareLink.svg";
+import Text from "../../../../../assets/Icons/Text.svg";
+import { useTranslation } from "react-i18next";
 
 type EventPopupProps = {
     isOpen: boolean;
@@ -36,14 +37,14 @@ const EventPopup: React.FC<EventPopupProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && isOpen) {
+            if (event.key === "Escape" && isOpen) {
                 onClose();
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, [isOpen, onClose]);
 
@@ -55,22 +56,36 @@ const EventPopup: React.FC<EventPopupProps> = ({
 
     useEffect(() => {
         if (isOpen) {
-            window.addEventListener('mousedown', handleClickOutside);
+            window.addEventListener("mousedown", handleClickOutside);
         }
         return () => {
-            window.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isOpen, onClose]);
 
-    const formatDateRange = (start: string, end: string): string => {
+    const formatDate = (date: string): string => {
         const options: Intl.DateTimeFormatOptions = {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
+            weekday: "long",
+            month: "long",
+            day: "numeric",
         };
-        const startDate = new Date(start).toLocaleDateString(undefined, options);
-        const endDate = new Date(end).toLocaleDateString(undefined, options);
-        return startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+        return new Date(date).toLocaleDateString(undefined, options);
+    };
+
+    const formatDateRange = (start: string, end: string): string => {
+        if (start === end) {
+            return formatDate(start);
+        } else {
+            return `${formatDate(start)} - ${formatDate(end)}`;
+        }
+    };
+
+    const getLocalizedTitle = () => {
+        const localizedDefaultTitle = t("calendar.eventForm.defaultTitle");
+        const previouslySavedDefaults = ["(No title)", "(无标题)"];
+        return previouslySavedDefaults.includes(eventData.title)
+            ? localizedDefaultTitle
+            : eventData.title;
     };
 
     if (!isOpen) return null;
@@ -78,38 +93,60 @@ const EventPopup: React.FC<EventPopupProps> = ({
     return (
         <div className="event-popup-overlay">
             <div className="event-popup" ref={popupRef}>
+                <div className="event-actions">
+                    <button
+                        className="icon-button"
+                        onClick={onEdit}
+                        title={t("calendar.eventPopup.edit")}
+                    >
+                        <img src={Edit} alt={t("calendar.eventPopup.edit")} />
+                    </button>
+                    <button
+                        className="icon-button"
+                        onClick={onDelete}
+                        title={t("calendar.eventPopup.delete")}
+                    >
+                        <img src={Trash} alt={t("calendar.eventPopup.delete")} />
+                    </button>
+                    <button
+                        className="icon-button"
+                        onClick={onEmail}
+                        title={t("calendar.eventPopup.email")}
+                    >
+                        <img src={Email} alt={t("calendar.eventPopup.email")} />
+                    </button>
+                    <button
+                        className="icon-button"
+                        onClick={onClose}
+                        title={t("calendar.eventPopup.close")}
+                    >
+                        <img src={Close} alt={t("calendar.eventPopup.close")} />
+                    </button>
+                </div>
                 <div className="event-popup-header">
-                    <div className="color-indicator"></div>
-                    <div className="event-details">
-                        <h3 className="event-title">
-                            {eventData.title.trim() === ''
-                                ? t('calendar.eventPopup.defaultTitle')
-                                : eventData.title
-                            }
-                        </h3>
-                        <p className="event-date">
-                            {formatDateRange(eventData.startDate, eventData.endDate)}
-                        </p>
-                    </div>
-                    <div className="event-actions">
-                        <button className="icon-button" onClick={onEdit} title={t('calendar.eventPopup.edit')}>
-                            <img src={Edit} alt={t('calendar.eventPopup.edit')} />
-                        </button>
-                        <button className="icon-button" onClick={onDelete} title={t('calendar.eventPopup.delete')}>
-                            <img src={Trash} alt={t('calendar.eventPopup.delete')} />
-                        </button>
-                        <button className="icon-button" onClick={onEmail} title={t('calendar.eventPopup.email')}>
-                            <img src={Email} alt={t('calendar.eventPopup.email')} />
-                        </button>
-                        <button className="icon-button" onClick={onClose} title={t('calendar.eventPopup.close')}>
-                            <img src={Close} alt={t('calendar.eventPopup.close')} />
-                        </button>
+                    <div className="header-top">
+                        <div className="event-details">
+                            <h3 className="event-title">{getLocalizedTitle()}</h3>
+                            <p className="event-date">
+                                {formatDateRange(eventData.startDate, eventData.endDate)}
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div className="event-popup-body">
                     <button className="share-button" onClick={onShare}>
-                        <img src={ShareLink} alt={t('calendar.eventPopup.share')} /> {t('calendar.eventPopup.inviteViaLink')}
+                        <img
+                            src={ShareLink}
+                            alt={t("calendar.eventPopup.share")}
+                        />{" "}
+                        {t("calendar.eventPopup.inviteViaLink")}
                     </button>
+                    {eventData.note && (
+                        <div className="event-note">
+                            <img src={Text} alt={t("calendar.eventPopup.note")} />
+                            <p>{eventData.note}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -93,6 +93,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         }
     };
 
+    const localizeTitle = (title: string): string => {
+        const localizedDefaultTitle = t("calendar.eventForm.defaultTitle");
+        const knownDefaults = ["(No title)", "(无标题)"];
+        return knownDefaults.includes(title) ? localizedDefaultTitle : title;
+    };
+
     return (
         <>
             <div className="calendar-grid">
@@ -127,7 +133,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                             handleEventClick(event);
                                         }}
                                     >
-                                        {event.title}
+                                        {localizeTitle(event.title)}
                                     </div>
                                 ))}
                             {events.filter((event) =>
@@ -154,7 +160,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     isOpen={isPopupOpen}
                     onClose={closePopup}
                     eventData={{
-                        title: selectedEvent.title,
+                        title: localizeTitle(selectedEvent.title),
                         startDate: selectedEvent.startDate,
                         endDate: selectedEvent.endDate,
                         note: selectedEvent.note || t('calendar.calendarGrid.noNote'),
@@ -168,7 +174,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             {allEventsDate && (
                 <AllEventsPopup
                     date={allEventsDate}
-                    events={allEventsForDate}
+                    events={allEventsForDate.map((event) => ({
+                        ...event,
+                        title: localizeTitle(event.title),
+                    }))}
                     onClose={closeAllEvents}
                     openEventDetails={(eventId: string) => {
                         const eventToOpen = events.find((event) => event.id === eventId);
