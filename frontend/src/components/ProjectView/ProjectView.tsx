@@ -34,7 +34,7 @@ const ProjectView = (props: ProjectViewProps) => {
                 <Route path="/task-list" element={<TaskList project_id={props.project_id}/>}/>
                 <Route path="/kanban" element={<Kanban project_id={props.project_id}/>}/>
                 <Route path="/gantt-chart" element={<GanttChart project_id={props.project_id}/>}/>
-                <Route path="/calendar" element={<Calendar project={project}/>}/>
+                <Route path="/calendar" element={<Calendar project_id={props.project_id}/>}/>
                 <Route path="/cpm" element={<CPM project_id={props.project_id}/>}/>
                 <Route path="/evm" element={<EVM project_id={props.project_id}/>}/>
                 <Route path="/*" element={<Navigate to={`/project/${props.project_id}/summary`} replace/>}/>

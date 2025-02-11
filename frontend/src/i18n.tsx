@@ -11,7 +11,7 @@ i18n
         resources: {
             en: {
                 translation: {
-                    nav: {
+                    navbar: {
                         project: 'Project',
                         userGuide: 'User Guide',
                         documentation: 'Documentation',
@@ -101,7 +101,7 @@ i18n
                             thu: 'Thu',
                             fri: 'Fri',
                             sat: 'Sat',
-                            Sun: 'Sunday',
+                            sunday: 'Sunday',
                             monday: 'Monday',
                             tuesday: 'Tuesday',
                             wednesday: 'Wednesday',

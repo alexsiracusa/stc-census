@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import CalendarHeader from './CalendarHeader/CalendarHeader.tsx';
 import CalendarGrid from './CalendarGrid/CalendarGrid.tsx';
 import EventForm from './EventForm/EventForm.tsx';
 import getCalendarDays from '../../../../utils/getCalendarDays.ts';
 import './Calendar.css';
+import TabProps from "../TabProps.ts";
+import { useSelector } from "react-redux";
+import {TaskStatusInfo} from "../../../../types/TaskStatuses.ts";
 
 export type Event = {
     id: string;
@@ -14,7 +17,7 @@ export type Event = {
     note: string;
 };
 
-const Calendar: React.FC = () => {
+const Calendar: React.FC<TabProps> = (props: TabProps) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
@@ -24,12 +27,33 @@ const Calendar: React.FC = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    const tasks = useSelector((state) => state.projects.byId[props.project_id]?.byId || {});
+
     const formatDateToLocalString = (date: Date) => {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+
+    useEffect(() => {
+        console.log('Tasks:', tasks);
+
+        const taskEvents: Event[] = Object.values(tasks).map((task: any) => ({
+            id: task.id,
+            title: task.name || 'Untitled Task',
+            color: TaskStatusInfo[task.status]?.color || '#003366',
+            startDate: task.target_start_date || 'N/A',
+            endDate: task.target_completion_date || 'N/A',
+            note: `${task.description || 'No details available'} (Status: ${TaskStatusInfo[task.status]?.name || 'Unknown'})`,
+        }));
+
+        console.log('Task Events:', taskEvents);
+        setEvents(taskEvents);
+    }, [tasks]);
+
+
+
 
     const handleSaveEvent = (eventData: {
         title: string;
@@ -100,7 +124,7 @@ const Calendar: React.FC = () => {
     const setMonth = (dir: number) => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + dir, 1);
         setCurrentMonth(nextMonth);
-    }
+    };
 
     return (
         <div className="calendar-container">

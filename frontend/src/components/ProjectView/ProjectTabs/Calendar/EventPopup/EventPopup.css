@@ -41,7 +41,6 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    cursor: pointer;
 }
 
 .event-popup-overlay .event-date {
