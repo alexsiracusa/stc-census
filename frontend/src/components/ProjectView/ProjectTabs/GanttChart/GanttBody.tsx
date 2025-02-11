@@ -18,6 +18,7 @@ import { findStartAndEndDates } from "./hooks/findStartAndEndDates";
 import { formatDateInLocal } from "./utils/formattedDate";
 import formatGanttData from "./utils/formatGanttData";
 import { Task } from "../../../../types/Task";
+import { useEffect, useRef } from "react";
 
 ChartJS.register(
     CategoryScale,
@@ -54,7 +55,14 @@ const CHART_CONTAINER_HEIGHT = 690; // Fixed height for the chart container
 const TIME_UNIT_WIDTH = 50; // Fixed width for each time unit
 const CHART_CONTAINER_WIDTH = 1000; // Fixed width for the chart container
 
-const GanttBody = ({ data }: { data: Task[] }) => {
+interface GanttBodyProps {
+    data: Task[];
+    dateRange?: { startDate: string; endDate: string } | null;
+}
+
+const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
+    const chartRef = useRef<any>(null);
+    
     if (!data) {
         throw new Error("GanttBody: data is null or undefined");
     }
@@ -101,20 +109,38 @@ const GanttBody = ({ data }: { data: Task[] }) => {
     const todayLine = {
         id: 'todayLine',
         afterDatasetsDraw(chart, args, pluginOptions) {
-            const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y
-            } } = chart;
+            const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
 
             ctx.save();
 
             ctx.beginPath();
             ctx.lineWidth = 3;
-            ctx.strokeStyle = 'rgba(255, 26, 104, 1)';
+            ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
             ctx.setLineDash([6, 6]);
             ctx.moveTo(x.getPixelForValue(new Date()), top);
             ctx.lineTo(x.getPixelForValue(new Date()), bottom);
             ctx.stroke();
+            ctx.restore();
 
             ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+            ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+            ctx.moveTo(x.getPixelForValue(new Date()), top + 3);
+            ctx.lineTo(x.getPixelForValue(new Date()) - 6, top - 6);
+            ctx.lineTo(x.getPixelForValue(new Date()) + 6, top - 6);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+            ctx.restore();
+
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+            ctx.textAlign = 'center';
+            ctx.fillText('Today', x.getPixelForValue(new Date()), bottom + 20);
+            ctx.restore();
         }
     }
 
@@ -137,8 +163,8 @@ const GanttBody = ({ data }: { data: Task[] }) => {
                 time: {
                     unit: timeUnit,
                 },
-                min: startDate,
-                max: endDate,
+                min: dateRange ? dateRange.startDate : startDate,
+                max: dateRange ? dateRange.endDate : endDate,
                 stacked: true,
                 offset: false,
             },
@@ -233,6 +259,15 @@ const GanttBody = ({ data }: { data: Task[] }) => {
             },
         },
     };
+
+    useEffect(() => {
+        if (chartRef.current && dateRange) {
+            const chart = chartRef.current;
+            chart.config.options.scales.x.min = dateRange.startDate;
+            chart.config.options.scales.x.max = dateRange.endDate;
+            chart.update();
+        }
+    }, [dateRange]);
 
     return (
         <div style={{ height: `${CHART_CONTAINER_HEIGHT}px`, width: `${CHART_CONTAINER_WIDTH}px`, overflow: 'auto' }}>
