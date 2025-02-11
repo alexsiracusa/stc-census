@@ -5,6 +5,7 @@ import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
 import TaskRow from "../../../TaskRow/TaskRow.tsx";
 import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
 import AddTaskButton from "./AddTaskButton/AddTaskButton.tsx";
+import AddProjectButton from "../../../AddProjectButton/AddProjectButton.tsx";
 import {useTranslation} from 'react-i18next';
 import {useState} from "react";
 import {sortArray, SortOptions} from "../../../../utils/sort.ts";
@@ -30,7 +31,7 @@ const TaskList = (props: TabProps) => {
             <div className='sub-projects'>
                 <h3>{t('taskList.subProjects')}</h3>
 
-                <AddTaskButton project_id={props.project_id}/>
+                <AddProjectButton project_id={props.project_id}/>
 
                 {project['sub_projects'].length > 0 &&
                     <ul>

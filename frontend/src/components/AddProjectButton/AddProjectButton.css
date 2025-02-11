@@ -1,0 +1,55 @@
+
+.add-project-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    height: 2.25em;
+    padding-left: 0.3em;
+    margin-bottom: 0.75em;
+    border: solid #dedede 1px;
+
+    .icon-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        height: 60%;
+        width: 2.25em;
+
+        .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 100%;
+            aspect-ratio: 1.0;
+            margin-left: 0.15em;
+            border-radius: 3px;
+
+            img {
+                height: 40%;
+                aspect-ratio: 1.0;
+            }
+        }
+
+        .icon:hover {
+            background-color: #00000020;
+        }
+    }
+
+    input {
+        height: 100%;
+        padding: 0 0.6em;
+        flex-grow: 1;
+
+        border: none;
+
+        font-size: 1em;
+    }
+
+    input:focus {
+        position: relative;
+    }
+}
