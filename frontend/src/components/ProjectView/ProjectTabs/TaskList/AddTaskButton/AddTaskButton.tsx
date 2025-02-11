@@ -20,7 +20,6 @@ const AddTaskButton = (props: AddTaskButtonProps) => {
             })
             setName("")
         }
-        ref.current.blur()
     }
 
     const handleKeyDown = (event) => {
