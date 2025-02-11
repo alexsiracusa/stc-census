@@ -29,6 +29,12 @@ conf = ConnectionConfig(
 class EmailClient:
 
     def format_email_message(self, tasks:list, first_line: str) -> str:
+        """
+        Format the email message to be sent for a list of tasks.
+        :param tasks: list of tasks of the form {'id': int, 'name': str, 'project_id': int}
+        :param first_line: first line of the email message
+        :return: formatted email message
+        """
         return f"{first_line}<br>" + "<br>".join(
             [f"{t['name']} (ID:{t['id']}, Project:{t['project_id']})" for t in tasks]
         )
@@ -38,7 +44,7 @@ class EmailClient:
         Send an email notification to the recipients.
         :param email_subject:
         :param email_message: message to send (formatted in HTML).
-        :return:
+        :return: None
         """
         if not EMAIL.EMAIL_NOTIFICATIONS:
             logger.info("Notifications not sent, since notifications are disabled.")
@@ -51,6 +57,7 @@ class EmailClient:
                 body=email_message,
                 subtype="html"
             )
+
             fm = FastMail(conf)
             logger.info("Sending email notification...")
             await fm.send_message(message)
