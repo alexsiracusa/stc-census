@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Response, status, Body
 import pandas as pd
 import asyncpg
+from typing import Any
+import json
 
 from ..database import data
 from .task import router as task_router
@@ -31,6 +33,24 @@ async def get_project(
 
     except asyncpg.exceptions.PostgresError as error:
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
+
+
+@router.post("/create")
+async def get_task(
+    response: Response,
+    fields: Any = Body(None)
+):
+    try:
+        if isinstance(fields, bytes):
+            fields = json.loads(fields.decode("utf-8"))
+
+        task = await data.create_project(fields)
+        response.status_code = status.HTTP_200_OK
+        return task
+
+    except Exception as error:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return {"error": str(error)}
 
 
 @router.get("/{project_id}/summary")

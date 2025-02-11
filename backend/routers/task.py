@@ -50,7 +50,7 @@ async def update_task(
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
-@router.post("/create/")
+@router.post("/create")
 async def get_task(
     response: Response,
     project_id: int,

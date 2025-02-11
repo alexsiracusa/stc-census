@@ -130,6 +130,15 @@ async def update_task(project_id, task_id, fields: dict):
 
             return result
 
+async def insert_into(table_name, columns, values):
+    value_placeholders = [f'${i + 1}' for i in range(len(values))]
+
+    # could do SQL injection with the column names here, fix
+    return await client.postgres_client.fetch_row(f"""
+        INSERT INTO {table_name} ({', '.join(columns)})
+        VALUES ({', '.join(value_placeholders)})
+        RETURNING *
+    """, *values)
 
 async def create_task(project_id, fields: dict):
     if fields.get('id') is not None:
@@ -141,13 +150,16 @@ async def create_task(project_id, fields: dict):
     # could do SQL injection with the field string here, fix
     column_names = ['project_id'] + list(fields.keys())
     column_values = [project_id] + list(fields.values())
-    column_values_placeholders = [f'$1'] + [f'${i + 2}' for i in range(len(column_values) - 1)]
 
-    return await client.postgres_client.fetch_row(f"""
-        INSERT INTO Task ({', '.join(column_names)})
-        VALUES ({', '.join(column_values_placeholders)})
-        RETURNING *
-    """, *column_values)
+    return await insert_into('Task', column_names, column_values)
+
+
+async def create_project(fields: dict):
+    if fields.get('id') is not None:
+        raise HTTPException(status_code=400, detail="Project id cannot be specified")
+
+    return await insert_into('Project', list(fields.keys()), list(fields.values()))
+
 
 
 
