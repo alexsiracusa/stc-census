@@ -9,7 +9,7 @@ type AllEventsPopupProps = {
         title: string;
         startDate: string;
         endDate: string;
-        description?: string;
+        color: string;
     }[];
     onClose: () => void;
     openEventDetails: (eventId: string) => void;
@@ -92,6 +92,7 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
                         events.map((event) => (
                             <div
                                 key={event.id}
+                                style={{ backgroundColor: event.color }}
                                 className="event-item"
                                 onClick={() => handleEventClick(event.id)}
                             >

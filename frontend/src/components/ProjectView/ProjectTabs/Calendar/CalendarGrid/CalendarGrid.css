@@ -83,7 +83,8 @@
 }
 
 .calendar-grid .event-block:hover {
-    background-color: #0055A5;
+    filter: brightness(1.2);
+    transition: filter 0.2s ease;
 }
 
 .calendar-grid .more-events {
