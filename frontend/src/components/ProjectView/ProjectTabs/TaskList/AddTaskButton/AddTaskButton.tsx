@@ -29,9 +29,7 @@ const AddTaskButton = (props: AddTaskButtonProps) => {
     };
 
     const handleButton = () => {
-        if (name === "") {
-            ref.current.focus()
-        }
+        ref.current.focus()
     }
 
     return (
