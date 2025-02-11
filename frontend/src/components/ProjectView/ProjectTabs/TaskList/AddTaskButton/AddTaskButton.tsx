@@ -2,20 +2,30 @@ import './AddTaskButton.css'
 
 import Plus from '../../../../../assets/Icons/Plus.svg'
 import {useState} from "react";
+import useCreateTask from "../../../../../hooks/useCreateTask.ts";
 
-const AddTaskButton = () => {
+type AddTaskButtonProps = {
+    project_id: number
+}
+
+const AddTaskButton = (props: AddTaskButtonProps) => {
     const [name, setName] = useState("")
+    const {createTask, loading, error, data} = useCreateTask();
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter" && name !== "") {
-            console.log(name)
+            createTask(props.project_id, {
+                name: name
+            })
             setName("")
         }
     };
 
     const handleBlur = () => {
         if (name !== "") {
-            console.log(name)
+            createTask(props.project_id, {
+                name: name
+            })
             setName("")
         }
     };

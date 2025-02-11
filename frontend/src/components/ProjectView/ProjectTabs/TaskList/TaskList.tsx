@@ -64,7 +64,7 @@ const TaskList = (props: TabProps) => {
                         </div>
                     }
 
-                    <AddTaskButton/>
+                    <AddTaskButton project_id={props.project_id}/>
                 </div>
 
             </>

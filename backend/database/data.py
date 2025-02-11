@@ -146,7 +146,7 @@ async def create_task(project_id, fields: dict):
     return await client.postgres_client.fetch_row(f"""
         INSERT INTO Task ({', '.join(column_names)})
         VALUES ({', '.join(column_values_placeholders)})
-        RETURNING id
+        RETURNING *
     """, *column_values)
 
 
