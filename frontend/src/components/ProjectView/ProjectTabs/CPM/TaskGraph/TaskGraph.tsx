@@ -20,12 +20,18 @@ interface CpmData {
     critical: boolean;
 }
 
+interface TaskInCycle {
+    id: number;
+    project_id: number;
+}
+
 const TaskGraph: React.FC<{
     className?: string;
     tasks?: Task[];
     currentProjectId?: number;
     cpmData?: CpmData[];
-}> = ({ className = '', tasks = [], currentProjectId, cpmData = [] }) => {
+    cycleInfo?: TaskInCycle[];
+}> = ({ className = '', tasks = [], currentProjectId, cpmData = [], cycleInfo = [] }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
 
@@ -52,6 +58,7 @@ const TaskGraph: React.FC<{
 
         const nodes = tasks.map(task => {
             const cpm = cpmData.find(c => c.id === task.id && c.project_id === task.project_id);
+            const isInCycle = cycleInfo.some(c => c.id === task.id && c.project_id === task.project_id);
             const tooltip = cpm ? formatTooltip(task, cpm) : '';
             return {
                 data: {
@@ -60,11 +67,12 @@ const TaskGraph: React.FC<{
                     tooltip,
                     status: task.status,
                     project_id: task.project_id,
-                    isExternalProject: task.project_id !== currentProjectId,
-                    isCritical: cpm ? cpm.critical : false
+                    isCritical: cpm ? cpm.critical : false,
+                    inCycle: isInCycle
                 }
             };
         });
+
 
         const edges = tasks.flatMap(task =>
             (task.depends_on || []).map(dependency => ({

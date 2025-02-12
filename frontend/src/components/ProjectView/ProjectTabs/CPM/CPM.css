@@ -1,0 +1,30 @@
+.cpm {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.error-message {
+    background-color: #ffeeba;
+    color: #856404;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    /* Ensure it doesn't cover other components */
+    position: relative;
+    z-index: 1;
+}
+.graph-container {
+    flex-grow: 1;
+    position: relative;
+    overflow: auto;
+    /* Optional styling: add a border to help separate it visually */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+}

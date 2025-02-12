@@ -2,6 +2,7 @@ import TabProps from "../TabProps";
 import TaskGraph from './TaskGraph/TaskGraph.tsx';
 import {Task} from "../../../../types/Task.ts";
 import {useEffect, useState} from "react";
+import './CPM.css';
 
 export const useTasksFetcher = (projectId: string): [Task[], boolean] => {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -56,19 +57,31 @@ const CPM = (props: TabProps) => {
         return <div className="cpm">Loading tasks...</div>;
     }
 
-    // the CPM loading display honestly could be handled better; e.g.) display everything else while the node contents load...
     if (cpmLoading) {
         return <div className="cpm">Loading CPM data...</div>;
     }
 
+    const hasCycles = cpmData.cycleInfo && cpmData.cycleInfo.length > 0;
+
     return (
-        <TaskGraph
-            className='cpm'
-            tasks={tasks}
-            currentProjectId={projectId}
-            cpmData={cpmData.cpm}
-        />
+        <div className="cpm">
+            {hasCycles && (
+                <div className="error-message">
+                    Warning: The project contains cycles, which may affect the correctness of the CPM analysis.
+                </div>
+            )}
+            <div className="graph-container">
+                <TaskGraph
+                    tasks={tasks}
+                    currentProjectId={projectId}
+                    cpmData={cpmData.cpm}
+                    cycleInfo={cpmData.cycleInfo}
+                />
+            </div>
+        </div>
     );
+
 };
+
 
 export default CPM;
