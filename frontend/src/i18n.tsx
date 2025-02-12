@@ -69,6 +69,7 @@ i18n
                             saveButton: 'Save',
                             locale: 'en-US',
                             noNote: '',
+                            note: 'Note',
                         },
                         eventPopup: {
                             edit: "Edit",
@@ -77,8 +78,6 @@ i18n
                             close: "Close",
                             share: "Link",
                             inviteViaLink: "Invite via link",
-                            text: "Text",
-                            confirmDelete: "Are you sure you want to delete this event?",
                             note: "Note"
                         },
                         months: {
@@ -206,6 +205,7 @@ i18n
                             saveButton: '保存',
                             locale: 'zh-CN',
                             noNote: '',
+                            note: '笔记',
                         },
                         eventPopup: {
                             edit: "编辑",
@@ -213,7 +213,8 @@ i18n
                             email: "邮件",
                             close: "关闭",
                             share: "链接",
-                            inviteViaLink: "通过链接邀请"
+                            inviteViaLink: "通过链接邀请",
+                            note: "笔记",
                         },
                         months: {
                             january: '一月',

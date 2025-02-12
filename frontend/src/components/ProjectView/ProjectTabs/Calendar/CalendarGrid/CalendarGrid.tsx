@@ -100,7 +100,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     };
 
     return (
-        <div className="calendar-container"> {/* Scrollable container */}
+        <>
             <div className="calendar-weekdays">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayKey) => (
                     <div key={dayKey} className="weekday">
@@ -108,89 +108,91 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     </div>
                 ))}
             </div>
-            <div className="calendar-grid">
-                {calendarDays.map(({ date, isCurrentMonth }, index) => (
-                    <div
-                        key={index}
-                        className={`day-cell ${isCurrentMonth ? "" : "other-month"} ${isToday(date) ? "today" : ""}`}
-                        onClick={(e) => {
-                            if (!(e.target as HTMLElement).classList.contains("more-events")) {
-                                openEventForm(date);
-                            }
-                        }}
-                    >
-                        <div className={`day-number ${isToday(date) ? "today" : ""}`}>
-                            {date.getDate()}
-                        </div>
-                        <div className="event-list">
-                            {events
-                                .filter((event) => isStartOrEndDate(date, event.startDate, event.endDate))
-                                .slice(0, maxEventsPerDay)
-                                .map((event) => (
-                                    <div
-                                        key={event.id}
-                                        className="event-block"
-                                        style={{ backgroundColor: event.color }}
+            <div className="calendar-container">
+                <div className="calendar-grid">
+                    {calendarDays.map(({ date, isCurrentMonth }, index) => (
+                        <div
+                            key={index}
+                            className={`day-cell ${isCurrentMonth ? "" : "other-month"} ${isToday(date) ? "today" : ""}`}
+                            onClick={(e) => {
+                                if (!(e.target as HTMLElement).classList.contains("more-events")) {
+                                    openEventForm(date);
+                                }
+                            }}
+                        >
+                            <div className={`day-number ${isToday(date) ? "today" : ""}`}>
+                                {date.getDate()}
+                            </div>
+                            <div className="event-list">
+                                {events
+                                    .filter((event) => isStartOrEndDate(date, event.startDate, event.endDate))
+                                    .slice(0, maxEventsPerDay)
+                                    .map((event) => (
+                                        <div
+                                            key={event.id}
+                                            className="event-block"
+                                            style={{ backgroundColor: event.color }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEventClick(event);
+                                            }}
+                                        >
+                                            {localizeTitle(event.title)}
+                                        </div>
+                                    ))}
+                                {events.filter((event) =>
+                                    isStartOrEndDate(date, event.startDate, event.endDate)
+                                ).length > maxEventsPerDay && (
+                                    <button
+                                        className="more-events"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleEventClick(event);
+                                            openAllEvents(date);
                                         }}
                                     >
-                                        {localizeTitle(event.title)}
-                                    </div>
-                                ))}
-                            {events.filter((event) =>
-                                isStartOrEndDate(date, event.startDate, event.endDate)
-                            ).length > maxEventsPerDay && (
-                                <button
-                                    className="more-events"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        openAllEvents(date);
-                                    }}
-                                >
-                                    {`+ ${events.filter((event) =>
-                                        isStartOrEndDate(date, event.startDate, event.endDate)
-                                    ).length - maxEventsPerDay} ${t("calendar.calendarGrid.more")}`}
-                                </button>
-                            )}
+                                        {`+ ${events.filter((event) =>
+                                            isStartOrEndDate(date, event.startDate, event.endDate)
+                                        ).length - maxEventsPerDay} ${t("calendar.calendarGrid.more")}`}
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+                {isPopupOpen && selectedEvent && (
+                    <EventPopup
+                        isOpen={isPopupOpen}
+                        onClose={closePopup}
+                        eventData={{
+                            title: localizeTitle(selectedEvent.title),
+                            startDate: selectedEvent.startDate,
+                            endDate: selectedEvent.endDate,
+                            note: selectedEvent.note || t("calendar.calendarGrid.noNote"),
+                        }}
+                        onEdit={handleEdit}
+                        onDelete={() => handleDelete(selectedEvent.id)}
+                        onShare={handleShare}
+                        onEmail={handleEmail}
+                        project_id={0}
+                        event_id={""}
+                    />
+                )}
+                {allEventsDate && (
+                    <AllEventsPopup
+                        date={allEventsDate}
+                        events={allEventsForDate.map((event) => ({
+                            ...event,
+                            title: localizeTitle(event.title),
+                        }))}
+                        onClose={closeAllEvents}
+                        openEventDetails={(eventId: string) => {
+                            const eventToOpen = events.find((event) => event.id === eventId);
+                            if (eventToOpen) handleEventClick(eventToOpen);
+                        }}
+                    />
+                )}
             </div>
-            {isPopupOpen && selectedEvent && (
-                <EventPopup
-                    isOpen={isPopupOpen}
-                    onClose={closePopup}
-                    eventData={{
-                        title: localizeTitle(selectedEvent.title),
-                        startDate: selectedEvent.startDate,
-                        endDate: selectedEvent.endDate,
-                        note: selectedEvent.note || t("calendar.calendarGrid.noNote"),
-                    }}
-                    onEdit={handleEdit}
-                    onDelete={() => handleDelete(selectedEvent.id)}
-                    onShare={handleShare}
-                    onEmail={handleEmail}
-                    project_id={0}
-                    event_id={""}
-                />
-            )}
-            {allEventsDate && (
-                <AllEventsPopup
-                    date={allEventsDate}
-                    events={allEventsForDate.map((event) => ({
-                        ...event,
-                        title: localizeTitle(event.title),
-                    }))}
-                    onClose={closeAllEvents}
-                    openEventDetails={(eventId: string) => {
-                        const eventToOpen = events.find((event) => event.id === eventId);
-                        if (eventToOpen) handleEventClick(eventToOpen);
-                    }}
-                />
-            )}
-        </div>
+        </>
     );
 };
 
