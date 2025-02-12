@@ -54,7 +54,16 @@ const TaskGraph: React.FC<{
     };
 
     useEffect(() => {
-        if (!containerRef.current) return;
+
+        // Early return if no tasks
+        if (!containerRef.current || tasks.length === 0) {
+            // Optional: You could render a placeholder or empty state
+            return () => {
+                if (cyRef.current) {
+                    cyRef.current.destroy();
+                }
+            };
+        }
 
         const nodes = tasks.map(task => {
             const cpm = cpmData.find(c => c.id === task.id && c.project_id === task.project_id);
@@ -116,6 +125,14 @@ const TaskGraph: React.FC<{
             }
         };
     }, [tasks, currentProjectId, cpmData]);
+
+    if (tasks.length === 0) {
+        return (
+            <div className={`taskGraphContainer ${className}`}>
+                <p>No tasks available</p>
+            </div>
+        );
+    }
 
     return (
         <div
