@@ -1,12 +1,12 @@
 import './TaskRow.css'
 
-import {useNavigate} from "react-router-dom";
 import TaskStatusSelector from "./TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
 import {useSelector} from "react-redux";
 import useUpdateTask from "../../hooks/useUpdateTask.ts";
 import TaskName from "./TaskName/TaskName.tsx";
+import TaskPopup from "../TaskPopup/TaskPopup.tsx";
 
 type TaskRowProps = {
     project_id: number
@@ -16,8 +16,6 @@ type TaskRowProps = {
 const TaskRow = (props: TaskRowProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
     const {updateTask, loading, error, data} = useUpdateTask();
-
-    const navigate = useNavigate()
 
     if (task === undefined) {
         return <></>
@@ -31,7 +29,10 @@ const TaskRow = (props: TaskRowProps) => {
 
     return (
         <div className={'task-row ' + (isOverdue() ? 'overdue' : '')}>
-            <div className='task-id'><p>T{task.id}</p></div>
+            <TaskPopup project_id={props.project_id} task_id={props.task_id} buttonClassName='task-id'>
+                <p>T{task.id}</p>
+            </TaskPopup>
+
             <div className='task-name-container'>
                 <TaskName project_id={props.project_id} task_id={props.task_id}/>
             </div>

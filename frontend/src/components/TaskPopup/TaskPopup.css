@@ -1,0 +1,9 @@
+
+.task-popup-content {
+    height: 10em;
+    width: 22em;
+
+    position: fixed;
+
+    background-color: #2196f3;
+}
