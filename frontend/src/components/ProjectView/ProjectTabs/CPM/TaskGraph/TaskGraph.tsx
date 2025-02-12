@@ -54,7 +54,15 @@ const TaskGraph: React.FC<{
     };
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        // Early return if no tasks
+        if (!containerRef.current || tasks.length === 0) {
+            // Optional: You could render a placeholder or empty state
+            return () => {
+                if (cyRef.current) {
+                    cyRef.current.destroy();
+                }
+            };
+        }
 
         const nodes = tasks.map(task => {
             const cpm = cpmData.find(c => c.id === task.id && c.project_id === task.project_id);
@@ -65,15 +73,15 @@ const TaskGraph: React.FC<{
                     id: `${task.project_id}-${task.id}`,
                     label: task.name,
                     tooltip,
+                    tooltipText: tooltip, // Add explicit tooltipText for styling
                     status: task.status,
                     project_id: task.project_id,
                     isCritical: cpm ? cpm.critical : false,
                     inCycle: isInCycle,
-                    slack: cpm ? cpm.slack : 0  // Add this line to make slack directly accessible
+                    slack: cpm ? cpm.slack : 0
                 }
             };
         });
-
 
         const edges = tasks.flatMap(task =>
             (task.depends_on || []).map(dependency => ({
@@ -116,6 +124,15 @@ const TaskGraph: React.FC<{
             }
         };
     }, [tasks, currentProjectId, cpmData]);
+
+    // Render a placeholder if no tasks
+    if (tasks.length === 0) {
+        return (
+            <div className={`taskGraphContainer ${className}`}>
+                <p>No tasks available</p>
+            </div>
+        );
+    }
 
     return (
         <div
