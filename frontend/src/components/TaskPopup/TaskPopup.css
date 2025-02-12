@@ -1,9 +1,12 @@
 
 .task-popup-content {
-    height: 10em;
-    width: 22em;
+    height: 35em;
+    width: 60em;
+
+    max-width: calc(100% - 50px);
+    max-height: calc(100% - 50px);
 
     position: fixed;
-
-    background-color: #2196f3;
+    background-color: white;
+    border-radius: 3px;
 }
