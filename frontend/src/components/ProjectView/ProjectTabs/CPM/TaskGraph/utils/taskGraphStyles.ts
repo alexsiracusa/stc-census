@@ -8,15 +8,18 @@ export const taskGraphStyles = [
         selector: 'node',
         style: {
             'background-clip': 'none',
-            'background-color': '#ffffff',
+            'background-color': (ele: any) => {
+                const status = ele.data('status');
+                return TaskStatusInfo[status]?.color || TaskStatusInfo['to_do'].color;
+            },
+            'background-opacity': 0.45,
             'background-fit': 'none',
             'background-height': '100%',
             'background-image': (ele: any) => {
-                const status = ele.data('status');
-                const color = TaskStatusInfo[status]?.color || TaskStatusInfo['to_do'].color;
+                const slack = ele.data('tooltip').split('\n')[0].split(': ')[1].trim();
                 const encodedSvg = encodeURIComponent(`
                     <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="80%" y="80%" width="15%" height="15%" rx="2" ry="2" fill="${color}"/>
+                        <text x="80%" y="90%" font-family="Arial" font-size="12" fill="#000000">${slack}</text>
                     </svg>
                 `.trim());
                 return `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
@@ -42,16 +45,13 @@ export const taskGraphStyles = [
         }
     },
     {
-        // Deep blue border for critical tasks
         selector: 'node[?isCritical]',
         style: {
-            'border-color': '#000080', // Deep blue
+            'border-color': '#000080',
             'border-width': '2px'
         }
     },
     {
-        // Red border for tasks in cycles - this selector should come after the critical path selector
-        // to ensure it takes precedence
         selector: 'node[?inCycle]',
         style: {
             'border-color': '#ff0000',

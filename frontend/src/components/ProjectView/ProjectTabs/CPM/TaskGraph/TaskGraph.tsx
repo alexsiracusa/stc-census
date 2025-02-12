@@ -68,7 +68,8 @@ const TaskGraph: React.FC<{
                     status: task.status,
                     project_id: task.project_id,
                     isCritical: cpm ? cpm.critical : false,
-                    inCycle: isInCycle
+                    inCycle: isInCycle,
+                    slack: cpm ? cpm.slack : 0  // Add this line to make slack directly accessible
                 }
             };
         });
