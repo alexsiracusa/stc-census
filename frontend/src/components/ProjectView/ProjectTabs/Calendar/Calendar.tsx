@@ -79,6 +79,10 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
         }
     };
 
+    const handleDelete = (eventId: string) => {
+        setEvents((prev) => prev.filter((event) => event.id !== eventId));
+    };
+
     const resetForm = () => {
         setIsEventFormOpen(false);
         setSelectedEventId(null);
@@ -125,6 +129,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                 setEvents={setEvents}
                 openEventForm={handleOpenNewEventForm}
                 openEditForm={handleOpenEditEventForm}
+                onDeleteEvent={handleDelete} // Pass the handleDelete function
             />
             <EventForm
                 isOpen={isEventFormOpen}

@@ -12,6 +12,7 @@ type CalendarGridProps = {
     setEvents: (events: Event[]) => void;
     openEventForm: (date: Date, eventToEdit?: Event) => void;
     openEditForm: (event: Event) => void;
+    onDeleteEvent: (eventId: string) => void;
 };
 
 const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boolean => {
@@ -23,9 +24,9 @@ const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boole
 const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                        calendarDays,
                                                        events,
-                                                       setEvents,
                                                        openEventForm,
                                                        openEditForm,
+                                                       onDeleteEvent,
                                                    }) => {
     const { t } = useTranslation();
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
@@ -36,7 +37,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows === 6 ? 1 : 1);
+        setMaxEventsPerDay(rows === 6 ? 2 : 2);
     }, [calendarDays]);
 
     const handleEventClick = (event: Event) => {
@@ -69,10 +70,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         }
     };
 
-    const handleDelete = () => {
-        if (selectedEvent) {
-            const updatedEvents = events.filter((event) => event.id !== selectedEvent.id);
-            setEvents(updatedEvents);
+    const handleDelete = (eventId: string) => {
+        if (onDeleteEvent) {
+            onDeleteEvent(eventId);
             closePopup();
         }
     };
@@ -81,7 +81,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         if (selectedEvent) {
             const shareLink = `http://localhost:5173/project/1/calendar/${selectedEvent.id}`;
             navigator.clipboard.writeText(shareLink).then(() => {
-                alert(t('calendar.calendarGrid.linkCopied'));
+                alert(t("calendar.calendarGrid.linkCopied"));
             });
         }
     };
@@ -100,13 +100,15 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     };
 
     return (
-        <>
-            <div className="calendar-grid">
+        <div className="calendar-container"> {/* Scrollable container */}
+            <div className="calendar-weekdays">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayKey) => (
                     <div key={dayKey} className="weekday">
                         {t(`calendar.days.${dayKey.toLowerCase()}`)}
                     </div>
                 ))}
+            </div>
+            <div className="calendar-grid">
                 {calendarDays.map(({ date, isCurrentMonth }, index) => (
                     <div
                         key={index}
@@ -149,7 +151,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                 >
                                     {`+ ${events.filter((event) =>
                                         isStartOrEndDate(date, event.startDate, event.endDate)
-                                    ).length - maxEventsPerDay} ${t('calendar.calendarGrid.more')}`}
+                                    ).length - maxEventsPerDay} ${t("calendar.calendarGrid.more")}`}
                                 </button>
                             )}
                         </div>
@@ -164,12 +166,14 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         title: localizeTitle(selectedEvent.title),
                         startDate: selectedEvent.startDate,
                         endDate: selectedEvent.endDate,
-                        note: selectedEvent.note || t('calendar.calendarGrid.noNote'),
+                        note: selectedEvent.note || t("calendar.calendarGrid.noNote"),
                     }}
                     onEdit={handleEdit}
-                    onDelete={handleDelete}
+                    onDelete={() => handleDelete(selectedEvent.id)}
                     onShare={handleShare}
                     onEmail={handleEmail}
+                    project_id={0}
+                    event_id={""}
                 />
             )}
             {allEventsDate && (
@@ -186,7 +190,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     }}
                 />
             )}
-        </>
+        </div>
     );
 };
 
