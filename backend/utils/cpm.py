@@ -85,9 +85,7 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
     return (result_df, cycle_node_info)
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
-    df.columns = ['id', 'project_id', 'status',
-                  'actual_start', 'actual_end',
-                  'target_start', 'target_end', 'target_duration', 'dependencies']
+    df.columns = ['id', 'project_id', 'status', 'target_duration', 'dependencies']
 
     df['target_duration'] = df['target_duration'].astype(float)
     df.loc[df['status'] == 'done', 'target_duration'] = 0  # Completed tasks are 'skipped'
@@ -107,7 +105,7 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
     df['dependencies'] = df['dependencies'].apply(convert_to_indices)
 
-    df = df.drop(columns=['status', 'actual_start', 'actual_end', 'target_start', 'target_end'])
+    df = df.drop(columns=['status'])
     df = df.reset_index(drop=True)  # Ensure 0-based index
 
     return df

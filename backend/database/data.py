@@ -49,8 +49,7 @@ async def get_all_project_tasks(project_id):
 # this is for the cpm algorithm to compute cpm stats
 async def get_all_project_tasks_cpm(project_id):
     return await client.postgres_client.fetch("""
-        SELECT id, project_id, status, start_date, completion_date,
-        target_start_date, target_completion_date, target_days_to_complete, depends_on
+        SELECT id, project_id, status, target_days_to_complete, depends_on
         FROM Task_Node
         WHERE Task_Node.project_id IN (
             SELECT unnest(children)
