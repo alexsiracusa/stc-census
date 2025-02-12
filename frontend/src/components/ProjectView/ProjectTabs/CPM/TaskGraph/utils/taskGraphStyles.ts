@@ -17,14 +17,13 @@ export const taskGraphStyles = [
             'border-width': '1px',
             'color': '#000',
             'font-size': '12px',
-            'font-weight': 'bold',
             'height': '90%',
             'label': (ele: any) => {
                 const taskName = ele.data('label');
                 return taskName;
             },
             'text-halign': 'center',
-            'text-max-width': '110%',
+            'text-max-width': '150%',
             'text-valign': 'center',
             'text-wrap': 'wrap',
             'width': '120%',
@@ -48,14 +47,14 @@ export const taskGraphStyles = [
         selector: 'node[?isCritical]',
         style: {
             'border-color': '#000080',
-            'border-width': '4px'
+            'border-width': '2px'
         }
     },
     {
         selector: 'node[?inCycle]',
         style: {
             'border-color': '#ff0000',
-            'border-width': '4px'
+            'border-width': '2px'
         }
     },
     {
