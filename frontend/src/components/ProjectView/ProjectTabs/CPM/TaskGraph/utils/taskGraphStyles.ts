@@ -16,18 +16,30 @@ export const taskGraphStyles = [
             'border-style': 'solid',
             'border-width': '1px',
             'color': '#000',
-            'font-size': '12px', // Fixed font size
+            'font-size': '12px',
             'height': '90%',
             'label': (ele: any) => {
-                const slack = ele.data('slack');
                 const taskName = ele.data('label');
-                return `${taskName}\nSlack: ${slack}`;
+                return taskName;
             },
             'text-halign': 'center',
             'text-max-width': '150%',
             'text-valign': 'center',
             'text-wrap': 'wrap',
             'width': '120%',
+            'shape': 'roundrectangle',
+            'border-radius': '10px',
+            'overlay-color': '#000',
+            'overlay-padding': '5px',
+            'overlay-opacity': 0,
+            'overlay-text': (ele: any) => {
+                const slack = ele.data('slack');
+                return `S:${slack}`;
+            },
+            'overlay-text-color': '#666',
+            'overlay-text-font-size': '10px',
+            'overlay-text-halign': 'right',
+            'overlay-text-valign': 'bottom',
             'tooltip': 'data(tooltipText)'
         }
     },
