@@ -59,31 +59,34 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
                 <div
                     className={column.className + " header"}
                     key={column.columnName}
-                    onClick={() => {
-                        if (props.taskSortOptions.key === column.columnName) {
-                            props.setTaskSortOptions({
-                                key: column.columnName,
-                                order: props.taskSortOptions.order === 'desc' ? 'asc' : 'desc'
-                            })
-                        }
-                        else {
-                            props.setTaskSortOptions({
-                                key: column.columnName,
-                                order: 'asc'
-                            } as SortOptions<Task>)
-                        }
-                    }}
                 >
-                    <p
-                        style={{
-                            fontWeight: column.columnName === props.taskSortOptions.key ? 'bold' : 'normal'
+                    <div
+                        className='header-button'
+                        onClick={() => {
+                            if (props.taskSortOptions.key === column.columnName) {
+                                props.setTaskSortOptions({
+                                    key: column.columnName,
+                                    order: props.taskSortOptions.order === 'desc' ? 'asc' : 'desc'
+                                })
+                            } else {
+                                props.setTaskSortOptions({
+                                    key: column.columnName,
+                                    order: 'asc'
+                                } as SortOptions<Task>)
+                            }
                         }}
                     >
-                        {column.displayName}
-                    </p>
-                    {column.columnName === props.taskSortOptions.key &&
-                        <img src={props.taskSortOptions.order === 'asc' ? TriangleUp : TriangleDown}/>
-                    }
+                        <p
+                            style={{
+                                fontWeight: column.columnName === props.taskSortOptions.key ? 'bold' : 'normal'
+                            }}
+                        >
+                            {column.displayName}
+                        </p>
+                        {column.columnName === props.taskSortOptions.key &&
+                            <img src={props.taskSortOptions.order === 'asc' ? TriangleUp : TriangleDown}/>
+                        }
+                    </div>
                 </div>
             ))}
         </div>
