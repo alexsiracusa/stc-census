@@ -134,7 +134,18 @@ i18n
                     taskList: {
                         tasks: 'Tasks',
                         subProjects: 'Sub Projects',
+
+                        columns: {
+                            id: 'ID',
+                            name: 'Name',
+                            status: 'Status',
+                            dependsOn: 'Depends On',
+                            startDate: 'Start Date',
+                            endDate: 'End Date',
+                        }
                     },
+                    addProject: 'Add Project',
+                    addTask: 'Add Task',
                 },
             },
             scn: {
@@ -257,7 +268,18 @@ i18n
                     taskList: {
                         tasks: '任务',
                         subProjects: '子项目',
+
+                        columns: {
+                            id: 'ID',
+                            name: '名称',
+                            status: '状态',
+                            dependsOn: '取决于',
+                            startDate: '开始日期',
+                            endDate: '结束日期',
+                        }
                     },
+                    addProject: '添加任务',
+                    addTask: '添加项目',
                 },
             },
         },

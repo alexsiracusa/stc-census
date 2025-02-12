@@ -9,42 +9,44 @@ type TaskRowHeaderProps = {
 
 import TriangleDown from '../../assets/Icons/TriangleDown.svg'
 import TriangleUp from '../../assets/Icons/TriangleUp.svg'
+import {useTranslation} from "react-i18next";
 
 const TaskRowHeader = (props: TaskRowHeaderProps) => {
+    const {t} = useTranslation();
 
     const columns = [
         {
-            displayName: 'ID',
+            displayName: t('taskList.columns.id'),
             columnName: 'id',
             className: 'task-id-header',
             disabled: false,
         },
         {
-            displayName: 'Name',
+            displayName: t('taskList.columns.name'),
             columnName: 'name',
             className: 'task-name-header',
             disabled: false,
         },
         {
-            displayName: 'Status',
+            displayName: t('taskList.columns.status'),
             columnName: 'status',
             className: 'task-status-header',
             disabled: false,
         },
         {
-            displayName: 'Depends On',
+            displayName: t('taskList.columns.dependsOn'),
             columnName: 'depends_on',
             className: 'task-depends-list-header',
             disabled: true,
         },
         {
-            displayName: 'Start Date',
+            displayName: t('taskList.columns.startDate'),
             columnName: 'target_start_date',
             className: 'task-start-date-header',
             disabled: false,
         },
         {
-            displayName: 'End Date',
+            displayName: t('taskList.columns.endDate'),
             columnName: 'target_end_date',
             className: 'task-end-date-header',
             disabled: false,
