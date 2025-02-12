@@ -17,7 +17,6 @@
 
 .task-list ul {
     list-style-type: none;
-    position: sticky;
 
     li {
         min-width: max-content;

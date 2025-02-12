@@ -32,7 +32,12 @@ const Popup = (props: PropsWithChildren<PopupProps>) => {
                         props.setIsVisible(false)
                     }}
                 >
-                    <div className={props.contentClassName}>
+                    <div
+                        className={props.contentClassName}
+                        onClick={(event) => {
+                            event.stopPropagation()
+                        }}
+                    >
                         {Children.map(props.children, child => {
                             return child
                         })}

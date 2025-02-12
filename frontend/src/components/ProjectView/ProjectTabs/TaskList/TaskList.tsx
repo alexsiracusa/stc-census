@@ -30,7 +30,6 @@ const TaskList = (props: TabProps) => {
         <div className='task-list'>
             <div className='sub-projects'>
                 <h3>{t('taskList.subProjects')}</h3>
-
                 <AddProjectButton project_id={props.project_id}/>
 
                 {project['sub_projects'].length > 0 &&
@@ -47,10 +46,9 @@ const TaskList = (props: TabProps) => {
 
             <div className='tasks'>
                 <h3>{t('taskList.tasks')}</h3>
-
+                <AddTaskButton project_id={props.project_id}/>
 
                 <div className='list-container'>
-                    <AddTaskButton project_id={props.project_id}/>
 
                     {Object.keys(tasks).length > 0 &&
                         <>
