@@ -42,19 +42,19 @@ export const taskGraphStyles = [
         }
     },
     {
-        // Red border for critical tasks
+        // Deep blue border for critical tasks
         selector: 'node[?isCritical]',
         style: {
-            'border-color': '#ff0000',
-            'border-style': 'solid',
+            'border-color': '#000080', // Deep blue
             'border-width': '2px'
         }
     },
     {
-        // Dashed border for tasks that belong to other projects
-        selector: 'node[?isExternalProject]',
+        // Red border for tasks in cycles - this selector should come after the critical path selector
+        // to ensure it takes precedence
+        selector: 'node[?inCycle]',
         style: {
-            'border-style': 'dashed',
+            'border-color': '#ff0000',
             'border-width': '2px'
         }
     },

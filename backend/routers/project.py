@@ -100,7 +100,7 @@ async def get_cpm_analysis(project_id: int, response: Response):
         result = {
             "id": project_id,
             "cpm": df.to_dict(orient="records"),
-            "cycle_info": cycle_info
+            "cycleInfo": cycle_info
         }
         return result
 
