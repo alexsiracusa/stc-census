@@ -91,11 +91,16 @@ async def get_cpm_analysis(project_id: int, response: Response):
         # Get all tasks with dependencies for the project
         tasks = await data.get_all_project_tasks_cpm(project_id)
         df = pd.DataFrame(tasks)
-        df = compute_cpm(df)
+        df, cycle_info = compute_cpm(df)
+
+        # convert cycle_info (a list of 2-tuple) to a list of objects with keys 'id' and 'project_id'
+        cycle_info = [{'id': x[0], 'project_id': x[1]} for x in cycle_info]
+
         # Create the final dictionary with the desired structure
         result = {
             "id": project_id,
-            "cpm": df.to_dict(orient="records")
+            "cpm": df.to_dict(orient="records"),
+            "cycle_info": cycle_info
         }
         return result
 

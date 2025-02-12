@@ -2,23 +2,39 @@ import pandas as pd
 from collections import deque
 import ast
 
-def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
+def compute_cpm(df: pd.DataFrame) -> tuple:
     df = prepare_data(df)
-    # assumption: df contains columns 'target_duration', 'dependencies'
     n = len(df)
     if n == 0:
-        return pd.DataFrame(columns=['es', 'ef', 'ls', 'lf', 'slack'])
+        return (pd.DataFrame(columns=['id', 'project_id', 'earliest_start', 'earliest_finish', 'latest_start', 'latest_finish', 'slack', 'critical']), [])
 
-    # build successors list
+    # Build successors list
     successors = [[] for _ in range(n)]
     for i in df.index:
         for predecessor in df.loc[i, 'dependencies']:
             successors[predecessor].append(i)
 
-    # compute in-degree for each node
-    in_degree = df['dependencies'].apply(len).to_numpy()
+    # Find SCCs using Tarjan's algorithm
+    sccs = tarjans_scc(successors)
+
+    # Determine cycle nodes
+    cycle_nodes = []
+    for scc in sccs:
+        if len(scc) > 1:
+            cycle_nodes.extend(scc)
+        else:
+            node = scc[0]
+            if node in df.loc[node, 'dependencies']:
+                cycle_nodes.append(node)
+
+    # Convert indices to (id, project_id) tuples
+    cycle_node_info = []
+    for idx in cycle_nodes:
+        cycle_node_info.append((int(df.loc[idx, 'id']),
+                                int(df.loc[idx, 'project_id'])))
 
     # Kahn's algorithm for topological sort
+    in_degree = df['dependencies'].apply(len).to_numpy()
     top_order = []
     queue = deque([i for i in df.index if in_degree[i] == 0])
 
@@ -30,7 +46,7 @@ def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
             if in_degree[successor] == 0:
                 queue.append(successor)
 
-    # forward pass to compute ES and EF
+    # Forward pass
     es = pd.Series(0, index=df.index)
     ef = pd.Series(0, index=df.index)
     for node in top_order:
@@ -40,7 +56,7 @@ def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
 
     project_duration = ef.max()
 
-    # backward pass to compute LS and LF
+    # Backward pass
     lf = pd.Series(0, index=df.index)
     ls = pd.Series(0, index=df.index)
     for node in reversed(top_order):
@@ -51,7 +67,7 @@ def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
             lf[node] = min(ls[s] for s in node_successors)
         ls[node] = lf[node] - df.loc[node, 'target_duration']
 
-    # compute slack and whether the task is critical
+    # Compute slack and critical
     slack = ls - es
     critical = slack == 0
 
@@ -66,16 +82,15 @@ def compute_cpm(df: pd.DataFrame) -> pd.DataFrame:
         'critical': critical
     })
 
-    return result_df
+    return (result_df, cycle_node_info)
 
-# helper function to prepare data
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = ['id', 'project_id', 'status',
-                      'actual_start', 'actual_end',
-                      'target_start', 'target_end', 'target_duration', 'dependencies']
+                  'actual_start', 'actual_end',
+                  'target_start', 'target_end', 'target_duration', 'dependencies']
 
     df['target_duration'] = df['target_duration'].astype(float)
-    df.loc[df['status'] == 'done', 'target_duration'] = 0  # completed tasks are 'skipped'
+    df.loc[df['status'] == 'done', 'target_duration'] = 0  # Completed tasks are 'skipped'
 
     def convert_dependencies(dep_str):
         if dep_str == '[]':
@@ -85,12 +100,50 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
     df['dependencies'] = df['dependencies'].apply(str).apply(convert_dependencies)
 
+    id_to_index = df.reset_index().set_index(['id', 'project_id'])['index'].to_dict()
+
     def convert_to_indices(dep_list):
-        id_to_index = df.reset_index().set_index(['id', 'project_id'])['index'].to_dict()
         return [id_to_index.get((id_, proj_id)) for id_, proj_id in dep_list]
 
     df['dependencies'] = df['dependencies'].apply(convert_to_indices)
 
     df = df.drop(columns=['status', 'actual_start', 'actual_end', 'target_start', 'target_end'])
+    df = df.reset_index(drop=True)  # Ensure 0-based index
 
     return df
+
+def tarjans_scc(graph):
+    index = 0
+    indices = {}
+    low = {}
+    on_stack = set()
+    stack = []
+    sccs = []
+
+    def strongconnect(v):
+        nonlocal index
+        indices[v] = index
+        low[v] = index
+        index += 1
+        stack.append(v)
+        on_stack.add(v)
+        for w in graph[v]:
+            if w not in indices:
+                strongconnect(w)
+                low[v] = min(low[v], low[w])
+            elif w in on_stack:
+                low[v] = min(low[v], indices[w])
+        if low[v] == indices[v]:
+            scc = []
+            while True:
+                w = stack.pop()
+                on_stack.remove(w)
+                scc.append(w)
+                if w == v:
+                    break
+            sccs.append(scc)
+
+    for v in range(len(graph)):
+        if v not in indices:
+            strongconnect(v)
+    return sccs
