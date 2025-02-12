@@ -66,14 +66,12 @@
 }
 
 /*TASK NAME*/
-.task-row .task-name, .task-row-header .task-name-header {
+.task-row .task-name-container, .task-row-header .task-name-header {
     width: 16em;
 }
 
-.task-row .task-name p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.task-row .task-name-container {
+    height: 100%;
 }
 
 /*TASK STATUS*/

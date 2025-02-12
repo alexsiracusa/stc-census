@@ -1,8 +1,8 @@
 import './AddTaskButton.css'
 
-import Plus from '../../../../../assets/Icons/Plus.svg'
+import Plus from '../../assets/Icons/Plus.svg'
 import {useRef, useState} from "react";
-import useCreateTask from "../../../../../hooks/useCreateTask.ts";
+import useCreateTask from "../../hooks/useCreateTask.ts";
 
 type AddTaskButtonProps = {
     project_id: number

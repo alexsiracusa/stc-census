@@ -6,6 +6,7 @@ import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
 import {useSelector} from "react-redux";
 import useUpdateTask from "../../hooks/useUpdateTask.ts";
+import TaskName from "./TaskName/TaskName.tsx";
 
 type TaskRowProps = {
     project_id: number
@@ -29,14 +30,11 @@ const TaskRow = (props: TaskRowProps) => {
     }
 
     return (
-        <div
-            className={'task-row ' + (isOverdue() ? 'overdue' : '')}
-            onClick={() => {
-                navigate('/')
-            }}
-        >
+        <div className={'task-row ' + (isOverdue() ? 'overdue' : '')}>
             <div className='task-id'><p>T{task.id}</p></div>
-            <div className='task-name'><p>{task.name}</p></div>
+            <div className='task-name-container'>
+                <TaskName project_id={props.project_id} task_id={props.task_id}/>
+            </div>
             <div className='task-status-container'>
                 <TaskStatusSelector project_id={props.project_id} task_id={props.task_id}/>
             </div>
