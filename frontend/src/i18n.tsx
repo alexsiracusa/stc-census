@@ -140,7 +140,7 @@ i18n
                             status: 'Status',
                             dependsOn: 'Depends On',
                             startDate: 'Start Date',
-                            endDate: 'End Date',
+                            dueDate: 'Due Date',
                         }
                     },
                     addProject: 'Add Project',
@@ -276,7 +276,7 @@ i18n
                             status: '状态',
                             dependsOn: '取决于',
                             startDate: '开始日期',
-                            endDate: '结束日期',
+                            dueDate: '到期日',
                         }
                     },
                     addProject: '添加任务',
