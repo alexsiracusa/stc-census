@@ -69,6 +69,7 @@ i18n
                             saveButton: 'Save',
                             locale: 'en-US',
                             noNote: '',
+                            note: 'Note',
                         },
                         eventPopup: {
                             edit: "Edit",
@@ -77,8 +78,6 @@ i18n
                             close: "Close",
                             share: "Link",
                             inviteViaLink: "Invite via link",
-                            text: "Text",
-                            confirmDelete: "Are you sure you want to delete this event?",
                             note: "Note"
                         },
                         months: {
@@ -134,7 +133,18 @@ i18n
                     taskList: {
                         tasks: 'Tasks',
                         subProjects: 'Sub Projects',
+
+                        columns: {
+                            id: 'ID',
+                            name: 'Name',
+                            status: 'Status',
+                            dependsOn: 'Depends On',
+                            startDate: 'Start Date',
+                            endDate: 'End Date',
+                        }
                     },
+                    addProject: 'Add Project',
+                    addTask: 'Add Task',
                 },
             },
             scn: {
@@ -195,6 +205,7 @@ i18n
                             saveButton: '保存',
                             locale: 'zh-CN',
                             noNote: '',
+                            note: '笔记',
                         },
                         eventPopup: {
                             edit: "编辑",
@@ -202,7 +213,8 @@ i18n
                             email: "邮件",
                             close: "关闭",
                             share: "链接",
-                            inviteViaLink: "通过链接邀请"
+                            inviteViaLink: "通过链接邀请",
+                            note: "笔记",
                         },
                         months: {
                             january: '一月',
@@ -257,7 +269,18 @@ i18n
                     taskList: {
                         tasks: '任务',
                         subProjects: '子项目',
+
+                        columns: {
+                            id: 'ID',
+                            name: '名称',
+                            status: '状态',
+                            dependsOn: '取决于',
+                            startDate: '开始日期',
+                            endDate: '结束日期',
+                        }
                     },
+                    addProject: '添加任务',
+                    addTask: '添加项目',
                 },
             },
         },

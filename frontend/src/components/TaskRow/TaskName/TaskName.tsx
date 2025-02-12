@@ -1,7 +1,6 @@
 import './TaskName.css'
 import {useSelector} from "react-redux";
 import {useRef, useState} from "react";
-import Plus from "../../../assets/Icons/Plus.svg";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 
 type TaskNameProps = {

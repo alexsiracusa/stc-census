@@ -45,6 +45,7 @@
         flex-grow: 1;
 
         border: none;
+        background: transparent;
 
         font-size: 1em;
     }

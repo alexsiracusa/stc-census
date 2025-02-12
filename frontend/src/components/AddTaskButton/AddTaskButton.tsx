@@ -3,6 +3,7 @@ import './AddTaskButton.css'
 import Plus from '../../assets/Icons/Plus.svg'
 import {useRef, useState} from "react";
 import useCreateTask from "../../hooks/useCreateTask.ts";
+import {useTranslation} from "react-i18next";
 
 type AddTaskButtonProps = {
     project_id: number
@@ -12,6 +13,7 @@ const AddTaskButton = (props: AddTaskButtonProps) => {
     const [name, setName] = useState("")
     const {createTask, loading, error, data} = useCreateTask();
     const ref = useRef(null);
+    const {t} = useTranslation();
 
     const enterInput = () => {
         if (name !== "") {
@@ -45,7 +47,7 @@ const AddTaskButton = (props: AddTaskButtonProps) => {
             <input
                 ref={ref}
                 type="text"
-                placeholder="Add Task"
+                placeholder={t('addTask')}
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 onKeyDown={handleKeyDown}
