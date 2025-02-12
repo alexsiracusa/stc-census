@@ -21,6 +21,8 @@ type EventPopupProps = {
     onDelete: () => void;
     onShare: () => void;
     onEmail: () => void;
+    project_id: number;
+    event_id: string;
 };
 
 const EventPopup: React.FC<EventPopupProps> = ({

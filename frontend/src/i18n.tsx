@@ -78,6 +78,8 @@ i18n
                             share: "Link",
                             inviteViaLink: "Invite via link",
                             text: "Text",
+                            confirmDelete: "Are you sure you want to delete this event?",
+                            note: "Note"
                         },
                         months: {
                             january: 'January',
