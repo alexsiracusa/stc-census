@@ -53,10 +53,10 @@ const TaskRow = (props: TaskRowProps) => {
                 />
             </div>
 
-            <div className='task-end-date'>
+            <div className='task-due-date'>
                 <TaskDatePicker
                     currentDate={task.target_completion_date}
-                    title='Edit End Date'
+                    title='Edit Due Date'
                     onChange={(value) => {
                         updateTask(props.project_id, props.task_id, {target_completion_date: value})
                     }}

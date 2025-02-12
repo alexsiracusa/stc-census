@@ -17,7 +17,7 @@ DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 -- ===================================
 
 CREATE TYPE TASK_STATUS AS ENUM ('to_do', 'in_progress', 'on_hold', 'done');
-CREATE TYPE PROJECT_STATUS AS ENUM ('not_started', 'in_progress', 'on_hold', 'complete');
+CREATE TYPE PROJECT_STATUS AS ENUM ('to_do', 'in_progress', 'on_hold', 'cancelled', 'done');
 
 
 -- ===================================
@@ -51,14 +51,18 @@ CREATE TABLE Project (
     parent          INT             REFERENCES Project(id),
     name            TEXT            NOT NULL,
     description     TEXT,
-    status          PROJECT_STATUS  NOT NULL DEFAULT 'not_started',
+    status          PROJECT_STATUS  NOT NULL DEFAULT 'to_do',
     budget          DECIMAL(2),
     created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     requested_by    TEXT,
     date_requested  DATE,
-    date_due        DATE,
-    date_started    DATE,
+
+    actual_start_date       DATE,
+    actual_completion_date  DATE,
+
+    target_start_date       DATE,
+    target_completion_date  DATE,
 
     archived        BOOLEAN         NOT NULL DEFAULT false
 );
@@ -75,11 +79,12 @@ CREATE TABLE Task (
     expected_cost   DECIMAL(2),
     actual_cost     DECIMAL(2),
 
-    start_date              DATE,
-    completion_date         DATE,
+    actual_start_date       DATE,
+    actual_completion_date  DATE,
 
     target_start_date       DATE,
     target_completion_date  DATE,
+
     target_days_to_complete DECIMAL(2),
 
     PRIMARY KEY (project_id, id)

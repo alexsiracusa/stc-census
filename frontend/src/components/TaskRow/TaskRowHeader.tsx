@@ -46,9 +46,9 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
             disabled: false,
         },
         {
-            displayName: t('taskList.columns.endDate'),
-            columnName: 'target_end_date',
-            className: 'task-end-date-header',
+            displayName: t('taskList.columns.dueDate'),
+            columnName: 'target_completion_date',
+            className: 'task-due-date-header',
             disabled: false,
         }
     ]
