@@ -37,7 +37,7 @@ export const taskGraphStyles = [
             'opacity': 1,
             'shape': 'roundrectangle',
             'text-halign': 'center',
-            'text-max-width': '150%',
+            'text-max-width': '110%',
             'text-valign': 'center',
             'text-wrap': 'wrap',
             'width': '120%',
