@@ -86,6 +86,8 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = ['id', 'project_id', 'status', 'target_duration', 'dependencies']
+    # set any null target_duration to 0
+    df['target_duration'] = df['target_duration'].fillna(0)
 
     df['target_duration'] = df['target_duration'].astype(float)
     df.loc[df['status'] == 'done', 'target_duration'] = 0  # Completed tasks are 'skipped'
