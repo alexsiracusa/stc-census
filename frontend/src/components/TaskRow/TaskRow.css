@@ -61,7 +61,6 @@
 
 
 /*TASK ID*/
-
 .task-row .task-id, .task-row-header .task-id-header {
     width: 2.25em;
 }
@@ -84,7 +83,6 @@
 }
 
 /*TASK NAME*/
-
 .task-row .task-name-container, .task-row-header .task-name-header {
     width: 16em;
 }
@@ -94,7 +92,6 @@
 }
 
 /*TASK STATUS*/
-
 .task-row .task-status-container, .task-row-header .task-status-header {
     width: 7em;
     height: 60%;
@@ -107,7 +104,6 @@
 }
 
 /* TASK DEPENDS LIST */
-
 .task-row .task-depends-list-container, .task-row-header .task-depends-list-header {
     width: 7.5em;
 }
@@ -117,7 +113,6 @@
 }
 
 /* START AND COMPLETION DATE */
-
 .task-row .task-start-date, .task-row-header .task-start-date-header,
 .task-row .task-due-date, .task-row-header .task-due-date-header {
     width: 6em;

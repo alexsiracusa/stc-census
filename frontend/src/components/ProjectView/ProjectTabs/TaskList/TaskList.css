@@ -3,42 +3,54 @@
     display: flex;
     flex-direction: column;
     gap: 1.5em;
+    flex-grow: 1;
 
     overflow-y: scroll;
     overflow-x: hidden;
-}
 
-.task-list .list-container {
-    display: flex;
-    flex-direction: column;
-    overflow-x: scroll;
-}
+    scrollbar-gutter: stable;
 
-
-.task-list ul {
-    list-style-type: none;
-
-    li {
-        min-width: max-content;
-        border-top: solid #dedede 1px;
-        border-left: solid #dedede 1px;
-        border-right: solid #dedede 1px;
+    .list-container {
+        display: flex;
+        flex-direction: column;
+        overflow-x: scroll;
     }
 
-    li:last-child {
-        border-bottom: solid #dedede 1px;
+    ul {
+        list-style-type: none;
+
+        li {
+            min-width: max-content;
+            border-top: solid #dedede 1px;
+            border-left: solid #dedede 1px;
+            border-right: solid #dedede 1px;
+        }
+
+        li:last-child {
+            border-bottom: solid #dedede 1px;
+        }
+    }
+
+    .list-container {
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .list-container::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+    }
+
+    .list-container::-webkit-scrollbar-track {
+        background: transparent;
     }
 }
 
-.task-list, .task-list .list-container {
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
+.task-list {
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
-.task-list .list-container::-webkit-scrollbar, .kanban-board::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+/* Make the scrollbar background transparent */
+.task-list::-webkit-scrollbar-track {
+    background-color: transparent; /* Ensure the track is transparent */
 }
 
-.task-list::-webkit-scrollbar, .kanban-board::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-}

@@ -67,7 +67,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                         <img src={ChevronLeft}/>
                     </button>
 
-                    <p>{`${t('calendar.months.' + format(currentMonth, 'MMMM').toLowerCase())} ${format(currentMonth, 'yy')}`}</p>
+                    <p>{`${t('calendar.months.' + format(currentMonth, 'MMMM').toLowerCase())} ${format(currentMonth, 'yyyy')}`}</p>
 
                     <button onClick={() => {
                         setMonth(1)
