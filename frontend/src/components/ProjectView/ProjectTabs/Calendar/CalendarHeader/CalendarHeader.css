@@ -50,6 +50,10 @@
     margin-left: 0.5rem;
 }
 
+.calendar-header .nav-button-previous-year img {
+    width: 100%;
+}
+
 .calendar-header .nav-button-previous-month {
     margin-right: 0.5rem;
 }
@@ -57,6 +61,10 @@
 .calendar-header .nav-button-next-year {
     margin-left: 0.5rem;
     margin-right: 1rem;
+}
+
+.calendar-header .nav-button-next-year img {
+    width: 100%;
 }
 
 .calendar-header h2 {

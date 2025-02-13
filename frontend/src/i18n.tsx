@@ -77,7 +77,6 @@ i18n
                             email: "Email",
                             close: "Close",
                             share: "Link",
-                            inviteViaLink: "Invite via link",
                             note: "Note"
                         },
                         months: {

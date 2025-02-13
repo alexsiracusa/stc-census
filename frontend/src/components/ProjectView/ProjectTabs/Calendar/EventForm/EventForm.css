@@ -60,6 +60,7 @@
     border-radius: 6px;
     background-color: transparent;
     color: black;
+    font-family: Arial, sans-serif;
 }
 
 .event-form-overlay .event-organizer-input {

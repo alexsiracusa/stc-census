@@ -42,6 +42,9 @@
     padding: 0.5rem;
     box-sizing: border-box;
     height: 9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .calendar-grid .other-month {
@@ -61,6 +64,7 @@
     color: #333;
     background-color: transparent;
     transition: background-color 0.3s ease, color 0.3s ease;
+    margin-bottom: 0.1rem;
 }
 
 .calendar-grid .day-number.today {
@@ -90,7 +94,7 @@
     overflow: hidden;
     position: relative;
     background-color: #003366;
-    height: 1.5rem;
+    height: 1.4rem;
     text-align: left;
     display: flex;
     align-items: center;
@@ -112,7 +116,7 @@
     text-align: left;
     padding: 0.3rem 0.5rem;
     width: 100%;
-    height: auto;
+    height: 1.4rem;
 }
 
 .calendar-grid .more-events:hover {

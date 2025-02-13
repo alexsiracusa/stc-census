@@ -136,13 +136,6 @@ const EventPopup: React.FC<EventPopupProps> = ({
                     </div>
                 </div>
                 <div className="event-popup-body">
-                    <button className="share-button" onClick={onShare}>
-                        <img
-                            src={ShareLink}
-                            alt={t("calendar.eventPopup.share")}
-                        />{" "}
-                        {t("calendar.eventPopup.inviteViaLink")}
-                    </button>
                     {eventData.note && (
                         <div className="event-note">
                             <img src={Text} alt={t("calendar.eventPopup.note")} />

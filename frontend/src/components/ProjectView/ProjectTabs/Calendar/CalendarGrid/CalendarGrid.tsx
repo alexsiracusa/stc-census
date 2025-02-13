@@ -38,6 +38,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
         setMaxEventsPerDay(rows === 6 ? 3 : 3);
+
     }, [calendarDays]);
 
     const handleEventClick = (event: Event) => {
