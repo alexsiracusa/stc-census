@@ -80,13 +80,15 @@
 
 .date-picker-calendar-grid .day-cell p {
     font-family: monospace, monospace;
-    font-size: 0.9em;
+    font-size: 0.75em;
 }
 
 .date-picker-calendar-grid .day-cell .day-number {
     aspect-ratio: 1.0;
     border-radius: 99px;
     text-align: center;
+
+    font-size: 1em;
 }
 
 .date-picker-calendar-grid .day-cell .selected {
