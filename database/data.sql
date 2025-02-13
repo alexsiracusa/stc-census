@@ -14,6 +14,10 @@ ALTER SEQUENCE task_seq_3 RESTART WITH 1;
 ALTER SEQUENCE task_seq_4 RESTART WITH 1;
 ALTER SEQUENCE task_seq_5 RESTART WITH 1;
 ALTER SEQUENCE task_seq_6 RESTART WITH 1;
+ALTER SEQUENCE task_seq_7 RESTART WITH 1;
+ALTER SEQUENCE task_seq_8 RESTART WITH 1;
+ALTER SEQUENCE task_seq_9 RESTART WITH 1;
+ALTER SEQUENCE task_seq_10 RESTART WITH 1;
 
 INSERT INTO Task (project_id, name, target_start_date, target_completion_date, target_days_to_complete) VALUES
 (1, 'Create supply list', '2025-03-14', '2025-03-15', 3),
