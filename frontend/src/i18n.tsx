@@ -145,6 +145,12 @@ i18n
                     },
                     addProject: 'Add Project',
                     addTask: 'Add Task',
+                    taskDependsEditor: {
+                        dependsOn: 'Depends On',
+                        addDependencies: 'Add Dependencies',
+                        add: 'Add',
+                        remove: 'Remove',
+                    },
                 },
             },
             scn: {
@@ -281,6 +287,12 @@ i18n
                     },
                     addProject: '添加任务',
                     addTask: '添加项目',
+                    taskDependsEditor: {
+                        dependsOn: '取决于',
+                        addDependencies: '添加依赖项',
+                        add: '添加',
+                        remove: '消除',
+                    },
                 },
             },
         },

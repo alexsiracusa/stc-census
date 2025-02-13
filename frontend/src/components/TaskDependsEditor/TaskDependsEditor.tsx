@@ -6,6 +6,7 @@ import PlusIcon from "../../assets/Icons/Plus.svg";
 import React from "react";
 import useUpdateTask from "../../hooks/useUpdateTask.ts";
 import {useSelector} from "react-redux";
+import {useTranslation} from "react-i18next";
 
 type TaskDependsEditorProps = {
     project_id: number
@@ -19,13 +20,13 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
     const {updateTask, loading, error, data} = useUpdateTask();
     const depends_on = Object.values(tasks).filter((option) => task.depends_on.some((task) => task.project_id === option.project_id && task.task_id === option.id))
     const options = Object.values(tasks).filter((option) => !task.depends_on.some((task) => task.project_id === option.project_id && task.task_id === option.id))
-
+    const {t} = useTranslation()
 
     return (
         <div className='task-depends-editor'>
             {depends_on.length != 0 &&
                 <ul>
-                    <p className='task-depends-editor-header'>Depends On:</p>
+                    <p className='task-depends-editor-header'>{t('taskDependsEditor.dependsOn') + ':'}</p>
                     {depends_on.length != 0 && depends_on.map((option) => (
                         <div className='task-depends-editor-row remove-from-list'
                              key={`${option.project_id}-${option.id}`}>
@@ -33,7 +34,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                             <p className='task-name'>{option.name}</p>
 
                             <button
-                                title={'Remove'}
+                                title={t('taskDependsEditor.remove')}
                                 onClick={() => {
                                     updateTask(props.project_id, props.task_id, {
                                         depends_on: task.depends_on.filter((task) => {
@@ -51,7 +52,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
 
             {options.length != 0 &&
                 <ul>
-                    <p className='task-depends-editor-header'>Add Tasks:</p>
+                    <p className='task-depends-editor-header'>{t('taskDependsEditor.addDependencies') + ':'}</p>
                     {options
                         .filter((option) => option.project_id != task.project_id || option.id != task.id)
                         .map((option) => (
@@ -61,7 +62,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                                 <p className='task-name'>{option.name}</p>
 
                                 <button
-                                    title={'Add'}
+                                    title={t('taskDependsEditor.add')}
                                     onClick={() => {
                                         updateTask(props.project_id, props.task_id, {
                                             depends_on: [...task.depends_on, {
