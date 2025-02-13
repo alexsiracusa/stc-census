@@ -9,4 +9,9 @@
     position: fixed;
     background-color: white;
     border-radius: 3px;
+
+    .task-detail {
+        display: flex;
+        flex-direction: column;
+    }
 }

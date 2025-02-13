@@ -28,8 +28,13 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
             isVisible={isVisible}
             setIsVisible={setIsVisible}
         >
-            <div>
-                Task Popup
+            <div className='task-detail'>
+                <div>
+                    {task.name}
+                </div>
+                <div>
+
+                </div>
             </div>
         </Popup>
     )
