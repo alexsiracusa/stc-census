@@ -1,6 +1,6 @@
 import './TaskDependsEditor.css'
 
-import TaskIcon from "../TaskRow/TaskDependsList/TaskIcon/TaskIcon.tsx";
+import TaskIcon from "../TaskIcon/TaskIcon.tsx";
 import MinusIcon from "../../assets/Icons/Minus.svg";
 import PlusIcon from "../../assets/Icons/Plus.svg";
 import React from "react";

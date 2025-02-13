@@ -2,6 +2,7 @@ import './TaskPopup.css'
 import Popup from "../Popup/Popup.tsx";
 import {useSelector} from "react-redux";
 import React, {Children, PropsWithChildren} from "react";
+import TaskDependsEditor from "../TaskDependsEditor/TaskDependsEditor.tsx";
 
 type TaskPopupProps = {
     project_id: number,
@@ -29,11 +30,11 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
             setIsVisible={setIsVisible}
         >
             <div className='task-detail'>
-                <div>
+                <div className='task-information'>
                     {task.name}
                 </div>
-                <div>
-
+                <div className='task-depends-editor-container'>
+                    <TaskDependsEditor project_id={props.project_id} task_id={props.task_id}/>
                 </div>
             </div>
         </Popup>
