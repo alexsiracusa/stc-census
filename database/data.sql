@@ -72,51 +72,51 @@ INSERT INTO Task_Depends_On (task_id, project_id, depends_task_id, depends_proje
 (5, 5, 3, 5);
 
 -- Insert tasks for Awards Ceremony 2024
-INSERT INTO Task (project_id, name, target_start_date, target_completion_date, status, description) VALUES
+INSERT INTO Task (project_id, name, target_start_date, target_completion_date, status, description, target_days_to_complete) VALUES
 -- Kick-off Meeting
-(6, 'Kick-off Meeting', '2024-05-16', '2024-05-16', 'done', 'Initial planning meeting for HKCC Awards Ceremony 2024'),
+(6, 'Kick-off Meeting', '2024-05-16', '2024-05-16', 'to_do', 'Initial planning meeting for HKCC Awards Ceremony 2024', 1),
 
 -- Ceremony Planning
-(6, 'Confirm Ceremony Date', '2024-05-16', '2024-09-27', 'done', 'Set final date for Awards Ceremony'),
-(6, 'Define Ceremony Theme', '2024-05-16', '2024-08-15', 'done', 'Decide on theme: Product Safety Carnival'),
+(6, 'Confirm Ceremony Date', '2024-05-16', '2024-09-27', 'to_do', 'Set final date for Awards Ceremony', 5),
+(6, 'Define Ceremony Theme', '2024-05-16', '2024-08-15', 'to_do', 'Decide on theme: Product Safety Carnival', 1),
 
 -- Venue Selection
-(6, 'Select and Confirm Venue', '2024-01-31', '2024-06-01', 'done', 'Venue at Tsuen Wan, Tsuen Wan Plaza'),
+(6, 'Select and Confirm Venue', '2024-01-31', '2024-06-01', 'to_do', 'Venue at Tsuen Wan, Tsuen Wan Plaza', 7),
 
 -- Contractor Selection
-(6, 'Select Stage Production Contractor', '2024-05-20', '2024-08-02', 'done', 'Choose JD Stage Production at \$34,380'),
-(6, 'Select Booth Contractor', '2024-05-20', '2024-08-02', 'done', 'Choose 美境展銷推廣有限公司 at \$70,000'),
+(6, 'Select Stage Production Contractor', '2024-05-20', '2024-08-02', 'to_do', 'Choose JD Stage Production at \$34,380', 2),
+(6, 'Select Booth Contractor', '2024-05-20', '2024-08-02', 'to_do', 'Choose 美境展銷推廣有限公司 at \$70,000', 2),
 
 -- Exhibitors and Booths
-(6, 'Prepare Booth Exhibitors List', '2024-05-02', '2024-08-05', 'done', 'Invite and confirm booth exhibitors'),
-(6, 'Finalize Exhibitor Numbers', '2024-05-31', '2024-09-20', 'done', '20 exhibitors on 27/09, 21 exhibitors from 28/9 to 4/10'),
+(6, 'Prepare Booth Exhibitors List', '2024-05-02', '2024-08-05', 'to_do', 'Invite and confirm booth exhibitors', 4),
+(6, 'Finalize Exhibitor Numbers', '2024-05-31', '2024-09-20', 'to_do', '20 exhibitors on 27/09, 21 exhibitors from 28/9 to 4/10', 1),
 
 -- Floor Plan
-(6, 'Obtain Venue Floor Plan', '2024-05-01', '2024-05-31', 'done', 'Get floor plan from venue'),
-(6, 'Create Updated Floor Plan', '2024-06-01', '2024-06-21', 'done', 'New floor plan without storeroom'),
-(6, 'Submit Floor Plan to FEHD', '2024-07-02', '2024-07-30', 'done', 'Official submission of floor plan'),
+(6, 'Obtain Venue Floor Plan', '2024-05-01', '2024-05-31', 'to_do', 'Get floor plan from venue', 3),
+(6, 'Create Updated Floor Plan', '2024-06-01', '2024-06-21', 'to_do', 'New floor plan without storeroom', 1),
+(6, 'Submit Floor Plan to FEHD', '2024-07-02', '2024-07-30', 'to_do', 'Official submission of floor plan', 1),
 
 -- Opening Ceremony
-(6, 'Prepare Opening Ceremony Production', '2024-05-20', '2024-09-03', 'done', 'Work with JD Stage Production on opening animation'),
-(6, 'Prepare Opening Ceremony Sound Effects', '2024-09-13', '2024-09-23', 'done', 'Add balloon popping and applause tracks'),
+(6, 'Prepare Opening Ceremony Production', '2024-05-20', '2024-09-03', 'to_do', 'Work with JD Stage Production on opening animation', 5),
+(6, 'Prepare Opening Ceremony Sound Effects', '2024-09-13', '2024-09-23', 'to_do', 'Add balloon popping and applause tracks', 8),
 
 -- Artist/Ambassador
-(6, 'Select Ceremony Ambassador', '2024-05-20', '2024-08-01', 'done', 'Confirmed 譚輝智 as ambassador'),
+(6, 'Select Ceremony Ambassador', '2024-05-20', '2024-08-01', 'to_do', 'Confirmed 譚輝智 as ambassador', 3),
 
 -- Emcee
-(6, 'Select Ceremony Emcee', '2024-07-31', '2024-06-14', 'done', 'Confirmed Agnes Leung as emcee'),
+(6, 'Select Ceremony Emcee', '2024-07-31', '2024-06-14', 'to_do', 'Confirmed Agnes Leung as emcee', 1),
 
 -- Honorable Guests
-(6, 'Generate Honorable Guest List', '2024-04-01', '2024-04-30', 'done', 'Initial list of potential guests'),
-(6, 'Invite Honorable Guests', '2024-05-01', '2024-08-31', 'done', 'Send invitations to potential guests'),
-(6, 'Confirm Guest Attendance', '2024-08-01', '2024-09-20', 'done', 'Mr. TSE Chin-wan confirmed attendance'),
+(6, 'Generate Honorable Guest List', '2024-04-01', '2024-04-30', 'to_do', 'Initial list of potential guests', 1),
+(6, 'Invite Honorable Guests', '2024-05-01', '2024-08-31', 'to_do', 'Send invitations to potential guests', 1),
+(6, 'Confirm Guest Attendance', '2024-08-01', '2024-09-20', 'to_do', 'Mr. TSE Chin-wan confirmed attendance', 7),
 
 -- Media and Invitations
-(6, 'Prepare Media Invitations', '2024-05-16', '2024-08-30', 'done', 'Draft and prepare media invitation letters'),
-(6, 'Send Media Invitations', '2024-09-03', '2024-09-05', 'done', 'First round of media invitations'),
+(6, 'Prepare Media Invitations', '2024-05-16', '2024-08-30', 'to_do', 'Draft and prepare media invitation letters', 4),
+(6, 'Send Media Invitations', '2024-09-03', '2024-09-05', 'to_do', 'First round of media invitations', 1),
 
 -- Marketing Materials
-(6, 'Create Marketing Materials', '2024-08-20', '2024-09-13', 'done', 'Prepare posters, flyers, backdrop, and other materials');
+(6, 'Create Marketing Materials', '2024-08-20', '2024-09-13', 'to_do', 'Prepare posters, flyers, backdrop, and other materials', 12);
 
 
 -- Insert dependencies for Awards Ceremony 2024 tasks
@@ -145,7 +145,7 @@ INSERT INTO Task_Depends_On (task_id, project_id, depends_task_id, depends_proje
 (17, 6, 16, 6), -- Invite Honorable Guests depends on Guest List
 (18, 6, 17, 6), -- Confirm Guest Attendance depends on Invitations
 (19, 6, 18, 6), -- Prepare Media Invitations depends on Guest Confirmations
-(20, 6, 19, 6); -- Send Media Invitations depends on Invitation Preparation
+(20, 6, 19, 6), -- Send Media Invitations depends on Invitation Preparation
 
 -- Marketing Materials Dependencies
 (21, 6, 19, 6); -- Create Marketing Materials depends on Media Invitation Preparation
