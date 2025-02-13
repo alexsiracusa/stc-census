@@ -86,7 +86,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     };
 
     const truncateText = (text: string, limit: number): string => {
-        return text.length > limit ? text.slice(0, limit) + "" : text;
+        return text.length > limit ? text.slice(0, limit) + "..." : text;
     };
 
     const localizeTitle = (title: string): string => {
@@ -133,7 +133,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                 handleEventClick(event);
                                             }}
                                         >
-                                            {truncateText(localizeTitle(event.title), 20)}
+                                            {truncateText(localizeTitle(event.title), 19)}
                                         </div>
                                     ))}
                                 {events.filter((event) =>
