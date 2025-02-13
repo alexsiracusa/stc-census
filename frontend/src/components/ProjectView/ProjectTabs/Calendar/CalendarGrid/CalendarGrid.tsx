@@ -78,20 +78,15 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         }
     };
 
-    const handleShare = () => {
-        if (selectedEvent) {
-            const shareLink = `http://localhost:5173/project/1/calendar/${selectedEvent.id}`;
-            navigator.clipboard.writeText(shareLink).then(() => {
-                alert(t("calendar.calendarGrid.linkCopied"));
-            });
-        }
-    };
-
     const handleEmail = () => {
         if (selectedEvent) {
             const mailto = `mailto:?subject=${t('calendar.calendarGrid.invitationSubject', { title: selectedEvent.title })}&body=${t('calendar.calendarGrid.invitationBody', { title: selectedEvent.title, start: selectedEvent.startDate, end: selectedEvent.endDate })}`;
             window.open(mailto, "_blank");
         }
+    };
+
+    const truncateText = (text: string, limit: number): string => {
+        return text.length > limit ? text.slice(0, limit) + "" : text;
     };
 
     const localizeTitle = (title: string): string => {
@@ -138,7 +133,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                 handleEventClick(event);
                                             }}
                                         >
-                                            {localizeTitle(event.title)}
+                                            {truncateText(localizeTitle(event.title), 20)}
                                         </div>
                                     ))}
                                 {events.filter((event) =>
@@ -172,7 +167,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         }}
                         onEdit={handleEdit}
                         onDelete={() => handleDelete(selectedEvent.id)}
-                        onShare={handleShare}
                         onEmail={handleEmail}
                         project_id={0}
                         event_id={""}

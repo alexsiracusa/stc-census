@@ -4,7 +4,6 @@ import Trash from "../../../../../assets/Icons/Trash.svg";
 import Edit from "../../../../../assets/Icons/Edit.svg";
 import Email from "../../../../../assets/Icons/Email.svg";
 import Close from "../../../../../assets/Icons/Close.svg";
-import ShareLink from "../../../../../assets/Icons/ShareLink.svg";
 import Text from "../../../../../assets/Icons/Text.svg";
 import { useTranslation } from "react-i18next";
 
@@ -19,7 +18,6 @@ type EventPopupProps = {
     };
     onEdit: () => void;
     onDelete: () => void;
-    onShare: () => void;
     onEmail: () => void;
     project_id: number;
     event_id: string;
@@ -31,7 +29,6 @@ const EventPopup: React.FC<EventPopupProps> = ({
                                                    eventData,
                                                    onEdit,
                                                    onDelete,
-                                                   onShare,
                                                    onEmail,
                                                }) => {
     const { t } = useTranslation();

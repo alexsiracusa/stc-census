@@ -15,8 +15,6 @@ i18n
                         project: 'Project',
                         userGuide: 'User Guide',
                         documentation: 'Documentation',
-                        profile: 'Profile',
-                        settings: 'Settings',
                         logout: 'Logout',
                     },
                     projectRow: {
@@ -76,7 +74,6 @@ i18n
                             delete: "Delete",
                             email: "Email",
                             close: "Close",
-                            share: "Link",
                             note: "Note"
                         },
                         months: {
@@ -158,8 +155,6 @@ i18n
                         project: '项目',
                         userGuide: '用户指南',
                         documentation: '文档',
-                        profile: '轮廓',
-                        settings: '设置',
                         logout: '退出',
                     },
                     projectRow: {
@@ -217,8 +212,7 @@ i18n
                             delete: "删除",
                             email: "邮件",
                             close: "关闭",
-                            share: "链接",
-                            inviteViaLink: "通过链接邀请",
+                                inviteViaLink: "通过链接邀请",
                             note: "笔记",
                         },
                         months: {

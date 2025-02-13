@@ -48,8 +48,6 @@ const Navbar: React.FC = () => {
                     <img src={User} alt="User" />
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
-                            <a href="/profile" className="dropdown-item">{t('navbar.profile', 'Profile')}</a>
-                            <a href="/settings" className="dropdown-item">{t('navbar.settings', 'Settings')}</a>
                             <a href="/logout" className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
                         </div>
                     )}
