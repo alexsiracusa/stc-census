@@ -21,10 +21,24 @@
 
         .task-information {
             flex-grow: 1;
+            padding: 0.5em;
+
+            .task-name-container {
+                font-size: 1.25em;
+                height: 1.75em;
+
+                input {
+                    font-weight: bold;
+                }
+
+                width: 100%;
+                margin-left: 0;
+            }
         }
 
         .task-depends-editor-container {
-            width: 14em;
+            width: 16em;
+            max-width: 45%;
             height: 100%;
             padding: 0.25em;
         }

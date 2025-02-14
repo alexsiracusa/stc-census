@@ -89,6 +89,7 @@
 
 .task-row .task-name-container {
     height: 100%;
+    margin-left: -0.3em;
 }
 
 /*TASK STATUS*/

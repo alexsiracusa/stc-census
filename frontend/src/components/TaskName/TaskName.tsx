@@ -1,7 +1,8 @@
 import './TaskName.css'
 import {useSelector} from "react-redux";
 import {useRef, useState} from "react";
-import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import useUpdateTask from "../../hooks/useUpdateTask.ts";
+import {useEffect} from "react";
 
 type TaskNameProps = {
     project_id: number,
@@ -14,14 +15,17 @@ const TaskName = (props: TaskNameProps) => {
     const [name, setName] = useState(task.name)
     const ref = useRef(null);
 
+    useEffect(() => {
+        setName(task.name)
+    }, [task.name]);
+
     const enterInput = () => {
         if (name !== "") {
             updateTask(props.project_id, props.task_id, {
                 name: name
             })
             setName(name)
-        }
-        else {
+        } else {
             setName(task.name)
         }
         ref.current.blur()
@@ -34,7 +38,7 @@ const TaskName = (props: TaskNameProps) => {
     };
 
     return (
-        <div className='task-name'>
+        <div className='task-name-editor'>
             <input
                 ref={ref}
                 type="text"
