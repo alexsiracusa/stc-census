@@ -71,6 +71,19 @@ async def get_all_project_tasks_evm(project_id):
         )
     """, project_id)
 
+# for es
+# !!! note: adapt the below copy-pasted code to make sure you get exactly what you need
+async def get_all_project_tasks_es(project_id):
+    return await client.postgres_client.fetch("""
+        SELECT id, project_id, status, actual_cost, start_date, completion_date,
+        expected_cost, target_start_date, target_completion_date, target_days_to_complete
+        FROM Task_Node
+        WHERE Task_Node.project_id IN (
+            SELECT unnest(children)
+            FROM Project_Children
+            WHERE id = $1
+        )
+    """, project_id)
 
 async def get_task(project_id, task_id):
     return await client.postgres_client.fetch_row(f"""
