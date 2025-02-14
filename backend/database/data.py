@@ -61,7 +61,7 @@ async def get_all_project_tasks_cpm(project_id):
 # for evm
 async def get_all_project_tasks_evm(project_id):
     return await client.postgres_client.fetch("""
-        SELECT id, project_id, status, actual_cost, start_date, completion_date,
+        SELECT id, project_id, status, actual_cost, actual_start_date, actual_completion_date,
         expected_cost, target_start_date, target_completion_date, target_days_to_complete
         FROM Task_Node
         WHERE Task_Node.project_id IN (
@@ -75,7 +75,7 @@ async def get_all_project_tasks_evm(project_id):
 # !!! note: adapt the below copy-pasted code to make sure you get exactly what you need
 async def get_all_project_tasks_es(project_id):
     return await client.postgres_client.fetch("""
-        SELECT id, project_id, status, actual_cost, start_date, completion_date,
+        SELECT id, project_id, status, actual_cost, actual_start_date, actual_completion_date,
         expected_cost, target_start_date, target_completion_date, target_days_to_complete
         FROM Task_Node
         WHERE Task_Node.project_id IN (
