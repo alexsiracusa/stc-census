@@ -37,6 +37,7 @@ i18n
                         calendar: 'Calendar',
                         CPM: 'CPM',
                         EVM: 'EVM',
+                        ES: 'ES'
                     },
                     calendar: {
                         allEventsPopup: {
@@ -113,6 +114,9 @@ i18n
                     EVM: {
                         title: 'EVM',
                     },
+                    ES: {
+                        title: 'ES'
+                    },
                     ganttChart: {
                         title: 'Gantt Chart',
                     },
@@ -177,6 +181,7 @@ i18n
                         calendar: '日历',
                         CPM: '关键路径法',
                         EVM: '挣值管理',
+                        ES: 'ES',
                     },
                     calendar: {
                         allEventsPopup: {
@@ -251,6 +256,9 @@ i18n
                     },
                     EVM: {
                         title: '挣值管理',
+                    },
+                    ES: {
+                        title: 'ES',
                     },
                     ganttChart: {
                         title: '甘特图',
