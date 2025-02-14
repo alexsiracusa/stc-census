@@ -1,6 +1,6 @@
 import './TaskDatePicker.css'
 
-import DropdownDatePicker from "../../Dropdowns/DropdownDatePicker/DropdownDatePicker.tsx";
+import DropdownDatePicker from "../../../Dropdowns/DropdownDatePicker/DropdownDatePicker.tsx";
 import {format} from "date-fns";
 
 type TaskDatePickerProps = {

@@ -1,10 +1,10 @@
 import './TaskDependsEditor.css'
 
 import TaskIcon from "../TaskIcon/TaskIcon.tsx";
-import MinusIcon from "../../assets/Icons/Minus.svg";
-import PlusIcon from "../../assets/Icons/Plus.svg";
+import MinusIcon from "../../../assets/Icons/Minus.svg";
+import PlusIcon from "../../../assets/Icons/Plus.svg";
 import React from "react";
-import useUpdateTask from "../../hooks/useUpdateTask.ts";
+import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 

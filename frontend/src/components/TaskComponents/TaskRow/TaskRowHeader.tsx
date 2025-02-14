@@ -1,14 +1,14 @@
 import './TaskRow.css'
-import {SortOptions} from "../../utils/sort.ts";
-import {Task} from "../../types/Task.ts";
+import {SortOptions} from "../../../utils/sort.ts";
+import {Task} from "../../../types/Task.ts";
 
 type TaskRowHeaderProps = {
     taskSortOptions: SortOptions<Task>,
     setTaskSortOptions: (options: SortOptions<Task>) => void
 }
 
-import TriangleDown from '../../assets/Icons/TriangleDown.svg'
-import TriangleUp from '../../assets/Icons/TriangleUp.svg'
+import TriangleDown from '../../../assets/Icons/TriangleDown.svg'
+import TriangleUp from '../../../assets/Icons/TriangleUp.svg'
 import {useTranslation} from "react-i18next";
 
 const TaskRowHeader = (props: TaskRowHeaderProps) => {

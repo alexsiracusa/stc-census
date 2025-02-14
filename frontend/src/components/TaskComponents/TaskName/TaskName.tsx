@@ -1,7 +1,7 @@
 import './TaskName.css'
 import {useSelector} from "react-redux";
 import {useRef, useState} from "react";
-import useUpdateTask from "../../hooks/useUpdateTask.ts";
+import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import {useEffect} from "react";
 
 type TaskNameProps = {

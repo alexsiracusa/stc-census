@@ -1,5 +1,5 @@
 import './TaskPopup.css'
-import Popup from "../Popup/Popup.tsx";
+import Popup from "../../Popup/Popup.tsx";
 import {useSelector} from "react-redux";
 import React, {Children, PropsWithChildren} from "react";
 import TaskDependsEditor from "../TaskDependsEditor/TaskDependsEditor.tsx";

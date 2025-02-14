@@ -1,6 +1,6 @@
 import './TaskIcon.css'
 
-import {TaskStatusInfo} from "../../types/TaskStatuses.ts";
+import {TaskStatusInfo} from "../../../types/TaskStatuses.ts";
 import {useSelector} from "react-redux";
 
 type TaskIconProps = {

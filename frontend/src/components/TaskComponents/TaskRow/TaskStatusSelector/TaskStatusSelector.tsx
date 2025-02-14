@@ -1,11 +1,11 @@
 import './TaskStatusSelector.css'
 
-import {TaskStatusInfo, TaskStatuses} from "../../../types/TaskStatuses.ts";
+import {TaskStatusInfo, TaskStatuses} from "../../../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
-import DropdownRowPicker from "../../Dropdowns/DropdownRowPicker/DropdownRowPicker.tsx";
-import DropdownPickerOption from "../../Dropdowns/DropdownPicker/DropdownPickerOption.tsx";
-import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import DropdownRowPicker from "../../../Dropdowns/DropdownRowPicker/DropdownRowPicker.tsx";
+import DropdownPickerOption from "../../../Dropdowns/DropdownPicker/DropdownPickerOption.tsx";
+import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
 
 type TaskStatusSelectorProps = {
     project_id: number

@@ -1,6 +1,6 @@
 import './EditDependenciesDropdown.css'
 
-import DropdownPicker from "../../../../Dropdowns/DropdownPicker/DropdownPicker.tsx";
+import DropdownPicker from "../../../../../Dropdowns/DropdownPicker/DropdownPicker.tsx";
 import React, {Children, PropsWithChildren} from "react";
 import TaskDependsEditor from "../../../../TaskDependsEditor/TaskDependsEditor.tsx";
 

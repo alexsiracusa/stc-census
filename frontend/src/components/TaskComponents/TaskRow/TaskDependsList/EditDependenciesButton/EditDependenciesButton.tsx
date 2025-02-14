@@ -2,9 +2,9 @@ import './EditDependenciesButton.css'
 
 import {useSelector} from "react-redux";
 import EditDependenciesDropdown from "./EditDependenciesDropdown/EditDependenciesDropdown.tsx";
-import Ellipsus from '../../../../assets/Icons/Ellipsus.svg'
-import Plus from '../../../../assets/Icons/Plus.svg'
-import Edit from '../../../../assets/Icons/Edit2.svg'
+import Ellipsus from '../../../../../assets/Icons/Ellipsus.svg'
+import Plus from '../../../../../assets/Icons/Plus.svg'
+import Edit from '../../../../../assets/Icons/Edit2.svg'
 
 type TaskIconProps = {
     project_id: number,
