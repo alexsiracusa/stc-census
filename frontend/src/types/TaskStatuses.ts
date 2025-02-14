@@ -11,7 +11,7 @@ export const TaskStatusInfo: Record<TaskStatus, { name: string, color: string }>
         color: '#919191'
     },
     'in_progress': {
-        name: 'In Progress',
+        name: 'WiP',
         color: '#0053ba'
     },
     'on_hold': {

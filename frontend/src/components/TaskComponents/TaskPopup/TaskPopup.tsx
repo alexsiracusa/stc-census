@@ -1,9 +1,11 @@
 import './TaskPopup.css'
-import Popup from "../../Popup/Popup.tsx";
+
 import {useSelector} from "react-redux";
-import React, {Children, PropsWithChildren} from "react";
+import {Children, PropsWithChildren, useState} from "react";
+import Popup from "../../Popup/Popup.tsx";
 import TaskDependsEditor from "../TaskDependsEditor/TaskDependsEditor.tsx";
 import TaskName from "../TaskName/TaskName.tsx";
+import TaskDescription from "../TaskDescription/TaskDescription.tsx";
 
 type TaskPopupProps = {
     project_id: number,
@@ -13,7 +15,7 @@ type TaskPopupProps = {
 
 const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
-    const [isVisible, setIsVisible] = React.useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     const icon = <>{
         Children.map(props.children, child => {
@@ -35,7 +37,9 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
                     <div className='task-name-container'>
                         <TaskName project_id={props.project_id} task_id={props.task_id}/>
                     </div>
-                    <p>{task.description}</p>
+                    <div className='task-description-container'>
+                        <TaskDescription project_id={props.project_id} task_id={props.task_id}/>
+                    </div>
                 </div>
                 <div className='task-depends-editor-container'>
                     <TaskDependsEditor project_id={props.project_id} task_id={props.task_id}/>
