@@ -17,7 +17,7 @@ interface CpmData {
     latest_start: number;
     latest_finish: number;
     slack: number;
-    critical: boolean;
+    is_critical: boolean;
 }
 
 interface TaskInCycle {
