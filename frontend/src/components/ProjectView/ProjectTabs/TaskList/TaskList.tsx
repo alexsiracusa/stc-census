@@ -2,8 +2,8 @@ import './TaskList.css'
 
 import TabProps from "../TabProps.ts";
 import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
-import TaskRow from "../../../TaskRow/TaskRow.tsx";
-import TaskRowHeader from "../../../TaskRow/TaskRowHeader.tsx";
+import TaskRow from "../../../TaskComponents/TaskRow/TaskRow.tsx";
+import TaskRowHeader from "../../../TaskComponents/TaskRow/TaskRowHeader.tsx";
 import AddTaskButton from "../../../AddTaskButton/AddTaskButton.tsx";
 import AddProjectButton from "../../../AddProjectButton/AddProjectButton.tsx";
 import {useTranslation} from 'react-i18next';

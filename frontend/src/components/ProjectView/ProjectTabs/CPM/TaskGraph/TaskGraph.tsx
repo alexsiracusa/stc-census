@@ -17,7 +17,7 @@ interface CpmData {
     latest_start: number;
     latest_finish: number;
     slack: number;
-    critical: boolean;
+    is_critical: boolean;
 }
 
 interface TaskInCycle {
@@ -41,7 +41,7 @@ const TaskGraph: React.FC<{
         const statusInfo = TaskStatusInfo[task.status as TaskStatus];
         const presentableStatus = statusInfo ? statusInfo.name : task.status;
 
-        const formatDays = (num) => `${padNumber(num)} ${num === 1 ? 'day' : 'days'}`;
+        const formatDays = (num: number) => `${padNumber(num)} ${num === 1 ? 'day' : 'days'}`;
 
         return [
             `Slack: ${padNumber(cpm.slack)}`,
@@ -76,7 +76,7 @@ const TaskGraph: React.FC<{
                     tooltip,
                     status: task.status,
                     project_id: task.project_id,
-                    isCritical: cpm ? cpm.critical : false,
+                    isCritical: cpm ? cpm.is_critical : false,
                     inCycle: isInCycle,
                     slack: cpm ? cpm.slack : 0  // Add this line to make slack directly accessible
                 }
@@ -106,7 +106,7 @@ const TaskGraph: React.FC<{
             style: taskGraphStyles
         });
 
-        cyRef.current.on('mouseover', 'node', (event) => {
+        cyRef.current.on('mouseover', 'node', (event: any) => {
             const node = event.target;
             if (containerRef.current && node.data('tooltip')) {
                 containerRef.current.setAttribute('title', node.data('tooltip'));

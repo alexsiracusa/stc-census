@@ -89,11 +89,12 @@
 
 .task-row .task-name-container {
     height: 100%;
+    transform: translate(-0.3em, 0);
 }
 
 /*TASK STATUS*/
 .task-row .task-status-container, .task-row-header .task-status-header {
-    width: 7em;
+    width: 5em;
     height: 60%;
 }
 

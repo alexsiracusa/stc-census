@@ -79,7 +79,8 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
         'latest_start': ls,
         'latest_finish': lf,
         'slack': slack,
-        'critical': critical
+        'is_critical': critical,
+        'dependencies': df['dependencies']
     })
 
     return (result_df, cycle_node_info)

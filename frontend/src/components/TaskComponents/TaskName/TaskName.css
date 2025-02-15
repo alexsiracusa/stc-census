@@ -1,5 +1,5 @@
 
-.task-row .task-name-container .task-name {
+.task-name-editor {
     height: 100%;
     font-size: 1em;
 
@@ -9,7 +9,6 @@
         border: none;
 
         padding: 0 0.3em;
-        margin-left: -0.3em;
 
         font-size: 1em;
         white-space: nowrap;

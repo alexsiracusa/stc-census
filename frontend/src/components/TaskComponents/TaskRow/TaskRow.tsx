@@ -4,8 +4,8 @@ import TaskStatusSelector from "./TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
 import {useSelector} from "react-redux";
-import useUpdateTask from "../../hooks/useUpdateTask.ts";
-import TaskName from "./TaskName/TaskName.tsx";
+import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import TaskName from "../TaskName/TaskName.tsx";
 import TaskPopup from "../TaskPopup/TaskPopup.tsx";
 
 type TaskRowProps = {
