@@ -1,15 +1,33 @@
 
-.task-description {
+.description-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 
     .description {
         width: 100%;
 
-        padding: 8px;
-        border: none;
+        padding: 4px 8px;
+        border: 1px solid transparent;
+        margin-left: -1px;
+        border-radius: 3px;
 
         font-family: Inter, sans-serif;
+        white-space: pre-wrap;
         font-size: 0.9em;
-        background: transparent;
+    }
+
+    .description.editing {
+        border: 1px solid #00000045;
+        outline: none;
+    }
+
+    .description.static:hover {
+        background-color: #00000015;
+    }
+
+    .description:focus {
+        background-color: transparent;
     }
 
     .description.placeholder:empty:before {
@@ -17,4 +35,28 @@
         color: #aaa;
         pointer-events: none; /* Prevents clicking on the placeholder text */
     }
+
+    .action-items {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        margin-left: 8px;
+
+        button {
+            padding: 4px 8px;
+            font-size: 0.9em;
+            border: none;
+            background: none;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background-color: #00000015;
+        }
+
+        .save {
+            background-color: #2196f340;
+        }
+    }
+
 }

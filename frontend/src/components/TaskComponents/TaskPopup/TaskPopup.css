@@ -23,31 +23,57 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            gap: 0.1em;
             padding: 0.75em;
 
             overflow-y: scroll;
+            overflow-x: hidden;
+
+            h2 {
+                font-family: Inter, sans-serif;
+                font-size: 0.8em;
+                font-weight: normal;
+                padding-left: 8px;
+            }
 
             .task-name-container {
                 font-size: 1.25em;
                 height: 1.75em;
+                margin-bottom: 0.25em;
 
                 input {
                     font-weight: bold;
                     padding: 8px;
                 }
 
+                input:hover {
+                    background-color: #00000015;
+                    border-radius: 3px;
+                }
+
+                input:focus {
+                    background-color: transparent;
+                }
+
                 width: 100%;
                 transform: none;
             }
 
-            .task-description-container {
+            .task-status-container {
+                height: fit-content;
+                width: fit-content;
+                margin-left: 8px;
+                font-size: 1.25em;
+                margin-bottom: 1em;
+            }
 
+            .task-description-container {
+                width: 100%;
+                max-width: 100%;
             }
         }
 
         .task-depends-editor-container {
-            width: 16em;
+            width: 20em;
             max-width: 45%;
             height: 100%;
             padding: 0.75em;

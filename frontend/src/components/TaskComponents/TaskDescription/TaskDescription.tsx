@@ -3,6 +3,7 @@ import './TaskDescription.css'
 import {useSelector} from "react-redux";
 import {useState, useRef} from "react";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import AutoExpandingTextarea from "../../AutoExpandingTextarea/AutoExpandingTextarea.tsx";
 
 type TaskDescriptionProps = {
     project_id: number,
@@ -11,44 +12,51 @@ type TaskDescriptionProps = {
 
 const TaskDescription = (props: TaskDescriptionProps) => {
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
+    const [editing, setEditing] = useState(false)
     const {updateTask, loading, error, data} = useUpdateTask();
-    const [description, setDescription] = useState("");
-    const ref = useRef(null);
+    const [description, setDescription] = useState(task.description);
 
-    const handleInput = (e) => {
-        setDescription(e.target.textContent);
-
-        const children = ref.current.childNodes;
-        if (children.length === 1 && children[0].nodeName === "BR") {
-            ref.current.innerHTML = ""; // Clean out <br>
-        }
-    };
-
-    const handleBlur = () => {
-        if (ref.current.textContent.trim() === "") {
-            setDescription("");
-            ref.current.classList.add("placeholder");
-            ref.current.innerHTML = "";
-        }
-        updateTask(props.project_id, props.task_id, {
-            description: description.trim()
-        })
-    };
-
+    const handleFocus = () => {
+        setEditing(true)
+    }
 
     return (
-        <div className='task-description'>
-            <div
-                ref={ref}
-                className={`description ${!description.trim() ? "placeholder" : ""}`}
-                onInput={handleInput}
-                onBlur={handleBlur}
-                contentEditable={true}
-                aria-placeholder="Enter a description..."
-                suppressContentEditableWarning={true}
-            >
-                {task.description}
-            </div>
+        <div className='description-editor'>
+            <AutoExpandingTextarea
+                value={description}
+                onChange={(value) => {
+                    setDescription(value)
+                    console.log(value)
+                }}
+                onFocus={handleFocus}
+                placeholder='Add a description...'
+                className={`description ${editing ? "editing" : "static"}`}
+            />
+
+            {editing &&
+                <div className='action-items'>
+                    <button
+                        className='save'
+                        onClick={() => {
+                            updateTask(props.project_id, props.task_id, {
+                                description: description
+                            })
+                            setEditing(false)
+                        }}
+                    >
+                        Save
+                    </button>
+                    <button
+                        className='cancel'
+                        onClick={() => {
+                            setEditing(false)
+                            setDescription(task.description)
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            }
         </div>
     )
 }

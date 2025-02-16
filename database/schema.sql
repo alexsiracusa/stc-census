@@ -53,7 +53,7 @@ CREATE TABLE Project (
     description     TEXT,
     status          PROJECT_STATUS  NOT NULL DEFAULT 'to_do',
     budget          DECIMAL(2),
-    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     requested_by    TEXT,
     date_requested  DATE,
