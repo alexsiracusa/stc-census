@@ -1,9 +1,23 @@
 
+.more-tasks-dropdown-container {
+    padding: 0.25em 0.5em;
+}
+
 .more-tasks-dropdown-content {
+    overflow-y: scroll;
+
     width: 18em;
     height: 20em;
+}
 
-    padding: 0.25em;
+
+.more-tasks-dropdown-content {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.more-tasks-dropdown-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 
 
