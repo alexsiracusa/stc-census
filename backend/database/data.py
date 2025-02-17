@@ -187,8 +187,6 @@ async def create_project(fields: dict):
     return await insert_into('Project', list(fields.keys()), list(fields.values()))
 
 
-
-
 # for email notifications
 async def get_tasks_due_soon():
     return await client.postgres_client.fetch("""
@@ -199,7 +197,7 @@ async def get_tasks_due_soon():
         AND target_completion_date
     """)
 
-# !!! NOTE: might also want to make one for tasks that are overdue
+
 async def get_tasks_overdue():
     return await client.postgres_client.fetch("""
         SELECT id, project_id, name, target_completion_date
