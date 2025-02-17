@@ -1,7 +1,7 @@
 import './ProjectName.css'
 
 import {useSelector} from "react-redux";
-import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import useUpdateProject from "../../../hooks/useUpdateProject.ts";
 import NameEditor from "../../NameEditor/NameEditor.tsx";
 
 type ProjectNameProps = {
@@ -10,12 +10,12 @@ type ProjectNameProps = {
 
 const ProjectName = (props: ProjectNameProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
-    const {updateTask, loading, error, data} = useUpdateTask();
+    const {updateProject, loading, error, data} = useUpdateProject();
 
     const setName = (name) => {
-        // updateTask(props.project_id, props.task_id, {
-        //     name: name
-        // })
+        updateProject(props.project_id, {
+            name: name
+        })
     }
 
     return (
