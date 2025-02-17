@@ -29,7 +29,7 @@ const ProjectView = (props: ProjectViewProps) => {
 
     return (
         <div className='project-view'>
-            <ProjectPath path={project.path}/>
+            <ProjectPath project_id={props.project_id}/>
             <Routes>
                 <Route path="/summary" element={<Summary project_id={props.project_id}/>}/>
                 <Route path="/task-list" element={<TaskList project_id={props.project_id}/>}/>
