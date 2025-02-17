@@ -8,6 +8,7 @@ type PopupProps = {
     title: string
     isVisible: boolean
     setIsVisible: (boolean) => void
+    transparentBackground: boolean
 }
 
 const Popup = (props: PropsWithChildren<PopupProps>) => {
@@ -26,7 +27,7 @@ const Popup = (props: PropsWithChildren<PopupProps>) => {
 
             {props.isVisible && (
                 <div
-                    className='popup-background'
+                    className={'popup-background ' + (props.transparentBackground ? 'clear' : '')}
                     onClick={(event) => {
                         event.stopPropagation()
                         props.setIsVisible(false)

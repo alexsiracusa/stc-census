@@ -35,9 +35,20 @@
                 margin-left: 8px;
             }
 
-            .task-path-container {
+            .top-row {
+                display: flex;
+                flex-direction: row;
                 margin-left: 8px;
+
+                .task-path-container {
+                    flex-grow: 1;
+                }
+
+                .task-delete-button-container {
+
+                }
             }
+
 
             .task-name-container {
                 font-size: 1.25em;

@@ -10,6 +10,7 @@ import TaskStatusSelector from "../TaskRow/TaskStatusSelector/TaskStatusSelector
 import TaskFields from "../TaskFields/TaskFields.tsx";
 import {useTranslation} from "react-i18next";
 import Path from "../../Path/Path.tsx";
+import TaskDeleteButton from "../TaskDeleteButton/TaskDeleteButton.tsx";
 
 type TaskPopupProps = {
     project_id: number,
@@ -45,15 +46,23 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
             icon={icon}
             buttonClassName={props.buttonClassName}
             contentClassName='task-popup-content'
-            title='title'
+            title={task.name}
             isVisible={isVisible}
             setIsVisible={setIsVisible}
+            transparentBackground={false}
         >
             <div className='task-detail'>
                 <div className='task-information'>
-                    <div className='task-path-container'>
-                        <Path path={path}/>
+                    <div className='top-row'>
+                        <div className='task-path-container'>
+                            <Path path={path}/>
+                        </div>
+
+                        <div className='task-delete-button-container'>
+                            <TaskDeleteButton project_id={props.project_id} task_id={props.task_id}/>
+                        </div>
                     </div>
+
                     <div className='task-name-container'>
                         <TaskName project_id={props.project_id} task_id={props.task_id}/>
                     </div>
