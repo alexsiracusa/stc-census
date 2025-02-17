@@ -58,6 +58,7 @@ async def get_all_project_tasks_cpm(project_id):
         )
     """, project_id)
 
+
 # for evm
 async def get_all_project_tasks_evm(project_id):
     return await client.postgres_client.fetch("""
@@ -70,6 +71,7 @@ async def get_all_project_tasks_evm(project_id):
             WHERE id = $1
         )
     """, project_id)
+
 
 # for es
 # !!! note: adapt the below copy-pasted code to make sure you get exactly what you need
@@ -84,6 +86,7 @@ async def get_all_project_tasks_es(project_id):
             WHERE id = $1
         )
     """, project_id)
+
 
 async def get_task(project_id, task_id):
     return await client.postgres_client.fetch_row(f"""
@@ -128,7 +131,8 @@ async def update_task(project_id, task_id, fields: dict):
             values = []
 
             for index, depends_on in enumerate(depends_on):
-                if not isinstance(depends_on, dict) or depends_on.get('task_id') is None or depends_on.get('project_id') is None:
+                if not isinstance(depends_on, dict) or depends_on.get('task_id') is None or depends_on.get(
+                        'project_id') is None:
                     raise HTTPException(
                         status_code=400,
                         detail="depends on must include 'task_id': int and 'project_id': int"
@@ -156,6 +160,23 @@ async def update_task(project_id, task_id, fields: dict):
 
             return result
 
+
+async def update_project(project_id, fields: dict):
+    if fields.get('project_id') is not None:
+        raise HTTPException(status_code=400, detail="Project id cannot be updated")
+
+    # could do SQL injection with the field string here, fix
+    query_parts = [f"{field} = ${i + 1}" for i, field in enumerate(fields.keys())]
+    values = list(fields.values()) + [project_id]
+
+    return await client.postgres_client.fetch(f"""
+        UPDATE Project
+        SET {', '.join(query_parts)}
+        WHERE id = ${len(values)}
+        RETURNING id
+    """, *values)
+
+
 async def insert_into(table_name, columns, values):
     value_placeholders = [f'${i + 1}' for i in range(len(values))]
 
@@ -166,12 +187,14 @@ async def insert_into(table_name, columns, values):
         RETURNING *
     """, *values)
 
+
 async def create_task(project_id, fields: dict):
     if fields.get('id') is not None:
         raise HTTPException(status_code=400, detail="Task id cannot be specified")
 
     if fields.get('depends_on') is not None:
-        raise HTTPException(status_code=400, detail="Creating a task with dependencies is not supported, please update the task dependencies after creation")
+        raise HTTPException(status_code=400,
+                            detail="Creating a task with dependencies is not supported, please update the task dependencies after creation")
 
     # could do SQL injection with the field string here, fix
     column_names = ['project_id'] + list(fields.keys())

@@ -11,7 +11,6 @@ from ..utils.evm import compute_evm
 from ..utils.es import compute_es
 from ..utils.cpm_scheduling import schedule_tasks
 
-
 router = APIRouter(
     prefix="/project",
     tags=["project"],
@@ -23,8 +22,8 @@ router.include_router(task_router)
 
 @router.get("/{project_id}")
 async def get_project(
-    response: Response,
-    project_id: int
+        response: Response,
+        project_id: int
 ):
     try:
         project = await data.get_project_by_id(project_id)
@@ -38,10 +37,28 @@ async def get_project(
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
+@router.put("/{project_id}/update")
+async def get_project(
+    response: Response,
+    project_id: int,
+    fields: Any = Body(None)
+):
+    try:
+        project = await data.update_project(project_id, fields)
+        if not project:
+            raise HTTPException(status_code=404, detail="Project not found")
+
+        response.status_code = status.HTTP_200_OK
+        return project
+
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
+
+
 @router.post("/create")
 async def get_task(
-    response: Response,
-    fields: Any = Body(None)
+        response: Response,
+        fields: Any = Body(None)
 ):
     try:
         if isinstance(fields, bytes):
@@ -58,8 +75,8 @@ async def get_task(
 
 @router.get("/{project_id}/summary")
 async def get_project(
-    response: Response,
-    project_id: int
+        response: Response,
+        project_id: int
 ):
     try:
         project = await data.get_project_summary(project_id)
@@ -75,8 +92,8 @@ async def get_project(
 
 @router.get("/{project_id}/all-tasks")
 async def get_project(
-    response: Response,
-    project_id: int
+        response: Response,
+        project_id: int
 ):
     try:
         project = await data.get_all_project_tasks(project_id)
@@ -115,6 +132,7 @@ async def get_cpm_analysis(project_id: int, response: Response):
             detail=f"Error calculating CPM: {str(e)}"
         )
 
+
 @router.get("/{project_id}/evm")
 async def get_evm_analysis(project_id: int, response: Response):
     try:
@@ -134,6 +152,7 @@ async def get_evm_analysis(project_id: int, response: Response):
             status_code=500,
             detail=f"Error calculating EVM: {str(e)}"
         )
+
 
 @router.get("/{project_id}/es")
 async def get_es_analysis(project_id: int, response: Response):
