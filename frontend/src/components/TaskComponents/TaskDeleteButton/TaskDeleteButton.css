@@ -21,5 +21,44 @@
 }
 
 .task-delete-button-confirm {
+    display: flex;
+    flex-direction: column;
+
+    width: 15em;
+    height: 9em;
+    padding: 0.5em;
+
     box-shadow: 0 0 32px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+
+    p {
+        text-align: center;
+
+        flex-grow: 1;
+    }
+
+    .action-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        padding: 0.5em 1em;
+
+        button {
+            height: 2em;
+            width: 6em;
+
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button.cancel {
+            background-color: #00000020;
+        }
+
+        button.delete {
+            background-color: #cc1b0030;
+        }
+    }
 }

@@ -7,6 +7,7 @@ import Trash from '../../../assets/Icons/Trash2.svg'
 type TaskDeleteButtonProps = {
     project_id: number,
     task_id: number,
+    onDelete?: () => void;
 }
 
 const TaskDeleteButton = (props: TaskDeleteButtonProps) => {
@@ -26,7 +27,29 @@ const TaskDeleteButton = (props: TaskDeleteButtonProps) => {
             setIsVisible={setIsVisible}
             transparentBackground={true}
         >
-            <p>Delete task</p>
+            <p>Are you sure you want to delete this task? This cannot be undone.</p>
+
+            <div className='action-items'>
+                <button
+                    className='delete'
+                    onClick={() => {
+                        setIsVisible(false)
+                        if (props.onDelete) {
+                            props.onDelete()
+                        }
+                    }}
+                >
+                    <p>Delete</p>
+                </button>
+                <button
+                    className='cancel'
+                    onClick={() => {
+                        setIsVisible(false)
+                    }}
+                >
+                    <p>Cancel</p>
+                </button>
+            </div>
         </Popup>
     )
 }

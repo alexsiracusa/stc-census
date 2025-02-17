@@ -59,7 +59,13 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
                         </div>
 
                         <div className='task-delete-button-container'>
-                            <TaskDeleteButton project_id={props.project_id} task_id={props.task_id}/>
+                            <TaskDeleteButton
+                                project_id={props.project_id}
+                                task_id={props.task_id}
+                                onDelete={() => {
+                                    setIsVisible(false)
+                                }}
+                            />
                         </div>
                     </div>
 
