@@ -26,7 +26,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
         <div className='task-depends-editor'>
             {depends_on.length != 0 &&
                 <ul>
-                    <p className='task-depends-editor-header'>{t('taskDependsEditor.dependsOn') + ':'}</p>
+                    <div className='task-depends-editor-header task-field-header'>{t('taskDependsEditor.dependsOn') + ':'}</div>
                     {depends_on.length != 0 && depends_on.map((option) => (
                         <div className='task-depends-editor-row remove-from-list'
                              key={`${option.project_id}-${option.id}`}>
@@ -52,7 +52,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
 
             {options.length != 0 &&
                 <ul>
-                    <p className='task-depends-editor-header'>{t('taskDependsEditor.addDependencies') + ':'}</p>
+                    <div className='task-depends-editor-header task-field-header'>{t('taskDependsEditor.addDependencies') + ':'}</div>
                     {options
                         .filter((option) => option.project_id != task.project_id || option.id != task.id)
                         .map((option) => (

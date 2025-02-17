@@ -29,8 +29,6 @@
     margin: 0 1px;
 
     p {
-        font-family: Inter, sans-serif;
-        font-size: 0.8em;
         overflow: hidden;
         white-space: nowrap;
         color: black;

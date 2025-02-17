@@ -77,6 +77,7 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
                         }}
                     >
                         <p
+                            className='task-field-header'
                             style={{
                                 fontWeight: column.columnName === props.taskSortOptions.key ? 'bold' : 'normal'
                             }}

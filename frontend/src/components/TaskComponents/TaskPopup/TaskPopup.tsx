@@ -6,6 +6,8 @@ import Popup from "../../Popup/Popup.tsx";
 import TaskDependsEditor from "../TaskDependsEditor/TaskDependsEditor.tsx";
 import TaskName from "../TaskName/TaskName.tsx";
 import TaskDescription from "../TaskDescription/TaskDescription.tsx";
+import TaskStatusSelector from "../TaskRow/TaskStatusSelector/TaskStatusSelector.tsx";
+import TaskFields from "../TaskFields/TaskFields.tsx";
 
 type TaskPopupProps = {
     project_id: number,
@@ -37,11 +39,19 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
                     <div className='task-name-container'>
                         <TaskName project_id={props.project_id} task_id={props.task_id}/>
                     </div>
+
+                    <div className='task-status-container'>
+                        <TaskStatusSelector project_id={props.project_id} task_id={props.task_id}/>
+                    </div>
+
+                    <h2>Description:</h2>
                     <div className='task-description-container'>
                         <TaskDescription project_id={props.project_id} task_id={props.task_id}/>
                     </div>
                 </div>
-                <div className='task-depends-editor-container'>
+
+                <div className='task-fields-container'>
+                    <TaskFields project_id={props.project_id} task_id={props.task_id}/>
                     <TaskDependsEditor project_id={props.project_id} task_id={props.task_id}/>
                 </div>
             </div>
