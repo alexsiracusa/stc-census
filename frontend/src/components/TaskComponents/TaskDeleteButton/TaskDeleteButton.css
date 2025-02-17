@@ -1,6 +1,23 @@
 
 .task-delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    aspect-ratio: 1.0;
+    height: 2em;
+    border: none;
+    border-radius: 3px;
+    background: transparent;
+
+    img {
+        aspect-ratio: 1.0;
+        height: 50%;
+    }
+}
+
+.task-delete-button:hover {
+    background-color: #00000020;
 }
 
 .task-delete-button-confirm {

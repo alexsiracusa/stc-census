@@ -38,6 +38,9 @@
             .top-row {
                 display: flex;
                 flex-direction: row;
+                align-items: center;
+
+                height: 2em;
                 margin-left: 8px;
 
                 .task-path-container {
