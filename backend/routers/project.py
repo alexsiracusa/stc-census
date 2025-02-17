@@ -93,7 +93,7 @@ async def get_cpm_analysis(project_id: int, response: Response):
         # Get all tasks with dependencies for the project
         tasks = await data.get_all_project_tasks_cpm(project_id)
         df = pd.DataFrame(tasks)
-        df, cycle_info = compute_cpm(df)
+        df, cycle_info, critical_path_length = compute_cpm(df)
 
         # convert cycle_info (a list of 2-tuple) to a list of objects with keys 'id' and 'project_id'
         cycle_info = [{'id': x[0], 'project_id': x[1]} for x in cycle_info]
@@ -104,7 +104,8 @@ async def get_cpm_analysis(project_id: int, response: Response):
         result = {
             "id": project_id,
             "cpm": df.to_dict(orient="records"),
-            "cycleInfo": cycle_info
+            "cycleInfo": cycle_info,
+            "criticalPathLength": float(critical_path_length)
         }
         return result
 
