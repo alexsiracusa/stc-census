@@ -2,6 +2,7 @@ import './TaskDeleteButton.css'
 
 import {useState} from "react";
 import Popup from "../../Popup/Popup.tsx";
+import useDeleteTask from "../../../hooks/useDeleteTask.ts";
 import Trash from '../../../assets/Icons/Trash2.svg'
 
 type TaskDeleteButtonProps = {
@@ -11,6 +12,7 @@ type TaskDeleteButtonProps = {
 }
 
 const TaskDeleteButton = (props: TaskDeleteButtonProps) => {
+    const {deleteTask, loading, error, data} = useDeleteTask()
     const [isVisible, setIsVisible] = useState(false);
 
     const icon = (
@@ -37,6 +39,7 @@ const TaskDeleteButton = (props: TaskDeleteButtonProps) => {
                         if (props.onDelete) {
                             props.onDelete()
                         }
+                        deleteTask(props.project_id, props.task_id)
                     }}
                 >
                     <p>Delete</p>

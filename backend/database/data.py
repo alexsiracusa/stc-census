@@ -161,6 +161,14 @@ async def update_task(project_id, task_id, fields: dict):
             return result
 
 
+async def delete_task(project_id, task_id):
+    return await client.postgres_client.fetch(f"""
+        DELETE FROM Task
+        WHERE project_id = $1 AND id = $2
+        RETURNING id
+    """, project_id, task_id)
+
+
 async def update_project(project_id, fields: dict):
     if fields.get('project_id') is not None:
         raise HTTPException(status_code=400, detail="Project id cannot be updated")

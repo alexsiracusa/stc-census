@@ -67,3 +67,22 @@ async def get_task(
     except Exception as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return {"error": str(error)}
+
+
+@router.delete("/{task_id}/delete")
+async def delete_task(
+    response: Response,
+    project_id: int,
+    task_id: int,
+):
+    try:
+        task = await data.delete_task(project_id, task_id)
+
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        response.status_code = status.HTTP_200_OK
+        return {'message': "task updated successfully"}
+
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
