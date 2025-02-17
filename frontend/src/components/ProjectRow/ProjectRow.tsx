@@ -3,6 +3,7 @@ import './ProjectRow.css'
 import {Link} from "react-router";
 import {useSelector} from "react-redux";
 import useFetchProjectSummary from "../../hooks/useFetchProjectSummary.ts";
+import ProjectName from "./ProjectName/ProjectName.tsx";
 
 type ProjectRowProps = {
     project_id: number
@@ -16,14 +17,19 @@ const ProjectRow = (props: ProjectRowProps) => {
     if (loading || project === undefined) return <p>Loading</p>;
 
     return (
-        <Link
-            reloadDocument
-            to={`/project/${props.project_id}/task-list`}
-            className='project-row'
-        >
-            <div className='project-id'>P{project.id}</div>
-            <div className='project-name'>{project.name}</div>
-        </Link>
+        <div className='project-row'>
+            <Link
+                reloadDocument
+                to={`/project/${props.project_id}/task-list`}
+                className='project-id'
+            >
+                <p>P{project.id}</p>
+            </Link>
+
+            <div className='project-name-container'>
+                <ProjectName project_id={props.project_id}/>
+            </div>
+        </div>
     )
 };
 
