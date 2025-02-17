@@ -8,6 +8,8 @@ from ..database import data
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
+from ..utils.es import compute_es
+from ..utils.cpm_scheduling import schedule_tasks
 
 
 router = APIRouter(
@@ -96,6 +98,8 @@ async def get_cpm_analysis(project_id: int, response: Response):
         # convert cycle_info (a list of 2-tuple) to a list of objects with keys 'id' and 'project_id'
         cycle_info = [{'id': x[0], 'project_id': x[1]} for x in cycle_info]
 
+        # sensible_schedule = schedule_tasks(df, )
+
         # Create the final dictionary with the desired structure
         result = {
             "id": project_id,
@@ -121,6 +125,26 @@ async def get_evm_analysis(project_id: int, response: Response):
         result = {
             "id": project_id,
             "evm": df.to_dict(orient="records")
+        }
+        return result
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error calculating EVM: {str(e)}"
+        )
+
+@router.get("/{project_id}/es")
+async def get_es_analysis(project_id: int, response: Response):
+    try:
+        # Get all tasks for the project
+        tasks = await data.get_all_project_tasks_evm(project_id)
+        df = pd.DataFrame(tasks)
+        df = compute_es(df)
+        # Create the final dictionary with the desired structure
+        result = {
+            "id": project_id,
+            "es": df.to_dict(orient="records")
         }
         return result
 
