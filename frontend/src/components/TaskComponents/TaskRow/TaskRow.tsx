@@ -2,7 +2,7 @@ import './TaskRow.css'
 
 import TaskStatusSelector from "./TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
-import TaskDatePicker from "./TaskDatePicker/TaskDatePicker.tsx";
+import SimpleDatePicker from "../../SimpleDatePicker/SimpleDatePicker.tsx";
 import {useSelector} from "react-redux";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import TaskName from "../TaskName/TaskName.tsx";
@@ -44,7 +44,7 @@ const TaskRow = (props: TaskRowProps) => {
             </div>
 
             <div className='task-start-date'>
-                <TaskDatePicker
+                <SimpleDatePicker
                     currentDate={task.target_start_date}
                     title='Edit Start Date'
                     onChange={(value) => {
@@ -54,7 +54,7 @@ const TaskRow = (props: TaskRowProps) => {
             </div>
 
             <div className='task-due-date'>
-                <TaskDatePicker
+                <SimpleDatePicker
                     currentDate={task.target_completion_date}
                     title='Edit Due Date'
                     onChange={(value) => {

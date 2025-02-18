@@ -1,5 +1,5 @@
 
-.task-date-picker {
+.simple-date-picker {
     border: none;
     background: transparent;
     height: 100%;
@@ -10,14 +10,14 @@
     font-size: 1em;
 
     p {
-        font-family: Inter, sans-serif;
+        font-family: Inter, sans-serif !important;
         text-align: center;
         width: 4.75em;
-        font-size: 0.8em;
+        font-size: 0.8em !important;
     }
 }
 
 
-.task-date-picker:hover {
+.simple-date-picker:hover {
     background-color: #00000020;
 }

@@ -69,7 +69,9 @@ export const projectSlice = createSlice({
             state.byId[`${project.id}`] = {...oldProject, ...project}
             const newProject = state.byId[`${project.id}`]
 
-            if (newProject.tasks === undefined) { return }
+            if (newProject.tasks === undefined) {
+                return
+            }
 
             newProject.byId = {}
             newProject.tasks.forEach((task) => {
@@ -83,8 +85,7 @@ export const projectSlice = createSlice({
             state.byId[`${body.id}`] = body
             if (body.parent) {
                 state.byId[`${body.parent}`].sub_projects.push(body)
-            }
-            else {
+            } else {
                 state.dashboard.push(body.id)
             }
         },
@@ -92,6 +93,9 @@ export const projectSlice = createSlice({
             const {project_id, body} = action.payload;
             const project = state.byId[`${project_id}`]
             state.byId[`${project_id}`] = {...project, ...body}
+
+            const parent = state.byId[`${project.parent}`]
+            state.byId[`${project.parent}`].sub_projects = [...parent.sub_projects];
         },
         createTask: (state, action) => {
             const {project_id, task_id, body} = action.payload;
