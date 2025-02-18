@@ -95,9 +95,24 @@ export const projectSlice = createSlice({
             state.byId[`${project_id}`] = {...project, ...body}
 
             // update subproject entry in parent
-            const parent = state.byId[`${project.parent}`]
-            let index = parent.sub_projects.findIndex((project) => project.id === project_id);
-            parent.sub_projects[index] = {...parent.sub_projects[index], ...body}
+            if (project.parent) {
+                const parent = state.byId[`${project.parent}`]
+                let index = parent.sub_projects.findIndex((project) => project.id === project_id);
+                parent.sub_projects[index] = {...parent.sub_projects[index], ...body}
+            }
+        },
+        deleteProjects: (state, action) => {
+            const {project_ids} = action.payload;
+            project_ids.forEach((project_id) => {
+                // update subproject entry in parent
+                const project = state.byId[`${project_id}`]
+                if (project.parent) {
+                    const parent = state.byId[`${project.parent}`]
+                    parent.sub_projects = parent.sub_projects.filter((project) => project.id !== project_id)
+                }
+
+                delete state.byId[`${project_id}`]
+            })
         },
         createTask: (state, action) => {
             const {project_id, task_id, body} = action.payload;
@@ -131,6 +146,7 @@ export const {
     setDashboard,
     createProject,
     updateProject,
+    deleteProjects,
     updateTask,
     createTask,
     deleteTask,

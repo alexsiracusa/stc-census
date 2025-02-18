@@ -4,7 +4,7 @@ import {createProject as createProjectRedux} from "../redux/features/tasks/proje
 
 
 const useCreateProject = () => {
-    const { updateData, loading, error, data } = useUpdate();
+    const {updateData, loading, error, data} = useUpdate();
 
     // Prepare a base URL for status updates
     const getUrl = () => `${import.meta.env.VITE_BACKEND_HOST}/project/create`;
@@ -14,7 +14,10 @@ const useCreateProject = () => {
         const url = getUrl();
         const options = {
             method: 'POST',
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
         };
         const update = (json) => {
             const body = json
@@ -23,7 +26,7 @@ const useCreateProject = () => {
         updateData(url, update, options);
     }, [updateData]);
 
-    return { createProject, loading, error, data };
+    return {createProject, loading, error, data};
 };
 
 export default useCreateProject;

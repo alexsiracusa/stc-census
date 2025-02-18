@@ -14,9 +14,9 @@ router = APIRouter(
 
 @router.get("/{task_id}/")
 async def get_task(
-        response: Response,
-        project_id: int,
-        task_id: int,
+    response: Response,
+    project_id: int,
+    task_id: int,
 ):
     try:
         task = await data.get_task(project_id, task_id)
@@ -30,14 +30,12 @@ async def get_task(
 
 @router.put("/{task_id}/update")
 async def update_task(
-        response: Response,
-        project_id: int,
-        task_id: int,
-        fields: Any = Body(None)
+    response: Response,
+    project_id: int,
+    task_id: int,
+    fields: Any = Body(None)
 ):
     try:
-        if isinstance(fields, bytes):
-            fields = json.loads(fields.decode("utf-8"))
         updated_task = await data.update_task(project_id, task_id, fields)
 
         if not updated_task:
@@ -57,9 +55,6 @@ async def get_task(
     fields: Any = Body(None)
 ):
     try:
-        if isinstance(fields, bytes):
-            fields = json.loads(fields.decode("utf-8"))
-
         task = await data.create_task(project_id, fields)
         response.status_code = status.HTTP_200_OK
         return task
