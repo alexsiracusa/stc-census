@@ -11,6 +11,8 @@ import TaskPopup from "../TaskPopup/TaskPopup.tsx";
 type TaskRowProps = {
     project_id: number
     task_id: number
+    editing: boolean
+    select: (boolean) => void
 }
 
 const TaskRow = (props: TaskRowProps) => {
@@ -23,15 +25,26 @@ const TaskRow = (props: TaskRowProps) => {
 
     const isOverdue = () => {
         const now = new Date();
-        now.setHours(0,0,0,0);
+        now.setHours(0, 0, 0, 0);
         return task.status !== 'done' && task.target_completion_date && (new Date(task.target_completion_date) < now)
     }
 
     return (
         <div className={'task-row ' + (isOverdue() ? 'overdue' : '')}>
-            <TaskPopup project_id={props.project_id} task_id={props.task_id} buttonClassName='task-id'>
-                <p>T{task.id}</p>
-            </TaskPopup>
+            {props.editing ? (
+                <div className='task-id'>
+                    <input
+                        type="checkbox"
+                        onChange={(e) => {
+                            props.select(e.target.checked)
+                        }}
+                    />
+                </div>
+            ) : (
+                <TaskPopup project_id={props.project_id} task_id={props.task_id} buttonClassName='task-id'>
+                    <p>T{task.id}</p>
+                </TaskPopup>
+            )}
 
             <div className='task-name-container'>
                 <TaskName project_id={props.project_id} task_id={props.task_id}/>

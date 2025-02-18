@@ -11,10 +11,12 @@ import useUpdateProject from "../../hooks/useUpdateProject.ts";
 
 type ProjectRowProps = {
     project_id: number
+    editing: boolean
+    select: (boolean) => void
 }
 
 const ProjectRow = (props: ProjectRowProps) => {
-    const { loading, error } = useFetchProjectSummary(props.project_id);
+    const {loading, error} = useFetchProjectSummary(props.project_id);
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const {updateProject, updateLoading, updateError, updateData} = useUpdateProject();
 
@@ -23,13 +25,24 @@ const ProjectRow = (props: ProjectRowProps) => {
 
     return (
         <div className='project-row'>
-            <Link
-                reloadDocument
-                to={`/project/${props.project_id}/task-list`}
-                className='project-id'
-            >
-                <p>P{project.id}</p>
-            </Link>
+            {props.editing ? (
+                <div className='project-id'>
+                    <input
+                        type="checkbox"
+                        onChange={(e) => {
+                            props.select(e.target.checked)
+                        }}
+                    />
+                </div>
+            ) : (
+                <Link
+                    reloadDocument
+                    to={`/project/${props.project_id}/task-list`}
+                    className='project-id'
+                >
+                    <p>P{project.id}</p>
+                </Link>
+            )}
 
             <div className='project-name-container'>
                 <ProjectName project_id={props.project_id}/>

@@ -1,0 +1,46 @@
+
+.confirm-button-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+
+    width: 16em;
+    height: fit-content;
+    padding: 0.5em;
+
+    box-shadow: 0 0 32px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+
+    background-color: white;
+
+    p {
+        text-align: center;
+        font-size: 0.9em;
+        flex-grow: 1;
+    }
+
+    .action-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        padding: 0.5em 1em;
+
+        button {
+            height: 2em;
+            width: 6em;
+
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button.neutral {
+            background-color: #00000020;
+        }
+
+        button.destructive {
+            background-color: #cc1b0030;
+        }
+    }
+}
