@@ -1,44 +1,92 @@
-
-.project-row {
+/*PROJECT ROW*/
+.project-row, .project-row-header {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    height: 2.25em;
     padding: 0 0.6em;
     gap: 0.3em;
 
     font-size: 1em;
+}
+
+.project-row {
+    align-items: center;
+    height: 2.25em;
+
     color: black;
 
-    .project-id {
-        width: 2.25em;
-        min-width: 2.25em;
+    p {
+        font-family: Inter, sans-serif;
+        font-size: 1em;
+    }
+}
 
-        p {
-            font-family: monospace, monospace;
-            font-size: 0.8em;
-        }
+/*PROJECT ROW HEADER*/
+.project-row-header {
+    font-size: 1em;
+    margin: 0 1px;
 
-        p:hover {
-            text-decoration: underline;
-            cursor: pointer;
-        }
+    p {
+        overflow: hidden;
+        white-space: nowrap;
+        color: black;
     }
 
-    .project-name-container {
-        width: 16em;
-        min-width: 16em;
-        height: 100%;
-    }
-
-    .project-status-container {
-        width: 5em;
-        height: 60%;
-    }
-
-    .project-status-container {
+    .header {
         display: flex;
         flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: flex-start;
+
+        .header-button {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.15em;
+            cursor: pointer;
+
+            img {
+                height: 0.6em;
+                width: 0.6em;
+                aspect-ratio: 1.0;
+            }
+        }
     }
+}
+
+/*PROJECT ID*/
+.project-row .project-id, .project-row-header .project-id-header {
+    width: 2.25em;
+    min-width: 2.25em;
+
+    p {
+        font-family: monospace, monospace;
+        font-size: 0.8em;
+    }
+
+    p:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+
+/*PROJECT NAME*/
+.project-row .project-name-container, .project-row-header .project-name-header {
+    width: 16em;
+    min-width: 16em;
+    height: 100%;
+}
+
+
+/*PROJECT STATUS*/
+.project-row .project-status-container, .project-row-header .project-status-header {
+    width: 5em;
+    height: 60%;
+}
+
+.project-row .project-status-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
 }

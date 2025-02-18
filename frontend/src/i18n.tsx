@@ -132,13 +132,23 @@ i18n
                     },
                     taskList: {
                         tasks: 'Tasks',
-                        subProjects: 'Sub Projects',
 
                         columns: {
                             id: 'ID',
                             name: 'Name',
                             status: 'Status',
                             dependsOn: 'Depends On',
+                            startDate: 'Start Date',
+                            dueDate: 'Due Date',
+                        }
+                    },
+                    projectList: {
+                        subProjects: 'Sub Projects',
+
+                        columns: {
+                            id: 'ID',
+                            name: 'Name',
+                            status: 'Status',
                             startDate: 'Start Date',
                             dueDate: 'Due Date',
                         }
@@ -275,13 +285,23 @@ i18n
                     },
                     taskList: {
                         tasks: '任务',
-                        subProjects: '子项目',
 
                         columns: {
                             id: 'ID',
                             name: '名称',
                             status: '状态',
                             dependsOn: '取决于',
+                            startDate: '开始日期',
+                            dueDate: '到期日',
+                        }
+                    },
+                    projectList: {
+                        subProjects: '子项目',
+
+                        columns: {
+                            id: 'ID',
+                            name: '名称',
+                            status: '状态',
                             startDate: '开始日期',
                             dueDate: '到期日',
                         }
