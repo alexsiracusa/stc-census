@@ -1,19 +1,23 @@
 from collections import defaultdict, deque
 import pandas as pd
 
+
 def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Schedule tasks using the Spread strategy, distributing non-critical tasks between their earliest and latest start times.
+    Schedule tasks using the Spread strategy, distributing non-critical tasks between their
+    earliest and latest start times, and ensuring the resulting start and end dates are integers.
 
     Parameters:
     end_date: int (target duration of the project in days, start is assumed to be 0)
-    tasks_df: pandas DataFrame with columns ['id', 'earliest_start', 'earliest_finish', 'latest_start', 'latest_finish', 'slack', 'is_critical', 'dependencies']
+    tasks_df: pandas DataFrame with columns ['id', 'earliest_start', 'earliest_finish',
+                                              'latest_start', 'latest_finish', 'slack',
+                                              'is_critical', 'dependencies']
         where dependencies are lists of row indices in the DataFrame.
 
     Returns:
     pandas DataFrame with columns ['task_id', 'start_date', 'end_date']
     """
-    # Convert DataFrame to dictionary format and process dependencies
+    # Convert DataFrame to dictionary format and process dependencies.
     tasks = []
     for row in tasks_df.to_dict('records'):
         task_id = row['id']
@@ -24,11 +28,11 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
         slack = row['slack']
         is_critical = row['is_critical']
         dependencies = row['dependencies']
-        # Convert dependencies from row indices to task_ids
+        # Convert dependencies from row indices to task_ids.
         deps_task_ids = [tasks_df.iloc[idx]['id'] for idx in dependencies]
         tasks.append((task_id, es, ee, ls, le, slack, is_critical, deps_task_ids))
 
-    # Preprocess tasks into a dictionary by id
+    # Preprocess tasks into a dictionary by id.
     task_map = {}
     for t in tasks:
         task_id, es, ee, ls, le, slack, is_critical, deps = t
@@ -45,7 +49,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
             'duration': duration
         }
 
-    # Build successor map and in-degree for topological sort
+    # Build successor map and in-degree for topological sort.
     successors = defaultdict(list)
     in_degree = defaultdict(int)
     for t in task_map.values():
@@ -53,7 +57,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
             successors[dep].append(t['id'])
         in_degree[t['id']] = len(t['dependencies'])
 
-    # Compute topological order
+    # Compute topological order.
     topo_order = []
     queue = deque([t_id for t_id in task_map if in_degree[t_id] == 0])
     while queue:
@@ -64,13 +68,13 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
             if in_degree[succ] == 0:
                 queue.append(succ)
 
-    # Build reverse dependencies for backward pass
+    # Build reverse dependencies for backward pass.
     reverse_successors = defaultdict(list)
     for t in task_map.values():
         for dep in t['dependencies']:
             reverse_successors[t['id']].append(dep)
 
-    # Compute reverse topological order for backward pass
+    # Compute reverse topological order for backward pass.
     reverse_topo_order = []
     pred_counts = defaultdict(int)
     for t in task_map.values():
@@ -90,7 +94,6 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     new_LS = {}
     new_LE = {}
     target_duration = end_date
-
     for t_id in reverse_topo_order:
         t = task_map[t_id]
         if not successors[t_id]:
@@ -99,40 +102,48 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
             new_LE[t_id] = min(new_LS[succ] for succ in successors[t_id])
         new_LS[t_id] = new_LE[t_id] - t['duration']
 
-    # Schedule tasks using Spread strategy
+    # Schedule tasks using Spread strategy.
     schedule = {}
-    # Schedule critical tasks ASAP
+
+    # Schedule critical tasks at their earliest possible start times.
     critical_tasks = [t_id for t_id in task_map if task_map[t_id]['is_critical']]
     for t_id in critical_tasks:
         t = task_map[t_id]
-        start = 0 + t['earliest_start']
+        start = t['earliest_start']  # Already an integer.
         end = start + t['duration']
         schedule[t_id] = (start, end)
 
-    # Process non-critical tasks in topological order
+    # Process non-critical tasks in topological order.
     non_critical = [t_id for t_id in topo_order if not task_map[t_id]['is_critical']]
     n = len(non_critical)
     for idx, t_id in enumerate(non_critical):
         t = task_map[t_id]
-        # Compute earliest possible start based on dependencies
+        # Compute the earliest possible start based on dependencies.
         if not t['dependencies']:
-            earliest_start = 0.0
+            earliest_start = 0
         else:
             earliest_start = max(schedule[dep][1] for dep in t['dependencies'])
+
         available_slack = new_LS[t_id] - earliest_start
+
+        # Distribute available slack in discrete integer steps.
         if available_slack <= 0:
             start_time = earliest_start
         else:
-            alpha = idx / (n - 1) if n > 1 else 0.0
-            start_time = earliest_start + available_slack * alpha
-        start_date = 0 + start_time
-        end_date = start_date + t['duration']
-        schedule[t_id] = (start_date, end_date)
+            # If more than one task, spread them out using integer multiplication & division.
+            if n > 1:
+                offset = (available_slack * idx) // (n - 1)
+            else:
+                offset = 0
+            start_time = earliest_start + offset
 
-    # Convert schedule to DataFrame
+        start_date = start_time
+        end_date_task = start_date + t['duration']
+        schedule[t_id] = (start_date, end_date_task)
+
+    # Convert the schedule dictionary into a DataFrame.
     result_data = []
-    for t_id in schedule:
-        start, end = schedule[t_id]
+    for t_id, (start, end) in schedule.items():
         result_data.append({
             'task_id': t_id,
             'start_date': start,
