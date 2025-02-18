@@ -161,22 +161,17 @@ CREATE VIEW Task_Node AS (
 );
 
 CREATE VIEW Project_Summary AS (
-    WITH status_counts AS (
-        SELECT project_id, status, count(*) AS count
-        FROM Task
-        WHERE Task.project_id IN (
-            SELECT unnest(children)
-            FROM Project_Children
-        )
-        GROUP BY project_id, status
-    )
     SELECT
         Project.*,
-        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'to_do') AS num_todo,
-        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'in_progress') AS num_in_progress,
-        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'on_hold') AS num_on_hold,
-        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'done') AS num_done
-    FROM Project
+        jsonb_build_object(
+            'to_do', COUNT(CASE WHEN Task.status = 'to_do' THEN 1 END),
+            'in_progress', COUNT(CASE WHEN Task.status = 'in_progress' THEN 1 END),
+            'on_hold', COUNT(CASE WHEN Task.status = 'on_hold' THEN 1 END),
+            'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
+        ) AS status_counts
+    FROM Task
+    RIGHT JOIN Project ON Project.id = Task.project_id
+    GROUP BY Project.id
 );
 
 CREATE VIEW Project_Node AS (
@@ -185,16 +180,10 @@ CREATE VIEW Project_Node AS (
         to_json(array_remove(array_agg(Task_Node.*), NULL)) AS tasks,
         to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
         (SELECT path FROM Project_Path WHERE id = Project.id) AS path,
-        jsonb_build_object(
-            'done', MAX(Project_Summary.num_done),
-            'on_hold', MAX(Project_Summary.num_on_hold),
-            'in_progress', MAX(Project_Summary.num_in_progress),
-            'to_do', MAX(Project_Summary.num_todo)
-        ) AS status_counts
+        (SELECT status_counts FROM Project_Summary WHERE Project_Summary.id = Project.id) AS status_counts
     FROM Project
     LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
     LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = Project.id
-    LEFT JOIN Project_Summary ON Project_Summary.id = Project.id
     GROUP BY Project.id
 );
 
