@@ -23,8 +23,8 @@ router.include_router(task_router)
 
 @router.get("/{project_id}")
 async def get_project(
-        response: Response,
-        project_id: int
+    response: Response,
+    project_id: int
 ):
     try:
         project = await data.get_project_by_id(project_id)
@@ -39,7 +39,7 @@ async def get_project(
 
 
 @router.put("/{project_id}/update")
-async def get_project(
+async def update_project(
     response: Response,
     project_id: int,
     fields: Any = Body(None)
@@ -60,14 +60,11 @@ async def get_project(
 
 
 @router.post("/create")
-async def get_task(
+async def create(
         response: Response,
         fields: Any = Body(None)
 ):
     try:
-        if isinstance(fields, bytes):
-            fields = json.loads(fields.decode("utf-8"))
-
         task = await data.create_project(fields)
         response.status_code = status.HTTP_200_OK
         return task
@@ -78,7 +75,7 @@ async def get_task(
 
 
 @router.get("/{project_id}/summary")
-async def get_project(
+async def get_project_summary(
         response: Response,
         project_id: int
 ):
@@ -95,7 +92,7 @@ async def get_project(
 
 
 @router.get("/{project_id}/all-tasks")
-async def get_project(
+async def get_project_all_tasks(
         response: Response,
         project_id: int
 ):

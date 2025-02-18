@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import { PropsWithChildren, useEffect, useRef } from "react";
 import "./EventPopup.css";
-import Trash from "../../../../../assets/Icons/Trash.svg";
-import Edit from "../../../../../assets/Icons/Edit.svg";
-import Email from "../../../../../assets/Icons/Email.svg";
-import Close from "../../../../../assets/Icons/Close.svg";
-import Text from "../../../../../assets/Icons/Text.svg";
 import { useTranslation } from "react-i18next";
+import Path from "../../../../Path/Path.tsx";
+import { useSelector } from "react-redux";
+import TaskFields from "../../../../TaskComponents/TaskFields/TaskFields.tsx";
+import TaskStatusSelector from "../../../../TaskComponents/TaskRow/TaskStatusSelector/TaskStatusSelector.tsx";
+import TaskDescription from "../../../../TaskComponents/TaskDescription/TaskDescription.tsx";
+import TaskName from "../../../../TaskComponents/TaskName/TaskName.tsx";
+import Popup from "../../../../Popup/Popup.tsx";
 
 type EventPopupProps = {
     isOpen: boolean;
@@ -16,27 +18,27 @@ type EventPopupProps = {
         endDate: string;
         note: string;
     };
-    onEdit: () => void;
-    onDelete: () => void;
-    onEmail: () => void;
     project_id: number;
     event_id: string;
 };
 
-const EventPopup: React.FC<EventPopupProps> = ({
-                                                   isOpen,
-                                                   onClose,
-                                                   eventData,
-                                                   onEdit,
-                                                   onDelete,
-                                                   onEmail,
-                                               }) => {
+const EventPopup: React.FC<PropsWithChildren<EventPopupProps>> = ({
+                                                                      isOpen,
+                                                                      onClose,
+                                                                      eventData,
+                                                                      project_id,
+                                                                      event_id,
+                                                                  }) => {
     const { t } = useTranslation();
     const popupRef = useRef<HTMLDivElement>(null);
 
+    const project = useSelector((state) => state.projects.byId[project_id]);
+
     useEffect(() => {
+        if (!isOpen) return;
+
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape" && isOpen) {
+            if (event.key === "Escape") {
                 onClose();
             }
         };
@@ -62,86 +64,72 @@ const EventPopup: React.FC<EventPopupProps> = ({
         };
     }, [isOpen, onClose]);
 
+    if (!project_id || !project) {
+        console.error(`Error: Project with id ${project_id} not found in Redux store.`);
+        return (
+            <div className="event-popup-overlay">
+                <div className="event-popup" ref={popupRef}>
+                    <h3>Error: Project not found</h3>
+                    <button onClick={onClose}>{t("calendar.eventPopup.close")}</button>
+                </div>
+            </div>
+        );
+    }
+
     const formatDate = (date: string): string => {
         const options: Intl.DateTimeFormatOptions = {
             weekday: "long",
             month: "long",
             day: "numeric",
+            year: "numeric",
         };
         return new Date(date).toLocaleDateString(undefined, options);
     };
 
     const formatDateRange = (start: string, end: string): string => {
-        if (start === end) {
-            return formatDate(start);
-        } else {
-            return `${formatDate(start)} - ${formatDate(end)}`;
-        }
+        const startFormatted = formatDate(start);
+        const endFormatted = formatDate(end);
+        return start === end ? startFormatted : `${startFormatted} - ${endFormatted}`;
     };
-
-    const getLocalizedTitle = () => {
-        const localizedDefaultTitle = t("calendar.eventForm.defaultTitle");
-        const previouslySavedDefaults = ["(No title)", "(无标题)"];
-        return previouslySavedDefaults.includes(eventData.title)
-            ? localizedDefaultTitle
-            : eventData.title;
-    };
-
-    if (!isOpen) return null;
 
     return (
-        <div className="event-popup-overlay">
-            <div className="event-popup" ref={popupRef}>
-                <div className="event-actions">
-                    <button
-                        className="icon-button"
-                        onClick={onEdit}
-                        title={t("calendar.eventPopup.edit")}
-                    >
-                        <img src={Edit} alt={t("calendar.eventPopup.edit")} />
-                    </button>
-                    <button
-                        className="icon-button"
-                        onClick={onDelete}
-                        title={t("calendar.eventPopup.delete")}
-                    >
-                        <img src={Trash} alt={t("calendar.eventPopup.delete")} />
-                    </button>
-                    <button
-                        className="icon-button"
-                        onClick={onEmail}
-                        title={t("calendar.eventPopup.email")}
-                    >
-                        <img src={Email} alt={t("calendar.eventPopup.email")} />
-                    </button>
-                    <button
-                        className="icon-button"
-                        onClick={onClose}
-                        title={t("calendar.eventPopup.close")}
-                    >
-                        <img src={Close} alt={t("calendar.eventPopup.close")} />
-                    </button>
+        <Popup
+            icon={<div></div>}
+            buttonClassName="open-event-popup"
+            contentClassName="event-popup-content"
+            title={eventData.title}
+            isVisible={true}
+            setIsVisible={() => {}}
+            transparentBackground={false}
+        >
+            <div className="event-detail" ref={popupRef}>
+                <div className="event-header">
+                    <Path path={[{ name: t("projectPath.title"), link: "/projects" }, ...project.path]} />
                 </div>
-                <div className="event-popup-header">
-                    <div className="header-top">
-                        <div className="event-details">
-                            <h3 className="event-title">{getLocalizedTitle()}</h3>
-                            <p className="event-date">
-                                {formatDateRange(eventData.startDate, eventData.endDate)}
-                            </p>
-                        </div>
+                <div className="event-fields">
+                    <div className="event-field event-name">
+                        <h3>{t("task.name")}</h3>
+                        <TaskName project_id={project_id} task_id={Number(event_id)} />
+                    </div>
+                    <div className="event-field event-status">
+                        <h3>{t("task.statusTitle")}</h3>
+                        <TaskStatusSelector project_id={project_id} task_id={Number(event_id)} />
+                    </div>
+                    <div className="event-field event-description">
+                        <h3>{t("task.descriptionLabel")}</h3>
+                        <TaskDescription project_id={project_id} task_id={Number(event_id)} />
+                    </div>
+                    <div className="event-field event-custom-fields">
+                        <h3>{t("task.customFields")}</h3>
+                        <TaskFields project_id={project_id} task_id={Number(event_id)} />
+                    </div>
+                    <div className="event-field event-dates">
+                        <h3>{t("calendar.eventPopup.dates")}</h3>
+                        <p>{formatDateRange(eventData.startDate, eventData.endDate)}</p>
                     </div>
                 </div>
-                <div className="event-popup-body">
-                    {eventData.note && (
-                        <div className="event-note">
-                            <img src={Text} alt={t("calendar.eventPopup.note")} />
-                            <p>{eventData.note}</p>
-                        </div>
-                    )}
-                </div>
             </div>
-        </div>
+        </Popup>
     );
 };
 

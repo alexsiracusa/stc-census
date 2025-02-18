@@ -58,7 +58,9 @@
 .project-row .project-id, .project-row-header .project-id-header {
     width: 2.25em;
     min-width: 2.25em;
+}
 
+.project-row .project-id {
     p {
         font-family: monospace, monospace;
         font-size: 0.8em;
