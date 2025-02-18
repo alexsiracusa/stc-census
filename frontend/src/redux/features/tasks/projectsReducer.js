@@ -94,8 +94,10 @@ export const projectSlice = createSlice({
             const project = state.byId[`${project_id}`]
             state.byId[`${project_id}`] = {...project, ...body}
 
+            // update subproject entry in parent
             const parent = state.byId[`${project.parent}`]
-            state.byId[`${project.parent}`].sub_projects = [...parent.sub_projects];
+            let index = parent.sub_projects.findIndex((project) => project.id === project_id);
+            parent.sub_projects[index] = {...parent.sub_projects[index], ...body}
         },
         createTask: (state, action) => {
             const {project_id, task_id, body} = action.payload;

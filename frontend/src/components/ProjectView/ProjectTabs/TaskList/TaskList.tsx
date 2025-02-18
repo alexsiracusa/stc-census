@@ -14,14 +14,12 @@ import {Task} from "../../../../types/Task.ts";
 import {Project} from "../../../../types/Project.ts";
 
 import {useSelector} from "react-redux";
-import {useEffect, useMemo} from "react";
 
 
 const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Task>)
-    // const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
-    const [projectSortOptions, setProjectSortOptions] = useState({key: 'status', order: 'asc'} as SortOptions<Project>)
+    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
     const {t} = useTranslation();
 
     const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
