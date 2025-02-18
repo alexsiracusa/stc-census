@@ -20,16 +20,18 @@ import TaskEditingHeader from "../../../../GenericComponents/EditingHeader/TaskE
 
 const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
+
+    // Task states
     const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Task>)
-    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
-    const [editingProjects, setEditingProjects] = useState(false)
+    const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
+    const selectedTasks = new Set<{ project_id: number, id: number }>();
     const [editingTasks, setEditingTasks] = useState(false)
 
-    const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
+    // Project states
+    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
     const sortedProjects = sortArray(Object.values(project.sub_projects), projectSortOptions) as Project[]
-
-    const selectedTasks = new Set<number>();
     const selectedProjects = new Set<number>();
+    const [editingProjects, setEditingProjects] = useState(false)
 
     if (project.byId == null) {
         return <></>
@@ -100,8 +102,15 @@ const TaskList = (props: TabProps) => {
                                             project_id={task.project_id}
                                             editing={editingTasks}
                                             select={(value) => {
-                                                if (value) selectedTasks.add(task.id)
-                                                else selectedTasks.delete(task.id)
+                                                if (value) selectedTasks.add({
+                                                    project_id: props.project_id,
+                                                    id: task.id
+                                                })
+                                                else {
+                                                    selectedTasks.forEach((item) => {
+                                                        if (item.project_id === props.project_id && item.id === task.id) selectedTasks.delete(item);
+                                                    });
+                                                }
                                             }}
                                         />
                                     </li>
