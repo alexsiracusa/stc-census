@@ -48,7 +48,7 @@ CREATE INDEX session_account_b_tree_index ON Session USING BTREE (account_id);
 
 CREATE TABLE Project (
     id              SERIAL          PRIMARY KEY,
-    parent          INT             REFERENCES Project(id),
+    parent          INT             REFERENCES Project(id) ON DELETE CASCADE,
     name            TEXT            NOT NULL,
     description     TEXT,
     status          PROJECT_STATUS  NOT NULL DEFAULT 'to_do',
@@ -70,7 +70,7 @@ CREATE TABLE Project (
 
 CREATE TABLE Task (
     id              INT         NOT NULL,
-    project_id      INT         NOT NULL REFERENCES Project(id),
+    project_id      INT         NOT NULL REFERENCES Project(id) ON DELETE CASCADE,
     name            TEXT        NOT NULL,
     description     TEXT,
     status          TASK_STATUS NOT NULL DEFAULT 'to_do',
@@ -98,8 +98,8 @@ CREATE TABLE Task_Depends_On (
     depends_task_id     INT,
     depends_project_id  INT,
 
-    FOREIGN KEY (project_id, task_id) REFERENCES Task (project_id, id),
-    FOREIGN KEY (depends_project_id, depends_task_id) REFERENCES Task (project_id, id),
+    FOREIGN KEY (project_id, task_id) REFERENCES Task (project_id, id) ON DELETE CASCADE,
+    FOREIGN KEY (depends_project_id, depends_task_id) REFERENCES Task (project_id, id) ON DELETE CASCADE,
 
     PRIMARY KEY (task_id, project_id, depends_task_id, depends_project_id)
 );

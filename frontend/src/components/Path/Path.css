@@ -1,0 +1,28 @@
+
+.project-path {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.project-path .link {
+    font-size: 0.95em;
+    color: black;
+
+    p:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.project-path .link p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-path img {
+    width: 0.5em;
+    height: 0.5em;
+}

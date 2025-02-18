@@ -3,9 +3,8 @@ import './TaskStatusSelector.css'
 import {TaskStatusInfo, TaskStatuses} from "../../../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
-import DropdownRowPicker from "../../../Dropdowns/DropdownRowPicker/DropdownRowPicker.tsx";
-import DropdownPickerOption from "../../../Dropdowns/DropdownPicker/DropdownPickerOption.tsx";
 import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
+import StatusSelector from "../../../StatusSelector/StatusSelector.tsx";
 
 type TaskStatusSelectorProps = {
     project_id: number
@@ -20,43 +19,20 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
         updateTask(props.project_id, props.task_id, {status: status});
     };
 
+    const selected = {
+        value: task.status,
+        displayName: TaskStatusInfo[task.status].name,
+        color: TaskStatusInfo[task.status].color
+    }
+
+    const options = TaskStatuses.map((status: string) => ({
+        value: status,
+        displayName: TaskStatusInfo[status].name,
+        color: TaskStatusInfo[status].color
+    }))
+
     return (
-        <div className="task-status-button">
-            <DropdownRowPicker
-                icon={
-                    <div
-                        className="dropdown-icon-inner"
-                        style={{
-                            backgroundColor: TaskStatusInfo[task.status].color + '45',
-                            color: TaskStatusInfo[task.status].color
-                        }}
-                    >
-                        <p>{TaskStatusInfo[task.status].name}</p>
-                    </div>
-                }
-                className="dropdown-icon"
-                title="Edit Status"
-                onChange={handleUpdate}
-            >
-                {TaskStatuses.map((status: string) => (
-                    <DropdownPickerOption
-                        value={status}
-                        className="task-status"
-                        key={status}
-                    >
-                        <div
-                            className="task-status-inner"
-                            style={{
-                                backgroundColor: TaskStatusInfo[status].color + '45',
-                                color: TaskStatusInfo[status].color
-                            }}
-                        >
-                            {`${TaskStatusInfo[status].name}`}
-                        </div>
-                    </DropdownPickerOption>
-                ))}
-            </DropdownRowPicker>
-        </div>
+        <StatusSelector value={selected} options={options} onChange={handleUpdate}/>
     )
 };
 

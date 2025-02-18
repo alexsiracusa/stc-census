@@ -78,15 +78,6 @@ export const projectSlice = createSlice({
 
             delete newProject.tasks
         },
-        updateTask: (state, action) => {
-            const {project_id, task_id, body} = action.payload;
-            const task = state.byId[`${project_id}`].byId[`${task_id}`]
-            state.byId[`${project_id}`].byId[`${task_id}`] = {...task, ...body}
-        },
-        createTask: (state, action) => {
-            const {project_id, task_id, body} = action.payload;
-            state.byId[`${project_id}`].byId[`${task_id}`] = body
-        },
         createProject: (state, action) => {
             const {body} = action.payload;
             state.byId[`${body.id}`] = body
@@ -96,6 +87,24 @@ export const projectSlice = createSlice({
             else {
                 state.dashboard.push(body.id)
             }
+        },
+        updateProject: (state, action) => {
+            const {project_id, body} = action.payload;
+            const project = state.byId[`${project_id}`]
+            state.byId[`${project_id}`] = {...project, ...body}
+        },
+        createTask: (state, action) => {
+            const {project_id, task_id, body} = action.payload;
+            state.byId[`${project_id}`].byId[`${task_id}`] = body
+        },
+        updateTask: (state, action) => {
+            const {project_id, task_id, body} = action.payload;
+            const task = state.byId[`${project_id}`].byId[`${task_id}`]
+            state.byId[`${project_id}`].byId[`${task_id}`] = {...task, ...body}
+        },
+        deleteTask: (state, action) => {
+            const {project_id, task_id} = action.payload;
+            delete state.byId[`${project_id}`].byId[`${task_id}`]
         },
         setDashboard: (state, action) => {
             const projects = action.payload.json;
@@ -114,9 +123,11 @@ export const projectSlice = createSlice({
 export const {
     addProject,
     setDashboard,
+    createProject,
+    updateProject,
     updateTask,
     createTask,
-    createProject,
+    deleteTask,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

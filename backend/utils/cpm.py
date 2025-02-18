@@ -6,7 +6,12 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
     df = prepare_data(df)
     n = len(df)
     if n == 0:
-        return (pd.DataFrame(columns=['id', 'project_id', 'earliest_start', 'earliest_finish', 'latest_start', 'latest_finish', 'slack', 'critical']), [])
+        # Return an empty dataframe with the proper columns, an empty cycle list, and a critical path duration of 0.
+        empty_df = pd.DataFrame(columns=[
+            'id', 'project_id', 'earliest_start', 'earliest_finish',
+            'latest_start', 'latest_finish', 'slack', 'is_critical', 'dependencies'
+        ])
+        return (empty_df, [], 0)
 
     # Build successors list
     successors = [[] for _ in range(n)]
@@ -24,10 +29,11 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
             cycle_nodes.extend(scc)
         else:
             node = scc[0]
+            # Self-dependency check
             if node in df.loc[node, 'dependencies']:
                 cycle_nodes.append(node)
 
-    # Convert indices to (id, project_id) tuples
+    # Convert indices to (id, project_id) tuples for cycle nodes
     cycle_node_info = []
     for idx in cycle_nodes:
         cycle_node_info.append((int(df.loc[idx, 'id']),
@@ -46,17 +52,17 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
             if in_degree[successor] == 0:
                 queue.append(successor)
 
-    # Forward pass
+    # Forward pass to compute earliest start (es) and earliest finish (ef)
     es = pd.Series(0, index=df.index)
     ef = pd.Series(0, index=df.index)
     for node in top_order:
         deps = df.loc[node, 'dependencies']
-        es[node] = max(ef[p] for p in deps) if deps else 0
+        es[node] = max((ef[p] for p in deps), default=0) if deps else 0
         ef[node] = es[node] + df.loc[node, 'target_duration']
 
     project_duration = ef.max()
 
-    # Backward pass
+    # Backward pass to compute latest finish (lf) and latest start (ls)
     lf = pd.Series(0, index=df.index)
     ls = pd.Series(0, index=df.index)
     for node in reversed(top_order):
@@ -67,7 +73,7 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
             lf[node] = min(ls[s] for s in node_successors)
         ls[node] = lf[node] - df.loc[node, 'target_duration']
 
-    # Compute slack and critical
+    # Compute slack and indicate whether the task is on the critical path
     slack = ls - es
     critical = slack == 0
 
@@ -83,13 +89,12 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
         'dependencies': df['dependencies']
     })
 
-    return (result_df, cycle_node_info)
+    return (result_df, cycle_node_info, project_duration)
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = ['id', 'project_id', 'status', 'target_duration', 'dependencies']
-    # set any null target_duration to 0
+    # Set any null target_duration to 0
     df['target_duration'] = df['target_duration'].fillna(0)
-
     df['target_duration'] = df['target_duration'].astype(float)
     df.loc[df['status'] == 'done', 'target_duration'] = 0  # Completed tasks are 'skipped'
 

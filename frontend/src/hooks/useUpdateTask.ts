@@ -6,10 +6,8 @@ import {updateTask as updateTaskRedux} from "../redux/features/tasks/projectsRed
 const useUpdateTask = () => {
     const { updateData, loading, error, data } = useUpdate();
 
-    // Prepare a base URL for status updates
     const getUrl = (project_id, task_id) => `${import.meta.env.VITE_BACKEND_HOST}/project/${project_id}/task/${task_id}/update`;
 
-    // Create a callback to update task status
     const updateTask = useCallback((project_id, task_id, body) => {
         const url = getUrl(project_id, task_id);
         const options = {

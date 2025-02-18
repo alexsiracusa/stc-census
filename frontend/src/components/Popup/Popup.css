@@ -14,3 +14,7 @@
     background: #00000020;
     z-index: 2;
 }
+
+.popup .popup-background.clear {
+    background: transparent;
+}
