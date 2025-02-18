@@ -38,7 +38,7 @@ const TaskFields = (props: TaskFieldsProps) => {
 
             <div className='task-actual-start-date'>
                 <div className='task-field-header'>Actual Start Date:</div>
-                <TaskDatePicker
+                <SimpleDatePicker
                     currentDate={task.actual_start_date}
                     title='Edit Actual Completion Date'
                     onChange={(value) => {
@@ -49,7 +49,7 @@ const TaskFields = (props: TaskFieldsProps) => {
 
             <div className='task-actual-end-date'>
                 <div className='task-field-header'>Actual End Date:</div>
-                <TaskDatePicker
+                <SimpleDatePicker
                     currentDate={task.actual_completion_date}
                     title='Edit Actual End Date'
                     onChange={(value) => {
