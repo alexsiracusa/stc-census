@@ -223,11 +223,16 @@ async def get_evm_analysis(project_id: int, response: Response):
         # Get all tasks for the project
         tasks = await data.get_all_project_tasks_evm(project_id)
         df = pd.DataFrame(tasks)
-        df = compute_evm(df)
+        df.columns = ['status',
+                      'actual_cost', 'expected_cost',
+                      'actual_start_date', 'target_start_date',
+                      'actual_completion_date', 'target_completion_date',
+                      'target_days_to_complete']
+        sigma = compute_evm(df)
         # Create the final dictionary with the desired structure
         result = {
             "id": project_id,
-            "evm": df.to_dict(orient="records")
+            "evm": sigma # df.to_dict(orient="records")
         }
         return result
 
