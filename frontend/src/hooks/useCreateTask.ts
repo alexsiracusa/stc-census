@@ -14,7 +14,10 @@ const useCreateTask = () => {
         const url = getUrl(project_id);
         const options = {
             method: 'POST',
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
         };
         const update = (json) => {
             const task_id  = json['id']

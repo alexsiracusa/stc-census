@@ -19,6 +19,7 @@ import Edit from '../../../../assets/Icons/Edit2.svg'
 import XMark from '../../../../assets/Icons/X.svg'
 import Trash from '../../../../assets/Icons/Trash2.svg'
 import ConfirmPopup from "../../../ConfirmPopup/ConfirmPopup.tsx";
+import useDeleteProjects from "../../../../hooks/useDeleteProjects.ts";
 
 
 const TaskList = (props: TabProps) => {
@@ -31,6 +32,7 @@ const TaskList = (props: TabProps) => {
     const [editingProjects, setEditingProjects] = useState(false)
     const [editingTasks, setEditingTasks] = useState(false)
     const {t} = useTranslation();
+    const {deleteProjects, loading, error, data} = useDeleteProjects();
 
     const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
     const sortedProjects = sortArray(Object.values(project.sub_projects), projectSortOptions) as Project[]
@@ -66,6 +68,7 @@ const TaskList = (props: TabProps) => {
                             left={{
                                 text: 'Delete',
                                 onPress: () => {
+                                    deleteProjects(Array.from(selectedProjects.values()))
                                     setEditingProjects(false)
                                 },
                                 type: 'destructive',

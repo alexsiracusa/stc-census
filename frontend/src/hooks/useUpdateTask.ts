@@ -12,7 +12,10 @@ const useUpdateTask = () => {
         const url = getUrl(project_id, task_id);
         const options = {
             method: 'PUT',
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
         };
         const update = () => {
             return updateTaskRedux({project_id, task_id, body})
