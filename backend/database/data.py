@@ -1,6 +1,4 @@
 from fastapi import HTTPException
-from datetime import datetime
-
 from .. import client
 
 
@@ -9,6 +7,14 @@ async def get_projects():
         SELECT * 
         FROM Project
         WHERE parent IS NULL
+    """)
+
+async def delete_projects(project_ids):
+    query_parts = [f'id = {project_id}' for project_id in project_ids]
+
+    return await client.postgres_client.fetch(f"""
+        DELETE FROM Project
+        WHERE {' OR '.join(query_parts)}
     """)
 
 

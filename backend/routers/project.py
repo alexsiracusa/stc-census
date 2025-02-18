@@ -23,8 +23,8 @@ router.include_router(task_router)
 
 @router.get("/{project_id}")
 async def get_project(
-        response: Response,
-        project_id: int
+    response: Response,
+    project_id: int
 ):
     try:
         project = await data.get_project_by_id(project_id)
