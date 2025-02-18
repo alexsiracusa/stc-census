@@ -17,6 +17,7 @@
 
         height: 60%;
         width: 2.25em;
+        min-width: 2.25em;
 
         .icon {
             display: flex;
