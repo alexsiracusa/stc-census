@@ -1,20 +1,20 @@
-import './TaskDatePicker.css'
+import './SimpleDatePicker.css'
 
-import DropdownDatePicker from "../../../Dropdowns/DropdownDatePicker/DropdownDatePicker.tsx";
+import DropdownDatePicker from "../Dropdowns/DropdownDatePicker/DropdownDatePicker.tsx";
 import {format} from "date-fns";
 
-type TaskDatePickerProps = {
+type SimpleDatePickerProps = {
     currentDate: string | null
     title: string
     onChange: (arg0: any) => void
 }
 
-const TaskDatePicker = (props: TaskDatePickerProps) => {
+const SimpleDatePicker = (props: SimpleDatePickerProps) => {
     const date = props.currentDate ? new Date(props.currentDate) : null
 
     return (
         <DropdownDatePicker
-            className='task-date-picker'
+            className='simple-date-picker'
             title={props.title}
             currentDate={date}
             onChange={props.onChange}
@@ -24,4 +24,4 @@ const TaskDatePicker = (props: TaskDatePickerProps) => {
     )
 }
 
-export default TaskDatePicker
+export default SimpleDatePicker
