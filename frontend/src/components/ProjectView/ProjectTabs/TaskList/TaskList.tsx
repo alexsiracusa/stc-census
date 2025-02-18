@@ -2,6 +2,7 @@ import './TaskList.css'
 
 import TabProps from "../TabProps.ts";
 import ProjectRow from "../../../ProjectRow/ProjectRow.tsx";
+import ProjectRowHeader from "../../../ProjectRow/ProjectRowHeader.tsx";
 import TaskRow from "../../../TaskComponents/TaskRow/TaskRow.tsx";
 import TaskRowHeader from "../../../TaskComponents/TaskRow/TaskRowHeader.tsx";
 import AddTaskButton from "../../../AddTaskButton/AddTaskButton.tsx";
@@ -10,6 +11,7 @@ import {useTranslation} from 'react-i18next';
 import {useState} from "react";
 import {sortArray, SortOptions} from "../../../../utils/sort.ts";
 import {Task} from "../../../../types/Task.ts";
+import {Project} from "../../../../types/Project.ts";
 
 import {useSelector} from "react-redux";
 
@@ -18,9 +20,11 @@ const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Task>)
+    const [projectSortOptions, setProjectSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Project>)
     const {t} = useTranslation();
 
     const sortedTasks = sortArray(Object.values(tasks), taskSortOptions) as Task[]
+    const sortedProjects = sortArray(Object.values(project['sub_projects']), projectSortOptions) as Project[]
 
     if (tasks == null) {
         return <></>
@@ -29,18 +33,28 @@ const TaskList = (props: TabProps) => {
     return (
         <div className='task-list'>
             <div className='sub-projects'>
-                <h3>{t('taskList.subProjects')}</h3>
+                <h3>{t('projectList.subProjects')}</h3>
                 <AddProjectButton project_id={props.project_id}/>
 
-                {project['sub_projects'].length > 0 &&
-                    <ul>
-                        {project['sub_projects'].map((project) => (
-                            <li key={project.id}>
-                                <ProjectRow project_id={project.id}/>
-                            </li>
-                        ))}
-                    </ul>
-                }
+                <div className='list-container'>
+
+                    {sortedProjects.length > 0 &&
+                        <>
+                            <ProjectRowHeader
+                                projectSortOptions={projectSortOptions}
+                                setProjectSortOptions={setProjectSortOptions}
+                            />
+                            <ul>
+                                {sortedProjects.map((project) => (
+                                    <li key={project.id}>
+                                        <ProjectRow project_id={project.id}/>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    }
+
+                </div>
             </div>
 
 
