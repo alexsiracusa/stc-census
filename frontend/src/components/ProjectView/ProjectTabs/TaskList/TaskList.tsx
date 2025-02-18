@@ -20,25 +20,22 @@ import XMark from '../../../../assets/Icons/X.svg'
 import Trash from '../../../../assets/Icons/Trash2.svg'
 import ConfirmPopup from "../../../ConfirmPopup/ConfirmPopup.tsx";
 import useDeleteProjects from "../../../../hooks/useDeleteProjects.ts";
+import ProjectEditingHeader from "../../../EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
+import TaskEditingHeader from "../../../EditingHeader/TaskEditingHeader/TaskEditingHeader.tsx";
 
 
 const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Task>)
-    const [projectSortOptions, setProjectSortOptions] = useState({
-        key: 'target_completion_date',
-        order: 'asc'
-    } as SortOptions<Project>)
+    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
     const [editingProjects, setEditingProjects] = useState(false)
     const [editingTasks, setEditingTasks] = useState(false)
-    const {t} = useTranslation();
-    const {deleteProjects, loading, error, data} = useDeleteProjects();
 
     const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
     const sortedProjects = sortArray(Object.values(project.sub_projects), projectSortOptions) as Project[]
 
-    let selectedTasks = new Set<number>();
-    let selectedProjects = new Set<number>();
+    const selectedTasks = new Set<number>();
+    const selectedProjects = new Set<number>();
 
     if (project.byId == null) {
         return <></>
@@ -47,44 +44,11 @@ const TaskList = (props: TabProps) => {
     return (
         <div className='task-list'>
             <div className='sub-projects'>
-                <div className='header'>
-                    <h3>{t('projectList.subProjects')}</h3>
-
-                    <button
-                        className='edit-button'
-                        title={editingProjects ? 'Cancel' : 'Edit'}
-                        onClick={() => {
-                            selectedProjects = new Set<number>();
-                            setEditingProjects(!editingProjects)
-                        }}
-                    >
-                        <img src={editingProjects ? XMark : Edit}/>
-                    </button>
-
-                    {editingProjects && (
-                        <ConfirmPopup
-                            className='delete-button'
-                            message='Are you sure you want to delete all selected subprojects? It better to archive them instead. This cannot be undone.'
-                            left={{
-                                text: 'Delete',
-                                onPress: () => {
-                                    deleteProjects(Array.from(selectedProjects.values()))
-                                    setEditingProjects(false)
-                                },
-                                type: 'destructive',
-                            }}
-                            right={{
-                                text: 'Cancel',
-                                onPress: () => {
-                                    setEditingProjects(false)
-                                },
-                                type: 'neutral'
-                            }}
-                        >
-                            <img src={Trash}/>
-                        </ConfirmPopup>
-                    )}
-                </div>
+                <ProjectEditingHeader
+                    editing={editingProjects}
+                    setEditing={setEditingProjects}
+                    selected={selectedProjects}
+                />
 
                 <AddProjectButton project_id={props.project_id}/>
 
@@ -118,43 +82,11 @@ const TaskList = (props: TabProps) => {
 
 
             <div className='tasks'>
-                <div className='header'>
-                    <h3>{t('taskList.tasks')}</h3>
-
-                    <button
-                        className='edit-button'
-                        title={editingTasks ? 'Cancel' : 'Edit'}
-                        onClick={() => {
-                            selectedTasks = new Set<number>();
-                            setEditingTasks(!editingTasks)
-                        }}
-                    >
-                        <img src={editingTasks ? XMark : Edit}/>
-                    </button>
-
-                    {editingTasks && (
-                        <ConfirmPopup
-                            className='delete-button'
-                            message='Are you sure you want to delete all selected tasks? This cannot be undone.'
-                            left={{
-                                text: 'Delete',
-                                onPress: () => {
-                                    setEditingTasks(false)
-                                },
-                                type: 'destructive',
-                            }}
-                            right={{
-                                text: 'Cancel',
-                                onPress: () => {
-                                    setEditingTasks(false)
-                                },
-                                type: 'neutral'
-                            }}
-                        >
-                            <img src={Trash}/>
-                        </ConfirmPopup>
-                    )}
-                </div>
+                <TaskEditingHeader
+                    editing={editingTasks}
+                    setEditing={setEditingTasks}
+                    selected={selectedTasks}
+                />
 
                 <AddTaskButton project_id={props.project_id}/>
 

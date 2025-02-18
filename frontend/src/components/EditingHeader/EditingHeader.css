@@ -1,0 +1,28 @@
+.editing-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25em;
+
+    .edit-button, .delete-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: none;
+        background-color: transparent;
+        border-radius: 3px;
+
+        aspect-ratio: 1.0;
+        height: 1.5em;
+
+        img {
+            aspect-ratio: 1.0;
+            height: 45%;
+        }
+    }
+
+    .edit-button:hover, .delete-button:hover {
+        background-color: #00000020;
+    }
+}

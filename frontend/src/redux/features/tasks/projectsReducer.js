@@ -113,6 +113,8 @@ export const projectSlice = createSlice({
 
                 delete state.byId[`${project_id}`]
             })
+
+            state.dashboard = state.dashboard.filter((id) => !project_ids.includes(id))
         },
         createTask: (state, action) => {
             const {project_id, task_id, body} = action.payload;
