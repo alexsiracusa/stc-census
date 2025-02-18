@@ -30,4 +30,15 @@
         min-width: 16em;
         height: 100%;
     }
+
+    .project-status-container {
+        width: 5em;
+        height: 60%;
+    }
+
+    .project-status-container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
 }

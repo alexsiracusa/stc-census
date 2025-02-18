@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import {useSelector} from "react-redux";
 import useFetchProjectSummary from "../../hooks/useFetchProjectSummary.ts";
 import ProjectName from "./ProjectName/ProjectName.tsx";
+import ProjectStatusSelector from "./ProjectStatusSelector/ProjectStatusSelector.tsx";
 
 type ProjectRowProps = {
     project_id: number
@@ -28,6 +29,9 @@ const ProjectRow = (props: ProjectRowProps) => {
 
             <div className='project-name-container'>
                 <ProjectName project_id={props.project_id}/>
+            </div>
+            <div className='project-status-container'>
+                <ProjectStatusSelector project_id={props.project_id}/>
             </div>
         </div>
     )
