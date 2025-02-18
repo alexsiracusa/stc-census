@@ -1,4 +1,5 @@
 from collections import defaultdict, deque
+from datetime import date
 import pandas as pd
 
 
@@ -151,3 +152,28 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
         })
 
     return pd.DataFrame(result_data)
+
+
+def convert_and_adjust_schedule(schedule_df: pd.DataFrame, diff: int, mode: int, wanted_start: date) -> (pd.DataFrame, date):
+    wanted_start = pd.Timestamp(wanted_start)
+
+    if diff < 0:  # i.e., the user-requested project duration is too short to fit the critical path
+        # modes: 0 - no duration, 1 - wanted_start is None, 2 - wanted_end is None
+
+        if mode == 0 or mode == 1: # make wanted_start date occur -(diff) days earlier
+            wanted_start = wanted_start + pd.Timedelta(days=diff)
+        elif mode == 2:
+            pass
+        else:  # this should never happen, but I am adding this just in case
+            raise ValueError("Invalid mode value. Must be 0, 1, or 2.")
+
+    # convert the start_date and end_date columns to datetime objects, based on wanted_start date corresponding to day = 0
+    schedule_df['start_date'] = wanted_start + pd.to_timedelta(schedule_df['start_date'], unit='D')
+    schedule_df['end_date'] = wanted_start + pd.to_timedelta(schedule_df['end_date'], unit='D')
+
+    # convert the start_date and end_date columns to datetime.date objects
+    schedule_df['start_date'] = schedule_df['start_date'].dt.date
+    schedule_df['end_date'] = schedule_df['end_date'].dt.date
+    wanted_start = wanted_start.date()
+
+    return schedule_df, wanted_start
