@@ -14,7 +14,8 @@ import {Project} from "../../../../../types/Project.ts";
 
 import {useSelector} from "react-redux";
 
-import ProjectEditingHeader from "../../../../GenericComponents/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
+import ProjectEditingHeader
+    from "../../../../GenericComponents/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
 import TaskEditingHeader from "../../../../GenericComponents/EditingHeader/TaskEditingHeader/TaskEditingHeader.tsx";
 
 
@@ -28,10 +29,26 @@ const TaskList = (props: TabProps) => {
     const [editingTasks, setEditingTasks] = useState(false)
 
     // Project states
-    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
+    const [projectSortOptions, setProjectSortOptions] = useState({
+        key: 'target_completion_date',
+        order: 'asc'
+    } as SortOptions<Project>)
     const sortedProjects = sortArray(Object.values(project.sub_projects), projectSortOptions) as Project[]
     const selectedProjects = new Set<number>();
     const [editingProjects, setEditingProjects] = useState(false)
+
+    const selectTask = (project_id: number, id: number) => {
+        selectedTasks.add({
+            project_id: project_id,
+            id: id
+        })
+    }
+
+    const deselectTask = (project_id: number, id: number) => {
+        selectedTasks.forEach((task) => {
+            if (task.project_id === project_id && task.id === id) selectedTasks.delete(task);
+        });
+    }
 
     if (project.byId == null) {
         return <></>
@@ -102,15 +119,8 @@ const TaskList = (props: TabProps) => {
                                             project_id={task.project_id}
                                             editing={editingTasks}
                                             select={(value) => {
-                                                if (value) selectedTasks.add({
-                                                    project_id: props.project_id,
-                                                    id: task.id
-                                                })
-                                                else {
-                                                    selectedTasks.forEach((item) => {
-                                                        if (item.project_id === props.project_id && item.id === task.id) selectedTasks.delete(item);
-                                                    });
-                                                }
+                                                if (value) selectTask(props.project_id, task.id)
+                                                else deselectTask(props.project_id, task.id)
                                             }}
                                         />
                                     </li>
