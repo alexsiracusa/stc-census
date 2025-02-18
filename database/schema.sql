@@ -6,7 +6,7 @@
 --
 -- ===================================
 
-DROP VIEW IF EXISTS Project_Path, Task_Node, Project_Children;
+DROP VIEW IF EXISTS Project_Summary, Project_Node, Project_Path, Task_Node, Project_Children;
 DROP TABLE IF EXISTS Account, Session, Project, Task, Task_Depends_On;
 DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 
@@ -158,6 +158,44 @@ CREATE VIEW Task_Node AS (
     FROM TASK
     LEFT JOIN Task_Depends_On ON Task.project_id = Task_Depends_On.project_id AND Task.id = Task_Depends_On.task_id
     GROUP BY Task.id, Task.project_id
+);
+
+CREATE VIEW Project_Summary AS (
+    WITH status_counts AS (
+        SELECT project_id, status, count(*) AS count
+        FROM Task
+        WHERE Task.project_id IN (
+            SELECT unnest(children)
+            FROM Project_Children
+        )
+        GROUP BY project_id, status
+    )
+    SELECT
+        Project.*,
+        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'to_do') AS num_todo,
+        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'in_progress') AS num_in_progress,
+        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'on_hold') AS num_on_hold,
+        (SELECT count FROM status_counts WHERE project_id = Project.id AND status = 'done') AS num_done
+    FROM Project
+);
+
+CREATE VIEW Project_Node AS (
+    SELECT
+        Project.*,
+        to_json(array_remove(array_agg(Task_Node.*), NULL)) AS tasks,
+        to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
+        (SELECT path FROM Project_Path WHERE id = Project.id) AS path,
+        jsonb_build_object(
+            'done', MAX(Project_Summary.num_done),
+            'on_hold', MAX(Project_Summary.num_on_hold),
+            'in_progress', MAX(Project_Summary.num_in_progress),
+            'to_do', MAX(Project_Summary.num_todo)
+        ) AS status_counts
+    FROM Project
+    LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
+    LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = Project.id
+    LEFT JOIN Project_Summary ON Project_Summary.id = Project.id
+    GROUP BY Project.id
 );
 
 

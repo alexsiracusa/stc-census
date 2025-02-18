@@ -44,8 +44,6 @@ async def update_project(
     fields: Any = Body(None)
 ):
     try:
-        if isinstance(fields, bytes):
-            fields = json.loads(fields.decode("utf-8"))
         project = await data.update_project(project_id, fields)
 
         if not project:
