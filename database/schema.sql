@@ -170,7 +170,11 @@ CREATE VIEW Project_Summary AS (
             'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
         ) AS status_counts
     FROM Task
-    RIGHT JOIN Project ON Project.id = Task.project_id
+    RIGHT JOIN Project ON project_id IN (
+        SELECT unnest(children)
+        FROM Project_Children
+        WHERE id = Project.id
+    )
     GROUP BY Project.id
 );
 
