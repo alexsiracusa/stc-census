@@ -10,7 +10,7 @@ from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
 from ..utils.es import compute_es
-from ..utils.cpm_scheduling import schedule_tasks
+from ..utils.cpm_scheduling import schedule_tasks, convert_and_adjust_schedule
 
 router = APIRouter(
     prefix="/project",
@@ -142,33 +142,19 @@ async def get_cpm_scheduling(project_id: int,
                            wanted_duration: Optional[int] = None,
                            response: Response = None):
     try:
-
         params = {
             "wanted_start": wanted_start,
             "wanted_end": wanted_end,
             "wanted_duration": wanted_duration
         }
+
         none_count = sum(value is None for value in params.values())
         if none_count != 1:
             raise HTTPException(
                 status_code=400,
-                detail=f"Exactly one of wanted_start, wanted_end, or wanted_duration must be null (i.e., not provided). {3-none_count} were provided."
+                detail=f"Exactly two of wanted_start, wanted_end, or wanted_duration must be provided, "
+                       f"with the third as null. {3-none_count} were provided."
             )
-        if wanted_duration is None:  # Both dates provided, so compute duration (i.e. number of days between start and end)
-            computed_duration = (wanted_end - wanted_start).days
-            start_int = 0
-            end_int = computed_duration
-
-        elif wanted_start is None:  # wanted_end and wanted_duration are provided, so compute the missing start date.
-            wanted_start = wanted_end - timedelta(days=wanted_duration)
-            start_int = 0
-            end_int = wanted_duration
-
-        elif wanted_end is None:  # wanted_start and wanted_duration are provided, so compute the missing end date.
-            wanted_end = wanted_start + timedelta(days=wanted_duration)
-            start_int = 0
-            end_int = wanted_duration
-
 
         # Get all tasks with dependencies for the project
         tasks = await data.get_all_project_tasks_cpm(project_id)
@@ -185,19 +171,42 @@ async def get_cpm_scheduling(project_id: int,
                 detail=f"Computing schedule: cyclical dependencies detected."
             )
 
-        critical_path_override = False
+        # end_int is the number of days from the requested start of project to the requested end of project
+        end_int = -1
+        schedule_mode = -1
 
-        if end_int < critical_path_length:
-            end_int = critical_path_length
-            critical_path_override = True
+        if wanted_duration is None:  # Both dates provided, so compute duration (i.e. number of days between start and end)
+            computed_duration = (wanted_end - wanted_start).days
+            end_int = computed_duration
+            schedule_mode = 0
+        elif wanted_start is None:  # wanted_end and wanted_duration are provided, so compute the missing start date.
+            wanted_start = wanted_end - timedelta(days=wanted_duration)
+            end_int = wanted_duration
+            schedule_mode = 1
+
+        elif wanted_end is None:  # wanted_start and wanted_duration are provided, so compute the missing end date.
+            wanted_end = wanted_start + timedelta(days=wanted_duration)
+            end_int = wanted_duration
+            schedule_mode = 2
+
+        diff = end_int - critical_path_length
+
+        if diff < 0: # the requested project duration is too short to fit the critical path
+            end_int = critical_path_length  # so the program will default to using the critical path length as the project duration
+        end_int = int(end_int)
 
         sensible_schedule = schedule_tasks(end_int, df)
+        adjusted_schedule, wanted_start = convert_and_adjust_schedule(sensible_schedule, diff,
+                                                        mode=schedule_mode, wanted_start=wanted_start)
 
         # Create the final dictionary with the desired structure
         result = {
             "id": project_id,
             "cpm": sensible_schedule.to_dict(orient="records"),
-            "givenDurationOverridden": critical_path_override,
+            "givenDurationOverridden": str(diff < 0),
+            "projectStartDate": wanted_start,
+            "projectEndDate": wanted_end,
+            "projectDurationInDays": int(end_int)
         }
         return result
 

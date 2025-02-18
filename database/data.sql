@@ -149,3 +149,358 @@ INSERT INTO Task_Depends_On (task_id, project_id, depends_task_id, depends_proje
 
 -- Marketing Materials Dependencies
 (21, 6, 19, 6); -- Create Marketing Materials depends on Media Invitation Preparation
+
+-------------------------------
+-- Project 1: Awards Ceremony
+-------------------------------
+-- Task 1: Create supply list (done)
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-15',
+    expected_cost = 10.00,
+    actual_cost = 9.50
+WHERE project_id = 1 AND id = 1;
+
+-- Task 2: Buy supplies (in_progress)
+UPDATE Task
+SET actual_start_date = '2025-03-15',
+    -- not yet finished, so no actual_completion_date
+    expected_cost = 150.00,
+    actual_cost = 100.00
+WHERE project_id = 1 AND id = 2;
+
+-- Task 3: Set up venue (to_do – not started yet)
+UPDATE Task
+SET expected_cost = 300.00
+-- actual_start_date and actual_completion_date left as NULL
+WHERE project_id = 1 AND id = 3;
+
+-- Task 4: Book venue (on_hold)
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    expected_cost = 120.00,
+    actual_cost = 60.00
+-- still on hold so no completion date
+WHERE project_id = 1 AND id = 4;
+
+-- Task 5: Create guest list (to_do)
+UPDATE Task
+SET expected_cost = 20.00
+WHERE project_id = 1 AND id = 5;
+
+-- Task 6: Send invitations (to_do)
+UPDATE Task
+SET expected_cost = 0.00
+WHERE project_id = 1 AND id = 6;
+
+
+-------------------------------
+-- Project 2: Create Flyer
+-------------------------------
+-- Task 1: Design flyer
+UPDATE Task
+SET actual_start_date = '2025-03-08',
+    actual_completion_date = '2025-03-10',
+    expected_cost = 75.00,
+    actual_cost = 80.00
+WHERE project_id = 2 AND id = 1;
+
+-- Task 2: Get design approved
+UPDATE Task
+SET actual_start_date = '2025-03-10',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 20.00,
+    actual_cost = 20.00
+WHERE project_id = 2 AND id = 2;
+
+-- Task 3: Print flyers
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-15',
+    expected_cost = 50.00,
+    actual_cost = 55.00
+WHERE project_id = 2 AND id = 3;
+
+
+-------------------------------
+-- Project 3: Create Poster
+-------------------------------
+-- Note: The target_completion_date for “Design poster” in the INSERT was earlier than the start date.
+-- Here we “fix” it by assuming a later completion.
+-- Task 1: Design poster
+UPDATE Task
+SET actual_start_date = '2025-03-09',
+    actual_completion_date = '2025-03-12',
+    expected_cost = 100.00,
+    actual_cost = 95.00
+WHERE project_id = 3 AND id = 1;
+
+-- Task 2: Get design approved
+UPDATE Task
+SET actual_start_date = '2025-03-12',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 30.00,
+    actual_cost = 30.00
+WHERE project_id = 3 AND id = 2;
+
+-- Task 3: Print poster
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-17',
+    expected_cost = 70.00,
+    actual_cost = 68.00
+WHERE project_id = 3 AND id = 3;
+
+
+-------------------------------
+-- Project 4: Morning Routine
+-------------------------------
+-- Task 1: Wake up
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 4 AND id = 1;
+
+-- Task 2: Brush teeth
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 1.00,
+    actual_cost = 1.00
+WHERE project_id = 4 AND id = 2;
+
+-- Task 3: Wash face
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 0.50,
+    actual_cost = 0.50
+WHERE project_id = 4 AND id = 3;
+
+-- Task 4: Eat breakfast
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 5.00,
+    actual_cost = 5.50
+WHERE project_id = 4 AND id = 4;
+
+
+-------------------------------
+-- Project 5: Morning Routine of Jason
+-------------------------------
+-- Task 1: Wake up
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 5 AND id = 1;
+
+-- Task 2: Get off bed
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 5 AND id = 2;
+
+-- Task 3: Brush teeth
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 1.00,
+    actual_cost = 1.00
+WHERE project_id = 5 AND id = 3;
+
+-- Task 4: Scroll Phone
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 5 AND id = 4;
+
+-- Task 5: ...
+UPDATE Task
+SET actual_start_date = '2025-03-14',
+    actual_completion_date = '2025-03-14',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 5 AND id = 5;
+
+
+-------------------------------
+-- Project 6: Awards Ceremony 2024
+-------------------------------
+
+-- Task 1: Kick-off Meeting
+UPDATE Task
+SET actual_start_date = '2024-05-16',
+    actual_completion_date = '2024-05-16',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 1;
+
+-- Task 2: Confirm Ceremony Date
+UPDATE Task
+SET actual_start_date = '2024-05-16',
+    actual_completion_date = '2024-06-01',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 2;
+
+-- Task 3: Define Ceremony Theme
+UPDATE Task
+SET actual_start_date = '2024-05-16',
+    actual_completion_date = '2024-05-30',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 3;
+
+-- Task 4: Select and Confirm Venue
+UPDATE Task
+SET actual_start_date = '2024-01-31',
+    actual_completion_date = '2024-06-01',
+    expected_cost = 5000.00,
+    actual_cost = 5200.00
+WHERE project_id = 6 AND id = 4;
+
+-- Task 5: Select Stage Production Contractor
+UPDATE Task
+SET actual_start_date = '2024-05-20',
+    actual_completion_date = '2024-07-15',
+    expected_cost = 34380.00,
+    actual_cost = 35000.00
+WHERE project_id = 6 AND id = 5;
+
+-- Task 6: Select Booth Contractor
+UPDATE Task
+SET actual_start_date = '2024-05-20',
+    actual_completion_date = '2024-07-20',
+    expected_cost = 70000.00,
+    actual_cost = 69000.00
+WHERE project_id = 6 AND id = 6;
+
+-- Task 7: Prepare Booth Exhibitors List
+UPDATE Task
+SET actual_start_date = '2024-05-02',
+    actual_completion_date = '2024-05-15',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 7;
+
+-- Task 8: Finalize Exhibitor Numbers
+UPDATE Task
+SET actual_start_date = '2024-05-31',
+    actual_completion_date = '2024-06-05',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 8;
+
+-- Task 9: Obtain Venue Floor Plan
+UPDATE Task
+SET actual_start_date = '2024-05-01',
+    actual_completion_date = '2024-05-30',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 9;
+
+-- Task 10: Create Updated Floor Plan
+UPDATE Task
+SET actual_start_date = '2024-06-01',
+    actual_completion_date = '2024-06-20',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 10;
+
+-- Task 11: Submit Floor Plan to FEHD
+UPDATE Task
+SET actual_start_date = '2024-07-02',
+    actual_completion_date = '2024-07-25',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 11;
+
+-- Task 12: Prepare Opening Ceremony Production
+UPDATE Task
+SET actual_start_date = '2024-05-20',
+    actual_completion_date = '2024-08-15',
+    expected_cost = 5000.00,
+    actual_cost = 5100.00
+WHERE project_id = 6 AND id = 12;
+
+-- Task 13: Prepare Opening Ceremony Sound Effects
+UPDATE Task
+SET actual_start_date = '2024-09-13',
+    actual_completion_date = '2024-09-23',
+    expected_cost = 1500.00,
+    actual_cost = 1450.00
+WHERE project_id = 6 AND id = 13;
+
+-- Task 14: Select Ceremony Ambassador
+UPDATE Task
+SET actual_start_date = '2024-05-20',
+    actual_completion_date = '2024-06-01',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 14;
+
+-- Task 15: Select Ceremony Emcee
+-- (Note: target dates were “swapped” in our fix)
+UPDATE Task
+SET actual_start_date = '2024-06-14',
+    actual_completion_date = '2024-07-31',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 15;
+
+-- Task 16: Generate Honorable Guest List
+UPDATE Task
+SET actual_start_date = '2024-04-01',
+    actual_completion_date = '2024-04-15',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 16;
+
+-- Task 17: Invite Honorable Guests
+UPDATE Task
+SET actual_start_date = '2024-05-01',
+    actual_completion_date = '2024-06-01',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 17;
+
+-- Task 18: Confirm Guest Attendance
+UPDATE Task
+SET actual_start_date = '2024-08-01',
+    actual_completion_date = '2024-08-15',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 18;
+
+-- Task 19: Prepare Media Invitations
+UPDATE Task
+SET actual_start_date = '2024-05-16',
+    actual_completion_date = '2024-05-30',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 19;
+
+-- Task 20: Send Media Invitations
+UPDATE Task
+SET actual_start_date = '2024-09-03',
+    actual_completion_date = '2024-09-05',
+    expected_cost = 0.00,
+    actual_cost = 0.00
+WHERE project_id = 6 AND id = 20;
+
+-- Task 21: Create Marketing Materials
+UPDATE Task
+SET actual_start_date = '2024-08-20',
+    actual_completion_date = '2024-09-10',
+    expected_cost = 4000.00,
+    actual_cost = 4100.00
+WHERE project_id = 6 AND id = 21;
