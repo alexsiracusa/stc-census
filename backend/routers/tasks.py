@@ -21,9 +21,9 @@ async def delete_tasks(
     request: TaskIds
 ):
     try:
-        tasks = await data.delete_tasks(request.task_ids)
+        num_deleted = await data.delete_tasks(request.task_ids)
         response.status_code = status.HTTP_200_OK
-        return tasks
+        return {"num_deleted": num_deleted}
 
     except asyncpg.exceptions.PostgresError as error:
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")

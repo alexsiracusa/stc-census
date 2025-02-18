@@ -13,8 +13,12 @@ async def delete_projects(project_ids):
     query_parts = [f'id = {project_id}' for project_id in project_ids]
 
     return await client.postgres_client.fetch(f"""
-        DELETE FROM Project
-        WHERE {' OR '.join(query_parts)}
+        WITH deleted AS (
+            DELETE FROM Project
+            WHERE {' OR '.join(query_parts)}
+            RETURNING *
+        )
+        SELECT count(*) FROM deleted
     """)
 
 
@@ -22,8 +26,12 @@ async def delete_tasks(task_ids):
     query_parts = [f"(project_id = {task['project_id']} AND id = {task['id']})" for task in task_ids]
 
     return await client.postgres_client.fetch(f"""
-        DELETE FROM Task
-        WHERE {' OR '.join(query_parts)}
+        WITH deleted AS (
+            DELETE FROM Task
+            WHERE {' OR '.join(query_parts)}
+            RETURNING *
+        )
+        SELECT count(*) FROM deleted
     """)
 
 
