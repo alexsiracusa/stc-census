@@ -18,6 +18,15 @@ async def delete_projects(project_ids):
     """)
 
 
+async def delete_tasks(task_ids):
+    query_parts = [f"(project_id = {task['project_id']} AND id = {task['id']})" for task in task_ids]
+
+    return await client.postgres_client.fetch(f"""
+        DELETE FROM Task
+        WHERE {' OR '.join(query_parts)}
+    """)
+
+
 async def get_project_summary(project_id):
     return await client.postgres_client.fetch_row("""
         SELECT * 
