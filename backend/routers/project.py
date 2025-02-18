@@ -152,7 +152,8 @@ async def get_cpm_scheduling(project_id: int,
         if none_count != 1:
             raise HTTPException(
                 status_code=400,
-                detail=f"Exactly one of wanted_start, wanted_end, or wanted_duration must be null (i.e., not provided). {3-none_count} were provided."
+                detail=f"Exactly two of wanted_start, wanted_end, or wanted_duration must be provided, "
+                       f"with the third as null. {3-none_count} were provided."
             )
 
         # Get all tasks with dependencies for the project
