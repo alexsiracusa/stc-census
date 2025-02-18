@@ -34,6 +34,18 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
             className: 'project-status-header',
             disabled: false,
         },
+        {
+            displayName: t('projectList.columns.startDate'),
+            columnName: 'target_start_date',
+            className: 'project-start-date-header',
+            disabled: false,
+        },
+        {
+            displayName: t('projectList.columns.dueDate'),
+            columnName: 'target_completion_date',
+            className: 'project-due-date-header',
+            disabled: false,
+        },
     ]
 
     return (

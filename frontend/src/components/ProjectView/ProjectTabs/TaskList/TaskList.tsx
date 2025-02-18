@@ -14,19 +14,20 @@ import {Task} from "../../../../types/Task.ts";
 import {Project} from "../../../../types/Project.ts";
 
 import {useSelector} from "react-redux";
+import {useEffect, useMemo} from "react";
 
 
 const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
-    const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Task>)
-    const [projectSortOptions, setProjectSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Project>)
+    // const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
+    const [projectSortOptions, setProjectSortOptions] = useState({key: 'status', order: 'asc'} as SortOptions<Project>)
     const {t} = useTranslation();
 
-    const sortedTasks = sortArray(Object.values(tasks), taskSortOptions) as Task[]
-    const sortedProjects = sortArray(Object.values(project['sub_projects']), projectSortOptions) as Project[]
+    const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
+    const sortedProjects = sortArray(Object.values(project.sub_projects), projectSortOptions) as Project[]
 
-    if (tasks == null) {
+    if (project.byId == null) {
         return <></>
     }
 
@@ -64,7 +65,7 @@ const TaskList = (props: TabProps) => {
 
                 <div className='list-container'>
 
-                    {Object.keys(tasks).length > 0 &&
+                    {sortedTasks.length > 0 &&
                         <>
                             <TaskRowHeader
                                 taskSortOptions={taskSortOptions}

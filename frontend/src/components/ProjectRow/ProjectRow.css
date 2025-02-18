@@ -90,3 +90,10 @@
     flex-direction: row;
     align-items: flex-start;
 }
+
+/* START AND COMPLETION DATE */
+.project-row .project-start-date, .project-row-header .project-start-date-header,
+.project-row .project-due-date, .project-row-header .project-due-date-header {
+    width: 6em;
+    height: 60%;
+}

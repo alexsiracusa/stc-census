@@ -1,6 +1,6 @@
 import './TaskFields.css'
 import {useSelector} from "react-redux";
-import TaskDatePicker from "../TaskRow/TaskDatePicker/TaskDatePicker.tsx";
+import SimpleDatePicker from "../../SimpleDatePicker/SimpleDatePicker.tsx";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 
 type TaskFieldsProps = {
@@ -16,7 +16,7 @@ const TaskFields = (props: TaskFieldsProps) => {
         <div className='task-fields'>
             <div className='task-start-date'>
                 <div className='task-field-header'>Start Date:</div>
-                <TaskDatePicker
+                <SimpleDatePicker
                     currentDate={task.target_start_date}
                     title='Edit Start Date'
                     onChange={(value) => {
@@ -27,7 +27,7 @@ const TaskFields = (props: TaskFieldsProps) => {
 
             <div className='task-end-date'>
                 <div className='task-field-header'>Due Date:</div>
-                <TaskDatePicker
+                <SimpleDatePicker
                     currentDate={task.target_completion_date}
                     title='Edit Due Date'
                     onChange={(value) => {
