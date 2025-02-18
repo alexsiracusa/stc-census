@@ -124,23 +124,19 @@ const EVM = (props: TabProps) => {
         <div className="evm">
             <h2>{t('EVM.title')}</h2>
             <table>
+                <thead>
+                <tr>
+                    <th>{t('EVM.metric', "Metric")}</th>
+                    <th>{t('EVM.value', "Value")}</th>
+                </tr>
+                </thead>
                 <tbody>
-                <tr>
-                    <th>{t('EVM.earned_schedule_days')}</th>
-                    <td>{evmData.evm.earned_schedule_days}</td>
-                </tr>
-                <tr>
-                    <th>{t('EVM.actual_time_days')}</th>
-                    <td>{evmData.evm.actual_time_days}</td>
-                </tr>
-                <tr>
-                    <th>{t('EVM.time_variance_days')}</th>
-                    <td>{evmData.evm.time_variance_days}</td>
-                </tr>
-                <tr>
-                    <th>{t('EVM.budget_at_completion')}</th>
-                    <td>{evmData.evm.budget_at_completion}</td>
-                </tr>
+                {evmData.evm.metrics && Object.entries(evmData.evm.metrics).map(([key, value]) => (
+                    <tr key={key}>
+                        <td>{key}</td>
+                        <td>{value !== null ? value : '-'}</td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
 
