@@ -5,6 +5,8 @@ import Text from "../../../../../assets/Icons/Text.svg";
 import DropdownDatePicker from "../../../../Dropdowns/DropdownDatePicker/DropdownDatePicker";
 import { useTranslation } from "react-i18next";
 
+type EventStatus = "Todo" | "WiP" | "On Hold" | "Done";
+
 type EventFormProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -13,6 +15,7 @@ type EventFormProps = {
         startDate: string;
         endDate: string;
         note: string;
+        status: EventStatus;
     }) => void;
     title: string;
     setTitle: (title: string) => void;
@@ -22,6 +25,8 @@ type EventFormProps = {
     setEndDate: (date: string) => void;
     note: string;
     setNote: (note: string) => void;
+    status: EventStatus;
+    setStatus: (status: EventStatus) => void;
 };
 
 const formatDate = (dateString: string, t: any) => {
@@ -33,7 +38,6 @@ const formatDate = (dateString: string, t: any) => {
     };
 
     const locale = t("calendar.eventForm.locale") || "en-US";
-
     return date.toLocaleDateString(locale, options);
 };
 
@@ -49,9 +53,10 @@ const EventForm: React.FC<EventFormProps> = ({
                                                  setEndDate,
                                                  note,
                                                  setNote,
+                                                 status,
+                                                 setStatus,
                                              }) => {
     const { t } = useTranslation();
-
     const formRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -73,7 +78,7 @@ const EventForm: React.FC<EventFormProps> = ({
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [isOpen, title, startDate, endDate, note]);
+    }, [isOpen, title, startDate, endDate, note, status]);
 
     const handleClickOutside = (event: MouseEvent) => {
         if (formRef.current && !formRef.current.contains(event.target as Node)) {
@@ -92,10 +97,11 @@ const EventForm: React.FC<EventFormProps> = ({
 
     const handleSaveEvent = () => {
         const eventData = {
-            title: title.trim() === "" ? t("calendar.eventForm.defaultTitle") : title,
+            title: title.trim() === "" ? t("calendar.eventForm.defaultTitle") : localizedTitle(title),
             startDate,
             endDate,
             note: note.trim() === "" ? t("calendar.eventForm.noNote") : note.trim(),
+            status,
         };
 
         onSaveEvent(eventData);
@@ -113,10 +119,10 @@ const EventForm: React.FC<EventFormProps> = ({
         setEndDate(newEndDate);
     };
 
-    const getEditableTitle = (title: string): string => {
-        t("calendar.eventForm.defaultTitle");
+    const localizedTitle = (title: string): string => {
+        const localizedDefaultTitle = t("calendar.eventForm.defaultTitle");
         const knownDefaults = ["(No title)", "(无标题)"];
-        return knownDefaults.includes(title) ? "" : title;
+        return knownDefaults.includes(title) ? localizedDefaultTitle : title;
     };
 
     if (!isOpen) return null;
@@ -132,7 +138,7 @@ const EventForm: React.FC<EventFormProps> = ({
                         type="text"
                         className="event-title-input"
                         placeholder={t("calendar.eventForm.titlePlaceholder")}
-                        value={getEditableTitle(title)}
+                        value={localizedTitle(title)}
                         onFocus={() => {
                             if (title === t("calendar.eventForm.defaultTitle")) {
                                 setTitle("");
@@ -170,6 +176,15 @@ const EventForm: React.FC<EventFormProps> = ({
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
                         />
+                    </div>
+
+                    <div className="event-status-select">
+                        <select value={status} onChange={(e) => setStatus(e.target.value as EventStatus)}>
+                            <option value="Todo">{t("calendar.eventForm.statusTodo")}</option>
+                            <option value="WiP">{t("calendar.eventForm.statusWiP")}</option>
+                            <option value="On Hold">{t("calendar.eventForm.statusOnHold")}</option>
+                            <option value="Done">{t("calendar.eventForm.statusDone")}</option>
+                        </select>
                     </div>
 
                     <button className="save-button" onClick={handleSaveEvent}>

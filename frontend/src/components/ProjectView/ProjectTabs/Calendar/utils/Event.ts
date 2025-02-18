@@ -8,6 +8,9 @@ export const convertTasksToEvents = (tasks: any): Event[] => {
         color: TaskStatusInfo[task.status]?.color || '#003366',
         startDate: task.target_start_date || 'N/A',
         endDate: task.target_completion_date || task.target_start_date || 'N/A',
-        note: `${task.description || 'No details available'} (Status: ${TaskStatusInfo[task.status]?.name || 'Unknown'})`,
+        note: task.description || 'No details available',
+        status: TaskStatusInfo[task.status]?.name || 'Unknown',
     }));
 };
+
+

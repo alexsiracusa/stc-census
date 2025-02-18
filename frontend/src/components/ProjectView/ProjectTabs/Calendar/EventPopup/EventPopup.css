@@ -114,7 +114,7 @@
     width: 20px;
 }
 
-.event-popup-overlay .event- {
+.event-popup-overlay .event-status {
     display: flex;
     gap: 10px;
     align-items: flex-start;

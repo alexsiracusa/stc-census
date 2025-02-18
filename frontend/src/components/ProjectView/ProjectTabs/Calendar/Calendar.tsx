@@ -6,7 +6,7 @@ import getCalendarDays from '../../../../utils/getCalendarDays.ts';
 import './Calendar.css';
 import TabProps from "../TabProps.ts";
 import { useSelector } from "react-redux";
-import { convertTasksToEvents } from "./utils/events.ts";
+import { convertTasksToEvents } from "./utils/Event.ts";
 
 export type Event = {
     id: string;
@@ -15,6 +15,7 @@ export type Event = {
     startDate: string;
     endDate: string;
     note: string;
+    status: string;
 };
 
 const Calendar: React.FC<TabProps> = (props: TabProps) => {
@@ -46,6 +47,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
         startDate: string;
         endDate: string;
         note: string;
+        status: string;
     }) => {
         if (eventData.title && eventData.startDate && eventData.endDate) {
             if (selectedEventId) {
@@ -58,6 +60,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                                 startDate: eventData.startDate,
                                 endDate: eventData.endDate,
                                 note: eventData.note,
+                                status: eventData.status
                             }
                             : event
                     )
@@ -72,6 +75,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                         startDate: eventData.startDate,
                         endDate: eventData.endDate,
                         note: eventData.note,
+                        status: eventData.status,
                     },
                 ]);
             }
@@ -129,7 +133,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                 setEvents={setEvents}
                 openEventForm={handleOpenNewEventForm}
                 openEditForm={handleOpenEditEventForm}
-                onDeleteEvent={handleDelete}
+                onDeleteEvent={handleDelete} currentProjectId={0}
             />
             <EventForm
                 isOpen={isEventFormOpen}
@@ -142,8 +146,10 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                 endDate={endDate}
                 setEndDate={setEndDate}
                 note={eventNote}
-                setNote={setEventNote}
-            />
+                setNote={setEventNote} status={'Todo'}
+                setStatus={function (status: 'Todo' | 'WiP' | 'On Hold' | 'Done'): void {
+                    throw new Error('Function not implemented.');
+                }}            />
         </div>
     );
 };

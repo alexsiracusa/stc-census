@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Event } from "../Calendar.tsx";
+import { Event } from "../Calendar"; // Adjust path accordingly
 import { useTranslation } from "react-i18next";
 import "./CalendarGrid.css";
 import { isToday, isSameDay } from "date-fns";
-import EventPopup from "../EventPopup/EventPopup.tsx";
-import AllEventsPopup from "../AllEventsPopup/AllEventsPopup.tsx";
+import EventPopup from "../EventPopup/EventPopup";
+import AllEventsPopup from "../AllEventsPopup/AllEventsPopup";
 
 type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
     events: Event[];
+    currentProjectId: number;
     setEvents: (events: Event[]) => void;
     openEventForm: (date: Date, eventToEdit?: Event) => void;
     openEditForm: (event: Event) => void;
@@ -25,8 +26,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                        calendarDays,
                                                        events,
                                                        openEventForm,
-                                                       openEditForm,
-                                                       onDeleteEvent,
                                                    }) => {
     const { t } = useTranslation();
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
@@ -37,8 +36,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows === 6 ? 3 : 3);
-
+        setMaxEventsPerDay(rows === 6 ? 3 : 3); // Set max events based on rows
     }, [calendarDays]);
 
     const handleEventClick = (event: Event) => {
@@ -62,31 +60,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     const closeAllEvents = () => {
         setAllEventsDate(null);
         setAllEventsForDate([]);
-    };
-
-    const handleEdit = () => {
-        if (selectedEvent) {
-            openEditForm(selectedEvent);
-            closePopup();
-        }
-    };
-
-    const handleDelete = (eventId: string) => {
-        if (onDeleteEvent) {
-            onDeleteEvent(eventId);
-            closePopup();
-        }
-    };
-
-    const handleEmail = () => {
-        if (selectedEvent) {
-            const mailto = `mailto:?subject=${t('calendar.calendarGrid.invitationSubject', { title: selectedEvent.title })}&body=${t('calendar.calendarGrid.invitationBody', { title: selectedEvent.title, start: selectedEvent.startDate, end: selectedEvent.endDate })}`;
-            window.open(mailto, "_blank");
-        }
-    };
-
-    const truncateText = (text: string, limit: number): string => {
-        return text.length > limit ? text.slice(0, limit) + "..." : text;
     };
 
     const localizeTitle = (title: string): string => {
@@ -133,7 +106,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                 handleEventClick(event);
                                             }}
                                         >
-                                            {truncateText(localizeTitle(event.title), 19)}
+                                            {localizeTitle(event.title)}
                                         </div>
                                     ))}
                                 {events.filter((event) =>
@@ -165,14 +138,11 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                             endDate: selectedEvent.endDate,
                             note: selectedEvent.note || t("calendar.calendarGrid.noNote"),
                         }}
-                        onEdit={handleEdit}
-                        onDelete={() => handleDelete(selectedEvent.id)}
-                        onEmail={handleEmail}
-                        project_id={0}
-                        event_id={""}
+                        project_id={Number(selectedEvent.id)}
+                        event_id={String(selectedEvent.id)}
                     />
                 )}
-                {allEventsDate && (
+                {allEventsDate && allEventsForDate.length > 0 && (
                     <AllEventsPopup
                         date={allEventsDate}
                         events={allEventsForDate.map((event) => ({
