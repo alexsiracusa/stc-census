@@ -80,6 +80,7 @@ def compute_cpm(df: pd.DataFrame, include_dependencies_in_result:bool=False) -> 
     result_df = pd.DataFrame({
         'id': df['id'],
         'project_id': df['project_id'],
+        'target_days_to_complete': df['target_duration'],
         'earliest_start': es,
         'earliest_finish': ef,
         'latest_start': ls,
