@@ -69,6 +69,7 @@ i18n
                             locale: 'en-US',
                             noNote: '',
                             note: 'Note',
+                            status: 'Status',
                         },
                         eventPopup: {
                             edit: "Edit",
@@ -221,13 +222,13 @@ i18n
                             locale: 'zh-CN',
                             noNote: '',
                             note: '笔记',
+                            status: '地位',
                         },
                         eventPopup: {
                             edit: "编辑",
                             delete: "删除",
                             email: "邮件",
                             close: "关闭",
-                                inviteViaLink: "通过链接邀请",
                             note: "笔记",
                         },
                         months: {
