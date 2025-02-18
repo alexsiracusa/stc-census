@@ -39,6 +39,7 @@ const ProjectDashboard = () => {
                 editing={editingProjects}
                 setEditing={setEditingProjects}
                 selected={selectedProjects}
+                dashboard={true}
             />
 
             <ul className='project-list'>

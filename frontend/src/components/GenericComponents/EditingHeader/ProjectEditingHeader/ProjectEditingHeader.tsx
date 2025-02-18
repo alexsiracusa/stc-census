@@ -11,6 +11,7 @@ type ProjectEditingHeaderProps = {
     editing: boolean
     setEditing: (boolean) => void
     selected: Set<number>
+    dashboard?: boolean
 }
 
 const ProjectEditingHeader = (props: ProjectEditingHeaderProps) => {
@@ -20,7 +21,7 @@ const ProjectEditingHeader = (props: ProjectEditingHeaderProps) => {
 
     return (
         <div className='editing-header'>
-            <h3>{t('projectList.subProjects')}</h3>
+            <h3>{t(props.dashboard ? 'projectDashboard.title' : 'projectList.subProjects')}</h3>
 
             <button
                 className='edit-button'
