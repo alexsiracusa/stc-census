@@ -2,7 +2,7 @@ import pandas as pd
 from collections import deque
 import ast
 
-def compute_cpm(df: pd.DataFrame) -> tuple:
+def compute_cpm(df: pd.DataFrame, include_dependencies_in_result:bool=False) -> tuple:
     df = prepare_data(df)
     n = len(df)
     if n == 0:
@@ -11,7 +11,7 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
             'id', 'project_id', 'earliest_start', 'earliest_finish',
             'latest_start', 'latest_finish', 'slack', 'is_critical', 'dependencies'
         ])
-        return (empty_df, [], 0)
+        return empty_df, [], 0
 
     # Build successors list
     successors = [[] for _ in range(n)]
@@ -86,10 +86,12 @@ def compute_cpm(df: pd.DataFrame) -> tuple:
         'latest_finish': lf,
         'slack': slack,
         'is_critical': critical,
-        'dependencies': df['dependencies']
     })
 
-    return (result_df, cycle_node_info, project_duration)
+    if include_dependencies_in_result:
+        result_df['dependencies'] = df['dependencies']
+
+    return result_df, cycle_node_info, project_duration
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     df.columns = ['id', 'project_id', 'status', 'target_duration', 'dependencies']
