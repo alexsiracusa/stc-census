@@ -1,7 +1,8 @@
 import './ProjectPage.css'
 
-import ProjectSidebar from "../../components/ProjectSidebar/ProjectSidebar.tsx";
-import ProjectView from "../../components/ProjectView/ProjectView.tsx";
+
+import ProjectSidebar from "../../components/ProjectComponents/ProjectSidebar/ProjectSidebar.tsx";
+import ProjectView from "../../components/ProjectComponents/ProjectView/ProjectView.tsx";
 import {useParams} from "react-router-dom";
 
 const ProjectPage = () => {

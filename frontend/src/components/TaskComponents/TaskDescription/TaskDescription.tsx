@@ -3,7 +3,7 @@ import './TaskDescription.css'
 import {useSelector} from "react-redux";
 import {useState, useRef} from "react";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
-import AutoExpandingTextarea from "../../AutoExpandingTextarea/AutoExpandingTextarea.tsx";
+import AutoExpandingTextarea from "../../GenericComponents/AutoExpandingTextarea/AutoExpandingTextarea.tsx";
 
 type TaskDescriptionProps = {
     project_id: number,

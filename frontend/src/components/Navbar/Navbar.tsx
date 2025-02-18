@@ -1,6 +1,6 @@
 import './Navbar.css';
 import Logo from '../../assets/STC.png';
-import LanguageSelector from '../LanguageSelector/LanguageSelector.tsx';
+import LanguageSelector from '../GenericComponents/LanguageSelector/LanguageSelector.tsx';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import User from '../../assets/Icons/User.svg';

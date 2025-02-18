@@ -4,7 +4,7 @@ import {TaskStatusInfo, TaskStatuses} from "../../../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
 import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
-import StatusSelector from "../../../StatusSelector/StatusSelector.tsx";
+import StatusSelector from "../../../GenericComponents/StatusSelector/StatusSelector.tsx";
 
 type TaskStatusSelectorProps = {
     project_id: number

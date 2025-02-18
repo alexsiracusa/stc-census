@@ -2,7 +2,7 @@ import './TaskName.css'
 
 import {useSelector} from "react-redux";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
-import NameEditor from "../../NameEditor/NameEditor.tsx";
+import NameEditor from "../../GenericComponents/NameEditor/NameEditor.tsx";
 
 type TaskNameProps = {
     project_id: number,

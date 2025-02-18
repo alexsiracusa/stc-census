@@ -2,14 +2,14 @@ import './TaskPopup.css'
 
 import {useSelector} from "react-redux";
 import {Children, PropsWithChildren, useState} from "react";
-import Popup from "../../Popup/Popup.tsx";
+import Popup from "../../GenericComponents/Popup/Popup.tsx";
 import TaskDependsEditor from "../TaskDependsEditor/TaskDependsEditor.tsx";
 import TaskName from "../TaskName/TaskName.tsx";
 import TaskDescription from "../TaskDescription/TaskDescription.tsx";
 import TaskStatusSelector from "../TaskRow/TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskFields from "../TaskFields/TaskFields.tsx";
 import {useTranslation} from "react-i18next";
-import Path from "../../Path/Path.tsx";
+import Path from "../../GenericComponents/Path/Path.tsx";
 import TaskDeleteButton from "../TaskDeleteButton/TaskDeleteButton.tsx";
 
 type TaskPopupProps = {

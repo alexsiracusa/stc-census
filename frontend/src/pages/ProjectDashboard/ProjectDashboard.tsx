@@ -1,20 +1,20 @@
 import './ProjectDashboard.css'
 
-import ProjectRow from "../../components/ProjectRow/ProjectRow.tsx";
+import ProjectRow from "../../components/ProjectComponents/ProjectRow/ProjectRow.tsx";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import useFetchDashboard from "../../hooks/useFetchDashboard.ts";
-import AddProjectButton from "../../components/AddProjectButton/AddProjectButton.tsx";
-import ProjectRowHeader from "../../components/ProjectRow/ProjectRowHeader.tsx";
+import AddProjectButton from "../../components/ProjectComponents/AddProjectButton/AddProjectButton.tsx";
+import ProjectRowHeader from "../../components/ProjectComponents/ProjectRow/ProjectRowHeader.tsx";
 import {useState} from "react";
 import {sortArray, SortOptions} from "../../utils/sort.ts";
 import {Project} from "../../types/Project.ts";
 import XMark from "../../assets/Icons/X.svg";
 import Edit from "../../assets/Icons/Edit2.svg";
-import ConfirmPopup from "../../components/ConfirmPopup/ConfirmPopup.tsx";
+import ConfirmPopup from "../../components/GenericComponents/ConfirmPopup/ConfirmPopup.tsx";
 import Trash from "../../assets/Icons/Trash2.svg";
 import useDeleteProjects from "../../hooks/useDeleteProjects.ts";
-import ProjectEditingHeader from "../../components/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
+import ProjectEditingHeader from "../../components/GenericComponents/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
 
 
 const ProjectDashboard = () => {

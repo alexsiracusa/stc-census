@@ -1,6 +1,6 @@
 import './TaskFields.css'
 import {useSelector} from "react-redux";
-import SimpleDatePicker from "../../SimpleDatePicker/SimpleDatePicker.tsx";
+import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 
 type TaskFieldsProps = {
