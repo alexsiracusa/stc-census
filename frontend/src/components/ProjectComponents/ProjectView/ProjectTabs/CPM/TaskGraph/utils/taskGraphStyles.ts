@@ -48,14 +48,15 @@ export const taskGraphStyles = [
         selector: 'node[?isCritical]',
         style: {
             'border-color': '#000080',
-            'border-width': '2px'
+            'border-width': '5px',
+            'font-weight': 'bold'
         }
     },
     {
         selector: 'node[?inCycle]',
         style: {
             'border-color': '#ff0000',
-            'border-width': '2px'
+            'border-width': '5px'
         }
     },
     {
