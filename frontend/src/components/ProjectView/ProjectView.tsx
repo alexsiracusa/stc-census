@@ -9,7 +9,6 @@ import GanttChart from "./ProjectTabs/GanttChart/GanttChart.tsx";
 import Calendar from "./ProjectTabs/Calendar/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM/CPM.tsx";
 import EVM from "./ProjectTabs/EVM/EVM.tsx";
-import ES from "./ProjectTabs/ES/ES.tsx";
 
 import { useSelector } from 'react-redux';
 import ProjectPath from "../ProjectPath/ProjectPath.tsx";
@@ -38,7 +37,6 @@ const ProjectView = (props: ProjectViewProps) => {
                 <Route path="/calendar" element={<Calendar project_id={props.project_id}/>}/>
                 <Route path="/cpm" element={<CPM project_id={props.project_id}/>}/>
                 <Route path="/evm" element={<EVM project_id={props.project_id}/>}/>
-                <Route path="/es" element={<ES project_id={props.project_id}/>}/>
                 <Route path="/*" element={<Navigate to={`/project/${props.project_id}/summary`} replace/>}/>
             </Routes>
         </div>

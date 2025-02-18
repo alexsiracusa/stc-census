@@ -59,12 +59,6 @@ const ProjectSidebar = (props: ProjectSidebarProps) => {
                         {t('sidebar.EVM')}
                     </a>
                 </li>
-                <li>
-                    <a href={`/project/${props.project_id}/es`}>
-                        <img src={Ring} alt={''}/>
-                        {t('sidebar.ES')}
-                    </a>
-                </li>
             </ul>
         </aside>
     )
