@@ -188,7 +188,6 @@ async def get_cpm_scheduling(project_id: int,
             end_int = wanted_duration
             schedule_mode = 2
 
-
         diff = end_int - critical_path_length
 
         if diff < 0: # the requested project duration is too short to fit the critical path
