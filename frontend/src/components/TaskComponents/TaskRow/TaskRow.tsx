@@ -80,6 +80,8 @@ const TaskRow = (props: TaskRowProps) => {
             <div className='task-budget'>
                 <NumberEditor
                     value={task.expected_cost}
+                    negative={false}
+                    step={10}
                     setValue={(value) => {
                         updateTask(props.project_id, props.task_id, {expected_cost: value})
                     }}
@@ -90,6 +92,8 @@ const TaskRow = (props: TaskRowProps) => {
             <div className='task-actual-cost'>
                 <NumberEditor
                     value={task.actual_cost}
+                    negative={false}
+                    step={10}
                     setValue={(value) => {
                         updateTask(props.project_id, props.task_id, {actual_cost: value})
                     }}

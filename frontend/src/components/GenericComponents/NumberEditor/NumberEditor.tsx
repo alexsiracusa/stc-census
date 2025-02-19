@@ -5,6 +5,8 @@ type NumberEditorProps = {
     value: number,
     setValue: (number) => void
     title?: string
+    negative?: boolean
+    step?: number
 }
 
 const NumberEditor = (props: NumberEditorProps) => {
@@ -13,8 +15,9 @@ const NumberEditor = (props: NumberEditorProps) => {
 
     const enterInput = () => {
         if (value !== null) {
-            setValue(value)
-            props.setValue(value)
+            const newValue = value > 0 ? value : 0
+            setValue(newValue)
+            props.setValue(newValue)
         } else {
             setValue(props.value)
         }
@@ -33,6 +36,8 @@ const NumberEditor = (props: NumberEditorProps) => {
                 ref={ref}
                 type="number"
                 value={value}
+                min={props.negative ? '' : 0}
+                step={props.step ? props.step : 1}
                 title={props.title ? props.title : ''}
                 onKeyDown={handleKeyDown}
                 onBlur={enterInput}
