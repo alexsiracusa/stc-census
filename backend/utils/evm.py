@@ -12,7 +12,9 @@ def compute_evm(df, current_date=None):
     for col in date_cols:
         df[col] = pd.to_datetime(df[col], errors='coerce')
 
-    df['actual_cost'] = df['actual_cost'].fillna(0)
+    # Convert costs to numeric types to ensure correct summation
+    df['actual_cost'] = pd.to_numeric(df['actual_cost'], errors='coerce').fillna(0)
+    df['expected_cost'] = pd.to_numeric(df['expected_cost'], errors='coerce').fillna(0)
     df.loc[df['status'] == 'on_hold', 'actual_cost'] = 0
 
     def get_planned_date(row):
@@ -27,14 +29,15 @@ def compute_evm(df, current_date=None):
             return row['target_completion_date']
 
     df['planned_date'] = df.apply(get_planned_date, axis=1)
-    df['expected_cost'] = df['expected_cost'].fillna(0)
 
+    # Planned Value (PV) calculation
     pv_df = df[df['planned_date'].notnull()].copy()
     pv_events = pv_df.groupby('planned_date')['expected_cost'].sum().sort_index()
     pv_cumsum = pv_events.cumsum()
 
+    # Earned Value (EV) calculation using expected_cost for completed tasks
     ev_df = df[df['actual_completion_date'].notnull()].copy()
-    ev_events = ev_df.groupby('actual_completion_date')['actual_cost'].sum().sort_index()
+    ev_events = ev_df.groupby('actual_completion_date')['expected_cost'].sum().sort_index()
     ev_cumsum = ev_events.cumsum()
 
     all_dates = set(pv_events.index.tolist() + ev_events.index.tolist() + [current_date])
@@ -55,7 +58,8 @@ def compute_evm(df, current_date=None):
     ac_df = df[df['actual_start_date'].notnull()]
     AC_current = ac_df['actual_cost'].sum()
 
-    if pv_series.max() == 0:
+    # Calculate Earned Schedule (ES)
+    if pv_series.empty:
         es_date = project_start
     else:
         if EV_current <= pv_series.iloc[0]:
@@ -65,6 +69,8 @@ def compute_evm(df, current_date=None):
         else:
             prev_date = timeline[0]
             prev_value = pv_series.iloc[0]
+            next_date = timeline[0]
+            next_value = pv_series.iloc[0]
             for t, pv_val in pv_series.items():
                 if pv_val < EV_current:
                     prev_date = t
@@ -127,7 +133,6 @@ def compute_evm(df, current_date=None):
             "time_performance_index": TPI,
             "actual_cost": AC_current
         }
-
     }
 
     return metrics
