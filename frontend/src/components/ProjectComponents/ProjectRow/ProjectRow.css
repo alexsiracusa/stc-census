@@ -142,8 +142,8 @@
 }
 
 .project-row .project-budget-variance.positive {
-    font-weight: bold;
-    color: darkgreen;
+    /*font-weight: bold;*/
+    /*color: darkgreen;*/
 }
 
 .project-row .project-budget-variance.negative {

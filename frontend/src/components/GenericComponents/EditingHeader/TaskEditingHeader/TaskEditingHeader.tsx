@@ -42,7 +42,7 @@ const TaskEditingHeader = (props: TaskEditingHeaderProps) => {
             {editing && (
                 <ConfirmPopup
                     className='delete-button'
-                    message='Are you sure you want to delete all selected subprojects? It better to archive them instead. This cannot be undone.'
+                    message='Are you sure you want to delete all selected tasks? This cannot be undone.'
                     left={{
                         text: 'Delete',
                         onPress: () => {

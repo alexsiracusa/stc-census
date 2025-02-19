@@ -62,9 +62,10 @@ async def create(
         fields: Any = Body(None)
 ):
     try:
-        task = await data.create_project(fields)
+        project = await data.create_project(fields)
+        project = await data.get_project_summary(project['id'])
         response.status_code = status.HTTP_200_OK
-        return task
+        return project
 
     except Exception as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR

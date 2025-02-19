@@ -38,7 +38,7 @@ const ProjectEditingHeader = (props: ProjectEditingHeaderProps) => {
             {editing && (
                 <ConfirmPopup
                     className='delete-button'
-                    message='Are you sure you want to delete all selected subprojects? It better to archive them instead. This cannot be undone.'
+                    message='Are you sure you want to delete all selected projects and related information? This cannot be undone. It is recommended to archive instead.'
                     left={{
                         text: 'Delete',
                         onPress: () => {
