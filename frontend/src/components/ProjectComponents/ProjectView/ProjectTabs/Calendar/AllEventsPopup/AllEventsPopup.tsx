@@ -1,24 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import './AllEventsPopup.css';
 import { useTranslation } from 'react-i18next';
+import { Task } from '../../../../../../types/Task.ts';  // Adjust the import path if necessary
 
 type AllEventsPopupProps = {
     date: Date;
-    events: {
-        id: string;
-        title: string;
-        startDate: string;
-        endDate: string;
-        color: string;
-    }[];
+    tasks: Task[]; // Use the Task interface defined in Task.ts
     onClose: () => void;
-    openEventDetails: (eventId: string) => void;
+    openTaskDetails: (taskId: number) => void; // Accept a number for Task ID
 };
 
-const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, openEventDetails }) => {
+const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, tasks, onClose, openTaskDetails }) => {
     const { t } = useTranslation();
     const popupRef = useRef<HTMLDivElement>(null);
 
+    // Close popup on 'Escape' key press
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -32,6 +28,7 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
         };
     }, [onClose]);
 
+    // Close popup on outside click
     const handleClickOutside = (event: MouseEvent) => {
         if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
             onClose();
@@ -45,6 +42,7 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
         };
     }, [onClose]);
 
+    // Format the date for display
     const formatDate = (date: Date) => {
         const options: Intl.DateTimeFormatOptions = {
             weekday: 'long',
@@ -69,11 +67,11 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
                         return part.value;
                 }
             })
-            .join('');
+            .join(' ');
     };
 
-    const handleEventClick = (eventId: string) => {
-        openEventDetails(eventId);
+    const handleTaskClick = (taskId: number) => {
+        openTaskDetails(taskId);
         onClose();
     };
 
@@ -88,17 +86,17 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, events, onClose, 
                     </button>
                 </div>
                 <div className="all-events-body">
-                    {events.length > 0 ? (
-                        events.map((event) => (
+                    {tasks.length > 0 ? (
+                        tasks.map((task) => (
                             <div
-                                key={event.id}
-                                style={{ backgroundColor: event.color }}
+                                key={task.id}
+                                style={{ backgroundColor: task.status === 'Completed' ? 'lightgreen' : 'lightcoral' }} // Example color logic
                                 className="event-item"
-                                onClick={() => handleEventClick(event.id)}
+                                onClick={() => handleTaskClick(task.id)}
                             >
-                                <strong>{event.title}</strong>
+                                <strong>{task.name}</strong>
                                 <span className="event-time">
-                                    {`${event.startDate} - ${event.endDate}`}
+                                    {`${task.target_start_date || 'N/A'} - ${task.target_completion_date || 'N/A'}`}
                                 </span>
                             </div>
                         ))
