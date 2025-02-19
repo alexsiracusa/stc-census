@@ -9,11 +9,6 @@ import ProjectRowHeader from "../../components/ProjectComponents/ProjectRow/Proj
 import {useState} from "react";
 import {sortArray, SortOptions} from "../../utils/sort.ts";
 import {Project} from "../../types/Project.ts";
-import XMark from "../../assets/Icons/X.svg";
-import Edit from "../../assets/Icons/Edit2.svg";
-import ConfirmPopup from "../../components/GenericComponents/ConfirmPopup/ConfirmPopup.tsx";
-import Trash from "../../assets/Icons/Trash2.svg";
-import useDeleteProjects from "../../hooks/useDeleteProjects.ts";
 import ProjectEditingHeader from "../../components/GenericComponents/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
 
 
@@ -24,8 +19,6 @@ const ProjectDashboard = () => {
     const project_ids = useSelector((state) => state.projects.dashboard);
     const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
     const selectedProjects = new Set<number>();
-    const {deleteProjects, loadingDeleteProjects, errorDeleteProjects, dataDeleteProjects} = useDeleteProjects();
-
     const {t} = useTranslation();
 
     if (error) return <p>Project Dashboard Error: {error.toString()}</p>;

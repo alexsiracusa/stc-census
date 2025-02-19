@@ -81,6 +81,22 @@ const ProjectRow = (props: ProjectRowProps) => {
                     }}
                 />
             </div>
+
+            <div className='project-budget'>
+                <p>{project.expected_cost}</p>
+            </div>
+
+            <div className='project-actual-cost'>
+                <p>{project.actual_cost}</p>
+            </div>
+
+            <div className={('project-budget-variance ' + (project.budget_variance < 0 ? 'negative' : 'positive'))}>
+                {project.budget_variance > 0 ? (
+                    <p>{Math.abs(project.budget_variance)}</p>
+                ) : (
+                    <p>{`[${Math.abs(project.budget_variance)}]`}</p>
+                )}
+            </div>
         </div>
     )
 };

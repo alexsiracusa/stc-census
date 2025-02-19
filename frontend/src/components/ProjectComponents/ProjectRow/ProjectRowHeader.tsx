@@ -52,6 +52,24 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
             className: 'project-due-date-header',
             disabled: false,
         },
+        {
+            displayName: t('projectList.columns.budget'),
+            columnName: 'expected_cost',
+            className: 'project-budget-header',
+            disabled: false,
+        },
+        {
+            displayName: t('projectList.columns.actualCost'),
+            columnName: 'actual_cost',
+            className: 'project-actual-cost-header',
+            disabled: false,
+        },
+        {
+            displayName: t('projectList.columns.budgetVariance'),
+            columnName: 'budget_variance',
+            className: 'project-budget-variance-header',
+            disabled: false,
+        },
     ]
 
     return (

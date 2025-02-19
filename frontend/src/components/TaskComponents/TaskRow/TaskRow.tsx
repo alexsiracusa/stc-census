@@ -5,7 +5,6 @@ import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import {useSelector} from "react-redux";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
-import TaskName from "../TaskName/TaskName.tsx";
 import TaskPopup from "../TaskPopup/TaskPopup.tsx";
 import NumberEditor from "../../GenericComponents/NumberEditor/NumberEditor.tsx";
 
@@ -51,12 +50,6 @@ const TaskRow = (props: TaskRowProps) => {
                 <p>{task.name}</p>
             </TaskPopup>
 
-            {/*<div className='task-name-container'>*/}
-            {/*    <TaskPopup project_id={props.project_id} task_id={props.task_id} buttonClassName='task-name'>*/}
-            {/*        <p>T{task.name}</p>*/}
-            {/*    </TaskPopup>*/}
-            {/*    /!*<TaskName project_id={props.project_id} task_id={props.task_id}/>*!/*/}
-            {/*</div>*/}
             <div className='task-status-container'>
                 <TaskStatusSelector project_id={props.project_id} task_id={props.task_id}/>
             </div>

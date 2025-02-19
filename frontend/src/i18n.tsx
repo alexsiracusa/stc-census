@@ -152,6 +152,9 @@ i18n
                             tasks: 'Tasks',
                             startDate: 'Start Date',
                             dueDate: 'Due Date',
+                            budget: 'Budget',
+                            actualCost: 'Actual $',
+                            budgetVariance: 'Diff.',
                         }
                     },
                     addProject: 'Add Project',
@@ -307,6 +310,9 @@ i18n
                             status: '状态',
                             startDate: '开始日期',
                             dueDate: '到期日',
+                            budget: '预算',
+                            actualCost: '实际成本',
+                            budgetVariance: '差别'
                         }
                     },
                     addProject: '添加任务',

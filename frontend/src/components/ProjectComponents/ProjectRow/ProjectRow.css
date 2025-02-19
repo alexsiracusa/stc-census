@@ -128,7 +128,34 @@
 /* START AND COMPLETION DATE */
 .project-row .project-start-date, .project-row-header .project-start-date-header,
 .project-row .project-due-date, .project-row-header .project-due-date-header {
-    width: 6em;
-    min-width: 6em;
+    width: 5.5em;
+    min-width: 5.5em;
     height: 60%;
+}
+
+/* BUDGET, ACTUAL COST, AND BUDGET VARIANCE */
+.project-row .project-budget, .project-row-header .project-budget-header,
+.project-row .project-actual-cost, .project-row-header .project-actual-cost-header,
+.project-row .project-budget-variance, .project-row-header .project-budget-variance-header{
+    width: 4.5em;
+    min-width: 4.5em;
+}
+
+.project-row .project-budget-variance.positive {
+    font-weight: bold;
+    color: darkgreen;
+}
+
+.project-row .project-budget-variance.negative {
+    font-weight: bold;
+    color: red;
+}
+
+.project-row .project-budget,
+.project-row .project-actual-cost,
+.project-row .project-budget-variance {
+    p {
+        font-size: 0.8em;
+        margin-left: 2px;
+    }
 }

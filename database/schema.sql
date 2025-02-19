@@ -154,7 +154,8 @@ CREATE VIEW Task_Node AS (
         array_remove(array_agg(json_object_nullif(jsonb_build_object(
             'task_id', Task_Depends_On.depends_task_id,
             'project_id', Task_Depends_On.depends_project_id)
-        )), NULL) AS depends_on
+        )), NULL) AS depends_on,
+        (Task.expected_cost - Task.actual_cost) AS budget_variance
     FROM TASK
     LEFT JOIN Task_Depends_On ON Task.project_id = Task_Depends_On.project_id AND Task.id = Task_Depends_On.task_id
     GROUP BY Task.id, Task.project_id
@@ -168,7 +169,10 @@ CREATE VIEW Project_Summary AS (
             'in_progress', COUNT(CASE WHEN Task.status = 'in_progress' THEN 1 END),
             'on_hold', COUNT(CASE WHEN Task.status = 'on_hold' THEN 1 END),
             'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
-        ) AS status_counts
+        ) AS status_counts,
+        SUM(Task.expected_cost) AS expected_cost,
+        SUM(Task.actual_cost) AS actual_cost,
+        SUM(Task.expected_cost - Task.actual_cost) AS budget_variance
     FROM Task
     RIGHT JOIN Project ON project_id IN (
         SELECT unnest(children)
