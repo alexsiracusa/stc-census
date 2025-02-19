@@ -47,9 +47,16 @@ const TaskRow = (props: TaskRowProps) => {
                 </TaskPopup>
             )}
 
-            <div className='task-name-container'>
-                <TaskName project_id={props.project_id} task_id={props.task_id}/>
-            </div>
+            <TaskPopup project_id={props.project_id} task_id={props.task_id} buttonClassName='task-name-container'>
+                <p>{task.name}</p>
+            </TaskPopup>
+
+            {/*<div className='task-name-container'>*/}
+            {/*    <TaskPopup project_id={props.project_id} task_id={props.task_id} buttonClassName='task-name'>*/}
+            {/*        <p>T{task.name}</p>*/}
+            {/*    </TaskPopup>*/}
+            {/*    /!*<TaskName project_id={props.project_id} task_id={props.task_id}/>*!/*/}
+            {/*</div>*/}
             <div className='task-status-container'>
                 <TaskStatusSelector project_id={props.project_id} task_id={props.task_id}/>
             </div>

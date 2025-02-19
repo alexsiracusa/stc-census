@@ -45,9 +45,15 @@ const ProjectRow = (props: ProjectRowProps) => {
                 </Link>
             )}
 
-            <div className='project-name-container'>
-                <ProjectName project_id={props.project_id}/>
-            </div>
+            <Link
+                reloadDocument
+                to={`/project/${props.project_id}/task-list`}
+                className='project-name-container'
+            >
+                <p>{project.name}</p>
+            </Link>
+
+
             <div className='project-status-container'>
                 <ProjectStatusSelector project_id={props.project_id}/>
             </div>

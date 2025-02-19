@@ -6,6 +6,9 @@
 
     padding: 0 0.6em;
     gap: 0.3em;
+
+    font-size: 1em;
+    line-height: normal;
 }
 
 .task-row.overdue {
@@ -87,7 +90,24 @@
 
 .task-row .task-name-container {
     height: 100%;
-    transform: translate(-0.3em, 0);
+    font-size: 1em;
+
+    border: none;
+    background-color: transparent;
+
+    p {
+        cursor: pointer;
+        width: 100%;
+
+        text-align: start;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    p:hover {
+        text-decoration: underline;
+    }
 }
 
 /*TASK STATUS*/

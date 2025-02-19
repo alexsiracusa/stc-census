@@ -1,4 +1,10 @@
 
+.popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .popup .popup-background {
     display: flex;
     align-items: center;

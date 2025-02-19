@@ -6,6 +6,7 @@
     gap: 0.3em;
 
     font-size: 1em;
+    line-height: normal;
 }
 
 .project-row {
@@ -78,7 +79,26 @@
 .project-row .project-name-container, .project-row-header .project-name-header {
     width: 16em;
     min-width: 16em;
-    height: 100%;
+}
+
+.project-row .project-name-container {
+    display: flex;
+    align-items: center;
+
+    p {
+        color: black;
+        cursor: pointer;
+        width: 100%;
+
+        text-align: start;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    p:hover {
+        text-decoration: underline;
+    }
 }
 
 
