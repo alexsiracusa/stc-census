@@ -6,17 +6,27 @@ import getCalendarDays from "../../../../../utils/getCalendarDays.ts";
 import './Calendar.css';
 import TabProps from "../TabProps.ts";
 import { useSelector } from "react-redux";
-import { convertTasksToEvents } from "./utils/Event.ts";
 import { Task } from "../../../../../types/Task.ts";
+import { TaskStatusInfo } from "../../../../../types/TaskStatuses.ts";
 
 export type Event = {
+    projectId: number;
     id: string;
     title: string;
     color: string;
     startDate: string;
     endDate: string;
-    note: string;
-    status: string;
+};
+
+const convertTasksToEvents = (tasks: Record<string, Task>, projectId: number): Event[] => {
+    return Object.values(tasks).map((task: Task) => ({
+        projectId,
+        id: task.id.toString(),
+        title: task.name || 'Untitled Task',
+        color: TaskStatusInfo[task.status]?.color || '#003366',
+        startDate: task.target_start_date || 'N/A',
+        endDate: task.target_completion_date || task.target_start_date || 'N/A',
+    }));
 };
 
 const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
@@ -30,26 +40,21 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    const tasks = useSelector((state) => state.projects.byId[project_id]?.byId || {});
+    const tasks: Record<string, Task> = useSelector((state) => state.projects.byId[project_id]?.byId) || {};
 
     useEffect(() => {
-        const taskEvents = convertTasksToEvents(tasks);
+        const taskEvents = convertTasksToEvents(tasks, project_id);
+        console.log("Converted taskEvents:", taskEvents);
         setEvents(taskEvents);
-    }, [tasks]);
+    }, [tasks, project_id]);
 
-    const handleSaveEvent = (eventData: {
-        title: string;
-        startDate: string;
-        endDate: string;
-        note: string;
-        status: string;
-    }) => {
+    const handleSaveEvent = (eventData: { title: string; startDate: string; endDate: string; note: string; status: string; }) => {
         if (eventData.title && eventData.startDate && eventData.endDate) {
             if (selectedEventId) {
                 setEvents((prev) =>
                     prev.map((event) =>
                         event.id === selectedEventId
-                            ? { ...event, ...eventData }
+                            ? { ...event, title: eventData.title, startDate: eventData.startDate, endDate: eventData.endDate }
                             : event
                     )
                 );
@@ -58,12 +63,11 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
                     ...prev,
                     {
                         id: Math.random().toString(36).substr(2, 9),
+                        projectId: project_id,
                         title: eventData.title,
                         color: '#003366',
                         startDate: eventData.startDate,
                         endDate: eventData.endDate,
-                        note: eventData.note,
-                        status: eventData.status,
                     },
                 ]);
             }
@@ -85,7 +89,7 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
     };
 
     const handleOpenNewEventForm = (date: Date) => {
-        const formDate = date.toISOString().split('T')[0]; // Formatting for date
+        const formDate = date.toISOString().split('T')[0];
         setSelectedEventId(null);
         setStartDate(formDate);
         setEndDate(formDate);
@@ -99,7 +103,7 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
         setStartDate(event.startDate);
         setEndDate(event.endDate);
         setEventTitle(event.title);
-        setEventNote(event.note);
+        setEventNote(eventNote);
         setIsEventFormOpen(true);
     };
 
@@ -122,10 +126,12 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
                 openEventForm={handleOpenNewEventForm}
                 openEditForm={handleOpenEditEventForm}
                 onDeleteEvent={handleDelete}
-                currentProjectId={project_id} // Pass project_id to CalendarGrid
-                editing={false} select={function (boolean: any): void {
-                throw new Error('Function not implemented.');
-            }} project_id={0} task_id={0}            />
+                currentProjectId={project_id}
+                editing={false}
+                select={() => {}}
+                project_id={project_id}
+                task_id={0}
+            />
             <EventForm
                 isOpen={isEventFormOpen}
                 onClose={() => setIsEventFormOpen(false)}
@@ -139,10 +145,7 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
                 note={eventNote}
                 setNote={setEventNote}
                 status={'Todo'}
-                setStatus={function (status: 'Todo' | 'WiP' | 'On Hold' | 'Done') {
-                    // Implement status handling as required
-                    throw new Error('Function not implemented.');
-                }}
+                setStatus={() => {}}
             />
         </div>
     );

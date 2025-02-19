@@ -1,34 +1,38 @@
-import React, { useEffect, useRef } from 'react';
-import './AllEventsPopup.css';
-import { useTranslation } from 'react-i18next';
-import { Task } from '../../../../../../types/Task.ts';  // Adjust the import path if necessary
+import React, { useEffect, useRef } from "react";
+import "./AllEventsPopup.css";
+import { useTranslation } from "react-i18next";
+import { Task } from "../../../../../../types/Task";
+import TaskPopup from "../../../../../TaskComponents/TaskPopup/TaskPopup";
 
 type AllEventsPopupProps = {
     date: Date;
-    tasks: Task[]; // Use the Task interface defined in Task.ts
+    tasks: (Task & { color: string; description?: string; })[];
     onClose: () => void;
-    openTaskDetails: (taskId: number) => void; // Accept a number for Task ID
+    openTaskDetails: (taskId: string) => void;
 };
 
-const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, tasks, onClose, openTaskDetails }) => {
+const AllEventsPopup: React.FC<AllEventsPopupProps> = ({
+                                                           date,
+                                                           tasks,
+                                                           onClose,
+                                                           openTaskDetails,
+                                                       }) => {
     const { t } = useTranslation();
     const popupRef = useRef<HTMLDivElement>(null);
 
-    // Close popup on 'Escape' key press
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
+            if (event.key === "Escape") {
                 onClose();
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose]);
 
-    // Close popup on outside click
     const handleClickOutside = (event: MouseEvent) => {
         if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
             onClose();
@@ -36,19 +40,18 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, tasks, onClose, o
     };
 
     useEffect(() => {
-        window.addEventListener('mousedown', handleClickOutside);
+        window.addEventListener("mousedown", handleClickOutside);
         return () => {
-            window.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener("mousedown", handleClickOutside);
         };
     }, [onClose]);
 
-    // Format the date for display
     const formatDate = (date: Date) => {
         const options: Intl.DateTimeFormatOptions = {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
         };
 
         const formatter = new Intl.DateTimeFormat(undefined, options);
@@ -57,51 +60,55 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({ date, tasks, onClose, o
         return parts
             .map((part) => {
                 switch (part.type) {
-                    case 'weekday':
+                    case "weekday":
                         return t(`calendar.days.${part.value.toLowerCase()}`);
-                    case 'month':
+                    case "month":
                         return t(`calendar.months.${part.value.toLowerCase()}`);
-                    case 'day':
-                    case 'year':
+                    case "day":
+                    case "year":
                     default:
                         return part.value;
                 }
             })
-            .join(' ');
-    };
-
-    const handleTaskClick = (taskId: number) => {
-        openTaskDetails(taskId);
-        onClose();
+            .join("");
     };
 
     return (
         <div className="all-events-overlay">
             <div className="all-events-content" ref={popupRef}>
                 <div className="all-events-header">
-                    <h3>{t('calendar.allEventsPopup.title')}</h3>
+                    <h3>{t("calendar.allEventsPopup.title")}</h3>
                     <p className="all-events-date">{formatDate(date)}</p>
                     <button className="close-button" onClick={onClose}>
                         &times;
                     </button>
                 </div>
+
                 <div className="all-events-body">
                     {tasks.length > 0 ? (
                         tasks.map((task) => (
-                            <div
+                            <TaskPopup
                                 key={task.id}
-                                style={{ backgroundColor: task.status === 'Completed' ? 'lightgreen' : 'lightcoral' }} // Example color logic
-                                className="event-item"
-                                onClick={() => handleTaskClick(task.id)}
+                                project_id={task.project_id}
+                                task_id={Number(task.id)}
+                                buttonClassName="event-item"
                             >
-                                <strong>{task.name}</strong>
-                                <span className="event-time">
-                                    {`${task.target_start_date || 'N/A'} - ${task.target_completion_date || 'N/A'}`}
-                                </span>
-                            </div>
+                                <div
+                                    style={{
+                                        backgroundColor: task.color,
+                                    }}
+                                    onClick={() => openTaskDetails(task.id.toString())}
+                                >
+                                    <strong>{task.name}</strong>
+                                    {task.description && <p>{task.description}</p>}
+                                    <span className="event-time">
+                                        {`${task.target_start_date || "N/A"} - ${task.target_completion_date || "N/A"}`}
+                                    </span>
+                                </div>
+                            </TaskPopup>
                         ))
                     ) : (
-                        <p className="no-events">{t('calendar.allEventsPopup.noEvents')}</p>
+                        <p className="no-tasks">{t("calendar.allEventsPopup.noTasks")}</p>
                     )}
                 </div>
             </div>
