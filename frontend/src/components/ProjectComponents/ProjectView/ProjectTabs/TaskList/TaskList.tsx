@@ -23,16 +23,13 @@ const TaskList = (props: TabProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
 
     // Task states
-    const [taskSortOptions, setTaskSortOptions] = useState({key: 'id', order: 'asc'} as SortOptions<Task>)
+    const [taskSortOptions, setTaskSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Task>)
     const sortedTasks = sortArray(Object.values(project.byId), taskSortOptions) as Task[]
     const selectedTasks = new Set<{ project_id: number, id: number }>();
     const [editingTasks, setEditingTasks] = useState(false)
 
     // Project states
-    const [projectSortOptions, setProjectSortOptions] = useState({
-        key: 'target_completion_date',
-        order: 'asc'
-    } as SortOptions<Project>)
+    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
     const sortedProjects = sortArray(Object.values(project.sub_projects), projectSortOptions) as Project[]
     const selectedProjects = new Set<number>();
     const [editingProjects, setEditingProjects] = useState(false)
