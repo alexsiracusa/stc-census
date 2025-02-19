@@ -30,8 +30,23 @@ const NumberEditor = (props: NumberEditorProps) => {
         }
     };
 
+    const handleInputChange = (e) => {
+        let inputValue = e.target.value;
+
+        // Allow only numeric characters
+        if (/^\d*$/.test(inputValue)) {
+            // Remove leading zeros
+            if (inputValue.startsWith("0") && inputValue.length > 1) {
+                inputValue = inputValue.replace(/^0+/, "");
+            }
+
+            // Set the value, but keep zero as empty
+            setValue(inputValue === "0" ? "" : inputValue);
+        }
+    };
+
     useEffect(() => {
-        setValue(props.value)
+        setValue(props.value ? props.value : '')
     }, [props.value]);
 
     return (
@@ -45,9 +60,7 @@ const NumberEditor = (props: NumberEditorProps) => {
                 title={props.title ? props.title : ''}
                 onKeyDown={handleKeyDown}
                 onBlur={enterInput}
-                onChange={(e) => {
-                    setValue(Number(e.target.value))
-                }}
+                onChange={handleInputChange}
             />
         </div>
     )
