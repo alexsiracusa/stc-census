@@ -25,18 +25,18 @@ async def get_projects(
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
-class ProjectIDs(BaseModel):
+class ProjectIds(BaseModel):
     project_ids: List[int]
 
 @router.delete("/delete")
-async def get_projects(
+async def delete_projects(
     response: Response,
-    request: ProjectIDs
+    request: ProjectIds
 ):
     try:
-        projects = await data.delete_projects(request.project_ids)
+        num_deleted = await data.delete_projects(request.project_ids)
         response.status_code = status.HTTP_200_OK
-        return projects
+        return {"num_deleted": num_deleted}
 
     except asyncpg.exceptions.PostgresError as error:
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")

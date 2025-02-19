@@ -131,6 +131,12 @@ export const projectSlice = createSlice({
             const {project_id, task_id} = action.payload;
             delete state.byId[`${project_id}`].byId[`${task_id}`]
         },
+        deleteTasks: (state, action) => {
+            const {task_ids} = action.payload;
+            task_ids.forEach((task_id) => {
+                delete state.byId[`${task_id.project_id}`].byId[`${task_id.id}`]
+            })
+        },
         setDashboard: (state, action) => {
             const projects = action.payload.json;
 
@@ -154,6 +160,7 @@ export const {
     updateTask,
     createTask,
     deleteTask,
+    deleteTasks,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

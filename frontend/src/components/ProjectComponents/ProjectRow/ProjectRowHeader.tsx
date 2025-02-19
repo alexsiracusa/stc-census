@@ -35,6 +35,12 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
             disabled: false,
         },
         {
+            displayName: t('projectList.columns.tasks'),
+            columnName: 'tasks',
+            className: 'project-tasks-header',
+            disabled: true,
+        },
+        {
             displayName: t('projectList.columns.startDate'),
             columnName: 'target_start_date',
             className: 'project-start-date-header',

@@ -85,18 +85,30 @@
 /*PROJECT STATUS*/
 .project-row .project-status-container, .project-row-header .project-status-header {
     width: 5em;
-    height: 60%;
+    min-width: 5em;
 }
 
 .project-row .project-status-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    height: 60%;
+}
+
+/*PROJECT TASKS*/
+.project-row .project-tasks-container, .project-row-header .project-tasks-header {
+    width: 7.5em;
+    min-width: 7.5em;
+}
+
+.project-row .project-tasks-container {
+    height: 60%;
 }
 
 /* START AND COMPLETION DATE */
 .project-row .project-start-date, .project-row-header .project-start-date-header,
 .project-row .project-due-date, .project-row-header .project-due-date-header {
     width: 6em;
+    min-width: 6em;
     height: 60%;
 }

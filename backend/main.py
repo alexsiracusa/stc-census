@@ -4,7 +4,7 @@ import logging
 
 from .utils.scheduler import setup_scheduler
 from .database import admin, InvalidCredentials
-from .routers import auth, project, projects
+from .routers import auth, project, projects, tasks
 from . import client
 
 # Configure logging
@@ -17,6 +17,7 @@ app = FastAPI()
 app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(project.router)
+app.include_router(tasks.router)
 
 origins = [
     "http://localhost:5173"

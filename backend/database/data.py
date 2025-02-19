@@ -5,7 +5,7 @@ from .. import client
 async def get_projects():
     return await client.postgres_client.fetch("""
         SELECT * 
-        FROM Project
+        FROM Project_Summary
         WHERE parent IS NULL
     """)
 
@@ -13,31 +13,41 @@ async def delete_projects(project_ids):
     query_parts = [f'id = {project_id}' for project_id in project_ids]
 
     return await client.postgres_client.fetch(f"""
-        DELETE FROM Project
-        WHERE {' OR '.join(query_parts)}
+        WITH deleted AS (
+            DELETE FROM Project
+            WHERE {' OR '.join(query_parts)}
+            RETURNING *
+        )
+        SELECT count(*) FROM deleted
+    """)
+
+
+async def delete_tasks(task_ids):
+    query_parts = [f"(project_id = {task['project_id']} AND id = {task['id']})" for task in task_ids]
+
+    return await client.postgres_client.fetch(f"""
+        WITH deleted AS (
+            DELETE FROM Task
+            WHERE {' OR '.join(query_parts)}
+            RETURNING *
+        )
+        SELECT count(*) FROM deleted
     """)
 
 
 async def get_project_summary(project_id):
     return await client.postgres_client.fetch_row("""
         SELECT * 
-        FROM Project
+        FROM Project_Summary
         WHERE id = $1
     """, project_id)
 
 
 async def get_project_by_id(project_id):
     return await client.postgres_client.fetch_row("""
-        SELECT 
-            Project.*,
-            to_json(array_remove(array_agg(Task_Node.*), NULL)) AS tasks,
-            to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
-            (SELECT path FROM Project_Path WHERE id = $1) AS path
-        FROM Project 
-        LEFT JOIN Task_Node ON Task_Node.project_id = $1
-        LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = $1
-        WHERE Project.id = $1
-        GROUP BY Project.id
+        SELECT *
+        FROM Project_Node
+        WHERE Project_Node.id = $1
     """, project_id)
 
 

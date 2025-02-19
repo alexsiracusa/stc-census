@@ -6,17 +6,20 @@ import Edit from "../../../../assets/Icons/Edit2.svg";
 import ConfirmPopup from "../../ConfirmPopup/ConfirmPopup.tsx";
 import Trash from "../../../../assets/Icons/Trash2.svg";
 import {useState} from "react";
-import useDeleteProjects from "../../../../hooks/useDeleteProjects.ts";
+import useDeleteTasks from "../../../../hooks/useDeleteTasks.ts";
 import {useTranslation} from "react-i18next";
 
 type TaskEditingHeaderProps = {
     editing: boolean
     setEditing: (boolean) => void
-    selected: Set<number>
+    selected: Set<{
+        project_id: number,
+        id: number
+    }>
 }
 
 const TaskEditingHeader = (props: TaskEditingHeaderProps) => {
-    // const {deleteProjects, loading, error, data} = useDeleteProjects();
+    const {deleteTasks, loading, error, data} = useDeleteTasks();
     const [editing, setEditing] = useState(false)
     const {t} = useTranslation();
 
@@ -43,7 +46,8 @@ const TaskEditingHeader = (props: TaskEditingHeaderProps) => {
                     left={{
                         text: 'Delete',
                         onPress: () => {
-                            // deleteProjects(Array.from(props.selected.values()))
+                            console.log(props.selected)
+                            deleteTasks(Array.from(props.selected.values()))
                             setEditing(false)
                             props.setEditing(false)
                         },

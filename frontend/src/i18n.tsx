@@ -146,6 +146,7 @@ i18n
                             id: 'ID',
                             name: 'Name',
                             status: 'Status',
+                            tasks: 'Tasks',
                             startDate: 'Start Date',
                             dueDate: 'Due Date',
                         }
@@ -294,6 +295,7 @@ i18n
                         columns: {
                             id: 'ID',
                             name: '名称',
+                            tasks: '任务',
                             status: '状态',
                             startDate: '开始日期',
                             dueDate: '到期日',

@@ -6,7 +6,7 @@
 --
 -- ===================================
 
-DROP VIEW IF EXISTS Project_Path, Task_Node, Project_Children;
+DROP VIEW IF EXISTS Project_Summary, Project_Node, Project_Path, Task_Node, Project_Children;
 DROP TABLE IF EXISTS Account, Session, Project, Task, Task_Depends_On;
 DROP TYPE IF EXISTS TASK_STATUS, PROJECT_STATUS;
 
@@ -158,6 +158,37 @@ CREATE VIEW Task_Node AS (
     FROM TASK
     LEFT JOIN Task_Depends_On ON Task.project_id = Task_Depends_On.project_id AND Task.id = Task_Depends_On.task_id
     GROUP BY Task.id, Task.project_id
+);
+
+CREATE VIEW Project_Summary AS (
+    SELECT
+        Project.*,
+        jsonb_build_object(
+            'to_do', COUNT(CASE WHEN Task.status = 'to_do' THEN 1 END),
+            'in_progress', COUNT(CASE WHEN Task.status = 'in_progress' THEN 1 END),
+            'on_hold', COUNT(CASE WHEN Task.status = 'on_hold' THEN 1 END),
+            'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
+        ) AS status_counts
+    FROM Task
+    RIGHT JOIN Project ON project_id IN (
+        SELECT unnest(children)
+        FROM Project_Children
+        WHERE id = Project.id
+    )
+    GROUP BY Project.id
+);
+
+CREATE VIEW Project_Node AS (
+    SELECT
+        Project.*,
+        to_json(array_remove(array_agg(Task_Node.*), NULL)) AS tasks,
+        to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
+        (SELECT path FROM Project_Path WHERE id = Project.id) AS path,
+        (SELECT status_counts FROM Project_Summary WHERE Project_Summary.id = Project.id) AS status_counts
+    FROM Project
+    LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
+    LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = Project.id
+    GROUP BY Project.id
 );
 
 

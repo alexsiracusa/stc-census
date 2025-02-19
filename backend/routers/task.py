@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Response, Body, status
 from typing import Any
 import asyncpg
-import json
 
 from ..database import data
 
@@ -49,7 +48,7 @@ async def update_task(
 
 
 @router.post("/create")
-async def get_task(
+async def create_task(
     response: Response,
     project_id: int,
     fields: Any = Body(None)
