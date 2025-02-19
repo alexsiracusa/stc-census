@@ -5,7 +5,7 @@ from .. import client
 async def get_projects():
     return await client.postgres_client.fetch("""
         SELECT * 
-        FROM Project
+        FROM Project_Summary
         WHERE parent IS NULL
     """)
 

@@ -8,6 +8,7 @@ import ProjectStatusSelector from "./ProjectStatusSelector/ProjectStatusSelector
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 
 import useUpdateProject from "../../../hooks/useUpdateProject.ts";
+import ProjectTasks from "./ProjectTasks/ProjectTasks.tsx";
 
 type ProjectRowProps = {
     project_id: number
@@ -49,6 +50,10 @@ const ProjectRow = (props: ProjectRowProps) => {
             </div>
             <div className='project-status-container'>
                 <ProjectStatusSelector project_id={props.project_id}/>
+            </div>
+
+            <div className='project-tasks-container'>
+                <ProjectTasks project_id={props.project_id}/>
             </div>
 
             <div className='project-start-date'>
