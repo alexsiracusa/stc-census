@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-.calendar-grid {
+.calendar-container .calendar-grid {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -32,7 +32,7 @@
     box-sizing: border-box;
 }
 
-.calendar-grid .day-cell {
+.calendar-container .calendar-grid .day-box {
     position: relative;
     background-color: white;
     display: flex;
@@ -42,17 +42,14 @@
     padding: 0.5rem;
     box-sizing: border-box;
     height: 9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.calendar-grid .other-month {
+.calendar-container .calendar-grid .other-month {
     background-color: #fafafa;
     color: #bbb;
 }
 
-.calendar-grid .day-number {
+.calendar-container .calendar-grid .day-box .day-num {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,12 +64,12 @@
     margin-bottom: 0.1rem;
 }
 
-.calendar-grid .day-number.today {
+.calendar-container .calendar-grid .day-box .day-num.today {
     background-color: #003366;
     color: white;
 }
 
-.calendar-grid .event-list {
+.calendar-container .calendar-grid .day-box .event-list {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
@@ -83,8 +80,7 @@
     overflow-y: auto;
 }
 
-.calendar-grid .event-block {
-    padding: 0.3rem 0.5rem;
+.calendar-container .calendar-grid .day-box .event-list .event-block {
     border-radius: 4px;
     color: white;
     font-size: 0.8rem;
@@ -93,19 +89,21 @@
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    background-color: #003366;
     height: 1.4rem;
     text-align: left;
     display: flex;
     align-items: center;
+    width: 100%;
+    border: none;
+    cursor: pointer;
 }
 
-.calendar-grid .event-block:hover {
-    filter: brightness(1.2);
+.calendar-container .calendar-grid .day-box .event-list .event-block .event-block:hover {
+    filter: brightness(1.1);
     transition: filter 0.2s ease;
 }
 
-.calendar-grid .more-events {
+.calendar-container .calendar-grid .day-box .event-list .more-events {
     font-size: 0.8rem;
     font-weight: bold;
     color: #555;
@@ -119,6 +117,6 @@
     height: 1.4rem;
 }
 
-.calendar-grid .more-events:hover {
+.calendar-container .calendar-grid .day-box .event-list .more-events:hover {
     background-color: #e0e0e0;
 }

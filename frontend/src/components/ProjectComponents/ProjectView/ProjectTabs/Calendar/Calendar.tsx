@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import CalendarHeader from './CalendarHeader/CalendarHeader.tsx';
-import CalendarGrid from './CalendarGrid/CalendarGrid.tsx';
-import EventForm from './EventForm/EventForm.tsx';
+import CalendarHeader from './CalendarHeader/CalendarHeader';
+import CalendarGrid from './CalendarGrid/CalendarGrid';
+import EventForm from './EventForm/EventForm';
 import getCalendarDays from "../../../../../utils/getCalendarDays.ts";
 import './Calendar.css';
 import TabProps from "../TabProps.ts";
 import { useSelector } from "react-redux";
 import { convertTasksToEvents } from "./utils/Event.ts";
+import { Task } from "../../../../../types/Task.ts";
 
 export type Event = {
     id: string;
@@ -18,7 +19,8 @@ export type Event = {
     status: string;
 };
 
-const Calendar: React.FC<TabProps> = (props: TabProps) => {
+const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
+    const { project_id } = props;
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
     const [isEventFormOpen, setIsEventFormOpen] = useState(false);
@@ -28,14 +30,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    const tasks = useSelector((state) => state.projects.byId[props.project_id]?.byId || {});
-
-    const formatDateToLocalString = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+    const tasks = useSelector((state) => state.projects.byId[project_id]?.byId || {});
 
     useEffect(() => {
         const taskEvents = convertTasksToEvents(tasks);
@@ -54,14 +49,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                 setEvents((prev) =>
                     prev.map((event) =>
                         event.id === selectedEventId
-                            ? {
-                                ...event,
-                                title: eventData.title,
-                                startDate: eventData.startDate,
-                                endDate: eventData.endDate,
-                                note: eventData.note,
-                                status: eventData.status
-                            }
+                            ? { ...event, ...eventData }
                             : event
                     )
                 );
@@ -97,7 +85,7 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
     };
 
     const handleOpenNewEventForm = (date: Date) => {
-        const formDate = formatDateToLocalString(date);
+        const formDate = date.toISOString().split('T')[0]; // Formatting for date
         setSelectedEventId(null);
         setStartDate(formDate);
         setEndDate(formDate);
@@ -133,8 +121,11 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                 setEvents={setEvents}
                 openEventForm={handleOpenNewEventForm}
                 openEditForm={handleOpenEditEventForm}
-                onDeleteEvent={handleDelete} currentProjectId={0}
-            />
+                onDeleteEvent={handleDelete}
+                currentProjectId={project_id} // Pass project_id to CalendarGrid
+                editing={false} select={function (boolean: any): void {
+                throw new Error('Function not implemented.');
+            }} project_id={0} task_id={0}            />
             <EventForm
                 isOpen={isEventFormOpen}
                 onClose={() => setIsEventFormOpen(false)}
@@ -146,10 +137,13 @@ const Calendar: React.FC<TabProps> = (props: TabProps) => {
                 endDate={endDate}
                 setEndDate={setEndDate}
                 note={eventNote}
-                setNote={setEventNote} status={'Todo'}
-                setStatus={function (status: 'Todo' | 'WiP' | 'On Hold' | 'Done'): void {
+                setNote={setEventNote}
+                status={'Todo'}
+                setStatus={function (status: 'Todo' | 'WiP' | 'On Hold' | 'Done') {
+                    // Implement status handling as required
                     throw new Error('Function not implemented.');
-                }}            />
+                }}
+            />
         </div>
     );
 };

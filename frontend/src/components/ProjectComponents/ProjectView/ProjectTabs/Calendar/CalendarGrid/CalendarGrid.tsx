@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Event } from "../Calendar"; // Adjust path accordingly
+import { Event } from "../Calendar";
 import { useTranslation } from "react-i18next";
 import "./CalendarGrid.css";
 import { isToday, isSameDay } from "date-fns";
-import EventPopup from "../EventPopup/EventPopup";
+import TaskPopup from "../../../../../TaskComponents/TaskPopup/TaskPopup";
 import AllEventsPopup from "../AllEventsPopup/AllEventsPopup";
 
 type CalendarGridProps = {
@@ -14,6 +14,10 @@ type CalendarGridProps = {
     openEventForm: (date: Date, eventToEdit?: Event) => void;
     openEditForm: (event: Event) => void;
     onDeleteEvent: (eventId: string) => void;
+    editing: boolean;
+    select: (boolean) => void;
+    project_id: number;
+    task_id: number;
 };
 
 const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boolean => {
@@ -25,29 +29,18 @@ const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boole
 const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                        calendarDays,
                                                        events,
+                                                       currentProjectId,
                                                        openEventForm,
                                                    }) => {
     const { t } = useTranslation();
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
-    const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [allEventsDate, setAllEventsDate] = useState<Date | null>(null);
     const [allEventsForDate, setAllEventsForDate] = useState<Event[]>([]);
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows === 6 ? 3 : 3); // Set max events based on rows
+        setMaxEventsPerDay(rows === 6 ? 3 : 3);
     }, [calendarDays]);
-
-    const handleEventClick = (event: Event) => {
-        setSelectedEvent(event);
-        setIsPopupOpen(true);
-    };
-
-    const closePopup = () => {
-        setIsPopupOpen(false);
-        setSelectedEvent(null);
-    };
 
     const openAllEvents = (date: Date) => {
         const filteredEvents = events.filter((event) =>
@@ -82,32 +75,38 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     {calendarDays.map(({ date, isCurrentMonth }, index) => (
                         <div
                             key={index}
-                            className={`day-cell ${isCurrentMonth ? "" : "other-month"} ${isToday(date) ? "today" : ""}`}
+                            className={`day-box ${isCurrentMonth ? "" : "other-month"} ${
+                                isToday(date) ? "today" : ""
+                            }`}
                             onClick={(e) => {
                                 if (!(e.target as HTMLElement).classList.contains("more-events")) {
                                     openEventForm(date);
                                 }
                             }}
                         >
-                            <div className={`day-number ${isToday(date) ? "today" : ""}`}>
+                            <div className={`day-num ${isToday(date) ? "today" : ""}`}>
                                 {date.getDate()}
                             </div>
                             <div className="event-list">
                                 {events
-                                    .filter((event) => isStartOrEndDate(date, event.startDate, event.endDate))
+                                    .filter((event) =>
+                                        isStartOrEndDate(date, event.startDate, event.endDate)
+                                    )
                                     .slice(0, maxEventsPerDay)
                                     .map((event) => (
-                                        <div
+                                        <TaskPopup
                                             key={event.id}
-                                            className="event-block"
-                                            style={{ backgroundColor: event.color }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEventClick(event);
-                                            }}
+                                            project_id={currentProjectId}
+                                            task_id={Number(event.id)}
+                                            buttonClassName="event-block"
                                         >
-                                            {localizeTitle(event.title)}
-                                        </div>
+                                            <div
+                                                className="event-block"
+                                                style={{ backgroundColor: event.color, padding: "4.8px 8px"}}
+                                            >
+                                                {localizeTitle(event.title)}
+                                            </div>
+                                        </TaskPopup>
                                     ))}
                                 {events.filter((event) =>
                                     isStartOrEndDate(date, event.startDate, event.endDate)
@@ -121,38 +120,28 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                     >
                                         {`+ ${events.filter((event) =>
                                             isStartOrEndDate(date, event.startDate, event.endDate)
-                                        ).length - maxEventsPerDay} ${t("calendar.calendarGrid.more")}`}
+                                        ).length - maxEventsPerDay} ${t(
+                                            "calendar.calendarGrid.more"
+                                        )}`}
                                     </button>
                                 )}
                             </div>
                         </div>
                     ))}
                 </div>
-                {isPopupOpen && selectedEvent && (
-                    <EventPopup
-                        isOpen={isPopupOpen}
-                        onClose={closePopup}
-                        eventData={{
-                            title: localizeTitle(selectedEvent.title),
-                            startDate: selectedEvent.startDate,
-                            endDate: selectedEvent.endDate,
-                            note: selectedEvent.note || t("calendar.calendarGrid.noNote"),
-                        }}
-                        project_id={Number(selectedEvent.id)}
-                        event_id={String(selectedEvent.id)}
-                    />
-                )}
                 {allEventsDate && allEventsForDate.length > 0 && (
                     <AllEventsPopup
                         date={allEventsDate}
-                        events={allEventsForDate.map((event) => ({
-                            ...event,
-                            title: localizeTitle(event.title),
+                        tasks={allEventsForDate.map((event) => ({
+                            id: event.id,
+                            name: localizeTitle(event.title),
+                            status: event.status,
+                            target_start_date: event.startDate,
+                            target_completion_date: event.endDate,
                         }))}
                         onClose={closeAllEvents}
-                        openEventDetails={(eventId: string) => {
-                            const eventToOpen = events.find((event) => event.id === eventId);
-                            if (eventToOpen) handleEventClick(eventToOpen);
+                        openTaskDetails={(taskId: number) => {
+                            const taskToOpen = events.find((event) => event.id === taskId.toString());
                         }}
                     />
                 )}
