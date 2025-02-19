@@ -15,4 +15,21 @@
 
         background: transparent;
     }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        opacity: 0; /* Make arrows invisible */
+        transition: opacity 0.2s; /* Smooth transition */
+    }
+
+    /* Show arrows on hover */
+    input[type="number"]:hover::-webkit-inner-spin-button,
+    input[type="number"]:hover::-webkit-outer-spin-button {
+        opacity: 1; /* Make arrows visible */
+    }
+
+    /* Firefox compatibility */
+    input[type="number"] {
+        -moz-appearance: textfield; /* Removes spinner on Firefox */
+    }
 }
