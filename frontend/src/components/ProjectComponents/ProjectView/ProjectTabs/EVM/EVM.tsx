@@ -118,7 +118,9 @@ const EVM = (props: TabProps) => {
                 title: {
                     display: true,
                     text: t('Cost Value')
-                }
+                },
+                min: 0,
+                // max: 100000
             }
         }
     }
