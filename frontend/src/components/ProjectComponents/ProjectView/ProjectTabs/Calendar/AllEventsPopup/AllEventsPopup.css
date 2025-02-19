@@ -11,7 +11,7 @@
     z-index: 2;
 }
 
-.all-events-content {
+.all-events-overlay .all-events-content {
     background: #fff;
     border-radius: 12px;
     width: 360px;
@@ -21,7 +21,7 @@
     font-family: Arial, sans-serif;
 }
 
-.all-events-header {
+.all-events-overlay .all-events-content .all-events-header {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -32,7 +32,7 @@
     width: 100%;
 }
 
-.all-events-header h3 {
+.all-events-overlay .all-events-content .all-events-header h3 {
     margin: 0;
     font-size: 1rem;
     font-weight: bold;
@@ -41,7 +41,7 @@
     line-height: 1.2;
 }
 
-.all-events-date {
+.all-events-overlay .all-events-content .all-events-date {
     font-size: 1.5rem;
     font-weight: bold;
     color: black;
@@ -49,7 +49,7 @@
     text-align: center;
 }
 
-.close-button {
+.all-events-overlay .all-events-content .all-events-header .close-button {
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -58,15 +58,15 @@
     cursor: pointer;
     transition: color 0.3s;
     position: absolute;
-    right: 15px;
-    top: 0;
+    right: 0;
+    top: -0.5rem;
 }
 
-.close-button:hover {
+.all-events-overlay .all-events-content .all-events-header .close-button:hover {
     color: #333;
 }
 
-.all-events-body {
+.all-events-overlay .all-events-body {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
@@ -75,20 +75,20 @@
     overflow-y: auto;
 }
 
-.all-events-body::-webkit-scrollbar {
+.all-events-overlay .all-events-body::-webkit-scrollbar {
     width: 6px;
 }
 
-.all-events-body::-webkit-scrollbar-thumb {
+.all-events-overlay .all-events-body::-webkit-scrollbar-thumb {
     background-color: #bbb;
     border-radius: 4px;
 }
 
-.all-events-body::-webkit-scrollbar-thumb:hover {
+.all-events-overlay .all-events-body::-webkit-scrollbar-thumb:hover {
     background-color: #999;
 }
 
-.event-item {
+.all-events-overlay .all-events-body .event-item {
     padding: 0.6rem 0.8rem;
     border-radius: 6px;
     color: white;
@@ -97,13 +97,15 @@
     text-align: left;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.event-item:hover {
+    width: 100%;
     background-color: #0055A5;
 }
 
-.event-time {
+.all-events-overlay .all-events-body .event-item:hover {
+    filter: brightness(1.1);
+    transition: filter 0.3s ease;}
+
+.all-events-overlay .all-events-body .event-time {
     font-size: 0.8rem;
     font-weight: normal;
     color: #f1f1f1;

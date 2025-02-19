@@ -47,8 +47,6 @@ i18n
                             more: 'more',
                             noNote: "(No note)",
                             linkCopied: "Event link copied to clipboard!",
-                            invitationSubject: "Invitation to {{title}}",
-                            invitationBody: "Please join the event: {{title}} from {{start}} to {{end}}.",
                         },
                         calendarHeader: {
                             today: 'Today',

@@ -5,15 +5,13 @@ import "./CalendarGrid.css";
 import { isToday, isSameDay } from "date-fns";
 import TaskPopup from "../../../../../TaskComponents/TaskPopup/TaskPopup";
 import AllEventsPopup from "../AllEventsPopup/AllEventsPopup";
+import { Task } from "../../../../../../types/Task";
 
 type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
     events: Event[];
-    currentProjectId: number;
-    setEvents: (events: Event[]) => void;
+    currentProjectId: number; // don't use
     openEventForm: (date: Date, eventToEdit?: Event) => void;
-    openEditForm: (event: Event) => void;
-    onDeleteEvent: (eventId: string) => void;
     editing: boolean;
     select: (boolean) => void;
     project_id: number;
@@ -28,26 +26,49 @@ const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boole
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                        calendarDays,
-                                                       events,
+                                                       events = [],
                                                        currentProjectId,
                                                        openEventForm,
                                                    }) => {
     const { t } = useTranslation();
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
     const [allEventsDate, setAllEventsDate] = useState<Date | null>(null);
-    const [allEventsForDate, setAllEventsForDate] = useState<Event[]>([]);
+    const [allEventsForDate, setAllEventsForDate] = useState<Task[]>([]);
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows === 6 ? 3 : 3);
+        setMaxEventsPerDay(rows === 6 ? 3 : 2);
     }, [calendarDays]);
 
     const openAllEvents = (date: Date) => {
         const filteredEvents = events.filter((event) =>
             isStartOrEndDate(date, event.startDate, event.endDate)
         );
+
+        if (filteredEvents.length === 0) {
+            console.warn("No events found for this date!");
+            return;
+        }
+
+        const tasksForPopup: Task[] = filteredEvents.map(event => ({
+            id: Number(event.id),
+            project_id: event.projectId,
+            name: event.title,
+            description: "",
+            status: "",
+            target_start_date: event.startDate,
+            target_completion_date: event.endDate,
+            created_at: "",
+            actual_start_date: "",
+            actual_completion_date: "",
+            target_days_to_complete: 0,
+            actual_cost: 0,
+            expected_cost: 0,
+            depends_on: [],
+        }));
+
         setAllEventsDate(date);
-        setAllEventsForDate(filteredEvents);
+        setAllEventsForDate(tasksForPopup);
     };
 
     const closeAllEvents = () => {
@@ -102,7 +123,10 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                         >
                                             <div
                                                 className="event-block"
-                                                style={{ backgroundColor: event.color, padding: "4.8px 8px"}}
+                                                style={{
+                                                    backgroundColor: event.color,
+                                                    padding: "4.8px 8px",
+                                                }}
                                             >
                                                 {localizeTitle(event.title)}
                                             </div>
@@ -132,16 +156,11 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                 {allEventsDate && allEventsForDate.length > 0 && (
                     <AllEventsPopup
                         date={allEventsDate}
-                        tasks={allEventsForDate.map((event) => ({
-                            id: event.id,
-                            name: localizeTitle(event.title),
-                            status: event.status,
-                            target_start_date: event.startDate,
-                            target_completion_date: event.endDate,
-                        }))}
+                        tasks={allEventsForDate}
                         onClose={closeAllEvents}
-                        openTaskDetails={(taskId: number) => {
-                            const taskToOpen = events.find((event) => event.id === taskId.toString());
+                        openTaskDetails={(taskId: string) => {
+                            const taskToOpen = allEventsForDate.find(task => task.id === Number(taskId));
+                            console.log("Task to open:", taskToOpen);
                         }}
                     />
                 )}
