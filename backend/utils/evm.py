@@ -59,14 +59,15 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         # Earned Value (EV)
         ev = 0.0
         for _, task in df.iterrows():
-            if task['status'].strip().lower() == 'done' and not pd.isnull(task['actual_completion_date']):
+            # Instead of checking status, consider the task done if actual_completion_date is not null.
+            if not pd.isnull(task['actual_completion_date']):
                 if task['actual_completion_date'] <= date:
                     ev += task['expected_cost']
 
         # Actual Cost (AC) trend: sum the actual cost for all done tasks completed on or before this date.
         ac_value = 0.0
         for _, task in df.iterrows():
-            if task['status'].strip().lower() == 'done' and not pd.isnull(task['actual_completion_date']):
+            if not pd.isnull(task['actual_completion_date']):
                 if task['actual_completion_date'] <= date:
                     ac_value += task['actual_cost']
 
@@ -76,6 +77,7 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     # Build lists of (date_str, value) from the computed pv/ev lists.
     planned_values = [(date.strftime('%Y-%m-%d'), pv) for date, pv, _ in pv_ev_list]
     earned_values = [(date.strftime('%Y-%m-%d'), ev) for date, _, ev in pv_ev_list]
+
     # Filter the computed actual_cost_list to only include milestone dates.
     milestone_dates = set()
     for col in ['target_start_date', 'target_completion_date']:
@@ -86,7 +88,8 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
                        for date, cost in actual_cost_list if date.strftime('%Y-%m-%d') in milestone_dates]
 
     # Calculate aggregated EVM metrics.
-    done_tasks = df[df['status'].str.lower() == 'done']
+    # Instead of filtering on status, a task is considered done if it has an actual_completion_date.
+    done_tasks = df[~df['actual_completion_date'].isna()]
     if done_tasks.empty:
         # If no task is done, choose either the provided current_day or today's date.
         latest_done_date = pd.to_datetime(current_day) if current_day else pd.to_datetime(datetime.now().date())
