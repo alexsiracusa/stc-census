@@ -15,9 +15,9 @@ const NumberEditor = (props: NumberEditorProps) => {
 
     const enterInput = () => {
         if (value !== null) {
-            const newValue = value > 0 ? value : 0
+            const newValue = value > 0 ? value : ''
             setValue(newValue)
-            props.setValue(newValue)
+            props.setValue(newValue ? newValue : 0)
         } else {
             setValue(props.value)
         }
