@@ -67,14 +67,16 @@ const EVM = (props: TabProps) => {
     // Extract arrays from the evm data.
     const plannedValue = evmData.evm.planned_value || []
     const earnedValue = evmData.evm.earned_value || []
+    const actualCost = evmData.evm.actual_cost || []   // New actual cost trend data
 
     // Map the data—each element is assumed to be a [date, cost] pair.
     const dates = plannedValue.map((pair: [string, number]) => pair[0])
     const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
     const earnedCosts = earnedValue.map((pair: [string, number]) => pair[1])
+    const actualCosts = actualCost.map((pair: [string, number]) => pair[1])
 
     // Define the given target date.
-    const givenDate = evmData.evm.metadata.today // Change this value as needed.
+    const givenDate = evmData.evm.metadata.today // Change this value or use metadata.today as needed.
     // Clip the given date to the chart range.
     let verticalLineDate = givenDate
     if (dates.length) {
@@ -85,7 +87,7 @@ const EVM = (props: TabProps) => {
         }
     }
 
-    // Chart data config.
+    // Chart data configuration including the new Actual Cost dataset.
     const data = {
         labels: dates,
         datasets: [
@@ -104,11 +106,19 @@ const EVM = (props: TabProps) => {
                 backgroundColor: 'rgba(255,99,132,0.2)',
                 fill: false,
                 tension: 0.0,
+            },
+            {
+                label: t('Actual Cost'),
+                data: actualCosts,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: false,
+                tension: 0.0,
             }
         ]
     }
 
-    // Chart options including the vertical dashed annotation.
+    // Chart options including a vertical dashed annotation for the target date.
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -132,7 +142,6 @@ const EVM = (props: TabProps) => {
                         borderColor: 'grey',
                         borderWidth: 2,
                         borderDash: [10, 5],
-                        // Optionally add a label to the line.
                         label: {
                             enabled: true,
                             content: t('Target Date'),
@@ -155,7 +164,6 @@ const EVM = (props: TabProps) => {
                     text: t('Cost Value')
                 },
                 min: 0,
-                // max: 100000
             }
         }
     }
