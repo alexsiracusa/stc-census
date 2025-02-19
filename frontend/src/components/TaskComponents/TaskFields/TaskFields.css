@@ -10,7 +10,8 @@
 
     .task-end-date, .task-start-date,
     .task-budget, .task-actual-cost,
-    .task-actual-start-date, .task-actual-end-date {
+    .task-actual-start-date, .task-actual-end-date,
+    .task-days-to-complete {
         display: flex;
         flex-direction: row;
         align-items: center;

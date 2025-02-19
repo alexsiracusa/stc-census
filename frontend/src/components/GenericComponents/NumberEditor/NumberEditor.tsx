@@ -30,6 +30,10 @@ const NumberEditor = (props: NumberEditorProps) => {
         }
     };
 
+    useEffect(() => {
+        setValue(props.value)
+    }, [props.value]);
+
     return (
         <div className='number-editor'>
             <input

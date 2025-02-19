@@ -63,6 +63,19 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
+            <div className='task-days-to-complete'>
+                <div className='task-field-header'>Days to Complete:</div>
+                <NumberEditor
+                    value={task.target_days_to_complete}
+                    negative={false}
+                    step={1}
+                    setValue={(value) => {
+                        updateTask(props.project_id, props.task_id, {target_days_to_complete: value})
+                    }}
+                    title='Edit Days to Complete'
+                />
+            </div>
+
             <div className='task-actual-start-date'>
                 <div className='task-field-header'>Actual Start Date:</div>
                 <SimpleDatePicker
