@@ -1,15 +1,13 @@
 .evm {
-    padding: 5%;
     font-family: Arial, sans-serif;
     overflow-y: auto;
 }
 
 .chart-container {
-    height: 100%;
+    height: 40em;
     overflow-y: auto;
-    margin-bottom: 5%;
+    margin-bottom: 2em;
     border: 1px solid #ccc;
-    padding: 5%;
     background-color: #fff;
 }
 
@@ -18,9 +16,8 @@
 }
 
 .evm-metrics-table {
-    width: 100%;
+    width: 10em;
     border-collapse: collapse;
-    margin-top: 5%;
 }
 
 .evm-metrics-table th,

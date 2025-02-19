@@ -81,7 +81,7 @@ const EVM = (props: TabProps) => {
                 borderColor: 'rgba(75,192,192,1)',
                 backgroundColor: 'rgba(75,192,192,0.2)',
                 fill: false,
-                tension: 0.1,
+                tension: 0.0,
             },
             {
                 label: t('Earned Value'),
@@ -89,7 +89,7 @@ const EVM = (props: TabProps) => {
                 borderColor: 'rgba(255,99,132,1)',
                 backgroundColor: 'rgba(255,99,132,0.2)',
                 fill: false,
-                tension: 0.1,
+                tension: 0.0,
             }
         ]
     }
@@ -105,6 +105,9 @@ const EVM = (props: TabProps) => {
             title: {
                 display: true,
                 text: t('EVM Graph')
+            },
+            datalabels: {
+                display: false
             }
         },
         scales: {
