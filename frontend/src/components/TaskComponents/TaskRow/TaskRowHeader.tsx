@@ -50,6 +50,18 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
             columnName: 'target_completion_date',
             className: 'task-due-date-header',
             disabled: false,
+        },
+        {
+            displayName: t('taskList.columns.actualStartDate'),
+            columnName: 'actual_start_date',
+            className: 'task-actual-start-date-header',
+            disabled: false,
+        },
+        {
+            displayName: t('taskList.columns.actualEndDate'),
+            columnName: 'actual_completion_date',
+            className: 'task-actual-end-date-header',
+            disabled: false,
         }
     ]
 

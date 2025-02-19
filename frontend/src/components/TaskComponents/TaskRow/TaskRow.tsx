@@ -75,6 +75,26 @@ const TaskRow = (props: TaskRowProps) => {
                     }}
                 />
             </div>
+
+            <div className='task-actual-start-date'>
+                <SimpleDatePicker
+                    currentDate={task.actual_start_date}
+                    title='Edit Actual Start Date'
+                    onChange={(value) => {
+                        updateTask(props.project_id, props.task_id, {actual_start_date: value})
+                    }}
+                />
+            </div>
+
+            <div className='task-actual-end-date'>
+                <SimpleDatePicker
+                    currentDate={task.actual_completion_date}
+                    title='Edit Actual End Date'
+                    onChange={(value) => {
+                        updateTask(props.project_id, props.task_id, {actual_completion_date: value})
+                    }}
+                />
+            </div>
         </div>
     )
 };
