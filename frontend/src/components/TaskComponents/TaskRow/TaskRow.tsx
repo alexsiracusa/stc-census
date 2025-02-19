@@ -101,6 +101,18 @@ const TaskRow = (props: TaskRowProps) => {
                 />
             </div>
 
+            <div className='task-days-to-complete'>
+                <NumberEditor
+                    value={task.target_days_to_complete}
+                    negative={false}
+                    step={1}
+                    setValue={(value) => {
+                        updateTask(props.project_id, props.task_id, {target_days_to_complete: value})
+                    }}
+                    title='Edit Days to Complete'
+                />
+            </div>
+
             <div className='task-actual-start-date'>
                 <SimpleDatePicker
                     currentDate={task.actual_start_date}

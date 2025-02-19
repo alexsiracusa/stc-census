@@ -85,7 +85,7 @@ CREATE TABLE Task (
     target_start_date       DATE,
     target_completion_date  DATE,
 
-    target_days_to_complete DECIMAL(1000, 2),
+    target_days_to_complete DECIMAL(1000, 2) NOT NULL DEFAULT 1,
 
     PRIMARY KEY (project_id, id)
 );

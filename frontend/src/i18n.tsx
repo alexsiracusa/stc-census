@@ -139,6 +139,7 @@ i18n
                             dueDate: 'Due Date',
                             budget: 'Budget',
                             actualCost: 'Spent',
+                            daysToComplete: 'Days',
                             actualStartDate: 'Actual Start',
                             actualEndDate: 'Actual End'
                         }
@@ -293,6 +294,7 @@ i18n
                             dueDate: '到期日',
                             budget: '预算',
                             actualCost: '实际成本',
+                            daysToComplete: '完成天数',
                             actualStartDate: '实际开始日期',
                             actualEndDate: '完成日期'
                         }

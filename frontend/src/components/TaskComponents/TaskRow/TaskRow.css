@@ -114,7 +114,7 @@
 /* START AND COMPLETION DATE */
 .task-row .task-start-date, .task-row-header .task-start-date-header,
 .task-row .task-due-date, .task-row-header .task-due-date-header {
-    width: 6em;
+    width: 5.5em;
     height: 60%;
 }
 
@@ -131,10 +131,21 @@
     transform: translate(-0.3em, 0);
 }
 
+/* ESTIMATED TIME TO COMPLETE */
+.task-row .task-days-to-complete, .task-row-header .task-days-to-complete-header {
+    width: 3em;
+    min-width: 3em;
+}
+
+.task-row .task-days-to-complete {
+    height: 100%;
+    transform: translate(-0.3em, 0);
+}
+
 /* ACTUAL START AND ACTUAL COMPLETION DATE */
 .task-row .task-actual-start-date, .task-row-header .task-actual-start-date-header,
 .task-row .task-actual-end-date, .task-row-header .task-actual-end-date-header {
-    width: 6em;
+    width: 5.5em;
     height: 60%;
 }
 
