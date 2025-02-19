@@ -1,5 +1,5 @@
 import './NumberEditor.css'
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 type NumberEditorProps = {
     value: number,
@@ -12,6 +12,35 @@ type NumberEditorProps = {
 const NumberEditor = (props: NumberEditorProps) => {
     const [value, setValue] = useState(props.value ? props.value : '')
     const ref = useRef(null);
+
+    // hide Up/Down arrows in Firefox
+    useEffect(() => {
+        const inputElement = ref.current;
+
+        if (!inputElement) return;
+
+        // Function to handle mouseenter (show spinner)
+        const handleMouseEnter = () => {
+            inputElement.style.appearance = 'number'; // Show spinner
+            inputElement.style.MozAppearance = 'number'; // Firefox support
+        };
+
+        // Function to handle mouseleave (hide spinner)
+        const handleMouseLeave = () => {
+            inputElement.style.appearance = 'textfield'; // Hide spinner
+            inputElement.style.MozAppearance = 'textfield'; // Firefox support
+        };
+
+        // Attach event listeners for hover effects
+        inputElement.addEventListener('mouseenter', handleMouseEnter);
+        inputElement.addEventListener('mouseleave', handleMouseLeave);
+
+        // Cleanup event listeners when component unmounts
+        return () => {
+            inputElement.removeEventListener('mouseenter', handleMouseEnter);
+            inputElement.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, []);
 
     const enterInput = () => {
         if (value !== null) {
