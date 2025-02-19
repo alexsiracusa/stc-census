@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 
 import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
 import StatusSelector from "../../../GenericComponents/StatusSelector/StatusSelector.tsx";
+import {format} from "date-fns";
 
 type TaskStatusSelectorProps = {
     project_id: number
@@ -16,7 +17,10 @@ const TaskStatusSelector = (props: TaskStatusSelectorProps) => {
     const {updateTask, loading, error, data} = useUpdateTask();
 
     const handleUpdate = (status) => {
-        updateTask(props.project_id, props.task_id, {status: status});
+        if (status === task.status) { return; }
+        const body = {status: status}
+        if (status === 'done') body['actual_completion_date'] = format(new Date(), 'yyyy-MM-dd')
+        updateTask(props.project_id, props.task_id, body);
     };
 
     const selected = {
