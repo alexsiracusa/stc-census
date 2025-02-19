@@ -18,7 +18,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
                     'actual_completion_date', 'target_completion_date']
     for col in date_columns:
         df[col] = pd.to_datetime(df[col], errors='coerce')
-    df['status'] = df['status'].astype(str)
 
     # Recalculate target_completion_date based on target_days_to_complete
     df['target_completion_date'] = df.apply(
@@ -59,7 +58,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         # Earned Value (EV)
         ev = 0.0
         for _, task in df.iterrows():
-            # Instead of checking status, consider the task done if actual_completion_date is not null.
             if not pd.isnull(task['actual_completion_date']):
                 if task['actual_completion_date'] <= date:
                     ev += task['expected_cost']
@@ -88,7 +86,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
                        for date, cost in actual_cost_list if date.strftime('%Y-%m-%d') in milestone_dates]
 
     # Calculate aggregated EVM metrics.
-    # Instead of filtering on status, a task is considered done if it has an actual_completion_date.
     done_tasks = df[~df['actual_completion_date'].isna()]
     if done_tasks.empty:
         # If no task is done, choose either the provided current_day or today's date.
