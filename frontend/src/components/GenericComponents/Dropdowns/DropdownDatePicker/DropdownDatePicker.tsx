@@ -96,8 +96,7 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                                 className={`day-number ${isSameDay(date, props.currentDate) ? 'selected' : ''}`}
                                 onClick={() => {
                                     const newDate = (isSameDay(date, props.currentDate)) ? null : date
-                                    console.log(newDate)
-                                    props.onChange(format(newDate, 'yyyy-MM-dd'))
+                                    props.onChange(newDate ? format(newDate, 'yyyy-MM-dd') : null)
                                     setIsVisible(false)
                                     setCurrentMonth(date)
                                 }}
