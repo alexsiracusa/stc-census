@@ -118,14 +118,15 @@
     height: 60%;
 }
 
-/* TASK BUDGET */
-.task-row .task-budget, .task-row-header .task-budget-header {
-    width: 6em;
-    min-width: 6em;
+/* TASK BUDGET AND ACTUAL COST */
+.task-row .task-budget, .task-row-header .task-budget-header,
+.task-row .task-actual-cost, .task-row-header .task-actual-cost-header {
+    width: 4.5em;
+    min-width: 4.5em;
 }
 
-.task-row .task-budget {
-    font-size: 0.8em;
+.task-row .task-budget,
+.task-row .task-actual-cost {
     height: 100%;
 }
 

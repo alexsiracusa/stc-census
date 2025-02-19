@@ -87,6 +87,16 @@ const TaskRow = (props: TaskRowProps) => {
                 />
             </div>
 
+            <div className='task-actual-cost'>
+                <NumberEditor
+                    value={task.actual_cost}
+                    setValue={(value) => {
+                        updateTask(props.project_id, props.task_id, {actual_cost: value})
+                    }}
+                    title='Edit Actual Cost'
+                />
+            </div>
+
             <div className='task-actual-start-date'>
                 <SimpleDatePicker
                     currentDate={task.actual_start_date}

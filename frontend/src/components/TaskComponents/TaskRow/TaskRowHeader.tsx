@@ -58,6 +58,12 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
             disabled: false,
         },
         {
+            displayName: t('taskList.columns.actualCost'),
+            columnName: 'actual_cost',
+            className: 'task-actual-cost-header',
+            disabled: false,
+        },
+        {
             displayName: t('taskList.columns.actualStartDate'),
             columnName: 'actual_start_date',
             className: 'task-actual-start-date-header',
