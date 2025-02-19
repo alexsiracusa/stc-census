@@ -24,7 +24,7 @@ ALTER SEQUENCE task_seq_10 RESTART WITH 1;
 -- Insert Tasks with full info (planning, actual dates, costs, status)
 ----------------------------------------------------------------
 
--- Project 1: Awards Ceremony
+-- Project 1: Awards Ceremony (already uses a mix of statuses)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
@@ -37,51 +37,50 @@ VALUES
     (1, 'Create guest list',  '2025-03-12', '2025-03-14', 3, 'to_do',     NULL,       NULL,         20.00,  0.00),
     (1, 'Send invitations',   '2025-03-14', '2025-03-14', 1, 'to_do',     NULL,       NULL,         0.00,   0.00);
 
--- Project 2: Create Flyer
+-- Project 2: Create Flyer (modified statuses)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
  expected_cost, actual_cost)
 VALUES
     (2, 'Design flyer',      '2025-03-08', '2025-03-10', 3, 'done', '2025-03-08', '2025-03-10', 75.00, 80.00),
-    (2, 'Get design approved', '2025-03-10', '2025-03-14', 5, 'done', '2025-03-10', '2025-03-14', 20.00, 20.00),
-    (2, 'Print flyers',      '2025-03-14', '2025-03-15', 2, 'done', '2025-03-14', '2025-03-15', 50.00, 55.00);
+    (2, 'Get design approved', '2025-03-10', '2025-03-14', 5, 'in_progress', '2025-03-10', NULL, 20.00, 20.00),
+    (2, 'Print flyers',      '2025-03-14', '2025-03-15', 2, 'to_do', NULL, NULL, 50.00, 55.00);
 
--- Project 3: Create Poster
+-- Project 3: Create Poster (modified statuses)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
  expected_cost, actual_cost)
 VALUES
     (3, 'Design poster',     '2025-03-09', '2025-03-12', 4, 'done', '2025-03-09', '2025-03-12', 100.00, 95.00),
-    (3, 'Get design approved','2025-03-12', '2025-03-14', 3, 'done', '2025-03-12', '2025-03-14', 30.00, 30.00),
-    (3, 'Print poster',      '2025-03-14', '2025-03-17', 4, 'done', '2025-03-14', '2025-03-17', 70.00, 68.00);
+    (3, 'Get design approved','2025-03-12', '2025-03-14', 3, 'on_hold', '2025-03-12', NULL, 30.00, 30.00),
+    (3, 'Print poster',      '2025-03-14', '2025-03-17', 4, 'in_progress', '2025-03-14', NULL, 70.00, 68.00);
 
--- Project 4: Morning Routine
+-- Project 4: Morning Routine (modified statuses)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
  expected_cost, actual_cost)
 VALUES
     (4, 'Wake up',       '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 0.00,  0.00),
-    (4, 'Brush teeth',    '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 1.00,  1.00),
-    (4, 'Wash face',      '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 0.50,  0.50),
-    (4, 'Eat breakfast',   '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 5.00,  5.50);
+    (4, 'Brush teeth',    '2025-03-14', '2025-03-14', 1, 'in_progress', '2025-03-14', NULL, 1.00,  1.00),
+    (4, 'Wash face',      '2025-03-14', '2025-03-14', 1, 'on_hold', '2025-03-14', NULL, 0.50,  0.50),
+    (4, 'Eat breakfast',   '2025-03-14', '2025-03-14', 1, 'to_do', NULL, NULL, 5.00,  5.50);
 
--- Project 5: Morning Routine of Jason
+-- Project 5: Morning Routine of Jason (modified statuses)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
  expected_cost, actual_cost)
 VALUES
     (5, 'Wake up',       '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 0.00,  0.00),
-    (5, 'Get off bed',   '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 0.00,  0.00),
+    (5, 'Get off bed',   '2025-03-14', '2025-03-14', 1, 'in_progress', '2025-03-14', NULL, 0.00,  0.00),
     (5, 'Brush teeth',    '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 1.00,  1.00),
-    (5, 'Scroll Phone',   '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 0.00,  0.00),
-    (5, '...',           '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 0.00,  0.00);
+    (5, 'Scroll Phone',   '2025-03-14', '2025-03-14', 1, 'to_do', NULL, NULL, 0.00,  0.00),
+    (5, '...',           '2025-03-14', '2025-03-14', 1, 'on_hold', '2025-03-14', NULL, 0.00,  0.00);
 
--- Project 6: Awards Ceremony 2024
--- (Here we’ve also added a description column.)
+-- Project 6: Awards Ceremony 2024 (modified statuses)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, description, actual_start_date, actual_completion_date,
@@ -91,44 +90,44 @@ VALUES
      'Initial planning meeting for HKCC Awards Ceremony 2024', '2024-05-16', '2024-05-16', 0.00, 0.00),
     (6, 'Confirm Ceremony Date', '2024-05-17', '2024-05-21', 5, 'done',
      'Set final date for Awards Ceremony', '2024-05-17', '2024-05-21', 0.00, 0.00),
-    (6, 'Define Ceremony Theme', '2024-05-22', '2024-05-26', 5, 'done',
-     'Decide on theme: Product Safety Carnival', '2024-05-22', '2024-05-26', 0.00, 0.00),
+    (6, 'Define Ceremony Theme', '2024-05-22', '2024-05-26', 5, 'in_progress',
+     'Decide on theme: Product Safety Carnival', '2024-05-22', NULL, 0.00, 0.00),
     (6, 'Select and Confirm Venue', '2024-04-01', '2024-04-10', 10, 'done',
      'Venue at Tsuen Wan, Tsuen Wan Plaza', '2024-04-01', '2024-04-10', 5000.00, 5200.00),
-    (6, 'Select Stage Production Contractor', '2024-05-20', '2024-06-10', 22, 'done',
-     'Choose JD Stage Production', '2024-05-20', '2024-06-10', 34380.00, 35000.00),
-    (6, 'Select Booth Contractor', '2024-05-20', '2024-06-12', 24, 'done',
-     'Choose 美境展銷推廣有限公司', '2024-05-20', '2024-06-12', 70000.00, 69000.00),
-    (6, 'Prepare Booth Exhibitors List', '2024-06-01', '2024-06-05', 5, 'done',
-     'Invite and confirm booth exhibitors', '2024-06-01', '2024-06-05', 0.00, 0.00),
-    (6, 'Finalize Exhibitor Numbers', '2024-06-06', '2024-06-10', 5, 'done',
-     'Finalize exhibitor numbers', '2024-06-06', '2024-06-10', 0.00, 0.00),
-    (6, 'Obtain Venue Floor Plan', '2024-04-15', '2024-04-20', 6, 'done',
-     'Get floor plan from venue', '2024-04-15', '2024-04-20', 0.00, 0.00),
-    (6, 'Create Updated Floor Plan', '2024-04-21', '2024-04-25', 5, 'done',
-     'New floor plan without storeroom', '2024-04-21', '2024-04-25', 0.00, 0.00),
-    (6, 'Submit Floor Plan to FEHD', '2024-04-26', '2024-04-30', 5, 'done',
-     'Official submission of floor plan', '2024-04-26', '2024-04-30', 0.00, 0.00),
-    (6, 'Prepare Opening Ceremony Production', '2024-06-11', '2024-06-25', 15, 'done',
-     'Work with JD Stage Production on opening animation', '2024-06-11', '2024-06-25', 5000.00, 5100.00),
-    (6, 'Prepare Opening Ceremony Sound Effects', '2024-06-26', '2024-07-05', 10, 'done',
-     'Add balloon popping and applause tracks', '2024-06-26', '2024-07-05', 1500.00, 1450.00),
-    (6, 'Select Ceremony Ambassador', '2024-05-27', '2024-05-30', 4, 'done',
-     'Confirmed 譚輝智 as ambassador', '2024-05-27', '2024-05-30', 0.00, 0.00),
-    (6, 'Select Ceremony Emcee', '2024-05-31', '2024-06-03', 4, 'done',
-     'Confirmed Agnes Leung as emcee', '2024-05-31', '2024-06-03', 0.00, 0.00),
-    (6, 'Generate Honorable Guest List', '2024-04-01', '2024-04-05', 5, 'done',
-     'Initial list of potential guests', '2024-04-01', '2024-04-05', 0.00, 0.00),
-    (6, 'Invite Honorable Guests', '2024-04-06', '2024-04-10', 5, 'done',
-     'Send invitations to potential guests', '2024-04-06', '2024-04-10', 0.00, 0.00),
-    (6, 'Confirm Guest Attendance', '2024-04-11', '2024-04-15', 5, 'done',
-     'Mr. TSE Chin-wan confirmed attendance', '2024-04-11', '2024-04-15', 0.00, 0.00),
-    (6, 'Prepare Media Invitations', '2024-04-16', '2024-04-20', 5, 'done',
-     'Draft and prepare media invitation letters', '2024-04-16', '2024-04-20', 0.00, 0.00),
-    (6, 'Send Media Invitations', '2024-04-21', '2024-04-23', 3, 'done',
-     'First round of media invitations', '2024-04-21', '2024-04-23', 0.00, 0.00),
-    (6, 'Create Marketing Materials', '2024-04-24', '2024-04-28', 5, 'done',
-     'Prepare posters, flyers, backdrop, and other materials', '2024-04-24', '2024-04-28', 4000.00, 4100.00);
+    (6, 'Select Stage Production Contractor', '2024-05-20', '2024-06-10', 22, 'in_progress',
+     'Choose JD Stage Production', '2024-05-20', NULL, 34380.00, 35000.00),
+    (6, 'Select Booth Contractor', '2024-05-20', '2024-06-12', 24, 'on_hold',
+     'Choose 美境展銷推廣有限公司', '2024-05-20', NULL, 70000.00, 69000.00),
+    (6, 'Prepare Booth Exhibitors List', '2024-06-01', '2024-06-05', 5, 'to_do',
+     'Invite and confirm booth exhibitors', NULL, NULL, 0.00, 0.00),
+    (6, 'Finalize Exhibitor Numbers', '2024-06-06', '2024-06-10', 5, 'in_progress',
+     'Finalize exhibitor numbers', '2024-06-06', NULL, 0.00, 0.00),
+    (6, 'Obtain Venue Floor Plan', '2024-04-15', '2024-04-20', 6, 'on_hold',
+     'Get floor plan from venue', '2024-04-15', NULL, 0.00, 0.00),
+    (6, 'Create Updated Floor Plan', '2024-04-21', '2024-04-25', 5, 'to_do',
+     'New floor plan without storeroom', NULL, NULL, 0.00, 0.00),
+    (6, 'Submit Floor Plan to FEHD', '2024-04-26', '2024-04-30', 5, 'to_do',
+     'Official submission of floor plan', NULL, NULL, 0.00, 0.00),
+    (6, 'Prepare Opening Ceremony Production', '2024-06-11', '2024-06-25', 15, 'in_progress',
+     'Work with JD Stage Production on opening animation', '2024-06-11', NULL, 5000.00, 5100.00),
+    (6, 'Prepare Opening Ceremony Sound Effects', '2024-06-26', '2024-07-05', 10, 'to_do',
+     'Add balloon popping and applause tracks', NULL, NULL, 1500.00, 1450.00),
+    (6, 'Select Ceremony Ambassador', '2024-05-27', '2024-05-30', 4, 'on_hold',
+     'Confirmed 譚輝智 as ambassador', '2024-05-27', NULL, 0.00, 0.00),
+    (6, 'Select Ceremony Emcee', '2024-05-31', '2024-06-03', 4, 'in_progress',
+     'Confirmed Agnes Leung as emcee', '2024-05-31', NULL, 0.00, 0.00),
+    (6, 'Generate Honorable Guest List', '2024-04-01', '2024-04-05', 5, 'to_do',
+     'Initial list of potential guests', NULL, NULL, 0.00, 0.00),
+    (6, 'Invite Honorable Guests', '2024-04-06', '2024-04-10', 5, 'in_progress',
+     'Send invitations to potential guests', '2024-04-06', NULL, 0.00, 0.00),
+    (6, 'Confirm Guest Attendance', '2024-04-11', '2024-04-15', 5, 'on_hold',
+     'Mr. TSE Chin-wan confirmed attendance', '2024-04-11', NULL, 0.00, 0.00),
+    (6, 'Prepare Media Invitations', '2024-04-16', '2024-04-20', 5, 'to_do',
+     'Draft and prepare media invitation letters', NULL, NULL, 0.00, 0.00),
+    (6, 'Send Media Invitations', '2024-04-21', '2024-04-23', 3, 'in_progress',
+     'First round of media invitations', '2024-04-21', NULL, 0.00, 0.00),
+    (6, 'Create Marketing Materials', '2024-04-24', '2024-04-28', 5, 'on_hold',
+     'Prepare posters, flyers, backdrop, and other materials', '2024-04-24', NULL, 4000.00, 4100.00);
 
 ----------------------------------------------------------------
 -- Insert Dependency Information (unchanged)
