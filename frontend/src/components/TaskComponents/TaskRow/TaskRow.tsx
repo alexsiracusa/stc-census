@@ -7,6 +7,7 @@ import {useSelector} from "react-redux";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import TaskName from "../TaskName/TaskName.tsx";
 import TaskPopup from "../TaskPopup/TaskPopup.tsx";
+import NumberEditor from "../../GenericComponents/NumberEditor/NumberEditor.tsx";
 
 type TaskRowProps = {
     project_id: number
@@ -73,6 +74,16 @@ const TaskRow = (props: TaskRowProps) => {
                     onChange={(value) => {
                         updateTask(props.project_id, props.task_id, {target_completion_date: value})
                     }}
+                />
+            </div>
+
+            <div className='task-budget'>
+                <NumberEditor
+                    value={task.expected_cost}
+                    setValue={(value) => {
+                        updateTask(props.project_id, props.task_id, {expected_cost: value})
+                    }}
+                    title='Edit Budget'
                 />
             </div>
 

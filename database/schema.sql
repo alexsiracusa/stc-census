@@ -76,8 +76,8 @@ CREATE TABLE Task (
     status          TASK_STATUS NOT NULL DEFAULT 'to_do',
     created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    expected_cost   DECIMAL(2),
-    actual_cost     DECIMAL(2),
+    expected_cost   DECIMAL(1000, 2),
+    actual_cost     DECIMAL(1000, 2),
 
     actual_start_date       DATE,
     actual_completion_date  DATE,
@@ -85,7 +85,7 @@ CREATE TABLE Task (
     target_start_date       DATE,
     target_completion_date  DATE,
 
-    target_days_to_complete DECIMAL(2),
+    target_days_to_complete DECIMAL(1000, 2),
 
     PRIMARY KEY (project_id, id)
 );

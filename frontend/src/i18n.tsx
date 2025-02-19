@@ -137,6 +137,7 @@ i18n
                             dependsOn: 'Depends On',
                             startDate: 'Start Date',
                             dueDate: 'Due Date',
+                            budget: 'Budget',
                             actualStartDate: 'Actual Start',
                             actualEndDate: 'Actual End'
                         }
@@ -289,6 +290,7 @@ i18n
                             dependsOn: '取决于',
                             startDate: '开始日期',
                             dueDate: '到期日',
+                            budget: '预算',
                             actualStartDate: '实际开始日期',
                             actualEndDate: '完成日期'
                         }
