@@ -8,12 +8,19 @@
         width: 10em;
     }
 
-    .task-end-date, .task-start-date, .task-actual-start-date, .task-actual-end-date {
+    .task-end-date, .task-start-date,
+    .task-budget, .task-actual-cost,
+    .task-actual-start-date, .task-actual-end-date {
         display: flex;
         flex-direction: row;
         align-items: center;
 
         width: 100%;
         gap: 0.5em;
+        transform: none;
+    }
+
+    .number-editor {
+        margin-left: -2px;
     }
 }

@@ -76,8 +76,8 @@ CREATE TABLE Task (
     status          TASK_STATUS NOT NULL DEFAULT 'to_do',
     created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    expected_cost   DECIMAL(1000, 2),
-    actual_cost     DECIMAL(1000, 2),
+    expected_cost   DECIMAL(1000, 2) NOT NULL DEFAULT 0,
+    actual_cost     DECIMAL(1000, 2) NOT NULL DEFAULT 0,
 
     actual_start_date       DATE,
     actual_completion_date  DATE,

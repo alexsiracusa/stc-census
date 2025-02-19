@@ -2,6 +2,7 @@ import './TaskFields.css'
 import {useSelector} from "react-redux";
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import NumberEditor from "../../GenericComponents/NumberEditor/NumberEditor.tsx";
 
 type TaskFieldsProps = {
     project_id: number,
@@ -33,6 +34,32 @@ const TaskFields = (props: TaskFieldsProps) => {
                     onChange={(value) => {
                         updateTask(props.project_id, props.task_id, {target_completion_date: value})
                     }}
+                />
+            </div>
+
+            <div className='task-budget'>
+                <div className='task-field-header'>Budget:</div>
+                <NumberEditor
+                    value={task.expected_cost}
+                    negative={false}
+                    step={10}
+                    setValue={(value) => {
+                        updateTask(props.project_id, props.task_id, {expected_cost: value})
+                    }}
+                    title='Edit Budget'
+                />
+            </div>
+
+            <div className='task-actual-cost'>
+                <div className='task-field-header'>Spent:</div>
+                <NumberEditor
+                    value={task.actual_cost}
+                    negative={false}
+                    step={10}
+                    setValue={(value) => {
+                        updateTask(props.project_id, props.task_id, {actual_cost: value})
+                    }}
+                    title='Edit Actual Cost'
                 />
             </div>
 
