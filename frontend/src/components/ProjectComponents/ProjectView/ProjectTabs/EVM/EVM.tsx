@@ -13,8 +13,9 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
+import annotationPlugin from 'chartjs-plugin-annotation'
 
-// Register necessary ChartJS modules.
+// Register necessary ChartJS modules and the annotation plugin.
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -22,10 +23,11 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    annotationPlugin
 )
 
-// Custom hook to fetch evm data.
+// Custom hook to fetch EVM data.
 const useFetchEvmData = (projectId: number): [any, boolean] => {
     const [evmData, setEvmData] = useState<any>({})
     const [loading, setLoading] = useState(true)
@@ -71,6 +73,18 @@ const EVM = (props: TabProps) => {
     const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
     const earnedCosts = earnedValue.map((pair: [string, number]) => pair[1])
 
+    // Define the given target date.
+    const givenDate = evmData.evm.metadata.today // Change this value as needed.
+    // Clip the given date to the chart range.
+    let verticalLineDate = givenDate
+    if (dates.length) {
+        if (givenDate < dates[0]) {
+            verticalLineDate = dates[0]
+        } else if (givenDate > dates[dates.length - 1]) {
+            verticalLineDate = dates[dates.length - 1]
+        }
+    }
+
     // Chart data config.
     const data = {
         labels: dates,
@@ -94,7 +108,7 @@ const EVM = (props: TabProps) => {
         ]
     }
 
-    // Chart options.
+    // Chart options including the vertical dashed annotation.
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -108,6 +122,24 @@ const EVM = (props: TabProps) => {
             },
             datalabels: {
                 display: false
+            },
+            annotation: {
+                annotations: {
+                    verticalLine: {
+                        type: 'line',
+                        scaleID: 'x',
+                        value: verticalLineDate,
+                        borderColor: 'grey',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        // Optionally add a label to the line.
+                        label: {
+                            enabled: true,
+                            content: t('Target Date'),
+                            position: 'start'
+                        }
+                    }
+                }
             }
         },
         scales: {

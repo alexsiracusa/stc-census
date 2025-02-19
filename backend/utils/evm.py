@@ -106,4 +106,13 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     compressed_planned = compress_points(planned_values)
     compressed_earned = compress_points(earned_values)
 
-    return {'planned_value': compressed_planned, 'earned_value': compressed_earned, 'metrics': {}}
+    # Determine today's date if not provided.
+    if current_day is None:
+        current_day = datetime.now()
+
+    return {
+        'planned_value': compressed_planned,
+        'earned_value': compressed_earned,
+        'metrics': {},
+        'metadata': {'today': current_day.strftime('%Y-%m-%d')}
+    }
