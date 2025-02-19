@@ -13,7 +13,7 @@ const ProjectTasks = (props: ProjectRowProps) => {
         <div className='project-tasks'>
             {TaskStatuses.map((status) => (
                 <div
-                    className='task-icon'
+                    className='icon'
                     title={`Tasks ${TaskStatusInfo[status].name}`}
                     key={status}
                     style={{
