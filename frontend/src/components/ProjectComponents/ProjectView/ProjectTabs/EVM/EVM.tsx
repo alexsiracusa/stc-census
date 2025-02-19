@@ -11,9 +11,10 @@ import {
     LineElement,
     Title,
     Tooltip,
-    Legend,
+    Legend
 } from 'chart.js'
 
+// Register necessary ChartJS modules.
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -24,6 +25,7 @@ ChartJS.register(
     Legend
 )
 
+// Custom hook to fetch evm data.
 const useFetchEvmData = (projectId: number): [any, boolean] => {
     const [evmData, setEvmData] = useState<any>({})
     const [loading, setLoading] = useState(true)
@@ -55,94 +57,98 @@ const EVM = (props: TabProps) => {
         return <div className="evm">Loading EVM data...</div>
     }
 
-    // Ensure there is an evm object before proceeding.
+    // If there is no evm data to display.
     if (!evmData.evm) {
         return <div className="evm">No EVM data available.</div>
     }
 
-    // Extract the data for plotting;
-    // each array is assumed to be an array of [date, cost] pairs.
+    // Extract arrays from the evm data.
     const plannedValue = evmData.evm.planned_value || []
     const earnedValue = evmData.evm.earned_value || []
 
-    // Create labels based on the dates. In this example, we assume the dates in plannedValue and earnedValue are aligned.
-    const labels = plannedValue.map((item: [string, number]) => item[0])
-    const plannedCosts = plannedValue.map((item: [string, number]) => item[1])
-    const earnedCosts = earnedValue.map((item: [string, number]) => item[1])
+    // Map the data—each element is assumed to be a [date, cost] pair.
+    const dates = plannedValue.map((pair: [string, number]) => pair[0])
+    const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
+    const earnedCosts = earnedValue.map((pair: [string, number]) => pair[1])
 
-    const chartData = {
-        labels: labels,
+    // Chart data config.
+    const data = {
+        labels: dates,
         datasets: [
             {
-                label: t('EVM.planned_value', "Planned Value"),
+                label: t('Planned Value'),
                 data: plannedCosts,
-                borderColor: 'blue',
-                backgroundColor: 'rgba(0, 0, 255, 0.5)',
-                tension: 0,
+                borderColor: 'rgba(75,192,192,1)',
+                backgroundColor: 'rgba(75,192,192,0.2)',
                 fill: false,
+                tension: 0.1,
             },
             {
-                label: t('EVM.earned_value', "Earned Value"),
+                label: t('Earned Value'),
                 data: earnedCosts,
-                borderColor: 'green',
-                backgroundColor: 'rgba(0, 128, 0, 0.5)',
-                tension: 0,
+                borderColor: 'rgba(255,99,132,1)',
+                backgroundColor: 'rgba(255,99,132,0.2)',
                 fill: false,
-            },
-        ],
+                tension: 0.1,
+            }
+        ]
     }
 
+    // Chart options.
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 position: 'top' as const,
             },
             title: {
                 display: true,
-                text: t('EVM.graph_title', "Graph of Planned Value and Earned Value"),
-            },
+                text: t('EVM Graph')
+            }
         },
         scales: {
             x: {
-                type: 'category' as const,
                 title: {
                     display: true,
-                    text: t('EVM.x_axis', "Date"),
-                },
+                    text: t('Date')
+                }
             },
             y: {
                 title: {
                     display: true,
-                    text: t('EVM.y_axis', "Cost"),
-                },
-            },
-        },
+                    text: t('Cost Value')
+                }
+            }
+        }
     }
+
+    // Grab metrics from the evm data.
+    const metrics = evmData.evm.metrics || {}
 
     return (
         <div className="evm">
-            <h2>{t('EVM.title')}</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>{t('EVM.metric', "Metric")}</th>
-                    <th>{t('EVM.value', "Value")}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {evmData.evm.metrics && Object.entries(evmData.evm.metrics).map(([key, value]) => (
-                    <tr key={key}>
-                        <td>{key}</td>
-                        <td>{value !== null ? value : '-'}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            <div className="chart-container">
+                <Line data={data} options={options} />
+            </div>
 
-            <h3>{t('EVM.graph_title', "Graph of Planned Value and Earned Value")}</h3>
-            <div id="evm-chart">
-                <Line data={chartData} options={options} />
+            <div className="table-container">
+                <table className="evm-metrics-table">
+                    <thead>
+                    <tr>
+                        <th>{t('Metric')}</th>
+                        <th>{t('Value')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {Object.entries(metrics).map(([key, value]) => (
+                        <tr key={key}>
+                            <td>{t(key)}</td>
+                            <td>{value === null ? 'N/A' : value}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     )
