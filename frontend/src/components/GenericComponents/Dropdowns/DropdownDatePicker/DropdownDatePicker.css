@@ -91,7 +91,12 @@
     font-size: 1em;
 }
 
+.date-picker-calendar-grid .day-cell .today {
+    background-color: #00000020;
+}
+
 .date-picker-calendar-grid .day-cell .selected {
     background-color: #003366;
     color: white;
 }
+
