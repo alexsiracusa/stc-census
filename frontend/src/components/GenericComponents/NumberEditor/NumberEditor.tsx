@@ -10,18 +10,24 @@ type NumberEditorProps = {
 }
 
 const NumberEditor = (props: NumberEditorProps) => {
-    const [value, setValue] = useState(props.value)
+    const [value, setValue] = useState<string>(props.value.toLocaleString('en-US'))
     const ref = useRef(null);
 
     const enterInput = () => {
-        if (value !== null) {
-            const newValue = value > 0 ? value : 0
-            setValue(newValue)
+        const numValue = Number(value)
+
+        if (value !== '') {
+            const newValue = numValue > 0 ? numValue : 0
+            setValue(newValue.toLocaleString('en-US'))
             props.setValue(newValue)
         } else {
-            setValue(props.value)
+            setValue(props.value.toLocaleString('en-US'))
         }
         ref.current.blur()
+    }
+
+    const onFocus = () => {
+        setValue(value.replace(/,/g, ''))
     }
 
     const handleKeyDown = (e) => {
@@ -53,20 +59,21 @@ const NumberEditor = (props: NumberEditorProps) => {
     };
 
     useEffect(() => {
-        setValue(props.value)
+        setValue(props.value.toLocaleString('en-US'))
     }, [props.value]);
 
     return (
         <div className='number-editor'>
             <input
                 ref={ref}
-                type="number"
+                type="text"
                 value={value}
                 min={props.negative ? '' : 0}
                 step={props.step ? props.step : 1}
                 title={props.title ? props.title : ''}
                 onKeyDown={handleKeyDown}
                 onBlur={enterInput}
+                onFocus={onFocus}
                 onChange={handleInputChange}
             />
         </div>
