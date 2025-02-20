@@ -15,6 +15,8 @@ i18n
                         project: 'Project',
                         userGuide: 'User Guide',
                         documentation: 'Documentation',
+
+                        login: 'Login',
                         logout: 'Logout',
                     },
                     projectRow: {
@@ -171,9 +173,11 @@ i18n
                 translation: {
                     navbar: {
                         project: '项目',
-                        userGuide: '用户指南',
-                        documentation: '文档',
-                        logout: '退出',
+                        userGuide: '说明书',
+                        documentation: '系统文件',
+
+                        login: '登入',
+                        logout: '登出',
                     },
                     projectRow: {
                         projectName: '项目',
@@ -188,7 +192,7 @@ i18n
                         loading: '加载中'
                     },
                     sidebar: {
-                        summary: '摘要',
+                        summary: '总结',
                         taskList: '任务列表',
                         kanban: '看板',
                         ganttChart: '甘特图',
@@ -281,7 +285,7 @@ i18n
                         onHold: '搁置',
                     },
                     summary: {
-                        title: '摘要',
+                        title: '总结',
                     },
                     taskList: {
                         tasks: '任务',
