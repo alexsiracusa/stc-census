@@ -134,6 +134,8 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         if not found and prev_date is not None:
             es_days = (prev_date - project_start_date).total_seconds() / 86400
 
+    bac = df['expected_cost'].sum()  # Budget at Completion
+
     # Build the metrics dictionary.
     metrics = {
         'cost_variance': round(cv, 2),
@@ -143,7 +145,8 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         'earned_schedule_days': round(es_days, 2),
         # Report the aggregated actual cost for reference (calculated from done tasks).
         'actual_cost_total': round(ac_aggregated, 2),
-        'date_of_latest_done_task': latest_done_date.strftime('%Y-%m-%d') if not done_tasks.empty else None
+        'date_of_latest_done_task': latest_done_date.strftime('%Y-%m-%d') if not done_tasks.empty else None,
+        'budget_at_completion': round(bac, 2),
     }
 
     # If current_day was not provided, use today's date.
