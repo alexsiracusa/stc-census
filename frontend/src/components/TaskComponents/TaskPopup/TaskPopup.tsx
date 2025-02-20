@@ -24,6 +24,10 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
     const {t} = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
 
+    if (!task) {
+        return null;
+    }
+
     const icon = <>{
         Children.map(props.children, child => {
             return child
