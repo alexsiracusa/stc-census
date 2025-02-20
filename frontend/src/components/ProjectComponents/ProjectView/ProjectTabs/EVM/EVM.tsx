@@ -15,7 +15,6 @@ import {
 } from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation'
 
-// Register necessary ChartJS modules and the annotation plugin.
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -27,7 +26,6 @@ ChartJS.register(
     annotationPlugin
 )
 
-// Custom hook to fetch EVM data.
 const useFetchEvmData = (projectId: number): [any, boolean] => {
     const [evmData, setEvmData] = useState<any>({})
     const [loading, setLoading] = useState(true)
@@ -59,35 +57,108 @@ const EVM = (props: TabProps) => {
         return <div className="evm">Loading EVM data...</div>
     }
 
-    // If there is no evm data to display.
     if (!evmData.evm) {
         return <div className="evm">No EVM data available.</div>
     }
 
-    // Extract arrays from the evm data.
     const plannedValue = evmData.evm.planned_value || []
     const earnedValue = evmData.evm.earned_value || []
-    const actualCost = evmData.evm.actual_cost || []   // New actual cost trend data
+    const actualCost = evmData.evm.actual_cost || []
 
-    // Map the data—each element is assumed to be a [date, cost] pair.
+    // Get actual date from metrics
+    const actualDate = evmData.evm.metrics.date_of_latest_done_task || ''
     const dates = plannedValue.map((pair: [string, number]) => pair[0])
-    const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
-    const earnedCosts = earnedValue.map((pair: [string, number]) => pair[1])
-    const actualCosts = actualCost.map((pair: [string, number]) => pair[1])
 
-    // Define the given target date.
-    const givenDate = evmData.evm.metadata.today // Change this value or use metadata.today as needed.
-    // Clip the given date to the chart range.
-    let verticalLineDate = givenDate
+    // Clip earned value data after actual date
+    const earnedCosts = earnedValue.map((pair: [string, number]) => {
+        const date = pair[0]
+        return date <= actualDate ? pair[1] : null
+    })
+
+    const actualCosts = actualCost.map((pair: [string, number]) => {
+        const date = pair[0]
+        return date <= actualDate ? pair[1] : null
+    })
+
+    const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
+
+    // Determine vertical line position (clipped to chart range)
+    let verticalLineDate = actualDate
     if (dates.length) {
-        if (givenDate < dates[0]) {
+        if (actualDate < dates[0]) {
             verticalLineDate = dates[0]
-        } else if (givenDate > dates[dates.length - 1]) {
+        } else if (actualDate > dates[dates.length - 1]) {
             verticalLineDate = dates[dates.length - 1]
         }
     }
 
-    // Chart data configuration including the new Actual Cost dataset.
+    // Find index for actual date in dataset
+    const actualIndex = dates.indexOf(verticalLineDate)
+    const metrics = evmData.evm.metrics || {}
+
+    // Prepare variance annotations
+    const annotations: any = {
+        verticalLine: {
+            type: 'line',
+            scaleID: 'x',
+            value: verticalLineDate,
+            borderColor: 'grey',
+            borderWidth: 2,
+            borderDash: [10, 5],
+            label: {
+                enabled: true,
+                content: t('Actual Time'),
+                position: 'start'
+            }
+        }
+    }
+
+    if (actualIndex !== -1) {
+        const pv = plannedCosts[actualIndex]
+        const ev = earnedCosts[actualIndex]
+        const ac = actualCosts[actualIndex]
+
+        // Schedule Variance annotation (EV vs PV)
+        if (typeof pv === 'number' && typeof ev === 'number') {
+            annotations.scheduleVariance = {
+                type: 'line',
+                xMin: verticalLineDate,
+                xMax: verticalLineDate,
+                yMin: pv,
+                yMax: ev,
+                borderColor: '#FF6B6B',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                label: {
+                    enabled: true,
+                    content: `SV: ${metrics.schedule_variance}`,
+                    position: 'right',
+                    backgroundColor: 'rgba(255,255,255,0.8)'
+                }
+            }
+        }
+
+        // Cost Variance annotation (EV vs AC)
+        if (typeof ev === 'number' && typeof ac === 'number') {
+            annotations.costVariance = {
+                type: 'line',
+                xMin: verticalLineDate,
+                xMax: verticalLineDate,
+                yMin: ev,
+                yMax: ac,
+                borderColor: '#4D96FF',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                label: {
+                    enabled: true,
+                    content: `CV: ${metrics.cost_variance}`,
+                    position: 'left',
+                    backgroundColor: 'rgba(255,255,255,0.8)'
+                }
+            }
+        }
+    }
+
     const data = {
         labels: dates,
         datasets: [
@@ -95,81 +166,55 @@ const EVM = (props: TabProps) => {
                 label: t('Planned Value'),
                 data: plannedCosts,
                 borderColor: 'rgba(75,192,192,1)',
-                backgroundColor: 'rgba(75,192,192,0.2)',
-                fill: false,
                 tension: 0.0,
+                datalabels: {
+                    display: false
+                }
             },
             {
                 label: t('Earned Value'),
                 data: earnedCosts,
                 borderColor: 'rgba(255,99,132,1)',
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                fill: false,
                 tension: 0.0,
+                datalabels: {
+                    display: false
+                }
             },
             {
                 label: t('Actual Cost'),
                 data: actualCosts,
                 borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                fill: false,
                 tension: 0.0,
+                datalabels: {
+                    display: false
+                }
             }
         ]
     }
 
-    // Chart options including a vertical dashed annotation for the target date.
     const options = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-            title: {
-                display: true,
-                text: t('EVM Graph')
-            },
-            datalabels: {
-                display: false
-            },
-            annotation: {
-                annotations: {
-                    verticalLine: {
-                        type: 'line',
-                        scaleID: 'x',
-                        value: verticalLineDate,
-                        borderColor: 'grey',
-                        borderWidth: 2,
-                        borderDash: [10, 5],
-                        label: {
-                            enabled: true,
-                            content: t('Target Date'),
-                            position: 'start'
-                        }
-                    }
-                }
+            legend: { position: 'top' as const },
+            title: { display: true, text: t('EVM Graph') },
+            annotation: { annotations },
+            tooltip: {
+                enabled: true,
+                displayColors: true,
+                mode: 'index',
+                intersect: false,
             }
         },
         scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: t('Date')
-                }
-            },
+            x: { title: { display: true, text: t('Date') } },
             y: {
-                title: {
-                    display: true,
-                    text: t('Cost Value')
-                },
+                title: { display: true, text: t('Cost Value') },
                 min: 0,
+                grace: '5%', // padding for annotations
             }
         }
     }
-
-    // Grab metrics from the evm data.
-    const metrics = evmData.evm.metrics || {}
 
     return (
         <div className="evm">
@@ -189,7 +234,7 @@ const EVM = (props: TabProps) => {
                     {Object.entries(metrics).map(([key, value]) => (
                         <tr key={key}>
                             <td>{t(key)}</td>
-                            <td>{value === null ? 'N/A' : value}</td>
+                            <td>{value ?? 'N/A'}</td>
                         </tr>
                     ))}
                     </tbody>
