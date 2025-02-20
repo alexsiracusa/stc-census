@@ -42,6 +42,9 @@
     padding: 0.5rem;
     box-sizing: border-box;
     height: 9rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .calendar-container .calendar-grid .other-month {

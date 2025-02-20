@@ -73,6 +73,9 @@
     gap: 0.5rem;
     max-height: 300px;
     overflow-y: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 
 .all-events-overlay .all-events-body::-webkit-scrollbar {
@@ -99,6 +102,7 @@
     transition: background-color 0.3s ease;
     width: 100%;
     background-color: #0055A5;
+    border: none;
 }
 
 .all-events-overlay .all-events-body .event-item:hover {
