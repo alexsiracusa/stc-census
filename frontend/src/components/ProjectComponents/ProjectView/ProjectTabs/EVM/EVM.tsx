@@ -120,7 +120,8 @@ const EVM = (props: TabProps) => {
 
         // Schedule Variance annotation (EV vs PV)
         if (typeof pv === 'number' && typeof ev === 'number') {
-            annotations.scheduleVariance = {
+            // Dashed line for Schedule Variance
+            annotations.scheduleVarianceLine = {
                 type: 'line',
                 xMin: verticalLineDate,
                 xMax: verticalLineDate,
@@ -129,18 +130,27 @@ const EVM = (props: TabProps) => {
                 borderColor: '#FF6B6B',
                 borderWidth: 2,
                 borderDash: [5, 5],
-                label: {
-                    enabled: true,
-                    content: `SV: ${metrics.schedule_variance}`,
-                    position: 'right',
-                    backgroundColor: 'rgba(255,255,255,0.8)'
-                }
+            }
+
+            // Label for Schedule Variance
+            annotations.scheduleVarianceLabel = {
+                type: 'label',
+                xValue: verticalLineDate,
+                yValue: (pv + ev) / 2, // Position label at midpoint
+                content: `SV: ${metrics.schedule_variance}`,
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                color: '#FF6B6B',
+                font: {
+                    size: 12
+                },
+                padding: 4
             }
         }
 
         // Cost Variance annotation (EV vs AC)
         if (typeof ev === 'number' && typeof ac === 'number') {
-            annotations.costVariance = {
+            // Dashed line for Cost Variance
+            annotations.costVarianceLine = {
                 type: 'line',
                 xMin: verticalLineDate,
                 xMax: verticalLineDate,
@@ -149,12 +159,20 @@ const EVM = (props: TabProps) => {
                 borderColor: '#4D96FF',
                 borderWidth: 2,
                 borderDash: [5, 5],
-                label: {
-                    enabled: true,
-                    content: `CV: ${metrics.cost_variance}`,
-                    position: 'left',
-                    backgroundColor: 'rgba(255,255,255,0.8)'
-                }
+            }
+
+            // Label for Cost Variance
+            annotations.costVarianceLabel = {
+                type: 'label',
+                xValue: verticalLineDate,
+                yValue: (ev + ac) / 2, // Position label at midpoint
+                content: `CV: ${metrics.cost_variance}`,
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                color: '#4D96FF',
+                font: {
+                    size: 12
+                },
+                padding: 4
             }
         }
     }
