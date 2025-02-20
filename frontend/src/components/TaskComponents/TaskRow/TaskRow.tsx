@@ -1,6 +1,6 @@
 import './TaskRow.css'
 
-import TaskStatusSelector from "./TaskStatusSelector/TaskStatusSelector.tsx";
+import TaskStatusSelector from "../TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskDependsList from "./TaskDependsList/TaskDependsList.tsx";
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import {useSelector} from "react-redux";

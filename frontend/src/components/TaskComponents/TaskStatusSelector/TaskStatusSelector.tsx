@@ -1,10 +1,10 @@
 import './TaskStatusSelector.css'
 
-import {TaskStatusInfo, TaskStatuses} from "../../../../types/TaskStatuses.ts";
+import {TaskStatusInfo, TaskStatuses} from "../../../types/TaskStatuses.ts";
 import {useSelector} from 'react-redux';
 
-import useUpdateTask from "../../../../hooks/useUpdateTask.ts";
-import StatusSelector from "../../../GenericComponents/StatusSelector/StatusSelector.tsx";
+import useUpdateTask from "../../../hooks/useUpdateTask.ts";
+import StatusSelector from "../../GenericComponents/StatusSelector/StatusSelector.tsx";
 import {format} from "date-fns";
 
 type TaskStatusSelectorProps = {

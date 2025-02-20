@@ -22,6 +22,8 @@
         overflow: hidden;
         height: 100%;
 
+        cursor: pointer;
+
         .dropdown-icon-inner {
             display: flex;
             align-items: center;
