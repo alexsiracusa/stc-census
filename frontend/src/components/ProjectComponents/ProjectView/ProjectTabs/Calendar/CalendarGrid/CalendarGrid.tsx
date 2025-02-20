@@ -11,11 +11,8 @@ type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
     events: Event[];
     currentProjectId: number; // don't use
-    openEventForm: (date: Date, eventToEdit?: Event) => void;
     editing: boolean;
     select: (boolean) => void;
-    project_id: number;
-    task_id: number;
 };
 
 const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boolean => {
@@ -28,7 +25,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                        calendarDays,
                                                        events = [],
                                                        currentProjectId,
-                                                       openEventForm,
                                                    }) => {
     const { t } = useTranslation();
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
@@ -46,7 +42,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         );
 
         if (filteredEvents.length === 0) {
-            console.warn("No events found for this date!");
             return;
         }
 
@@ -55,7 +50,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
             project_id: event.projectId,
             name: event.title,
             description: "",
-            status: "",
+            status: event.status,
             target_start_date: event.startDate,
             target_completion_date: event.endDate,
             created_at: "",
@@ -99,11 +94,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                             className={`day-box ${isCurrentMonth ? "" : "other-month"} ${
                                 isToday(date) ? "today" : ""
                             }`}
-                            onClick={(e) => {
-                                if (!(e.target as HTMLElement).classList.contains("more-events")) {
-                                    openEventForm(date);
-                                }
-                            }}
                         >
                             <div className={`day-num ${isToday(date) ? "today" : ""}`}>
                                 {date.getDate()}
@@ -158,9 +148,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         date={allEventsDate}
                         tasks={allEventsForDate}
                         onClose={closeAllEvents}
-                        openTaskDetails={(taskId: string) => {
-                            const taskToOpen = allEventsForDate.find(task => task.id === Number(taskId));
-                            console.log("Task to open:", taskToOpen);
+                        openTaskDetails={function (): void {
+                            throw new Error("Function not implemented.");
                         }}
                     />
                 )}

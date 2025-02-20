@@ -3,10 +3,11 @@ import "./AllEventsPopup.css";
 import { useTranslation } from "react-i18next";
 import { Task } from "../../../../../../types/Task";
 import TaskPopup from "../../../../../TaskComponents/TaskPopup/TaskPopup";
+import { TaskStatusInfo } from "../../../../../../types/TaskStatuses.ts";
 
 type AllEventsPopupProps = {
     date: Date;
-    tasks: (Task & { color: string; description?: string; })[];
+    tasks: Task[];
     onClose: () => void;
     openTaskDetails: (taskId: string) => void;
 };
@@ -86,27 +87,33 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({
 
                 <div className="all-events-body">
                     {tasks.length > 0 ? (
-                        tasks.map((task) => (
-                            <TaskPopup
-                                key={task.id}
-                                project_id={task.project_id}
-                                task_id={Number(task.id)}
-                                buttonClassName="event-item"
-                            >
-                                <div
-                                    style={{
-                                        backgroundColor: task.color,
-                                    }}
-                                    onClick={() => openTaskDetails(task.id.toString())}
+                        tasks.map((task) => {
+                            const taskColor = TaskStatusInfo[task.status]?.color || "#003366";
+
+                            return (
+                                <TaskPopup
+                                    key={task.id}
+                                    project_id={task.project_id}
+                                    task_id={Number(task.id)}
+                                    buttonClassName="event-item"
                                 >
-                                    <strong>{task.name}</strong>
-                                    {task.description && <p>{task.description}</p>}
-                                    <span className="event-time">
-                                        {`${task.target_start_date || "N/A"} - ${task.target_completion_date || "N/A"}`}
-                                    </span>
-                                </div>
-                            </TaskPopup>
-                        ))
+                                    <div
+                                        style={{
+                                            backgroundColor: taskColor,
+                                            padding: "10px 12px",
+                                            borderRadius: "6px",
+                                        }}
+                                        onClick={() => openTaskDetails(task.id.toString())}
+                                    >
+                                        <strong>{task.name}</strong>
+                                        {task.description && <p>{task.description}</p>}
+                                        <span className="event-time">
+                                            {`${task.target_start_date || "N/A"} - ${task.target_completion_date || "N/A"}`}
+                                        </span>
+                                    </div>
+                                </TaskPopup>
+                            );
+                        })
                     ) : (
                         <p className="no-tasks">{t("calendar.allEventsPopup.noTasks")}</p>
                     )}

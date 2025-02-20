@@ -92,8 +92,6 @@
 }
 
 .all-events-overlay .all-events-body .event-item {
-    padding: 0.6rem 0.8rem;
-    border-radius: 6px;
     color: white;
     font-size: 0.9rem;
     font-weight: bold;
@@ -101,7 +99,6 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
-    background-color: #0055A5;
     border: none;
 }
 
