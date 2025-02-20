@@ -1,9 +1,9 @@
 import {configureStore} from '@reduxjs/toolkit'
 
-import taskReducer from '../features/tasks/projectsReducer.js'
+import projectReducer from '../features/tasks/projectsReducer.js'
 
 export default configureStore({
     reducer: {
-        projects: taskReducer,
+        projects: projectReducer,
     },
 })
