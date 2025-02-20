@@ -3,7 +3,6 @@ import './ProjectRow.css'
 import {Link} from "react-router";
 import {useSelector} from "react-redux";
 import useFetchProjectSummary from "../../../hooks/useFetchProjectSummary.ts";
-import ProjectName from "./ProjectName/ProjectName.tsx";
 import ProjectStatusSelector from "./ProjectStatusSelector/ProjectStatusSelector.tsx";
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 
@@ -83,18 +82,18 @@ const ProjectRow = (props: ProjectRowProps) => {
             </div>
 
             <div className='project-budget'>
-                <p>{project.expected_cost}</p>
+                <p>{project.expected_cost.toLocaleString()}</p>
             </div>
 
             <div className='project-actual-cost'>
-                <p>{project.actual_cost}</p>
+                <p>{project.actual_cost.toLocaleString()}</p>
             </div>
 
             <div className={('project-budget-variance ' + (project.budget_variance < 0 ? 'negative' : 'positive'))}>
                 {project.budget_variance < 0 ? (
-                    <p>{`[${Math.abs(project.budget_variance)}]`}</p>
+                    <p>{`(${Math.abs(project.budget_variance).toLocaleString()})`}</p>
                 ) : (
-                    <p>{Math.abs(project.budget_variance)}</p>
+                    <p>{Math.abs(project.budget_variance).toLocaleString()}</p>
                 )}
             </div>
         </div>

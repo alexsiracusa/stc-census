@@ -154,7 +154,7 @@ i18n
                             dueDate: 'Due Date',
                             budget: 'Budget',
                             actualCost: 'Actual $',
-                            budgetVariance: 'Diff.',
+                            budgetVariance: 'Diff. (Loss)',
                         }
                     },
                     addProject: 'Add Project',
