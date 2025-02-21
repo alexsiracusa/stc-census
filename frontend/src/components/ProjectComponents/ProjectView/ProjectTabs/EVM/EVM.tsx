@@ -2,9 +2,9 @@ import './EVM.css';
 import { useTranslation } from 'react-i18next';
 import TabProps from "../TabProps";
 import { useEffect, useState } from "react";
-import Graph from "./Graph";
-import { getCostChartOptions } from "./costChartConfig";
-import { getIndexChartOptions } from "./indexChartConfig";
+import Graph from "./utils/Graph.tsx";
+import { getCostChartOptions } from "./utils/costChartConfig.ts";
+import { getIndexChartOptions } from "./utils/indexChartConfig.ts";
 import {
     Chart as ChartJS,
     CategoryScale,
