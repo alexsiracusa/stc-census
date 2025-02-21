@@ -1,6 +1,6 @@
 import useUpdate from "./useUpdate.ts";
 import {useCallback} from "react";
-import {updateProject as updateProjectRedux} from "../redux/features/tasks/projectsReducer.js";
+import {updateProject as updateProjectRedux} from "../redux/features/projects/projectsReducer.js";
 
 
 const useUpdateTask = () => {

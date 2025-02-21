@@ -1,6 +1,6 @@
 import useUpdate from "./useUpdate.ts";
 import {useCallback} from "react";
-import {deleteTask as deleteTaskRedux} from "../redux/features/tasks/projectsReducer.js";
+import {deleteTask as deleteTaskRedux} from "../redux/features/projects/projectsReducer.js";
 
 
 const useDeleteTask = () => {

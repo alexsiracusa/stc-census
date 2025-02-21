@@ -1,5 +1,5 @@
 import useFetch from "./useFetch.ts";
-import {addProject} from "../redux/features/tasks/projectsReducer.js";
+import {addProject} from "../redux/features/projects/projectsReducer.js";
 
 const useFetchProject = (project_id) => {
     const host = import.meta.env.VITE_BACKEND_HOST;

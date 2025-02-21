@@ -52,6 +52,12 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
             disabled: false,
         },
         {
+            displayName: t('taskList.columns.personInCharge'),
+            columnName: 'person_in_charge',
+            className: 'task-person-in-charge-header',
+            disabled: false,
+        },
+        {
             displayName: t('taskList.columns.budget'),
             columnName: 'expected_cost',
             className: 'task-budget-header',

@@ -27,6 +27,8 @@ CREATE TYPE PROJECT_STATUS AS ENUM ('to_do', 'in_progress', 'on_hold', 'cancelle
 CREATE TABLE Account (
     id              SERIAL  PRIMARY KEY,
     email           TEXT    NOT NULL,
+    first_name      TEXT    NOT NULL,
+    last_name       TEXT    NOT NULL,
     password_hash   TEXT    NOT NULL
 );
 
@@ -76,8 +78,9 @@ CREATE TABLE Task (
     status          TASK_STATUS NOT NULL DEFAULT 'to_do',
     created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    expected_cost   DECIMAL(1000, 2) NOT NULL DEFAULT 0,
-    actual_cost     DECIMAL(1000, 2) NOT NULL DEFAULT 0,
+    person_in_charge    INT                 REFERENCES Account(id) ON DELETE SET NULL,
+    expected_cost       DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
+    actual_cost         DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
 
     actual_start_date       DATE,
     actual_completion_date  DATE,
