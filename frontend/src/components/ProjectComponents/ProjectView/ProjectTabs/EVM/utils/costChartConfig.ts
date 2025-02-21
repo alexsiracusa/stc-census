@@ -5,7 +5,8 @@ export const getCostChartOptions = (t: Function, annotations: any) => ({
         legend: { position: 'top' },
         title: { display: true, text: t('EVM Cost Metrics') },
         annotation: { annotations },
-        tooltip: { mode: 'index', intersect: false }
+        tooltip: { mode: 'index', intersect: false },
+        datalabels: { display: false }
     },
     scales: {
         x: { title: { display: true, text: t('Date') } },

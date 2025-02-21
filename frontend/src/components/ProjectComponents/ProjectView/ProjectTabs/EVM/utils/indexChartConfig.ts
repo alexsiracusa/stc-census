@@ -3,7 +3,9 @@ export const getIndexChartOptions = (t: Function) => ({
     maintainAspectRatio: false,
     plugins: {
         legend: { position: 'top' },
-        title: { display: true, text: t('EVM Index Metrics') }
+        title: { display: true, text: t('EVM Index Metrics') },
+        tooltip: { mode: 'index', intersect: false },
+        datalabels: { display: false }
     },
     scales: {
         left: {
