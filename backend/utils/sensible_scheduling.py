@@ -1,11 +1,32 @@
-from collections import defaultdict, deque
+from typing import Optional
 from datetime import date
+import numpy as np
 import pandas as pd
+from collections import defaultdict, deque
+
+
+# Helper function: if a user-supplied date falls on a weekend, push it to the following Monday.
+def adjust_if_weekend(d: date) -> date:
+    d_ts = pd.Timestamp(d)
+    if d_ts.weekday() == 5:  # Saturday
+        return (d_ts + pd.Timedelta(days=2)).date()
+    elif d_ts.weekday() == 6:  # Sunday
+        return (d_ts + pd.Timedelta(days=1)).date()
+    return d
+
+
+# Helper function: count number of business days (Monday-Friday) between two date objects.
+def business_days_between(start: date, end: date) -> int:
+    start_np = np.datetime64(start)
+    end_np = np.datetime64(end)
+    # np.busday_count returns the number of business days between start (inclusive) and end (exclusive)
+    return int(np.busday_count(start_np, end_np))
 
 
 def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Schedule tasks using the Spread strategy, using target_days_to_complete for each task's duration.
+    Schedule tasks using the Spread strategy.
+    NOTE: Here durations are interpreted as working days.
     """
     tasks = []
     for row in tasks_df.to_dict('records'):
@@ -17,7 +38,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
         slack = row['slack']
         is_critical = row['is_critical']
         dependencies = row['dependencies']
-        target_days = row['target_days_to_complete']  # Extract target days
+        target_days = row['target_days_to_complete']  # assumed to be working days
         deps_task_ids = [tasks_df.iloc[idx]['id'] for idx in dependencies]
         tasks.append((task_id, es, ee, ls, le, slack, is_critical, deps_task_ids, target_days))
 
@@ -33,7 +54,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
             'slack': slack,
             'is_critical': is_critical,
             'dependencies': deps,
-            'duration': target_days  # Use target_days as duration
+            'duration': target_days  # Working days
         }
 
     successors = defaultdict(list)
@@ -86,6 +107,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
 
     schedule = {}
 
+    # Schedule critical tasks at their earliest start.
     critical_tasks = [t_id for t_id in task_map if task_map[t_id]['is_critical']]
     for t_id in critical_tasks:
         t = task_map[t_id]
@@ -93,6 +115,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
         end = start + t['duration']
         schedule[t_id] = (start, end)
 
+    # Schedule non-critical tasks by “spreading” them over the available slack.
     non_critical = [t_id for t_id in topo_order if not task_map[t_id]['is_critical']]
     n = len(non_critical)
     for idx, t_id in enumerate(non_critical):
@@ -121,7 +144,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     for t_id, (start, end) in schedule.items():
         result_data.append({
             'task_id': t_id,
-            'start_date': start,
+            'start_date': start,  # these are offsets expressed in working days
             'end_date': end
         })
 
@@ -129,21 +152,27 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def convert_and_adjust_schedule(schedule_df: pd.DataFrame, diff: int, mode: int, wanted_start: date) -> (pd.DataFrame, date):
-    wanted_start = pd.Timestamp(wanted_start)
-
+    """
+    Given a schedule with “working day offsets” convert these into actual dates by adding business day offsets.
+    If the schedule’s overall duration (i.e. the CPM minimum) is longer than what the user requested (diff < 0)
+    then the project start date is adjusted backward (using business day arithmetic) so that none of the
+    scheduled tasks starts on a weekend.
+    """
+    wanted_start_ts = pd.Timestamp(wanted_start)
     if diff < 0:
-        if mode == 0 or mode == 1:
-            wanted_start = wanted_start + pd.Timedelta(days=diff)
+        # For modes 0 and 1, shift the project start earlier business-day wise.
+        if mode in (0, 1):
+            wanted_start_ts = wanted_start_ts - pd.offsets.BDay(abs(diff))
         elif mode == 2:
             pass
         else:
             raise ValueError("Invalid mode value. Must be 0, 1, or 2.")
 
-    schedule_df['start_date'] = wanted_start + pd.to_timedelta(schedule_df['start_date'], unit='D')
-    schedule_df['end_date'] = wanted_start + pd.to_timedelta(schedule_df['end_date'], unit='D')
-
-    schedule_df['start_date'] = schedule_df['start_date'].dt.date
-    schedule_df['end_date'] = schedule_df['end_date'].dt.date
-    wanted_start = wanted_start.date()
-
-    return schedule_df, wanted_start
+    # Now, for each task offset (in working days) add the offset using Business Day arithmetic.
+    schedule_df['start_date'] = schedule_df['start_date'].apply(
+        lambda x: (wanted_start_ts + pd.offsets.BDay(x)).date()
+    )
+    schedule_df['end_date'] = schedule_df['end_date'].apply(
+        lambda x: (wanted_start_ts + pd.offsets.BDay(x)).date()
+    )
+    return schedule_df, wanted_start_ts.date()

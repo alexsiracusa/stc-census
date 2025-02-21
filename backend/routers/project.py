@@ -2,14 +2,13 @@ from fastapi import APIRouter, HTTPException, Response, status, Body
 import pandas as pd
 import asyncpg
 from typing import Any, Optional
-import json
-from datetime import date, timedelta
+from datetime import date
 
 from ..database import data
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
-from ..utils.sensible_scheduling import schedule_tasks, convert_and_adjust_schedule
+from ..utils.sensible_scheduling import schedule_tasks, adjust_if_weekend, business_days_between, convert_and_adjust_schedule
 
 router = APIRouter(
     prefix="/project",
@@ -148,58 +147,72 @@ async def get_sensible_scheduling(project_id: int,
             raise HTTPException(
                 status_code=400,
                 detail=f"Exactly two of wanted_start, wanted_end, or wanted_duration must be provided, "
-                       f"with the third as null. {3-none_count} were provided."
+                       f"with the third as null. {3 - none_count} were provided."
             )
 
-        # Get all tasks with dependencies for the project
+        # Make sure any user-provided dates fall on business days.
+        if wanted_start is not None:
+            wanted_start = adjust_if_weekend(wanted_start)
+        if wanted_end is not None:
+            wanted_end = adjust_if_weekend(wanted_end)
+
+        # Determine scheduling mode (how the missing parameter is computed) and compute the project duration
+        # in business days:
+        #
+        #   Mode 0: Both wanted_start and wanted_end provided.
+        #           (Then we compute the working-days duration between them.)
+        #   Mode 1: (wanted_end and wanted_duration provided) so we compute wanted_start
+        #   Mode 2: (wanted_start and wanted_duration provided) so we compute wanted_end
+        if wanted_duration is None:  # Mode 0: Both dates given.
+            computed_duration = business_days_between(wanted_start, wanted_end)
+            end_int = computed_duration
+            schedule_mode = 0
+        elif wanted_start is None:  # Mode 1: wanted_end and duration provided. Compute wanted_start by subtracting business days.
+            # Subtract wanted_duration business days from wanted_end.
+            wanted_start = (pd.Timestamp(wanted_end) - pd.offsets.BDay(wanted_duration)).date()
+            schedule_mode = 1
+            end_int = wanted_duration
+        elif wanted_end is None:  # Mode 2: wanted_start and duration provided. Compute wanted_end by adding business days.
+            wanted_end = (pd.Timestamp(wanted_start) + pd.offsets.BDay(wanted_duration)).date()
+            schedule_mode = 2
+            end_int = wanted_duration
+
+        # Retrieve the tasks (here we assume data.get_all_project_tasks_cpm is defined elsewhere)
         tasks = await data.get_all_project_tasks_cpm(project_id)
         df = pd.DataFrame(tasks)
         df, cycle_info, critical_path_length = compute_cpm(df, include_dependencies_in_result=True)
 
-        # convert cycle_info (a list of 2-tuple) to a list of objects with keys 'id' and 'project_id'
+        # convert cycle_info (a list of 2-tuples) to a list of objects with keys 'id' and 'project_id'
         cycle_info = [{'id': x[0], 'project_id': x[1]} for x in cycle_info]
 
-        # if cycle_info is nonempty, return an error
         if cycle_info:
             raise HTTPException(
                 status_code=500,
-                detail=f"Computing schedule: cyclical dependencies detected."
+                detail="Computing schedule: cyclical dependencies detected."
             )
 
-        # end_int is the number of days from the requested start of project to the requested end of project
-        end_int = -1
-        schedule_mode = -1
-
-        if wanted_duration is None:  # Both dates provided, so compute duration (i.e. number of days between start and end)
-            computed_duration = (wanted_end - wanted_start).days
-            end_int = computed_duration
-            schedule_mode = 0
-        elif wanted_start is None:  # wanted_end and wanted_duration are provided, so compute the missing start date.
-            wanted_start = wanted_end - timedelta(days=wanted_duration)
-            end_int = wanted_duration
-            schedule_mode = 1
-
-        elif wanted_end is None:  # wanted_start and wanted_duration are provided, so compute the missing end date.
-            wanted_end = wanted_start + timedelta(days=wanted_duration)
-            end_int = wanted_duration
-            schedule_mode = 2
-
+        # Compare the provided (business-day) project duration with the CPM minimum.
+        # (critical_path_length is assumed to be in working days – i.e. the sum of target_days_to_complete on the critical path)
         diff = end_int - critical_path_length
+        if diff < 0:
+            # If the user-provided working-day duration isn’t long enough to fit the critical path,
+            # then default the project duration to the critical path’s length.
+            end_int = critical_path_length
 
-        if diff < 0: # the requested project duration is too short to fit the critical path
-            end_int = critical_path_length  # so the program will default to using the critical path length as the project duration
-        end_int = int(end_int)
-
+        # Calculate the schedule as “working day offsets.”
         sensible_schedule = schedule_tasks(end_int, df)
-        adjusted_schedule, wanted_start = convert_and_adjust_schedule(sensible_schedule, diff,
-                                                        mode=schedule_mode, wanted_start=wanted_start)
 
-        # Create the final dictionary with the desired structure
+        # Convert the offsets to actual calendar dates (using business day arithmetic) for the tasks.
+        # If the provided duration was too short, then adjust the project’s start date accordingly.
+        adjusted_schedule, adjusted_wanted_start = convert_and_adjust_schedule(
+            sensible_schedule, diff, schedule_mode, wanted_start
+        )
+
         result = {
             "id": project_id,
-            "cpm": sensible_schedule.to_dict(orient="records"),
+            "cpm": adjusted_schedule.to_dict(orient="records"),
             "givenDurationOverridden": str(diff < 0),
-            "projectStartDate": wanted_start,
+            "projectStartDate": adjusted_wanted_start,
             "projectEndDate": wanted_end,
             "projectDurationInDays": int(end_int)
         }
