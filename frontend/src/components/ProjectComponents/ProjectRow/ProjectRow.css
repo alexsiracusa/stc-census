@@ -159,3 +159,25 @@
         margin-left: 2px;
     }
 }
+
+.download-button {
+    width: 5.5em;
+    height: 2.4em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    background-color: #99ee99;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+    padding: 0;
+}
+
+.download-button:hover {
+    background-color: #e0e0e0;
+}
+
+.project-download-container {
+    margin: 0 10px;
+}
