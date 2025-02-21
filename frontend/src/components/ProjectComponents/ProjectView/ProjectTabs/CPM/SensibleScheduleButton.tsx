@@ -1,24 +1,27 @@
-import { useState } from "react";
-import Popup from "../../../../GenericComponents/Popup/Popup.tsx";
-import SchedulePopup from "./SchedulePopup";
-import "./SensibleScheduleButton.css";
-import TabProps from "../TabProps.ts";
+import React, { useState } from "react";
+import SensibleSchedulePopup from "./SensibleSchedulePopup.tsx";
+// import "./SensibleScheduleButton.css";
 
-const SensibleScheduleButton = (props: TabProps) => {
-    const [isVisible, setIsVisible] = useState(false);
+interface SensibleScheduleButtonProps {
+    props: any; // Replace with TabProps if you want to type it more strictly.
+}
+
+const SensibleScheduleButton: React.FC<SensibleScheduleButtonProps> = ({ props: any }) => {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const openPopup = () => {
+        setIsPopupOpen(true);
+    };
+
+    const closePopup = () => {
+        setIsPopupOpen(false);
+    };
 
     return (
-        <Popup
-            icon={<span>Schedule</span>}
-            buttonClassName="sensible-schedule-button"
-            contentClassName="schedule-popup-content"
-            title="Schedule Planner"
-            isVisible={isVisible}
-            setIsVisible={setIsVisible}
-            transparentBackground={true}
-        >
-            <SchedulePopup />
-        </Popup>
+        <div>
+            <button onClick={openPopup}>Sensible Schedule</button>
+            {isPopupOpen && <SensibleSchedulePopup onClose={closePopup} />}
+        </div>
     );
 };
 

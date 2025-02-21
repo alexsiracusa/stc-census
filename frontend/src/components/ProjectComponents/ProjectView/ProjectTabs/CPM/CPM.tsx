@@ -80,7 +80,7 @@ const CPM = (props: TabProps) => {
                 />
             </div>
             <div className={"sensible-schedule-button"}>
-                <SensibleScheduleButton />
+                <SensibleScheduleButton props={props}/>
             </div>
         </div>
     );
