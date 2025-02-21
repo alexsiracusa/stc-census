@@ -156,7 +156,7 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
 
     metrics = {
         'actual_time': actual_time,
-        'actual_cost_total': round(ac_aggregated, 2),
+        'total_actual_cost': round(ac_aggregated, 2),
         'date_of_latest_done_task': latest_done_date.strftime('%Y-%m-%d') if not done_tasks.empty else None,
         'budget_at_completion': round(bac, 2),
     }
