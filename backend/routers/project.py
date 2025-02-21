@@ -9,7 +9,7 @@ from ..database import data
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
-from ..utils.cpm_scheduling import schedule_tasks, convert_and_adjust_schedule
+from ..utils.sensible_scheduling import schedule_tasks, convert_and_adjust_schedule
 
 router = APIRouter(
     prefix="/project",
@@ -130,12 +130,12 @@ async def get_cpm_analysis(project_id: int, response: Response):
         )
 
 
-@router.get("/{project_id}/cpm_scheduling")
-async def get_cpm_scheduling(project_id: int,
-                           wanted_start: Optional[date] = None,
-                           wanted_end: Optional[date] = None,
-                           wanted_duration: Optional[int] = None,
-                           response: Response = None):
+@router.get("/{project_id}/sensible_scheduling")
+async def get_sensible_scheduling(project_id: int,
+                                  wanted_start: Optional[date] = None,
+                                  wanted_end: Optional[date] = None,
+                                  wanted_duration: Optional[int] = None,
+                                  response: Response = None):
     try:
         params = {
             "wanted_start": wanted_start,
