@@ -64,39 +64,41 @@ const EVM = (props: TabProps) => {
     const plannedValue = evmData.evm.planned_value || []
     const earnedValue = evmData.evm.earned_value || []
     const actualCost = evmData.evm.actual_cost || []
+    const scheduleVariancePercent = evmData.evm.schedule_variance_percent || []
+    const cpiArray = evmData.evm.cpi || []
 
-    // Get actual date from metrics
     const actualDate = evmData.evm.metrics.date_of_latest_done_task || ''
     const dates = plannedValue.map((pair: [string, number]) => pair[0])
 
-    // Clip earned value data after actual date
-    const earnedCosts = earnedValue.map((pair: [string, number]) => {
-        const date = pair[0]
-        return date <= actualDate ? pair[1] : null
-    })
-
-    const actualCosts = actualCost.map((pair: [string, number]) => {
-        const date = pair[0]
-        return date <= actualDate ? pair[1] : null
-    })
-
-    const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
-
-    // Determine vertical line position (clipped to chart range)
-    let verticalLineDate = actualDate
-    if (dates.length) {
-        if (actualDate < dates[0]) {
-            verticalLineDate = dates[0]
-        } else if (actualDate > dates[dates.length - 1]) {
-            verticalLineDate = dates[dates.length - 1]
-        }
+    const getLatestValue = (dataArray: [string, number][], cutoffDate: string): number | null => {
+        const validEntries = dataArray.filter(([date]) => date <= cutoffDate)
+        return validEntries.length > 0 ? validEntries[validEntries.length - 1][1] : null
     }
 
-    // Find index for actual date in dataset
-    const actualIndex = dates.indexOf(verticalLineDate)
-    const metrics = evmData.evm.metrics || {}
+    const scheduleVariancePercentValue = getLatestValue(scheduleVariancePercent, actualDate)
+    const cpiValue = getLatestValue(cpiArray, actualDate)
 
-    // Prepare variance annotations
+    const mergedMetrics = {
+        ...evmData.evm.metrics,
+        schedule_variance_percent: scheduleVariancePercentValue,
+        cpi: cpiValue
+    }
+
+    const earnedCosts = earnedValue.map((pair: [string, number]) =>
+        pair[0] <= actualDate ? pair[1] : null
+    )
+    const actualCosts = actualCost.map((pair: [string, number]) =>
+        pair[0] <= actualDate ? pair[1] : null
+    )
+    const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1])
+
+    let verticalLineDate = actualDate
+    if (dates.length) {
+        verticalLineDate = actualDate < dates[0] ? dates[0] :
+            actualDate > dates[dates.length - 1] ? dates[dates.length - 1] : actualDate
+    }
+
+    const actualIndex = dates.indexOf(verticalLineDate)
     const annotations: any = {
         verticalLine: {
             type: 'line',
@@ -118,9 +120,8 @@ const EVM = (props: TabProps) => {
         const ev = earnedCosts[actualIndex]
         const ac = actualCosts[actualIndex]
 
-        // Schedule Variance annotation (EV vs PV)
         if (typeof pv === 'number' && typeof ev === 'number') {
-            // Dashed line for Schedule Variance
+            const sv = ev - pv
             annotations.scheduleVarianceLine = {
                 type: 'line',
                 xMin: verticalLineDate,
@@ -131,25 +132,20 @@ const EVM = (props: TabProps) => {
                 borderWidth: 2,
                 borderDash: [5, 5],
             }
-
-            // Label for Schedule Variance
             annotations.scheduleVarianceLabel = {
                 type: 'label',
                 xValue: verticalLineDate,
-                yValue: (pv + ev) / 2, // Position label at midpoint
-                content: `SV: ${metrics.schedule_variance}`,
+                yValue: (pv + ev) / 2,
+                content: `SV: ${sv.toFixed(2)}`,
                 backgroundColor: 'rgba(255,255,255,0.8)',
                 color: '#FF6B6B',
-                font: {
-                    size: 12
-                },
+                font: { size: 12 },
                 padding: 4
             }
         }
 
-        // Cost Variance annotation (EV vs AC)
         if (typeof ev === 'number' && typeof ac === 'number') {
-            // Dashed line for Cost Variance
+            const cv = ev - ac
             annotations.costVarianceLine = {
                 type: 'line',
                 xMin: verticalLineDate,
@@ -160,21 +156,35 @@ const EVM = (props: TabProps) => {
                 borderWidth: 2,
                 borderDash: [5, 5],
             }
-
-            // Label for Cost Variance
             annotations.costVarianceLabel = {
                 type: 'label',
                 xValue: verticalLineDate,
-                yValue: (ev + ac) / 2, // Position label at midpoint
-                content: `CV: ${metrics.cost_variance}`,
+                yValue: (ev + ac) / 2,
+                content: `CV: ${cv.toFixed(2)}`,
                 backgroundColor: 'rgba(255,255,255,0.8)',
                 color: '#4D96FF',
-                font: {
-                    size: 12
-                },
+                font: { size: 12 },
                 padding: 4
             }
         }
+    }
+
+    const formatMetricValue = (key: string, value: any) => {
+        if (value === null || value === undefined) return 'N/A'
+        if (typeof value === 'number') {
+            switch (key) {
+                case 'schedule_variance_percent':
+                    return `${(value * 100).toFixed(0)}%`
+                case 'cpi':
+                    return value.toFixed(2)
+                case 'actual_cost_total':
+                case 'budget_at_completion':
+                    return value.toFixed(2)
+                default:
+                    return value
+            }
+        }
+        return value
     }
 
     const data = {
@@ -184,28 +194,19 @@ const EVM = (props: TabProps) => {
                 label: t('Planned Value'),
                 data: plannedCosts,
                 borderColor: 'rgba(75,192,192,1)',
-                tension: 0.0,
-                datalabels: {
-                    display: false
-                }
+                tension: 0.0
             },
             {
                 label: t('Earned Value'),
                 data: earnedCosts,
                 borderColor: 'rgba(255,99,132,1)',
-                tension: 0.0,
-                datalabels: {
-                    display: false
-                }
+                tension: 0.0
             },
             {
                 label: t('Actual Cost'),
                 data: actualCosts,
                 borderColor: 'rgba(54, 162, 235, 1)',
-                tension: 0.0,
-                datalabels: {
-                    display: false
-                }
+                tension: 0.0
             }
         ]
     }
@@ -217,19 +218,14 @@ const EVM = (props: TabProps) => {
             legend: { position: 'top' as const },
             title: { display: true, text: t('EVM Graph') },
             annotation: { annotations },
-            tooltip: {
-                enabled: true,
-                displayColors: true,
-                mode: 'index',
-                intersect: false,
-            }
+            tooltip: { mode: 'index', intersect: false }
         },
         scales: {
             x: { title: { display: true, text: t('Date') } },
             y: {
                 title: { display: true, text: t('Cost Value') },
                 min: 0,
-                grace: '5%', // padding for annotations
+                grace: '5%'
             }
         }
     }
@@ -249,10 +245,10 @@ const EVM = (props: TabProps) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {Object.entries(metrics).map(([key, value]) => (
+                    {Object.entries(mergedMetrics).map(([key, value]) => (
                         <tr key={key}>
                             <td>{t(key)}</td>
-                            <td>{value ?? 'N/A'}</td>
+                            <td>{formatMetricValue(key, value)}</td>
                         </tr>
                     ))}
                     </tbody>
