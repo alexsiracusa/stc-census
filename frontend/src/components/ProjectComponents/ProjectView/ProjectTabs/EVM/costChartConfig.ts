@@ -1,0 +1,14 @@
+export const getCostChartOptions = (t: Function, annotations: any) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { position: 'top' },
+        title: { display: true, text: t('EVM Cost Metrics') },
+        annotation: { annotations },
+        tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+        x: { title: { display: true, text: t('Date') } },
+        y: { title: { display: true, text: t('Cost Value') }, min: 0, grace: '5%' }
+    }
+});
