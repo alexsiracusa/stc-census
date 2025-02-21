@@ -71,6 +71,9 @@ const CPM = (props: TabProps) => {
                     Warning: The project contains cycles, which may affect the correctness of the CPM analysis.
                 </div>
             )}
+            <div>
+                Critical Path Length: {cpmData.criticalPathLength} days
+            </div>
             <div className="graph-container">
                 <TaskGraph
                     tasks={tasks}
