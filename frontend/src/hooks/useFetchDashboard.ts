@@ -1,4 +1,4 @@
-import { setDashboard } from "../redux/features/tasks/projectsReducer.js";
+import { setDashboard } from "../redux/features/projects/projectsReducer.js";
 import useFetch from "./useFetch";
 
 const useFetchDashboard = () => {

@@ -4,7 +4,7 @@ import logging
 
 from .utils.scheduler import setup_scheduler
 from .database import admin, InvalidCredentials
-from .routers import auth, project, projects, tasks
+from .routers import auth, project, projects, tasks, accounts
 from . import client
 
 # Configure logging
@@ -18,6 +18,7 @@ app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(project.router)
 app.include_router(tasks.router)
+app.include_router(accounts.router)
 
 origins = [
     "http://localhost:5173"

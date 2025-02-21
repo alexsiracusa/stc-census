@@ -5,6 +5,7 @@ Example State Structure
 
 {
     projects: {
+        dashboard: [1, 2, 3... ]
         byId: {
             "1": {
                 "id": 1,
@@ -50,7 +51,6 @@ Example State Structure
             }
             ...
         }
-        "dashboard": [1, 2, 3... ]
     }
 }
  */

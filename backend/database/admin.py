@@ -13,6 +13,8 @@ from . import util
 
 class AccountInfo(BaseModel):
     email: str
+    first_name: str
+    last_name: str
     password: str
 
 
@@ -37,9 +39,9 @@ async def register(account: AccountInfo, host):
     password_hash = util.hash_bcrypt_2b(account.password)
 
     record = await client.postgres_client.fetch_row("""
-        INSERT INTO Account (email, password_hash) 
-        VALUES ($1, $2) RETURNING id;
-    """, account.email, password_hash)
+        INSERT INTO Account (email, first_name, last_name, password_hash) 
+        VALUES ($1, $2, $3, $4) RETURNING id;
+    """, account.email, account.first_name, account.last_name, password_hash)
 
     account_id = record.get("id")
     return await _create_session(account_id, host)

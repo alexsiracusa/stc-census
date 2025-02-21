@@ -7,6 +7,7 @@ import {useSelector} from "react-redux";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import TaskPopup from "../TaskPopup/TaskPopup.tsx";
 import NumberEditor from "../../GenericComponents/NumberEditor/NumberEditor.tsx";
+import TaskPersonInChargePicker from "../TaskAssignPicker/TaskPersonInChargePicker.tsx";
 
 type TaskRowProps = {
     project_id: number
@@ -75,6 +76,10 @@ const TaskRow = (props: TaskRowProps) => {
                         updateTask(props.project_id, props.task_id, {target_completion_date: value})
                     }}
                 />
+            </div>
+
+            <div className='task-person-in-charge-container'>
+                <TaskPersonInChargePicker project_id={props.project_id} task_id={props.task_id}/>
             </div>
 
             <div className='task-budget'>

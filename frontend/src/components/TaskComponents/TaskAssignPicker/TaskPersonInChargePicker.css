@@ -1,0 +1,12 @@
+
+.task-person-in-charge-picker {
+    height: 100%;
+    width: 3.5em;
+
+    border-radius: 3px;
+    border: none;
+}
+
+.task-person-in-charge-picker-row {
+    width: 6em;
+}
