@@ -1,0 +1,13 @@
+.sensible-schedule-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.sensible-schedule-button:hover {
+    background-color: #0069d9;
+}

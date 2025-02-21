@@ -1,0 +1,57 @@
+.schedule-popup-content {
+    width: 30em;
+    max-width: calc(100% - 50px);
+    background-color: white;
+    border-radius: 3px;
+    overflow: hidden;
+    position: fixed;
+}
+
+.schedule-popup {
+    display: flex;
+    flex-direction: column;
+    border-color: #000000;
+    padding: 1em;
+}
+
+.schedule-popup-header {
+    margin-bottom: 1em;
+}
+
+.schedule-popup-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.schedule-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule-field-header {
+    font-size: 0.9em;
+    margin-bottom: 0.2em;
+    color: black;
+}
+
+.schedule-popup-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+}
+
+.schedule-button {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.schedule-button:hover {
+    background-color: #0069d9;
+}
+

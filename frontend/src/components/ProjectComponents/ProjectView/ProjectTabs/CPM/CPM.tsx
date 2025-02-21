@@ -3,6 +3,7 @@ import TaskGraph from './TaskGraph/TaskGraph.tsx';
 import {Task} from "../../../../../types/Task.ts";
 import {useEffect, useState} from "react";
 import './CPM.css';
+import SensibleScheduleButton from "./SensibleScheduleButton.tsx";
 
 export const useTasksFetcher = (projectId: string): [Task[], boolean] => {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -77,6 +78,9 @@ const CPM = (props: TabProps) => {
                     cpmData={cpmData.cpm}
                     cycleInfo={cpmData.cycleInfo}
                 />
+            </div>
+            <div className={"sensible-schedule-button"}>
+                <SensibleScheduleButton />
             </div>
         </div>
     );
