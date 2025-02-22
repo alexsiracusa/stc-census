@@ -24,6 +24,8 @@
             flex-direction: column;
             flex-grow: 1;
             padding: 0.75em;
+            width: 100%;
+            box-sizing: border-box;
 
             overflow-y: scroll;
             overflow-x: hidden;
@@ -45,6 +47,9 @@
                 .task-path-container {
                     flex-grow: 1;
                     max-width: calc(100% - 2em);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
 
                 .task-delete-button-container {

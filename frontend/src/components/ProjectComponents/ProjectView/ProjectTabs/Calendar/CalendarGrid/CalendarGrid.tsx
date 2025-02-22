@@ -10,7 +10,7 @@ import { Task } from "../../../../../../types/Task";
 type CalendarGridProps = {
     calendarDays: { date: Date; isCurrentMonth: boolean }[];
     events: Event[];
-    currentProjectId: number; // don't use
+    currentProjectId: number;
     editing: boolean;
     select: (boolean) => void;
 };

@@ -1,196 +1,176 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import "./EventForm.css";
-import Clock from '../../../../../../assets/Icons/Clock.svg'
-import Text from '../../../../../../assets/Icons/Text.svg'
-import DropdownDatePicker from "../../../../../GenericComponents/Dropdowns/DropdownDatePicker/DropdownDatePicker.tsx";
-import { useTranslation } from "react-i18next";
-
-type EventStatus = "Todo" | "WiP" | "On Hold" | "Done";
+import TaskStatusSelector from "../../../../../TaskComponents/TaskStatusSelector/TaskStatusSelector.tsx";
+import TaskDependsList from "../../../../../TaskComponents/TaskRow/TaskDependsList/TaskDependsList.tsx";
+import SimpleDatePicker from "../../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
+import NumberEditor from "../../../../../GenericComponents/NumberEditor/NumberEditor.tsx";
+import { Task } from "../../../../../../types/Task";
 
 type EventFormProps = {
-    isOpen: boolean;
+    onSaveTask: (taskData: Task) => void;
+    initialData?: Task;
     onClose: () => void;
-    onSaveEvent: (eventData: {
-        title: string;
-        startDate: string;
-        endDate: string;
-        note: string;
-        status: EventStatus;
-    }) => void;
-    title: string;
-    setTitle: (title: string) => void;
-    startDate: string;
-    setStartDate: (date: string) => void;
-    endDate: string;
-    setEndDate: (date: string) => void;
-    note: string;
-    setNote: (note: string) => void;
-    status: EventStatus;
-    setStatus: (status: EventStatus) => void;
 };
 
-const formatDate = (dateString: string, t: any) => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    };
+const EventForm: React.FC<EventFormProps> = ({ onSaveTask, initialData, onClose }) => {
+    const [name, setName] = useState(initialData?.name || "");
+    const [description, setDescription] = useState(initialData?.description || "");
+    const [status, setStatus] = useState(initialData?.status || "Todo");
+    const [dependsOn, setDependsOn] = useState(initialData?.depends_on || []);
+    const [targetStartDate, setTargetStartDate] = useState(initialData?.target_start_date || null);
+    const [targetCompletionDate, setTargetCompletionDate] = useState(
+        initialData?.target_completion_date || null
+    );
+    const [targetDaysToComplete, setTargetDaysToComplete] = useState(
+        initialData?.target_days_to_complete || 0
+    );
+    const [actualStartDate, setActualStartDate] = useState(initialData?.actual_start_date || null);
+    const [actualCompletionDate, setActualCompletionDate] = useState(
+        initialData?.actual_completion_date || null
+    );
+    const [expectedCost, setExpectedCost] = useState(initialData?.expected_cost || 0);
+    const [actualCost, setActualCost] = useState(initialData?.actual_cost || 0);
 
-    const locale = t("calendar.eventForm.locale") || "en-US";
-    return date.toLocaleDateString(locale, options);
-};
-
-const EventForm: React.FC<EventFormProps> = ({
-                                                 isOpen,
-                                                 onClose,
-                                                 onSaveEvent,
-                                                 title,
-                                                 setTitle,
-                                                 startDate,
-                                                 setStartDate,
-                                                 endDate,
-                                                 setEndDate,
-                                                 note,
-                                                 setNote,
-                                                 status,
-                                                 setStatus,
-                                             }) => {
-    const { t } = useTranslation();
-    const formRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (!isOpen) return;
-
-            if (event.key === "Enter") {
-                event.preventDefault();
-                handleSaveEvent();
-            }
-
-            if (event.key === "Escape") {
-                event.preventDefault();
-                onClose();
-            }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [isOpen, title, startDate, endDate, note, status]);
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (formRef.current && !formRef.current.contains(event.target as Node)) {
-            onClose();
+    const handleSave = () => {
+        if (!name.trim()) {
+            alert("Task name cannot be empty.");
+            return;
         }
-    };
 
-    useEffect(() => {
-        if (isOpen) {
-            window.addEventListener("mousedown", handleClickOutside);
+        if (
+            targetStartDate &&
+            targetCompletionDate &&
+            new Date(targetCompletionDate) < new Date(targetStartDate)
+        ) {
+            alert("Target completion date cannot be earlier than the target start date.");
+            return;
         }
-        return () => {
-            window.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isOpen]);
 
-    const handleSaveEvent = () => {
-        const eventData = {
-            title: title.trim() === "" ? t("calendar.eventForm.defaultTitle") : localizedTitle(title),
-            startDate,
-            endDate,
-            note: note.trim() === "" ? t("calendar.eventForm.noNote") : note.trim(),
-            status,
+        const taskData: Task = {
+            id: initialData?.id || Date.now(), // Use timestamp or generate unique ID for a new task
+            project_id: initialData?.project_id || 0, // Project ID must be provided externally or default to 0
+            name: name.trim(),
+            description: description.trim() || null,
+            status: status as Task["status"],
+            created_at: initialData?.created_at || new Date().toISOString(),
+            actual_start_date: actualStartDate,
+            actual_completion_date: actualCompletionDate,
+            target_start_date: targetStartDate,
+            target_completion_date: targetCompletionDate,
+            target_days_to_complete: targetDaysToComplete || null,
+            actual_cost: actualCost || null,
+            expected_cost: expectedCost || null,
+            depends_on: dependsOn,
         };
 
-        onSaveEvent(eventData);
+        onSaveTask(taskData);
         onClose();
     };
 
-    const handleEndDateChange = (newEndDate: string) => {
-        const newEndDateObj = new Date(newEndDate);
-        const startDateObj = new Date(startDate);
-
-        if (newEndDateObj < startDateObj) {
-            alert(t("calendar.eventForm.endDateError"));
-            return;
-        }
-        setEndDate(newEndDate);
-    };
-
-    const localizedTitle = (title: string): string => {
-        const localizedDefaultTitle = t("calendar.eventForm.defaultTitle");
-        const knownDefaults = ["(No title)", "(无标题)"];
-        return knownDefaults.includes(title) ? localizedDefaultTitle : title;
-    };
-
-    if (!isOpen) return null;
-
     return (
-        <div className="event-form-overlay">
-            <div className="event-form" ref={formRef}>
-                <button className="close-button" onClick={onClose}>
-                    ×
-                </button>
-                <div className="event-form-body">
-                    <input
-                        type="text"
-                        className="event-title-input"
-                        placeholder={t("calendar.eventForm.titlePlaceholder")}
-                        value={localizedTitle(title)}
-                        onFocus={() => {
-                            if (title === t("calendar.eventForm.defaultTitle")) {
-                                setTitle("");
-                            }
-                        }}
-                        onChange={(e) => setTitle(e.target.value)}
+        <div className="event-form">
+            <button className="close-button" onClick={onClose}>
+                ×
+            </button>
+            <div className="event-form-body">
+                <input
+                    type="text"
+                    className="event-title-input"
+                    placeholder="Enter Task Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+
+                <textarea
+                    className="event-description-input"
+                    placeholder="Enter Task Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+
+                <div className="event-status-select">
+                    <TaskStatusSelector
+                        currentStatus={status}
+                        onChange={(newStatus) => setStatus(newStatus)}
                     />
+                </div>
 
-                    <div className="event-date-inputs">
-                        <img src={Clock} alt={t("calendar.eventForm.startDate")} />
-                        <DropdownDatePicker
-                            className="event-start-date-picker"
-                            title={t("calendar.eventForm.startDate")}
-                            currentDate={new Date(startDate)}
-                            onChange={setStartDate}
-                        >
-                            <p>{formatDate(startDate, t)}</p>
-                        </DropdownDatePicker>
-                        <span className="date-separator">-</span>
-                        <DropdownDatePicker
-                            className="event-end-date-picker"
-                            title={t("calendar.eventForm.endDate")}
-                            currentDate={new Date(endDate)}
-                            onChange={handleEndDateChange}
-                        >
-                            <p>{formatDate(endDate, t)}</p>
-                        </DropdownDatePicker>
+                <div className="task-dependencies">
+                    <TaskDependsList
+                        dependsOn={dependsOn}
+                        onChange={(updatedDepends) => setDependsOn(updatedDepends)}
+                    />
+                </div>
+
+                <div className="event-date-inputs">
+                    <div className="task-start-date">
+                        <SimpleDatePicker
+                            currentDate={targetStartDate}
+                            title="Target Start Date"
+                            onChange={(value) => setTargetStartDate(value)}
+                        />
                     </div>
+                    <span className="date-separator">-</span>
+                    <div className="task-due-date">
+                        <SimpleDatePicker
+                            currentDate={targetCompletionDate}
+                            title="Target Completion Date"
+                            onChange={(value) => setTargetCompletionDate(value)}
+                        />
+                    </div>
+                </div>
 
-                    <div className="event-note-input">
-                        <img src={Text} alt={t("calendar.eventForm.note")} />
-                        <textarea
-                            className="note-input"
-                            placeholder={t("calendar.eventForm.notePlaceholder")}
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
+                <div className="task-budget-fields">
+                    <div className="task-expected-cost">
+                        <NumberEditor
+                            value={expectedCost || 0}
+                            negative={false}
+                            step={10}
+                            setValue={(value) => setExpectedCost(value)}
+                            title="Edit Expected Cost"
                         />
                     </div>
 
-                    <div className="event-status-select">
-                        <select value={status} onChange={(e) => setStatus(e.target.value as EventStatus)}>
-                            <option value="Todo">{t("calendar.eventForm.statusTodo")}</option>
-                            <option value="WiP">{t("calendar.eventForm.statusWiP")}</option>
-                            <option value="On Hold">{t("calendar.eventForm.statusOnHold")}</option>
-                            <option value="Done">{t("calendar.eventForm.statusDone")}</option>
-                        </select>
+                    <div className="task-actual-cost">
+                        <NumberEditor
+                            value={actualCost || 0}
+                            negative={false}
+                            step={10}
+                            setValue={(value) => setActualCost(value)}
+                            title="Edit Actual Cost"
+                        />
                     </div>
-
-                    <button className="save-button" onClick={handleSaveEvent}>
-                        {t("calendar.eventForm.saveButton")}
-                    </button>
                 </div>
+
+                <div className="task-days-to-complete">
+                    <NumberEditor
+                        value={targetDaysToComplete || 0}
+                        negative={false}
+                        step={1}
+                        setValue={(value) => setTargetDaysToComplete(value)}
+                        title="Edit Days to Complete"
+                    />
+                </div>
+
+                <div className="task-actual-start-date">
+                    <SimpleDatePicker
+                        currentDate={actualStartDate}
+                        title="Edit Actual Start Date"
+                        onChange={(value) => setActualStartDate(value)}
+                    />
+                </div>
+
+                <div className="task-actual-end-date">
+                    <SimpleDatePicker
+                        currentDate={actualCompletionDate}
+                        title="Edit Actual Completion Date"
+                        onChange={(value) => setActualCompletionDate(value)}
+                    />
+                </div>
+
+                <button className="save-button" onClick={handleSave}>
+                    Save Task
+                </button>
             </div>
         </div>
     );
