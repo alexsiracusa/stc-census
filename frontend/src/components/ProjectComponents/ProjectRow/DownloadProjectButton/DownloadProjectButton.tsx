@@ -1,4 +1,7 @@
+// src/components/DownloadProjectButton.tsx
+
 import React from 'react';
+import { convertProjectDataToCSV } from './utils/csvFormatter';
 
 type DownloadProjectButtonProps = {
     projectId: number;
@@ -7,18 +10,21 @@ type DownloadProjectButtonProps = {
 const DownloadProjectButton: React.FC<DownloadProjectButtonProps> = ({ projectId }) => {
     const handleDownload = async () => {
         try {
-            // Fetch CSV data from the endpoint (customized with the projectId)
+            // Fetch JSON data for the given project.
             const response = await fetch(`http://localhost:8000/project/${projectId}/`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
 
-            // Get CSV as text and create a Blob object
-            const csvData = await response.text();
-            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
+            // Parse the JSON.
+            const data = await response.json();
 
-            // Create a temporary link to trigger the download
+            // Convert the JSON data to a formatted CSV string.
+            const csvString = convertProjectDataToCSV(data);
+
+            // Create a Blob from the CSV data and trigger the download.
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', `project_${projectId}.csv`);
