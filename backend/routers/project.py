@@ -210,7 +210,7 @@ async def get_sensible_scheduling(project_id: int,
 
         result = {
             "id": project_id,
-            "cpm": adjusted_schedule.to_dict(orient="records"),
+            "suggested_schedule": adjusted_schedule.to_dict(orient="records"),
             "givenDurationOverridden": str(diff < 0),
             "projectStartDate": adjusted_wanted_start,
             "projectEndDate": wanted_end,
