@@ -1,53 +1,45 @@
-import TabProps from "../TabProps";
-import TaskGraph from './TaskGraph/TaskGraph.tsx';
-
-import {useEffect, useState} from "react";
 import './CPM.css';
+
+import { useSelector } from "react-redux";
+import TabProps from "../TabProps";
 import SensibleScheduleButton from "./SensibleScheduleButton/SensibleScheduleButton.tsx";
+import TaskGraph from './TaskGraph/TaskGraph.tsx';
 import useFetchTasks from "../../../../../hooks/useFetchTasks.ts";
-import {useSelector} from "react-redux";
-
-const useFetchCpmData = (projectId: number): [any, boolean] => {
-    const [cpmData, setCpmData] = useState<any>({});
-    const [loading, setLoading] = useState(true);
-    const host = import.meta.env.VITE_BACKEND_HOST;
-
-    useEffect(() => {
-        setLoading(true);
-        fetch(`${host}/project/${projectId}/cpm`)
-            .then(response => response.json())
-            .then(json => {
-                setCpmData(json);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error(error);
-                setLoading(false);
-            });
-    }, [projectId, host]);
-
-    return [cpmData, loading];
-}
+import useFetchCPM from "../../../../../hooks/useFetchCPM.ts";
 
 const CPM = (props: TabProps) => {
     const projectId = Number(props.project_id);
-    const { loading, error } = useFetchTasks(projectId);
 
-    const tasks = useSelector((state: any) => Object.values(state.projects.byId[projectId].byId));
-    const [cpmData, cpmLoading] = useFetchCpmData(projectId);
+    const { loading: tasksLoading, error: tasksError } = useFetchTasks(projectId);
+    const { loading: cpmLoading, error: cpmError } = useFetchCPM(projectId);
 
-    if (loading) {
+    const tasks = useSelector((state: any) => {
+        const project = state.projects.byId[projectId];
+        return (project && project.byId) ? Object.values(project.byId) : [];
+    });
+
+    const projectCpmData = useSelector((state: any) => state.projects.byId[projectId]);
+
+    // Return early while data is loading or if there are errors.
+    if (tasksLoading) {
         return <div className="cpm">Loading tasks...</div>;
     }
 
-    if (error) return <div>Error loading tasks</div>;
-
+    if (tasksError) {
+        return <div className="cpm">Error loading tasks</div>;
+    }
 
     if (cpmLoading) {
         return <div className="cpm">Loading CPM data...</div>;
     }
 
-    const hasCycles = cpmData.cycleInfo && cpmData.cycleInfo.length > 0;
+    if (cpmError) {
+        return <div className="cpm">Error loading CPM data</div>;
+    }
+
+    const hasCycles = projectCpmData.cycleInfo && projectCpmData.cycleInfo.length > 0;
+
+    console.log("CPM.tsx: projectCpmData", projectCpmData);
 
     return (
         <div className="cpm">
@@ -58,22 +50,20 @@ const CPM = (props: TabProps) => {
             )}
             <div className="graph-container">
                 <div className="critical-path-length">
-                    Critical Path Length: {cpmData.criticalPathLength} days
+                    Critical Path Length: {projectCpmData.criticalPathLength} days
                 </div>
                 <TaskGraph
                     tasks={tasks}
                     currentProjectId={projectId}
-                    cpmData={cpmData.cpm}
-                    cycleInfo={cpmData.cycleInfo}
+                    cpmData={projectCpmData.cpm}
+                    cycleInfo={projectCpmData.cycleInfo}
                 />
                 <div className="sensible-schedule-button">
-                    <SensibleScheduleButton props={props}/>
+                    <SensibleScheduleButton props={props} />
                 </div>
             </div>
         </div>
     );
-
 };
-
 
 export default CPM;

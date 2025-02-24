@@ -16,12 +16,14 @@ export const taskGraphStyles = [
             'background-fit': 'none',
             'background-height': '100%',
             'background-image': (ele: any) => {
-                const slack = ele.data('tooltip').split('\n')[0].split(': ')[1].trim();
+                // Parse slack from the first line of the tooltip.
+                const tooltip = ele.data('tooltip') as string;
+                const slack = tooltip ? tooltip.split('\n')[0].split(': ')[1].trim() : '0';
                 const encodedSvg = encodeURIComponent(`
-                    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                        <text x="80%" y="90%" font-family="Arial" font-size="12" fill="#000000">${slack}</text>
-                    </svg>
-                `.trim());
+          <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+              <text x="80%" y="90%" font-family="Arial" font-size="12" fill="#000000">${slack}</text>
+          </svg>
+        `.trim());
                 return `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
             },
             'background-image-containment': 'over',

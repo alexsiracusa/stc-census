@@ -162,6 +162,18 @@ export const projectSlice = createSlice({
                 state.byId[projectId].byId[task.id] = task;
             });
         },
+        setCPM: (state, action) => {
+            const json = action.payload.json;
+            const projectId = json.id;
+            // Create a placeholder for the project if it doesn't already exist.
+            if (!state.byId[projectId]) {
+                state.byId[projectId] = { id: projectId };
+            }
+            // Save the CPM-related data.
+            state.byId[projectId].cpm = json.cpm;
+            state.byId[projectId].cycleInfo = json.cycleInfo;
+            state.byId[projectId].criticalPathLength = json.criticalPathLength;
+        },
     }
 });
 
@@ -176,6 +188,7 @@ export const {
     deleteTask,
     deleteTasks,
     setTasks,
+    setCPM,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

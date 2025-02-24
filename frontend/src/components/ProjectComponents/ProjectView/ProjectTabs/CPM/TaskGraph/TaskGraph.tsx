@@ -1,10 +1,9 @@
-/* TaskGraph.tsx */
 import React, { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import './TaskGraph.css';
 import { Task } from "../../../../../../types/Task.ts";
-import {TaskStatus, TaskStatusInfo} from "../../../../../../types/TaskStatuses.ts";
+import { TaskStatus, TaskStatusInfo } from "../../../../../../types/TaskStatuses.ts";
 import { taskGraphStyles } from "./utils/taskGraphStyles.ts";
 
 cytoscape.use(dagre);
@@ -25,24 +24,30 @@ interface TaskInCycle {
     project_id: number;
 }
 
-const TaskGraph: React.FC<{
+interface TaskGraphProps {
     className?: string;
     tasks?: Task[];
     currentProjectId?: number;
     cpmData?: CpmData[];
     cycleInfo?: TaskInCycle[];
-}> = ({ className = '', tasks = [], currentProjectId, cpmData = [], cycleInfo = [] }) => {
+}
+
+const TaskGraph: React.FC<TaskGraphProps> = ({
+                                                 className = '',
+                                                 tasks = [],
+                                                 currentProjectId,
+                                                 cpmData = [],
+                                                 cycleInfo = []
+                                             }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
 
+    // Format tooltip using the task info and corresponding CPM data.
     const formatTooltip = (task: Task, cpm: CpmData) => {
         const padNumber = (num: number): string => num.toString().padStart(2, ' ');
-
         const statusInfo = TaskStatusInfo[task.status as TaskStatus];
         const presentableStatus = statusInfo ? statusInfo.name : task.status;
-
         const formatDays = (num: number) => `${padNumber(num)} ${num === 1 ? 'day' : 'days'}`;
-
         return [
             `Slack: ${padNumber(cpm.slack)}`,
             '',
@@ -54,10 +59,8 @@ const TaskGraph: React.FC<{
     };
 
     useEffect(() => {
-
-        // Early return if no tasks
+        // If no container or no tasks are available, cleanup and exit.
         if (!containerRef.current || tasks.length === 0) {
-            // Optional: You could render a placeholder or empty state
             return () => {
                 if (cyRef.current) {
                     cyRef.current.destroy();
@@ -78,11 +81,10 @@ const TaskGraph: React.FC<{
                     project_id: task.project_id,
                     isCritical: cpm ? cpm.is_critical : false,
                     inCycle: isInCycle,
-                    slack: cpm ? cpm.slack : 0  // Add this line to make slack directly accessible
+                    slack: cpm ? cpm.slack : 0
                 }
             };
         });
-
 
         const edges = tasks.flatMap(task =>
             (task.depends_on || []).map(dependency => ({
@@ -106,6 +108,7 @@ const TaskGraph: React.FC<{
             style: taskGraphStyles
         });
 
+        // Show tooltip on node hover.
         cyRef.current.on('mouseover', 'node', (event: any) => {
             const node = event.target;
             if (containerRef.current && node.data('tooltip')) {
@@ -113,6 +116,7 @@ const TaskGraph: React.FC<{
             }
         });
 
+        // Remove tooltip when the mouse leaves.
         cyRef.current.on('mouseout', 'node', () => {
             if (containerRef.current) {
                 containerRef.current.removeAttribute('title');
@@ -124,7 +128,7 @@ const TaskGraph: React.FC<{
                 cyRef.current.destroy();
             }
         };
-    }, [tasks, currentProjectId, cpmData]);
+    }, [tasks, currentProjectId, cpmData, cycleInfo]);
 
     if (tasks.length === 0) {
         return (
@@ -135,10 +139,7 @@ const TaskGraph: React.FC<{
     }
 
     return (
-        <div
-            ref={containerRef}
-            className={`taskGraphContainer ${className}`}
-        />
+        <div ref={containerRef} className={`taskGraphContainer ${className}`} />
     );
 };
 
