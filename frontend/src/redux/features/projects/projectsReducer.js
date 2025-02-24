@@ -148,6 +148,20 @@ export const projectSlice = createSlice({
                 })
             })
         },
+        setTasks: (state, action) => {
+            const tasks = action.payload.json; // expecting an array of task objects
+            tasks.forEach((task) => {
+                const projectId = task.project_id;
+                // Create a project placeholder if it doesn't exist.
+                if (!state.byId[projectId]) {
+                    state.byId[projectId] = { id: projectId, byId: {} };
+                }
+                if (!state.byId[projectId].byId) {
+                    state.byId[projectId].byId = {};
+                }
+                state.byId[projectId].byId[task.id] = task;
+            });
+        },
     }
 });
 
@@ -161,6 +175,7 @@ export const {
     createTask,
     deleteTask,
     deleteTasks,
+    setTasks,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;
