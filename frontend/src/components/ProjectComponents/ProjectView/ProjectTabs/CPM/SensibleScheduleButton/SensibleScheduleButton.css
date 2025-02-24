@@ -5,7 +5,7 @@
     z-index: 1000;
 }
 
-.sensible-schedule-button button {
+.sensible-schedule-button .schedule-button {
     padding: 12px 24px;
     font-size: 1.2rem;
     min-width: 3em;
@@ -17,7 +17,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.sensible-schedule-button button:hover {
+.sensible-schedule-button .schedule-button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

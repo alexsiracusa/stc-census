@@ -61,7 +61,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
         <>
             <div className="popup-overlay">
                 <div className="popup-content">
-                    <button className="close-button" onClick={onClose}>
+                    <button className="close-button, schedule-button" onClick={onClose}>
                         &times;
                     </button>
                     <h2>Select Schedule Dates</h2>
@@ -79,7 +79,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
                             onChange={(date: Date) => setDueDate(date.toISOString())}
                         />
                     </div>
-                    <button onClick={handleGenerateSchedule}>Generate Schedule</button>
+                    <button className='schedule-button' onClick={handleGenerateSchedule}>Generate Schedule</button>
                 </div>
             </div>
 
@@ -94,9 +94,9 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
                         ) : (
                             <pre>{JSON.stringify(suggestedScheduleData, null, 2)}</pre>
                         )}
-                        <div className="confirmation-buttons">
-                            <button onClick={handleRejectPlan}>Reject Plan</button>
-                            <button onClick={handleAcceptPlan} disabled={isLoading || !!fetchError}>
+                        <div className="confirmation-button">
+                            <button className='schedule-button' onClick={handleRejectPlan}>Reject Plan</button>
+                            <button className='schedule-button' onClick={handleAcceptPlan} disabled={isLoading || !!fetchError}>
                                 Accept Plan
                             </button>
                         </div>
