@@ -19,6 +19,23 @@ ALTER SEQUENCE task_seq_7 RESTART WITH 1;
 ALTER SEQUENCE task_seq_8 RESTART WITH 1;
 ALTER SEQUENCE task_seq_9 RESTART WITH 1;
 ALTER SEQUENCE task_seq_10 RESTART WITH 1;
+ALTER SEQUENCE account_id_seq RESTART WITh 1;
+
+----------------------------------------------------------------
+-- Create Accounts
+----------------------------------------------------------------
+INSERT INTO Account
+(email, first_name, last_name, password_hash)
+VALUES
+    -- password: 'password'
+    ('alexander.siracusa@gmail.com', 'alexander', 'siracusa', '$2b$12$bojXQ5Q/F5wpS5VnLP0Yve3Bdun41X4t3VJBnH6N2TohnmqZBkyM.'),
+    -- password: 'gu'
+    ('azgu@wpi.edu', 'alexander', 'gu', '$2b$12$7jTHX5prhBJWd3xXVaE./e0fWuDMjxgdKT87w2wNH0SwMfWqNKwTC'),
+    -- password: 'lap'
+    ('ajlap@wpi.edu', 'alexander', 'lap', '$2b$12$L3htQGEyaAe/B.BBE0n3I.mJ8jesZwWWkEWeliF3rMAi/hqigd5mu'),
+    -- password: 'chu'
+    ('hvchu@wpi.edu', 'ha', 'chu', '$2b$12$L4GKSPHAwupLFXbHlh.2fOs5gZxkN7o5etiL38lwosRM.C/B3KoOG');
+
 
 ----------------------------------------------------------------
 -- Insert Tasks with full info (planning, actual dates, costs, status)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response, Request, status
 import asyncpg
 
-from ..database import AccountInfo, InvalidCredentials, admin
+from ..database import AccountInfo, AccountLogin, InvalidCredentials, admin
 
 
 # Get TLS certificate from here for deploying
@@ -35,7 +35,7 @@ async def register(
 async def login(
     request: Request,
     response: Response,
-    account: AccountInfo
+    account: AccountLogin
 ):
     try:
         session_id = await admin.login(account, request.client.host)

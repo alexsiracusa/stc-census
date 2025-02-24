@@ -17,6 +17,10 @@ class AccountInfo(BaseModel):
     last_name: str
     password: str
 
+class AccountLogin(BaseModel):
+    email: str
+    password: str
+
 
 async def _create_session(account_id: int, host):
     session_id = str(uuid.uuid4())
@@ -47,7 +51,7 @@ async def register(account: AccountInfo, host):
     return await _create_session(account_id, host)
 
 
-async def login(account: AccountInfo, host):
+async def login(account: AccountLogin, host):
     # get stored hash value from database
     record = await client.postgres_client.fetch_row("""
         SELECT id, password_hash 
