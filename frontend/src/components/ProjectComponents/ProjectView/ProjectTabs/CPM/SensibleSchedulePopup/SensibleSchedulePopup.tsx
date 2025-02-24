@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SimpleDatePicker from "../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
+import SimpleDatePicker from "../../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import "./SensibleSchedulePopup.css";
 
 interface SensibleSchedulePopupProps {

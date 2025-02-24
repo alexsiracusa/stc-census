@@ -3,7 +3,7 @@ import TaskGraph from './TaskGraph/TaskGraph.tsx';
 import {Task} from "../../../../../types/Task.ts";
 import {useEffect, useState} from "react";
 import './CPM.css';
-import SensibleScheduleButton from "./SensibleScheduleButton.tsx";
+import SensibleScheduleButton from "./SensibleScheduleButton/SensibleScheduleButton.tsx";
 
 export const useTasksFetcher = (projectId: string): [Task[], boolean] => {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -71,19 +71,19 @@ const CPM = (props: TabProps) => {
                     Warning: The project contains cycles, which may affect the correctness of the CPM analysis.
                 </div>
             )}
-            <div>
-                Critical Path Length: {cpmData.criticalPathLength} days
-            </div>
             <div className="graph-container">
+                <div className="critical-path-length">
+                    Critical Path Length: {cpmData.criticalPathLength} days
+                </div>
                 <TaskGraph
                     tasks={tasks}
                     currentProjectId={projectId}
                     cpmData={cpmData.cpm}
                     cycleInfo={cpmData.cycleInfo}
                 />
-            </div>
-            <div className={"sensible-schedule-button"}>
-                <SensibleScheduleButton props={props}/>
+                <div className="sensible-schedule-button">
+                    <SensibleScheduleButton props={props}/>
+                </div>
             </div>
         </div>
     );

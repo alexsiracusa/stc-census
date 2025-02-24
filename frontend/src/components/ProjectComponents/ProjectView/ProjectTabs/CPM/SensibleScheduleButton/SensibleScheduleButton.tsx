@@ -1,9 +1,10 @@
+import "./SensibleScheduleButton.css";
+
 import React, { useState } from "react";
-import SensibleSchedulePopup from "./SensibleSchedulePopup.tsx";
-// import "./SensibleScheduleButton.css";
+import SensibleSchedulePopup from "../SensibleSchedulePopup/SensibleSchedulePopup.tsx";
 
 interface SensibleScheduleButtonProps {
-    props: any; // Replace with TabProps if you want to type it more strictly.
+    props: any;
 }
 
 const SensibleScheduleButton: React.FC<SensibleScheduleButtonProps> = ({ props: any }) => {
