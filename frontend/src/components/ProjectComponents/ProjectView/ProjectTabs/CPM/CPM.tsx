@@ -39,8 +39,6 @@ const CPM = (props: TabProps) => {
 
     const hasCycles = projectCpmData.cycleInfo && projectCpmData.cycleInfo.length > 0;
 
-    console.log("CPM.tsx: projectCpmData", projectCpmData);
-
     return (
         <div className="cpm">
             {hasCycles && (
