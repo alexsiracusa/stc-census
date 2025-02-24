@@ -1,6 +1,5 @@
 import './TaskDeleteButton.css'
 
-import {useState} from "react";
 import useDeleteTask from "../../../hooks/useDeleteTask.ts";
 import Trash from '../../../assets/Icons/Trash2.svg'
 import ConfirmPopup from "../../GenericComponents/ConfirmPopup/ConfirmPopup.tsx";
