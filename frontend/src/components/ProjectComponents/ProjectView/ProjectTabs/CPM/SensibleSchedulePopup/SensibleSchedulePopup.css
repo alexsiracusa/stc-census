@@ -1,3 +1,4 @@
+/* Overlay style (used by your Popup component) */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -11,14 +12,30 @@
     z-index: 9999;
 }
 
-.popup-content {
+/* Style for the content that appears in the popup */
+.sensible-schedule-popup-content {
     background-color: white;
     padding: 20px;
     border-radius: 5px;
     position: relative;
     min-width: 300px;
+    /* Optional sizing: Uncomment and adjust if needed */
+    /* height: 40em; */
+    /* width: 70em; */
+    /* max-width: calc(100% - 50px); */
+    /* max-height: calc(100% - 50px); */
 }
 
+.hidden-button {
+    display: none;
+}
+
+/* Inner container */
+.sensible-schedule-popup-inner {
+    position: relative;
+}
+
+/* Close button in the upper corner */
 .close-button {
     position: absolute;
     top: 5px;
@@ -29,8 +46,37 @@
     cursor: pointer;
 }
 
+/* Container for the date pickers */
 .date-picker-container {
     display: flex;
     gap: 10px;
     margin: 20px 0;
+}
+
+/* Header labels for the date pickers */
+.date-picker-header {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+/* Style for the schedule and confirmation buttons */
+.schedule-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Section that displays confirmation details */
+.confirmation-section {
+    margin-top: 20px;
+}
+
+/* Container for the confirmation buttons */
+.confirmation-button {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
 }

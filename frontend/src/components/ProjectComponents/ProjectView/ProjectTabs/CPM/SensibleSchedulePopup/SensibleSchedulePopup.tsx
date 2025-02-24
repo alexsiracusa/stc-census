@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SimpleDatePicker from "../../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker";
-import Popup from "../../../../../GenericComponents/Popup/Popup.tsx";
+import Popup from "../../../../../GenericComponents/Popup/Popup";
 import "./SensibleSchedulePopup.css";
 
 interface SensibleSchedulePopupProps {
@@ -23,7 +23,6 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
         setIsLoading(true);
         setFetchError(null);
         try {
-            // Replace the URL with your actual backend host if needed.
             const response = await fetch(
                 `http://localhost:8000/project/1/sensible_scheduling?wanted_start=${wanted_start}&wanted_end=${wanted_end}`
             );
@@ -38,9 +37,8 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
     };
 
     const handleGenerateSchedule = () => {
-        // Convert the Date objects into the YYYY-MM-DD string format.
-        const wanted_start = startDate.toISOString().split("T")[0];
-        const wanted_end = dueDate.toISOString().split("T")[0];
+        const wanted_start = startDate.split("T")[0];
+        const wanted_end = dueDate.split("T")[0];
 
         setShowConfirmation(true);
         fetchScheduleData(wanted_start, wanted_end);
@@ -58,12 +56,11 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
 
     return (
         <Popup
-            // Pass an empty element as the icon to hide the built-in toggle button.
             icon={<span style={{ display: "none" }} />}
-            buttonClassName="hidden-button" // Use CSS to hide or minimize the built-in button.
+            buttonClassName="hidden-button"
             contentClassName="sensible-schedule-popup-content"
             title="Select Schedule Dates"
-            isVisible={true} // The popup is controlled externally.
+            isVisible={true}
             setIsVisible={(visible: boolean) => {
                 if (!visible) {
                     onClose();
