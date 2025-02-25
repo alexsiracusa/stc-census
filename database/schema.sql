@@ -245,6 +245,11 @@ FOR EACH ROW
 WHEN (NEW.id IS NULL)
 EXECUTE FUNCTION generate_task_id();
 
+CREATE TRIGGER set_project_task_sequence
+AFTER INSERT ON Project
+FOR EACH ROW
+EXECUTE FUNCTION create_task_sequence();
+
 CREATE TRIGGER project_parent_immutable
 AFTER UPDATE OF parent ON Project
 FOR EACH ROW EXECUTE PROCEDURE raise_immutable('Project', 'parent');
