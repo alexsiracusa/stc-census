@@ -23,22 +23,46 @@ conf = ConnectionConfig(
 
 class EmailClient:
 
+    def get_person_info(self, task: dict) -> tuple:
+        """
+        Get the appropriate person's email and name information from the task.
+        Uses task_person info if available, otherwise falls back to project_person info.
+        :param task: task dictionary
+        :return: tuple of (email, first_name, last_name)
+        """
+        # Use task person's email if available, otherwise use project person's email
+        email = task.get('task_person_email') or task.get('project_person_email')
+
+        # Get appropriate first name, with fallback to "FIRSTNAME" if missing
+        if task.get('task_person_email'):
+            first_name = task.get('task_person_first_name') or "FIRSTNAME"
+            last_name = task.get('task_person_last_name') or "LASTNAME"
+        else:
+            first_name = task.get('project_person_first_name') or "FIRSTNAME"
+            last_name = task.get('project_person_last_name') or "LASTNAME"
+
+        return (email, first_name, last_name)
+
     def format_email_message(self, tasks: list, first_line: str) -> str:
         """
         Format the email message to be sent for a list of tasks.
-        :param tasks: list of tasks of the form {'id': int, 'name': str, 'project_id': int, 'email': str, 'first_name': str, 'last_name': str}
+        :param tasks: list of tasks with task and project person information
         :param first_line: first line of the email message
         :return: formatted email message
         """
-        return f"{first_line}<br>" + "<br>".join(
-            [f"{t['name']} (ID:{t['id']}, Project:{t['project_id']}, Assigned to: {t['first_name']} {t['last_name']})"
-             for t in tasks]
-        )
+        task_lines = []
+        for t in tasks:
+            _, first_name, last_name = self.get_person_info(t)
+            task_lines.append(
+                f"{t['name']} (ID:{t['id']}, Project:{t['project_id']}, Assigned to: {first_name} {last_name})"
+            )
+
+        return f"{first_line}<br>" + "<br>".join(task_lines)
 
     async def send_notification(self, tasks: list, email_subject: str, first_line: str) -> None:
         """
         Send an email notification to the recipients based on the tasks.
-        :param tasks: list of tasks containing recipient email information
+        :param tasks: list of tasks containing recipient information
         :param email_subject: subject of the email
         :param first_line: first line of the email message
         :return: None
@@ -47,16 +71,36 @@ class EmailClient:
             logger.info("Notifications not sent, since notifications are disabled.")
             return
 
-        # Extract unique email addresses from the tasks
-        email_recipients = list(set([task['email'] for task in tasks if 'email' in task and task['email']]))
+        # Check tasks for missing project person emails when task person email is also missing
+        invalid_tasks = []
+        valid_tasks = []
 
-        if not email_recipients:
-            logger.warning("No valid email recipients found in tasks. Notification not sent.")
+        for task in tasks:
+            email, _, _ = self.get_person_info(task)
+            if not email:
+                invalid_tasks.append(task)
+            else:
+                valid_tasks.append(task)
+
+        if invalid_tasks:
+            task_ids = [t['id'] for t in invalid_tasks]
+            error_msg = f"Error: Missing email information for tasks with IDs: {task_ids}. These notifications were not sent."
+            logger.error(error_msg)
+
+        if not valid_tasks:
+            logger.error("No valid tasks with email information. No notifications sent.")
             return
+
+        # Extract unique email addresses from the valid tasks
+        email_recipients = []
+        for task in valid_tasks:
+            email, _, _ = self.get_person_info(task)
+            if email and email not in email_recipients:
+                email_recipients.append(email)
 
         try:
             # Format the email message
-            email_message = self.format_email_message(tasks, first_line)
+            email_message = self.format_email_message(valid_tasks, first_line)
 
             # Construct an HTML body listing the tasks
             message = MessageSchema(
