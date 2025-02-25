@@ -37,8 +37,8 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
     };
 
     const handleGenerateSchedule = () => {
-        const wanted_start = startDate.split("T")[0];
-        const wanted_end = dueDate.split("T")[0];
+        const wanted_start = String(startDate).split("T")[0];
+        const wanted_end = String(dueDate).split("T")[0];
 
         setShowConfirmation(true);
         fetchScheduleData(wanted_start, wanted_end);
