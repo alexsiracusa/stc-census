@@ -1,3 +1,6 @@
+-- Reset Sequences
+ALTER SEQUENCE project_id_seq RESTART WITH 1;
+
 ----------------------------------------------------------------
 -- Create Accounts
 ----------------------------------------------------------------
@@ -16,13 +19,13 @@ VALUES
 ----------------------------------------------------------------
 -- Insert Projects
 ----------------------------------------------------------------
-INSERT INTO Project (id, parent, name, person_in_charge_id, team_email_alias)
-VALUES (1, NULL, 'Awards Ceremony', 1, 'wpi.smwms.email.testing@gmail.com'),
-       (2, NULL, 'Create Flyer', 1, 'wpi.smwms.email.testing@gmail.com'),
-       (3, 1, 'Create Poster', 1, 'wpi.smwms.email.testing@gmail.com'),
-       (4, NULL, 'Morning Routine', 1, 'wpi.smwms.email.testing@gmail.com'),
-       (5, NULL, 'Morning Routine of Jason', 1, 'wpi.smwms.email.testing@gmail.com'),
-       (6, NULL, 'Awards Ceremony 2024', 1, 'wpi.smwms.email.testing@gmail.com');
+INSERT INTO Project (parent, name, person_in_charge_id, team_email_alias)
+VALUES (NULL, 'Awards Ceremony', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (NULL, 'Create Flyer', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (1, 'Create Poster', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (NULL, 'Morning Routine', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (NULL, 'Morning Routine of Jason', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (NULL, 'Awards Ceremony 2024', 1, 'wpi.smwms.email.testing@gmail.com');
 
 ----------------------------------------------------------------
 -- Insert Tasks with full info (planning, actual dates, costs, status)
