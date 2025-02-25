@@ -17,7 +17,7 @@ import "chartjs-adapter-date-fns";
 import { findStartAndEndDates } from "./hooks/findStartAndEndDates";
 import { formatDateInLocal } from "./utils/formattedDate";
 import formatGanttData from "./utils/formatGanttData";
-import { Task } from "../../../../types/Task";
+import { Task } from "../../../../../types/Task";
 import { useEffect, useRef } from "react";
 
 ChartJS.register(
