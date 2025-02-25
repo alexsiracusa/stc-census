@@ -17,7 +17,7 @@ const PathPicker = (props: PathProps) => {
             {props.path.map((item, index) => (
                 <Fragment key={index}>
                     <Link
-                        reloadDocument
+
                         to={item.link}
                         className='link'
                     >

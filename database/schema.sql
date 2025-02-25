@@ -201,14 +201,23 @@ CREATE VIEW Project_Summary AS (
 CREATE VIEW Project_Node AS (
     SELECT
         Project.*,
+        Project_Summary.status_counts AS status_counts,
+        Project_Summary.expected_cost AS expected_cost,
+        Project_Summary.actual_cost AS actual_cost,
+        Project_Summary.budget_variance AS budget_variance,
         to_json(array_remove(array_agg(Task_Node.*), NULL)) AS tasks,
         to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
-        (SELECT path FROM Project_Path WHERE id = Project.id) AS path,
-        (SELECT status_counts FROM Project_Summary WHERE Project_Summary.id = Project.id) AS status_counts
+        (SELECT path FROM Project_Path WHERE id = Project.id) AS path
     FROM Project
     LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
     LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = Project.id
-    GROUP BY Project.id
+    INNER JOIN Project_Summary ON Project_Summary.id = Project.id
+    GROUP BY
+        Project.id,
+        Project_Summary.status_counts,
+        Project_Summary.expected_cost,
+        Project_Summary.actual_cost,
+        Project_Summary.budget_variance
 );
 
 
