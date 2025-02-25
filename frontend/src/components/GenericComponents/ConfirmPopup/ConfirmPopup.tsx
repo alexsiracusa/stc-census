@@ -32,7 +32,7 @@ const ConfirmPopup = (props: PropsWithChildren<ConfirmPopupProps>) => {
             icon={icon}
             buttonClassName={props.className}
             contentClassName='confirm-button-content'
-            title='Delete Task'
+            title='Delete'
             isVisible={isVisible}
             setIsVisible={setIsVisible}
             transparentBackground={true}
