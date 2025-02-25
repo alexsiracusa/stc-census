@@ -53,7 +53,7 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
         },
         {
             displayName: t('taskList.columns.personInCharge'),
-            columnName: 'person_in_charge',
+            columnName: 'person_in_charge.last_name',
             className: 'task-person-in-charge-header',
             disabled: false,
         },

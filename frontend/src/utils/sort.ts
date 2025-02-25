@@ -3,12 +3,27 @@ export interface SortOptions<T> {
     order?: 'asc' | 'desc'; // Order: 'asc' for ascending (default), 'desc' for descending
 }
 
+function getNestedValue(obj: any, path: string): any {
+    const keys = path.split("."); // Split the string (e.g., "field.subfield") into an array ['field', 'subfield']
+    let result = obj;
+
+    for (const key of keys) {
+        if (result && typeof result === "object") {
+            result = result[key];
+        } else {
+            return undefined; // Return undefined if the key doesn't exist in the current level
+        }
+    }
+
+    return result; // Return the final resolved value
+}
+
 export function sortArray<T>(array: T[], options: SortOptions<T>): T[] {
     const {key, order = 'asc'} = options;
 
     return array.sort((a, b) => {
-        const valueA = a[key];
-        const valueB = b[key];
+        const valueA = getNestedValue(a, key);
+        const valueB = getNestedValue(b, key);
 
         // Handle null and undefined values explicitly
         const isNullOrUndefinedA = valueA === null || valueA === undefined;
