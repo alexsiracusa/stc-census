@@ -15,7 +15,8 @@ type DropdownProps = {
     setIsVisible: (boolean) => void
 }
 
-const findNearestScrollableParent = (element) => {
+const findScrollableParents = (element) => {
+    const scrollable = []
     let parent = element.parentNode;
 
     while (parent) {
@@ -31,13 +32,14 @@ const findNearestScrollableParent = (element) => {
         const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll') && parent.scrollWidth > parent.clientWidth;
 
         if (isScrollableY || isScrollableX) {
-            return parent;
+            scrollable.push(parent)
+            // return parent;
         }
 
         parent = parent.parentNode; // Step up to the next parent
     }
 
-    return null; // No scrollable parent found
+    return scrollable; // No scrollable parent found
 };
 
 
@@ -48,22 +50,30 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
     useEffect(() => {
         if (ref.current) {
             // Find the nearest scrollable parent dynamically
-            const scrollableParent = findNearestScrollableParent(ref.current);
+            const scrollableParents = findScrollableParents(ref.current);
+            const cleanupArray = []
 
-            if (scrollableParent) {
-
-                // Optionally, listen to scroll events on the scrollable parent
+            scrollableParents.forEach((scrollableParent) => {
                 const handleScroll = () => {
-                    setFixedPosition({x: scrollableParent.scrollLeft, y: scrollableParent.scrollTop})
-                    // console.log('ScrollTop:', scrollableParent.scrollTop, 'ScrollLeft:', scrollableParent.scrollLeft);
+                    setFixedPosition({
+                        x: fixedPosition.x + scrollableParent.scrollLeft,
+                        y: fixedPosition.y + scrollableParent.scrollTop
+                    })
                 };
 
                 scrollableParent.addEventListener('scroll', handleScroll);
 
-                return () => {
-                    scrollableParent.removeEventListener('scroll', handleScroll); // Cleanup on unmount
-                };
-            }
+                cleanupArray.push({
+                    scrollable: scrollableParent,
+                    handleScroll: handleScroll
+                })
+            })
+
+            return () => {
+                cleanupArray.forEach(({scrollable, handleScroll}) => {
+                    scrollable.removeEventListener('scroll', handleScroll); // Cleanup on unmount
+                })
+            };
         }
     }, []);
 

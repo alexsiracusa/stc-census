@@ -7,20 +7,6 @@ VALUES (1, NULL, 'Awards Ceremony'),
        (5, NULL, 'Morning Routine of Jason'),
        (6, NULL, 'Awards Ceremony 2024');
 
--- Reset Sequences
-ALTER SEQUENCE project_id_seq RESTART WITH 7;
-ALTER SEQUENCE task_seq_1 RESTART WITH 1;
-ALTER SEQUENCE task_seq_2 RESTART WITH 1;
-ALTER SEQUENCE task_seq_3 RESTART WITH 1;
-ALTER SEQUENCE task_seq_4 RESTART WITH 1;
-ALTER SEQUENCE task_seq_5 RESTART WITH 1;
-ALTER SEQUENCE task_seq_6 RESTART WITH 1;
-ALTER SEQUENCE task_seq_7 RESTART WITH 1;
-ALTER SEQUENCE task_seq_8 RESTART WITH 1;
-ALTER SEQUENCE task_seq_9 RESTART WITH 1;
-ALTER SEQUENCE task_seq_10 RESTART WITH 1;
-ALTER SEQUENCE account_id_seq RESTART WITh 1;
-
 ----------------------------------------------------------------
 -- Create Accounts
 ----------------------------------------------------------------
