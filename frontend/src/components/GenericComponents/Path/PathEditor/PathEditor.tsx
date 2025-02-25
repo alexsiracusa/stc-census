@@ -1,16 +1,19 @@
 import '../Path.css'
+import './PathEditor.css'
 
 import {Fragment} from "react";
 import ChevronRight from "../../../../assets/Icons/ChevronRight.svg";
 import DropdownRowPicker from "../../Dropdowns/DropdownRowPicker/DropdownRowPicker.tsx";
 import {useSelector} from "react-redux";
 import DropdownPickerOption from "../../Dropdowns/DropdownPicker/DropdownPickerOption.tsx";
+import useFetchProject from "../../../../hooks/useFetchProject.ts";
 
 type PathEditorProps = {
     path: [{
         id: number,
         name: string
     }]
+    select: (number) => void
 }
 
 const PathEditor = (props: PathEditorProps) => {
@@ -25,9 +28,7 @@ const PathEditor = (props: PathEditorProps) => {
                         )}
                         className='link'
                         title=''
-                        onChange={(value) => {
-
-                        }}
+                        onChange={props.select}
                     >
                         {PathEditorSubProjects({project_id: item.id})}
                     </DropdownRowPicker>
@@ -46,18 +47,26 @@ type PathEditorSubProjectsProps = {
 }
 
 const PathEditorSubProjects = (props: PathEditorSubProjectsProps) => {
+    const {loading, error} = useFetchProject(props.project_id);
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     if (project === undefined || project.sub_projects === null) {
-        console.log(project)
         return <div>Loading</div>
     }
 
     return (
-        project.sub_projects.map((subProject) => (
-            <DropdownPickerOption value={subProject.id} className=''>
-                {subProject.name}
-            </DropdownPickerOption>
-        ))
+        project.sub_projects.length === 0 ? (
+            <div className='sub-project-row'>
+                <p>No Subprojects</p>
+            </div>
+        ) : (
+            project.sub_projects.map((subProject) => (
+                <DropdownPickerOption key={subProject.id} value={subProject.id} className='sub-project-row clickable'>
+                    <p>{subProject.name}</p>
+                </DropdownPickerOption>
+            ))
+
+        )
+
     )
 }
 

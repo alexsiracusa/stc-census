@@ -12,6 +12,8 @@ const ProjectPath = (props: ProjectPathProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const {t} = useTranslation();
 
+    if (!project || !project.path) { return <p>Loading</p>}
+
     const path = [{
         name: t('projectPath.title'),
         link: '/projects'
