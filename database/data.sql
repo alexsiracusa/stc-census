@@ -1,11 +1,15 @@
+-- Reset Sequences
+ALTER SEQUENCE project_id_seq RESTART WITH 1;
+
 -- Insert Projects
-INSERT INTO Project (id, parent, name)
-VALUES (1, NULL, 'Awards Ceremony'),
-       (2, NULL, 'Create Flyer'),
-       (3, 1, 'Create Poster'),
-       (4, NULL, 'Morning Routine'),
-       (5, NULL, 'Morning Routine of Jason'),
-       (6, NULL, 'Awards Ceremony 2024');
+INSERT INTO Project (parent, name)
+VALUES (NULL, 'Awards Ceremony'),
+       (NULL, 'Create Flyer'),
+       (1, 'Create Poster'),
+       (NULL, 'Morning Routine'),
+       (NULL, 'Morning Routine of Jason'),
+       (NULL, 'Awards Ceremony 2024');
+
 
 ----------------------------------------------------------------
 -- Create Accounts
