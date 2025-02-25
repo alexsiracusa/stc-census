@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { format } from "date-fns";
 import SimpleDatePicker from "../../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker";
 import Popup from "../../../../../GenericComponents/Popup/Popup";
 import "./SensibleSchedulePopup.css";
@@ -20,6 +21,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
     const [fetchError, setFetchError] = useState<string | null>(null);
 
     const fetchScheduleData = async (wanted_start: string, wanted_end: string) => {
+        // wanted_start and wanted_end are now in the "YYYY-MM-DD" format
         setIsLoading(true);
         setFetchError(null);
         try {
@@ -37,8 +39,9 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
     };
 
     const handleGenerateSchedule = () => {
-        const wanted_start = String(startDate).split("T")[0];
-        const wanted_end = String(dueDate).split("T")[0];
+        // Using date-fns format to ensure the dates are in "YYYY-MM-DD" format.
+        const wanted_start = format(startDate, "yyyy-MM-dd");
+        const wanted_end = format(dueDate, "yyyy-MM-dd");
 
         setShowConfirmation(true);
         fetchScheduleData(wanted_start, wanted_end);
