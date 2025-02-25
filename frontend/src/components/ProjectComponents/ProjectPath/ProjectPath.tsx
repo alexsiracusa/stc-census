@@ -1,11 +1,8 @@
 import './ProjectPath.css'
 
-import {Link} from "react-router";
-import {Fragment} from "react";
-import ChevronRight from "../../../assets/Icons/ChevronRight.svg";
 import {useTranslation} from 'react-i18next';
 import {useSelector} from "react-redux";
-import Path from "../../GenericComponents/Path/Path.tsx";
+import PathPicker from "../../GenericComponents/Path/PathPicker/PathPicker.tsx";
 
 type ProjectPathProps = {
     project_id: number
@@ -24,7 +21,7 @@ const ProjectPath = (props: ProjectPathProps) => {
     })));
 
     return (
-        <Path path={path}/>
+        <PathPicker path={path}/>
     )
 }
 

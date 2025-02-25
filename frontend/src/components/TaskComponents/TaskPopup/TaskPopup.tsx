@@ -9,7 +9,7 @@ import TaskDescription from "../TaskDescription/TaskDescription.tsx";
 import TaskStatusSelector from "../TaskStatusSelector/TaskStatusSelector.tsx";
 import TaskFields from "../TaskFields/TaskFields.tsx";
 import {useTranslation} from "react-i18next";
-import Path from "../../GenericComponents/Path/Path.tsx";
+import PathPicker from "../../GenericComponents/Path/PathPicker/PathPicker.tsx";
 import TaskDeleteButton from "../TaskDeleteButton/TaskDeleteButton.tsx";
 
 type TaskPopupProps = {
@@ -59,7 +59,7 @@ const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
                 <div className='task-information'>
                     <div className='top-row'>
                         <div className='task-path-container'>
-                            <Path path={path}/>
+                            <PathPicker path={path}/>
                         </div>
 
                         <div className='task-delete-button-container'>

@@ -7,6 +7,7 @@ import React from "react";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
+import PathEditor from "../../GenericComponents/Path/PathEditor/PathEditor.tsx";
 
 type TaskDependsEditorProps = {
     project_id: number
@@ -15,6 +16,7 @@ type TaskDependsEditorProps = {
 
 
 const TaskDependsEditor = (props: TaskDependsEditorProps) => {
+    const project = useSelector((state) => state.projects.byId[props.project_id]);
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
     const tasks = useSelector((state) => state.projects.byId[props.project_id].byId);
     const {updateTask, loading, error, data} = useUpdateTask();
@@ -49,6 +51,8 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                     ))}
                 </ul>
             }
+
+            <PathEditor path={project.path}/>
 
             {options.length != 0 &&
                 <ul>

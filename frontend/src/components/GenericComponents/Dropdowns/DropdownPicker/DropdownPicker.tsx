@@ -44,38 +44,7 @@ const findScrollableParents = (element) => {
 
 
 const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
-    const [fixedPosition, setFixedPosition] = useState({x: 0, y: 0}); // Initial position
     const ref = useRef(null);
-
-    useEffect(() => {
-        if (ref.current) {
-            // Find the nearest scrollable parent dynamically
-            const scrollableParents = findScrollableParents(ref.current);
-            const cleanupArray = []
-
-            scrollableParents.forEach((scrollableParent) => {
-                const handleScroll = () => {
-                    setFixedPosition({
-                        x: fixedPosition.x + scrollableParent.scrollLeft,
-                        y: fixedPosition.y + scrollableParent.scrollTop
-                    })
-                };
-
-                scrollableParent.addEventListener('scroll', handleScroll);
-
-                cleanupArray.push({
-                    scrollable: scrollableParent,
-                    handleScroll: handleScroll
-                })
-            })
-
-            return () => {
-                cleanupArray.forEach(({scrollable, handleScroll}) => {
-                    scrollable.removeEventListener('scroll', handleScroll); // Cleanup on unmount
-                })
-            };
-        }
-    }, []);
 
     const closeDropdown = () => {
         props.setIsVisible(false);
@@ -106,7 +75,6 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
                 <DropdownPickerContent
                     contentAlignment={props.contentAlignment}
                     contentClassName={props.contentClassName}
-                    fixedPosition={fixedPosition}
                     children={props.children}
                 />
             )}

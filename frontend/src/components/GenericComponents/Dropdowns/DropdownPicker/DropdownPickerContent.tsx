@@ -3,14 +3,15 @@ import React, {PropsWithChildren, Children, useEffect, useRef} from "react";
 type DropdownPickerContentProps = {
     contentAlignment: 'flex-start' | 'flex-end' | 'center'
     contentClassName: string
-    fixedPosition: { x: number, y: number }
 }
 
 const DropdownPickerContent = (props: PropsWithChildren<DropdownPickerContentProps>) => {
+    const containerRef = useRef(null);
     const divRef = useRef(null);
 
     const checkAndAdjustPosition = () => {
-        if (divRef.current) {
+        if (containerRef.current && divRef.current) {
+            const containerRect = containerRef.current.getBoundingClientRect();
             const rect = divRef.current.getBoundingClientRect();
             const padding = 10;
 
@@ -18,26 +19,31 @@ const DropdownPickerContent = (props: PropsWithChildren<DropdownPickerContentPro
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
 
-            let newTop = rect.top;
-            let newLeft = rect.left;
+            // get offset for alignment
+            const offset =  props.contentAlignment === 'flex-start' ? 0 :
+                            props.contentAlignment === 'flex-end' ? rect.width :
+                            props.contentAlignment === 'center' ? rect.width / 2 : 0
+
+            let newTop = containerRect.top;
+            let newLeft = containerRect.left - offset;
 
             // Check if the div is outside the viewport and adjust
-            if (rect.top < padding) {
+            if (newTop < padding) {
                 newTop = padding; // Bring into view from top
             }
-            if (rect.left < padding) {
+            if (newLeft < padding) {
                 newLeft = padding; // Bring into view from left
             }
-            if (rect.bottom > viewportHeight - padding) {
+            if (newTop + rect.height > viewportHeight - padding) {
                 newTop = viewportHeight - rect.height - padding; // Bring into view from bottom
             }
-            if (rect.right > viewportWidth - padding) {
+            if (newLeft + rect.width > viewportWidth - padding) {
                 newLeft = viewportWidth - rect.width - padding; // Bring into view from right
             }
 
             // Apply new position if needed
-            divRef.current.style.top = `${newTop + props.fixedPosition.y}px`;
-            divRef.current.style.left = `${newLeft + props.fixedPosition.x}px`;
+            divRef.current.style.top = `${newTop}px`;
+            divRef.current.style.left = `${newLeft}px`;
         }
     };
 
@@ -57,16 +63,13 @@ const DropdownPickerContent = (props: PropsWithChildren<DropdownPickerContentPro
     return (
         <div
             className="dropdown-container"
-            style={{
-                justifyContent: props.contentAlignment
-            }}
             onClick={(event) => {
                 event.stopPropagation()
             }}
+            ref={containerRef}
         >
             <div
                 className={`dropdown-content ${props.contentClassName}`}
-                style={{transform: `translate(-${props.fixedPosition.x}px, -${props.fixedPosition.y}px)`}}
                 ref={divRef}
             >
                 {Children.map(props.children, child => {
