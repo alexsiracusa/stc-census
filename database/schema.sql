@@ -78,9 +78,9 @@ CREATE TABLE Task (
     status          TASK_STATUS NOT NULL DEFAULT 'to_do',
     created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    person_in_charge    INT                 REFERENCES Account(id) ON DELETE SET NULL,
-    expected_cost       DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
-    actual_cost         DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
+    person_in_charge_id     INT                 REFERENCES Account(id) ON DELETE SET NULL,
+    expected_cost           DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
+    actual_cost             DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
 
     actual_start_date       DATE,
     actual_completion_date  DATE,
@@ -158,10 +158,20 @@ CREATE VIEW Task_Node AS (
             'task_id', Task_Depends_On.depends_task_id,
             'project_id', Task_Depends_On.depends_project_id)
         )), NULL) AS depends_on,
+        CASE
+            WHEN Account.id IS NULL THEN NULL
+            ELSE jsonb_build_object(
+                'id', Account.id,
+                'email', Account.email,
+                'first_name', Account.first_name,
+                'last_name', Account.last_name
+            )
+        END AS person_in_charge,
         (Task.expected_cost - Task.actual_cost) AS budget_variance
-    FROM TASK
+    FROM Task
     LEFT JOIN Task_Depends_On ON Task.project_id = Task_Depends_On.project_id AND Task.id = Task_Depends_On.task_id
-    GROUP BY Task.id, Task.project_id
+    LEFT JOIN Account ON Account.id = Task.person_in_charge_id
+    GROUP BY Task.id, Task.project_id, Account.id
 );
 
 CREATE VIEW Project_Summary AS (

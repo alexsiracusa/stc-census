@@ -1,11 +1,16 @@
 
 .task-person-in-charge-picker {
-    height: 100%;
-    width: 3.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    height: 100%;
+    aspect-ratio: 1.0;
+
+    font-size: 0.8em;
     cursor: pointer;
 
-    border-radius: 3px;
+    border-radius: 999px;
     border: none;
     background-color: transparent;
 }

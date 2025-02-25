@@ -10,9 +10,12 @@ const useUpdateTask = () => {
 
     const updateTask = useCallback((project_id, task_id, body) => {
         const url = getUrl(project_id, task_id);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { person_in_charge, ...rest } = body;
         const options = {
             method: 'PUT',
-            body: JSON.stringify(body),
+            body: JSON.stringify(rest),
             headers: {
                 "Content-Type": "application/json",
             },
