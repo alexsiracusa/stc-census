@@ -148,6 +148,8 @@
 
 .task-row .task-person-in-charge-container {
     height: 70%;
+    margin-left: -0.225em;
+    margin-right: 0.225em;
 }
 
 /* TASK BUDGET AND ACTUAL COST */
