@@ -1,7 +1,7 @@
 import './TaskDeleteButton.css'
 
 import useDeleteTask from "../../../hooks/useDeleteTask.ts";
-import Trash from '../../../assets/Icons/Trash2.svg'
+import Trash from '../../../assets/Icons/Trash.svg'
 import ConfirmPopup from "../../GenericComponents/ConfirmPopup/ConfirmPopup.tsx";
 
 type TaskDeleteButtonProps = {

@@ -2,9 +2,9 @@ import '../EditingHeader.css'
 
 import '../EditingHeader.css'
 import XMark from "../../../../assets/Icons/X.svg";
-import Edit from "../../../../assets/Icons/Edit2.svg";
+import Edit from "../../../../assets/Icons/Edit.svg";
 import ConfirmPopup from "../../ConfirmPopup/ConfirmPopup.tsx";
-import Trash from "../../../../assets/Icons/Trash2.svg";
+import Trash from "../../../../assets/Icons/Trash.svg";
 import {useState} from "react";
 import useDeleteTasks from "../../../../hooks/useDeleteTasks.ts";
 import {useTranslation} from "react-i18next";

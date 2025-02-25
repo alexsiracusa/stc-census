@@ -9,14 +9,12 @@ type AllEventsPopupProps = {
     date: Date;
     tasks: Task[];
     onClose: () => void;
-    openTaskDetails: (taskId: string) => void;
 };
 
 const AllEventsPopup: React.FC<AllEventsPopupProps> = ({
                                                            date,
                                                            tasks,
                                                            onClose,
-                                                           openTaskDetails,
                                                        }) => {
     const { t } = useTranslation();
     const popupRef = useRef<HTMLDivElement>(null);
@@ -103,7 +101,6 @@ const AllEventsPopup: React.FC<AllEventsPopupProps> = ({
                                             padding: "10px 12px",
                                             borderRadius: "6px",
                                         }}
-                                        onClick={() => openTaskDetails(task.id.toString())}
                                     >
                                         <strong>{task.name}</strong>
                                         {task.description && <p>{task.description}</p>}
