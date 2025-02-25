@@ -41,24 +41,13 @@ const GanttChart = (props: TabProps) => {
     return (
         <div>
             {t('ganttChart.title')} {props.project_id}
-            {/* <div className="chart-legend">
-                <ul>
-                    <div className="legend-container">
-                        {Object.keys(TaskStatusInfo).map((status) => (
-                            <div key={status} className="legend-item">
-                                <span className="legend-color" style={{ backgroundColor: TaskStatusInfo[status].color }}></span>
-                                <span className="legend-text">{TaskStatusInfo[status].name}</span>
-                            </div>
-                        ))}
-                    </div>
-                </ul>
-            </div> */}
             <div style={{ display: 'flex', justifyContent: 'right', gap: '10px' }}>
                 <label htmlFor='month'>Filter by Month: </label>
                 <input type='month' onChange={chartFilter} />
             </div>
-            <GanttBody data={sortedTasks} dateRange={dateRange} />
-
+            <div style={{ overflow: 'auto' }}>
+                <GanttBody data={sortedTasks} dateRange={dateRange} />
+            </div>
         </div>
 
     )
