@@ -55,6 +55,7 @@ async def create_task(
 ):
     try:
         task = await data.create_task(project_id, fields)
+        task = await data.get_task(project_id, task['id'])
         response.status_code = status.HTTP_200_OK
         return task
 
