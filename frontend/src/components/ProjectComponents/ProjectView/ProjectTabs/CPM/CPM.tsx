@@ -34,7 +34,10 @@ const CPM = (props: TabProps) => {
     }
 
     if (cpmError) {
-        return <div className="cpm">Error loading CPM data</div>;
+        // with error message
+        return <div className="cpm">Error loading CPM data
+            <div className="error-message">{cpmError.toString()}</div>
+            </div>;
     }
 
     const hasCycles = projectCpmData.cycleInfo && projectCpmData.cycleInfo.length > 0;

@@ -105,9 +105,24 @@ async def get_project_all_tasks(
 @router.get("/{project_id}/cpm")
 async def get_cpm_analysis(project_id: int, response: Response):
     try:
+        # check if project exists first
+        project = await data.get_project_by_id(project_id)
+        if not project:
+            raise HTTPException(
+                status_code=404,
+                detail="Project does not exist."
+            )
+
         # Get all tasks with dependencies for the project
         tasks = await data.get_all_project_tasks_cpm(project_id)
         df = pd.DataFrame(tasks)
+
+        # if df is null
+        if df.empty:
+            raise HTTPException(
+                status_code=404,
+                detail="Project exists, but has no tasks."
+            )
         df, cycle_info, critical_path_length = compute_cpm(df)
 
         # convert cycle_info (a list of 2-tuple) to a list of objects with keys 'id' and 'project_id'
