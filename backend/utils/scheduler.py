@@ -82,12 +82,12 @@ async def check_deadlines() -> None:
     """
     Check for tasks due soon and, if any are found, send email notifications.
     """
-    tasks = await get_tasks_due_soon()
-    logger.info(f"Tasks found: {tasks}")
+    tasks = await get_tasks_due_soon(days_until_due=3)
+    logger.info(f"Tasks found: {len(tasks)} tasks.")
     if tasks:
         email_client = EmailClient()
         message = email_client.format_email_message(tasks, "The following tasks are due soon:")
-        await email_client.send_notification("Tasks Nearing Deadline", message)
+        await email_client.send_notification(tasks, message, "Tasks Due Soon")
         logger.info(f"Found {len(tasks)} tasks due soon")
     else:
         logger.info("No tasks due soon")
@@ -98,11 +98,11 @@ async def check_overdue() -> None:
     Check for tasks overdue and, if any are found, send email notifications.
     """
     tasks = await get_tasks_overdue()
-    logger.info(f"Tasks found: {tasks}")
+    logger.info(f"Tasks found: {len(tasks)} tasks.")
     if tasks:
         email_client = EmailClient()
         message = email_client.format_email_message(tasks, "The following tasks are overdue:")
-        await email_client.send_notification("Tasks Overdue", message)
+        await email_client.send_notification(tasks, message, "Tasks Overdue")
         logger.info(f"Found {len(tasks)} tasks overdue")
     else:
         logger.info("No tasks overdue")

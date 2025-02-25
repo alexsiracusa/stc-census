@@ -1,16 +1,3 @@
--- Reset Sequences
-ALTER SEQUENCE project_id_seq RESTART WITH 1;
-
--- Insert Projects
-INSERT INTO Project (parent, name)
-VALUES (NULL, 'Awards Ceremony'),
-       (NULL, 'Create Flyer'),
-       (1, 'Create Poster'),
-       (NULL, 'Morning Routine'),
-       (NULL, 'Morning Routine of Jason'),
-       (NULL, 'Awards Ceremony 2024');
-
-
 ----------------------------------------------------------------
 -- Create Accounts
 ----------------------------------------------------------------
@@ -26,6 +13,16 @@ VALUES
     -- password: 'chu'
     ('hvchu@wpi.edu', 'ha', 'chu', '$2b$12$L4GKSPHAwupLFXbHlh.2fOs5gZxkN7o5etiL38lwosRM.C/B3KoOG');
 
+----------------------------------------------------------------
+-- Insert Projects
+----------------------------------------------------------------
+INSERT INTO Project (id, parent, name, person_in_charge_id, team_email_alias)
+VALUES (1, NULL, 'Awards Ceremony', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (2, NULL, 'Create Flyer', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (3, 1, 'Create Poster', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (4, NULL, 'Morning Routine', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (5, NULL, 'Morning Routine of Jason', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (6, NULL, 'Awards Ceremony 2024', 1, 'wpi.smwms.email.testing@gmail.com');
 
 ----------------------------------------------------------------
 -- Insert Tasks with full info (planning, actual dates, costs, status)
@@ -35,13 +32,13 @@ VALUES
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
- expected_cost, actual_cost)
-VALUES (1, 'Create supply list', '2025-03-14', '2025-03-15', 2, 'done', '2025-03-14', '2025-03-15', 10.00, 9.50),
-       (1, 'Buy supplies', '2025-03-15', '2025-03-16', 2, 'in_progress', '2025-03-15', NULL, 150.00, 100.00),
-       (1, 'Set up venue', '2025-03-16', '2025-03-18', 3, 'to_do', NULL, NULL, 300.00, 0.00),
-       (1, 'Book venue', '2025-03-14', '2025-03-16', 3, 'on_hold', '2025-03-14', NULL, 120.00, 60.00),
-       (1, 'Create guest list', '2025-03-12', '2025-03-14', 3, 'to_do', NULL, NULL, 20.00, 0.00),
-       (1, 'Send invitations', '2025-03-14', '2025-03-14', 1, 'to_do', NULL, NULL, 0.00, 0.00);
+ expected_cost, actual_cost, person_in_charge_id)
+VALUES (1, 'Create supply list', '2025-03-14', '2025-03-15', 2, 'in_progress', '2025-03-14', NULL, 10.00, 9.50, 1),
+       (1, 'Buy supplies', '2025-03-15', '2025-03-16', 2, 'in_progress', '2025-03-15', NULL, 150.00, 100.00, 2),
+       (1, 'Set up venue', '2025-03-16', '2025-03-18', 3, 'to_do', NULL, NULL, 300.00, 0.00, 3),
+       (1, 'Book venue', '2025-03-14', '2025-03-16', 3, 'on_hold', '2025-03-14', NULL, 120.00, 60.00, 4),
+       (1, 'Create guest list', '2025-03-12', '2025-03-14', 3, 'to_do', NULL, NULL, 20.00, 0.00, NULL),
+       (1, 'Send invitations', '2025-03-14', '2025-03-14', 1, 'to_do', NULL, NULL, 0.00, 0.00, NULL);
 
 -- Project 2: Create Flyer (modified statuses)
 INSERT INTO Task
