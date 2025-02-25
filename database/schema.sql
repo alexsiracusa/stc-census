@@ -54,6 +54,9 @@ CREATE TABLE Project (
     name            TEXT            NOT NULL,
     description     TEXT,
     status          PROJECT_STATUS  NOT NULL DEFAULT 'to_do',
+    person_in_charge_id     INT     REFERENCES Account(id) ON DELETE SET NULL,
+    team_email_alias        TEXT    DEFAULT NULL,
+    
     budget          DECIMAL(2),
     created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

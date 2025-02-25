@@ -1,12 +1,3 @@
--- Insert Projects
-INSERT INTO Project (id, parent, name)
-VALUES (1, NULL, 'Awards Ceremony'),
-       (2, NULL, 'Create Flyer'),
-       (3, 1, 'Create Poster'),
-       (4, NULL, 'Morning Routine'),
-       (5, NULL, 'Morning Routine of Jason'),
-       (6, NULL, 'Awards Ceremony 2024');
-
 ----------------------------------------------------------------
 -- Create Accounts
 ----------------------------------------------------------------
@@ -22,6 +13,16 @@ VALUES
     -- password: 'chu'
     ('hvchu@wpi.edu', 'ha', 'chu', '$2b$12$L4GKSPHAwupLFXbHlh.2fOs5gZxkN7o5etiL38lwosRM.C/B3KoOG');
 
+----------------------------------------------------------------
+-- Insert Projects
+----------------------------------------------------------------
+INSERT INTO Project (id, parent, name, person_in_charge_id, team_email_alias)
+VALUES (1, NULL, 'Awards Ceremony', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (2, NULL, 'Create Flyer', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (3, 1, 'Create Poster', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (4, NULL, 'Morning Routine', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (5, NULL, 'Morning Routine of Jason', 1, 'wpi.smwms.email.testing@gmail.com'),
+       (6, NULL, 'Awards Ceremony 2024', 1, 'wpi.smwms.email.testing@gmail.com');
 
 ----------------------------------------------------------------
 -- Insert Tasks with full info (planning, actual dates, costs, status)
