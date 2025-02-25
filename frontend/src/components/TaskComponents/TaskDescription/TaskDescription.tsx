@@ -23,7 +23,7 @@ const TaskDescription = (props: TaskDescriptionProps) => {
     return (
         <div className='description-editor'>
             <AutoExpandingTextarea
-                value={description}
+                value={description ?? ''}
                 onChange={(value) => {
                     setDescription(value)
                     console.log(value)

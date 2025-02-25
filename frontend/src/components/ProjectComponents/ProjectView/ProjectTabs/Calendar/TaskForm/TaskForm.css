@@ -52,7 +52,7 @@
     background: #0055cc;
 }
 
-.task-name-container {
+.task-form-overlay .task-name-container {
     margin-bottom: 1rem;
 }
 
@@ -63,17 +63,19 @@
     outline: none;
 }
 
-.task-status-container,
-.task-depends-list-container,
-.task-start-input,
-.task-end-input,
-.task-person-in-charge-container,
-.task-budget-container,
-.task-actual-container,
-.task-days-to-complete {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
+.task-form-overlay {
+    .task-status-container,
+    .task-depends-list-container,
+    .task-start-input,
+    .task-end-input,
+    .task-person-in-charge-container,
+    .task-budget-container,
+    .task-actual-container,
+    .task-days-to-complete {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
 }
 
 .task-form-overlay .task-end-input {
