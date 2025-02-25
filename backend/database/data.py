@@ -228,18 +228,22 @@ async def create_project(fields: dict):
 # for email notifications
 async def get_tasks_due_soon():
     return await client.postgres_client.fetch("""
-        SELECT id, project_id, name, target_completion_date
-        FROM Task
-        WHERE target_completion_date IS NOT NULL
-        AND NOW() BETWEEN (target_completion_date - INTERVAL '2 hours')
-        AND target_completion_date
+        SELECT t.id, t.project_id, t.name, t.target_completion_date, 
+               a.email, a.first_name, a.last_name
+        FROM Task t
+        JOIN Account a ON t.person_in_charge_id = a.id
+        WHERE t.target_completion_date IS NOT NULL
+        AND NOW() BETWEEN (t.target_completion_date - INTERVAL '2 hours')
+        AND t.target_completion_date
     """)
 
 
 async def get_tasks_overdue():
     return await client.postgres_client.fetch("""
-        SELECT id, project_id, name, target_completion_date
-        FROM Task
-        WHERE target_completion_date IS NOT NULL
-        AND NOW() > target_completion_date
+        SELECT t.id, t.project_id, t.name, t.target_completion_date, 
+               a.email, a.first_name, a.last_name
+        FROM Task t
+        JOIN Account a ON t.person_in_charge_id = a.id
+        WHERE t.target_completion_date IS NOT NULL
+        AND NOW() > t.target_completion_date
     """)
