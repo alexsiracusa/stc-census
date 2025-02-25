@@ -8,20 +8,21 @@
         width: 10em;
     }
 
-    .task-end-date, .task-start-date,
-    .task-budget, .task-actual-cost,
-    .task-actual-start-date, .task-actual-end-date,
-    .task-days-to-complete {
+    .row {
         display: flex;
         flex-direction: row;
         align-items: center;
 
         width: 100%;
+        height: 1.25em;
         gap: 0.5em;
-        transform: none;
     }
 
     .number-editor {
         margin-left: -2px;
+    }
+
+    .simple-date-picker {
+        margin-left: -0.5em;
     }
 }
