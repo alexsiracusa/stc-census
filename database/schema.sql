@@ -183,9 +183,9 @@ CREATE VIEW Project_Summary AS (
             'on_hold', COUNT(CASE WHEN Task.status = 'on_hold' THEN 1 END),
             'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
         ) AS status_counts,
-        SUM(Task.expected_cost) AS expected_cost,
-        SUM(Task.actual_cost) AS actual_cost,
-        SUM(Task.expected_cost - Task.actual_cost) AS budget_variance
+        COALESCE(SUM(Task.expected_cost), 0) AS expected_cost,
+        COALESCE(SUM(Task.actual_cost), 0) AS actual_cost,
+        COALESCE(SUM(Task.expected_cost - Task.actual_cost), 0) AS budget_variance
     FROM Task
     RIGHT JOIN Project ON project_id IN (
         SELECT unnest(children)
