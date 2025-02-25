@@ -142,12 +142,12 @@
 
 /* TASK PERSON IN CHARGE */
 .task-row .task-person-in-charge-container, .task-row-header .task-person-in-charge-header {
-    width: 4em;
-    min-width: 4em;
+    width: 2.5em;
+    min-width: 2.5em;
 }
 
 .task-row .task-person-in-charge-container {
-    height: 60%;
+    height: 70%;
 }
 
 /* TASK BUDGET AND ACTUAL COST */

@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import useFetchAccounts from "../../../hooks/useFetchAccounts.ts";
 import DropdownPicker from "../../GenericComponents/Dropdowns/DropdownPicker/DropdownPicker.tsx";
 import {useState} from "react";
+import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 
 type TaskPersonInChargePickerProps = {
     project_id: number
@@ -11,10 +12,20 @@ type TaskPersonInChargePickerProps = {
 }
 
 const TaskPersonInChargePicker = (props: TaskPersonInChargePickerProps) => {
+    const {accountsLoading, accountsError} = useFetchAccounts();
+
     const [isVisible, setIsVisible] = useState(false)
-    const {loading, error} = useFetchAccounts();
     const task = useSelector((state) => state.projects.byId[props.project_id].byId[props.task_id]);
+    const {updateTask, loading, error, data} = useUpdateTask();
     const accounts = useSelector((state) => state.accounts.byId);
+
+    const select = (account) => {
+        updateTask(task.project_id, task.id, {
+            person_in_charge: account ? account : null,
+            person_in_charge_id: account ? Number(account.id) : null
+        })
+        setIsVisible(false)
+    }
 
     function capitalize(word: string): string {
         if (!word) return '';
@@ -23,9 +34,13 @@ const TaskPersonInChargePicker = (props: TaskPersonInChargePickerProps) => {
 
     return (
         <DropdownPicker
-            icon={(
-                <p>Assign</p>
-            )}
+            icon={
+                task.person_in_charge === null ? (
+                    <p></p>
+                ) : (
+                    <p>{`${task.person_in_charge.first_name[0]}${task.person_in_charge.last_name[0]}`.toUpperCase()}</p>
+                )
+            }
             buttonClassName='task-person-in-charge-picker'
             contentClassName='task-person-in-charge-picker-content'
             containerAlignment='left'
@@ -37,14 +52,24 @@ const TaskPersonInChargePicker = (props: TaskPersonInChargePickerProps) => {
             {Object.keys(accounts).length === 0 ? (
                 <div>Loading</div>
             ) : (
-                Object.values(accounts).map((account) => (
+                <>
                     <button
-                        key={account.id}
                         className='task-person-in-charge-picker-row'
+                        onClick={() => select(null)}
                     >
-                        <p>{capitalize(account.first_name)} {capitalize(account.last_name)}</p>
+                        <p>Unassign</p>
                     </button>
-                ))
+
+                    {Object.values(accounts).map((account) => (
+                        <button
+                            key={account.id}
+                            className='task-person-in-charge-picker-row'
+                            onClick={() => select(account)}
+                        >
+                            <p>{capitalize(account.first_name)} {capitalize(account.last_name)}</p>
+                        </button>
+                    ))}
+                </>
             )}
         </DropdownPicker>
     )
