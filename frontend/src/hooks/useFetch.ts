@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
  * @returns {object} - An object containing `loading`, `error`, and the fetched data (if needed).
  */
 const useFetch = (url, actionCreator, options = {}) => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [data, setData] = useState(null); // Optional, to return data directly if needed
     const dispatch = useDispatch();

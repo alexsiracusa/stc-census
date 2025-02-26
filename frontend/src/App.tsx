@@ -28,7 +28,7 @@ function App() {
                         element={isAuthenticated ? <Navigate to="/projects" replace /> : <Login/>}
                     />
                     {/*TODO fix routing when logged in*/}
-                    <Route path="/project/:id/*" element={true ? <ProjectPage/> : <Navigate to="/login" replace />}/>
+                    <Route path="/project/:id/*" element={isAuthenticated ? <ProjectPage/> : <Navigate to="/login" replace />}/>
                     <Route path="/projects" element={isAuthenticated ? <ProjectDashboard/> : <Navigate to="/login" replace />}/>
                     <Route path="/user-guide" element={isAuthenticated ? <UserGuide/> : <Navigate to="/login" replace />}/>
                     <Route path="/documentation" element={isAuthenticated ? <Documentation/> : <Navigate to="/login" replace />}/>
