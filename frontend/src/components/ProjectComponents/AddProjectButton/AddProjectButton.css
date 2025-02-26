@@ -9,6 +9,8 @@
     margin-bottom: 0.75em;
     border: solid #dedede 1px;
 
+    cursor: pointer;
+
     .icon-container {
         display: flex;
         flex-direction: row;

@@ -41,6 +41,7 @@ const AddProjectButton = (props: AddTaskButtonProps) => {
                 <div
                     className='icon'
                     onClick={handleButton}
+                    title='Click to add project'
                 >
                     <img src={Plus}/>
                 </div>

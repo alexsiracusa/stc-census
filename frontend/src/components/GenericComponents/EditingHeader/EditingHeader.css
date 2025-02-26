@@ -16,6 +16,8 @@
         aspect-ratio: 1.0;
         height: 1.5em;
 
+        cursor: pointer;
+
         img {
             aspect-ratio: 1.0;
             height: 45%;
