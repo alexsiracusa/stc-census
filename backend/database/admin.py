@@ -48,13 +48,18 @@ async def register(account: AccountInfo, host):
     """, account.email, account.first_name, account.last_name, password_hash)
 
     account_id = record.get("id")
-    return await _create_session(account_id, host)
+    return await _create_session(account_id, host), {
+        "id": account_id,
+        "email": account.email,
+        "first_name": account.first_name,
+        "last_name": account.last_name
+    }
 
 
 async def login(account: AccountLogin, host):
     # get stored hash value from database
     record = await client.postgres_client.fetch_row("""
-        SELECT id, password_hash 
+        SELECT id, email, first_name, last_name, password_hash 
         FROM Account 
         WHERE lower(email)=lower($1)
     """, account.email)
@@ -70,7 +75,12 @@ async def login(account: AccountLogin, host):
     if not password_correct:
         raise InvalidCredentials()
 
-    return await _create_session(record.get("id"), host)
+    return await _create_session(record.get("id"), host), {
+        "id": record.get('id'),
+        "email": record.get('email'),
+        "first_name": record.get('first_name'),
+        "last_name": record.get('last_name')
+    }
 
 
 async def authenticate(request: Request):
@@ -89,7 +99,7 @@ async def authenticate(request: Request):
             )
             RETURNING account_id
         )
-        SELECT id, email 
+        SELECT id, email, first_name, last_name 
         FROM Account_Session
         JOIN Account ON id = account_id;
     """, session_id_hash)

@@ -21,10 +21,10 @@ async def register(
     account: AccountInfo
 ):
     try:
-        session_id = await admin.register(account, request.client.host)
+        session_id, account = await admin.register(account, request.client.host)
         admin.set_session_cookie(response, session_id)
         response.status_code = status.HTTP_201_CREATED
-        return {"message": f"Account created successfully"}
+        return account
 
     except asyncpg.exceptions.PostgresError as error:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -38,10 +38,10 @@ async def login(
     account: AccountLogin
 ):
     try:
-        session_id = await admin.login(account, request.client.host)
+        session_id, account = await admin.login(account, request.client.host)
         admin.set_session_cookie(response, session_id)
         response.status_code = status.HTTP_200_OK
-        return {"message": "Successfully logged in"}
+        return account
 
     except InvalidCredentials as error:
         response.status_code = status.HTTP_401_UNAUTHORIZED
@@ -63,7 +63,7 @@ async def ping(
             raise InvalidCredentials()
 
         response.status_code = status.HTTP_200_OK
-        return {"account": account_info.get("email")}
+        return account_info
 
     except InvalidCredentials:
         response.status_code = status.HTTP_401_UNAUTHORIZED

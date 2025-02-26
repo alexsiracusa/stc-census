@@ -77,7 +77,7 @@ async def delete_task(
             raise HTTPException(status_code=404, detail="Task not found")
 
         response.status_code = status.HTTP_200_OK
-        return {'message': "task updated successfully"}
+        return {'message': "task deleted successfully"}
 
     except asyncpg.exceptions.PostgresError as error:
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
