@@ -158,6 +158,7 @@ i18n
                             budget: 'Budget',
                             actualCost: 'Actual $',
                             budgetVariance: 'Diff. (Loss)',
+                            download: '',
                         }
                     },
                     addProject: 'Add Project',
@@ -318,7 +319,8 @@ i18n
                             dueDate: '到期日',
                             budget: '预算',
                             actualCost: '实际成本',
-                            budgetVariance: '差别'
+                            budgetVariance: '差别',
+                            download: ''
                         }
                     },
                     addProject: '添加任务',

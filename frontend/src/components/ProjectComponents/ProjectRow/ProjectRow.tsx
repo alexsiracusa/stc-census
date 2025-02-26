@@ -1,4 +1,5 @@
 import './ProjectRow.css';
+
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import useFetchProjectSummary from "../../../hooks/useFetchProjectSummary.ts";
@@ -6,7 +7,7 @@ import ProjectStatusSelector from "./ProjectStatusSelector/ProjectStatusSelector
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import useUpdateProject from "../../../hooks/useUpdateProject.ts";
 import ProjectTasks from "./ProjectTasks/ProjectTasks.tsx";
-import DownloadProjectButton from "./DownloadProjectButton/DownloadProjectButton.tsx";
+import ProjectDownloadButton from "../ProjectDownloadButton/ProjectDownloadButton.tsx";
 
 type ProjectRowProps = {
     project_id: number;
@@ -87,7 +88,7 @@ const ProjectRow = (props: ProjectRowProps) => {
                 )}
             </div>
             <div className="project-download-container">
-                <DownloadProjectButton projectId={props.project_id} />
+                <ProjectDownloadButton projectId={props.project_id} />
             </div>
         </div>
     );
