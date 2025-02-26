@@ -11,13 +11,11 @@ export const getIndexChartOptions = (t: Function) => ({
         left: {
             type: 'linear',
             position: 'left',
-            title: { display: true, text: t('Variance (%)') }
-        },
-        right: {
-            type: 'linear',
-            position: 'right',
-            title: { display: true, text: t('Cost Performance Index') },
-            grid: { drawOnChartArea: false }
+            title: { display: true, text: t('EVM Metrics (%)') },
+            ticks: {
+                callback: (value: number) => `${value}%`
+            },
+            beginAtZero: true,
         }
     }
 });

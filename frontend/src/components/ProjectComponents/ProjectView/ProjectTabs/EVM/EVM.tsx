@@ -238,11 +238,12 @@ const EVM = (props: TabProps) => {
                 yAxisID: 'left'
             },
             {
-                label: t('Cost Performance Index'),
-                data: costPerformanceValues,
+                label: t('Cost Performance Index (%)'),
+                // Multiply by 100 so it’s on the same percent scale as the others.
+                data: costPerformanceValues.map((val: number) => val * 100),
                 borderColor: '#4D96FF',
                 tension: 0.0,
-                yAxisID: 'right'
+                yAxisID: 'left'
             }
         ]
     };
