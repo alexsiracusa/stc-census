@@ -50,6 +50,29 @@ const useFetchEvmData = (projectId: number): [any, boolean] => {
     return [evmData, loading];
 };
 
+// Custom mapping of keys to display names
+const metricDisplayNames: Record<string, string> = {
+    actual_time: 'Actual Time',
+    total_actual_cost: 'Total Actual Cost',
+    date_of_latest_done_task: 'Date of Last Done Task',
+    budget_at_completion: 'Budget At Completion (BAC)',
+};
+
+// Custom formatting for the four metrics
+const customMetricFormatters: Record<string, (val: any) => string> = {
+    actual_time: (val: number) => `${val} days`,
+    total_actual_cost: (val: number) => `$${Number(val).toFixed(2)}`,
+    date_of_latest_done_task: (val: string) => {
+        const date = new Date(val);
+        return date.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    },
+    budget_at_completion: (val: number) => `$${Number(val).toFixed(2)}`
+};
+
 const EVM = (props: TabProps) => {
     const { t } = useTranslation();
     const projectId = Number(props.project_id);
@@ -106,7 +129,6 @@ const EVM = (props: TabProps) => {
                 ? dates[dates.length - 1]
                 : actualDate;
     }
-    const actualIndex = dates.indexOf(verticalLineDate);
 
     // Build annotations for the cost chart.
     // Only the vertical line for "Actual Time" is retained.
@@ -129,14 +151,12 @@ const EVM = (props: TabProps) => {
     // Formatting for metric values shown in the table.
     const formatMetricValue = (key: string, value: any) => {
         if (value === null || value === undefined) return 'N/A';
+        if (customMetricFormatters[key]) {
+            return customMetricFormatters[key](value);
+        }
         if (typeof value === 'number') {
-            switch (key) {
-                case 'actual_cost_total':
-                case 'budget_at_completion':
-                    return value.toFixed(2);
-                default:
-                    return value;
-            }
+            // Default for any other number: show it as is.
+            return value;
         }
         return value;
     };
@@ -220,7 +240,8 @@ const EVM = (props: TabProps) => {
                     <tbody>
                     {Object.entries(otherMetrics).map(([key, value]) => (
                         <tr key={key}>
-                            <td>{t(key)}</td>
+                            {/* Use custom display name if available */}
+                            <td>{t(metricDisplayNames[key] || key)}</td>
                             <td>{formatMetricValue(key, value)}</td>
                         </tr>
                     ))}
