@@ -11,9 +11,10 @@ type PathEditorProjectProps = {
 
 const PathEditorProject = (props: PathEditorProjectProps) => {
     const [isVisible, setIsVisible] = useState(false)
-    const project = useSelector((state) => state.projects.byId[props.project_id]);
-    if (!project || !project.sub_projects) {
-        return <div>Loading</div>
+
+    const toggleDropdown = (value) => {
+        props.select(props.project_id)
+        setIsVisible(value)
     }
 
     return (
@@ -25,7 +26,7 @@ const PathEditorProject = (props: PathEditorProjectProps) => {
             contentAlignment='flex-start'
             title=''
             isVisible={isVisible}
-            setIsVisible={setIsVisible}
+            setIsVisible={toggleDropdown}
         >
             <SubProjectDropdown
                 project_id={props.project_id}

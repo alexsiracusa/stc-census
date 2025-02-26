@@ -1,7 +1,7 @@
 import '../Path.css'
 import './PathEditor.css'
 
-import {Fragment, useState} from "react";
+import {Fragment} from "react";
 import ChevronRight from "../../../../assets/Icons/ChevronRight.svg";
 import PathEditorProject from "./PathEditorProject.tsx";
 

@@ -43,12 +43,12 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
 
     const selectDependsOn = useMemo(() => makeSelectDependsOn(task), [task]);
     const depends_on = useSelector((state) => selectDependsOn(state));
-    const options = Object.values(project.byId ?? {}).filter((option) => !task.depends_on.some((task) => task.project_id === option.project_id && task.task_id === option.id))
+    const options = Object.values(project ? project.byId ?? {} : {}).filter((option) => !task.depends_on.some((task) => task.project_id === option.project_id && task.task_id === option.id))
 
     const {updateTask, updateLoading, updateError, data} = useUpdateTask();
     const {t} = useTranslation()
 
-    if (project.byId === undefined) {
+    if (!project || !project.byId) {
         return <>Loading</>
     }
 
