@@ -36,7 +36,7 @@ const TaskPersonInChargePicker = (props: TaskPersonInChargePickerProps) => {
         <DropdownPicker
             icon={
                 task.person_in_charge === null ? (
-                    <p></p>
+                    <p>{'-'}</p>
                 ) : (
                     <p>{`${capitalize(task.person_in_charge.first_name)}`}</p>
                 )

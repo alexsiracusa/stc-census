@@ -18,20 +18,20 @@ const ProfileDropdown = () => {
     };
 
     return (
-        <div
-            className="profile-dropdown"
-            onClick={() => setIsDropdownOpen((prev) => !prev)}
-            ref={dropdownRef}
-            title='User Menu'
-        >
-            <img src={User} alt="User"/>
-            {isDropdownOpen && (
-                <div className="dropdown-menu">
-                    <a href="#" onClick={handleLogout} className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
-                </div>
-            )}
-        </div>
-    )
+    <div
+        className="profile-dropdown"
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+        ref={dropdownRef}
+        title='User Menu'
+    >
+        <img src={User} alt="User"/>
+        {isDropdownOpen && (
+            <div className="dropdown-menu">
+                <a href="#" onClick={handleLogout} className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
+            </div>
+        )}
+    </div>
+)
 }
 
 export default ProfileDropdown
