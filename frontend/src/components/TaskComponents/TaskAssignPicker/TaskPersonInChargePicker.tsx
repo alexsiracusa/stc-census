@@ -47,7 +47,10 @@ const TaskPersonInChargePicker = (props: TaskPersonInChargePickerProps) => {
             contentAlignment='left'
             isVisible={isVisible}
             setIsVisible={setIsVisible}
-            title=''
+            title={task.person_in_charge ?
+                 capitalize(task.person_in_charge.first_name) + ' ' +
+                 capitalize(task.person_in_charge.last_name)
+                : 'Select person in charge'}
         >
             {Object.keys(accounts).length === 0 ? (
                 <div>Loading</div>
