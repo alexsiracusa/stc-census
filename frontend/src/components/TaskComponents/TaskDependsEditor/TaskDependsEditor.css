@@ -30,7 +30,7 @@
             flex-grow: 1;
         }
 
-        button {
+        .minus-button, .plus-button {
             display: flex;
             align-items: center;
             justify-content: center;
