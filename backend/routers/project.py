@@ -148,14 +148,14 @@ async def get_cpm_analysis(project_id: int, response: Response):
 async def get_sensible_scheduling(project_id: int,
                                   wanted_start: Optional[date] = None,
                                   wanted_end: Optional[date] = None,
-                                  wanted_duration: Optional[int] = None,
                                   response: Response = None):
     try:
         params = {
             "wanted_start": wanted_start,
             "wanted_end": wanted_end,
-            "wanted_duration": wanted_duration
+            "wanted_duration": None  # depreciated, so this has been set to None
         }
+        wanted_duration = None  # depreciated, so this has been set to None
 
         none_count = sum(value is None for value in params.values())
         if none_count != 1:
