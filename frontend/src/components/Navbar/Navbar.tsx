@@ -4,17 +4,28 @@ import LanguageSelector from '../GenericComponents/LanguageSelector/LanguageSele
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import User from '../../assets/Icons/User.svg';
+import { useNavigate } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+type NavbarProps = {
+    onLogout: () => void;
+};
+
+const Navbar: React.FC<NavbarProps> = ({onLogout}) => {
     const { t } = useTranslation();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     const handleClickOutside = (event: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsDropdownOpen(false);
         }
     };
+
+    const handleLogout = () => {
+        onLogout();
+        navigate('/login');
+    }
 
     useEffect(() => {
         if (isDropdownOpen) {
@@ -51,7 +62,7 @@ const Navbar: React.FC = () => {
                     <img src={User} alt="User" />
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
-                            <a href="/logout" className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
+                            <a href="#" onClick={handleLogout} className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
                         </div>
                     )}
                 </div>

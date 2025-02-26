@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import PathEditor from "../../GenericComponents/Path/PathEditor/PathEditor.tsx";
 import {createSelector} from 'reselect';
 import useFetchProject from "../../../hooks/useFetchProject.ts";
+import TaskPopup from "../TaskPopup/TaskPopup.tsx";
 
 // Input selectors: These grab pieces of the state directly.
 const selectProjectsById = (state) => state.projects.byId;
@@ -65,13 +66,17 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                     <div
                         className='task-depends-editor-header task-field-header'>{t('taskDependsEditor.dependsOn') + ':'}</div>
                     {depends_on.length != 0 && depends_on.map((option) => (
-                        <div className='task-depends-editor-row remove-from-list'
-                             key={`${option.project_id}-${option.id}`}>
+                        <div
+                            className='task-depends-editor-row remove-from-list'
+                            key={`${option.project_id}-${option.id}`}
+                        >
                             <TaskIcon project_id={option.project_id} task_id={option.id}/>
+
                             <p className='task-name'>{option.name}</p>
 
                             <button
                                 title={t('taskDependsEditor.remove')}
+                                className={'minus-button'}
                                 onClick={() => {
                                     updateTask(props.project_id, props.task_id, {
                                         depends_on: task.depends_on.filter((task) => {
@@ -96,13 +101,17 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                     {options
                         .filter((option) => option.project_id != task.project_id || option.id != task.id)
                         .map((option) => (
-                            <div className='task-depends-editor-row add-to-list'
-                                 key={`${option.project_id}-${option.id}`}>
-                                <TaskIcon project_id={option.project_id} task_id={option.id}/>
+                            <div
+                                className='task-depends-editor-row add-to-list'
+                                key={`${option.project_id}-${option.id}`}
+                            >
+                                <TaskIcon project_id={option.project_id} task_id={option.id} clickable={true}/>
+
                                 <p className='task-name'>{option.name}</p>
 
                                 <button
                                     title={t('taskDependsEditor.add')}
+                                    className={'plus-button'}
                                     onClick={() => {
                                         updateTask(props.project_id, props.task_id, {
                                             depends_on: [...task.depends_on, {

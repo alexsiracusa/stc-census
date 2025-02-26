@@ -2,7 +2,7 @@ import './UserGuide.css'
 
 const UserGuide = () => {
     return (
-        <div className='home-page'>
+        <div className='user-guide-page'>
             User Guide
         </div>
     )
