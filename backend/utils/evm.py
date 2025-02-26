@@ -54,7 +54,7 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     if pd.isnull(start_date):
         start_date = df['actual_start_date'].min()
     if pd.isnull(start_date) or pd.isnull(end_date):
-        dates = pd.date_range(start=latest_done_date, end=latest_done_date)  # Single date
+        dates = pd.date_range(start=latest_done_date, end=latest_done_date)  # Single date fallback
     else:
         dates = pd.date_range(start=start_date, end=end_date)
 
@@ -96,13 +96,13 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         pv_ev_list.append((date, round(pv, 2), ev))
         actual_cost_list.append((date, round(ac_value, 2)))
 
-        # Schedule Variance Percent and CPI
+        # Schedule Variance Percent and CPI calculations
         sv_percent = (ev - pv) / pv if pv != 0 else 0.0
         cpi_value = ev / ac_value if ac_value != 0 else 0.0
         sv_pct_list.append((date, sv_percent))
         cpi_list.append((date, cpi_value))
 
-        # Earned Schedule and Time Variance Percent
+        # Earned Schedule (ES) and Time Variance Percent (TV%)
         if bac != 0:
             es = (ev / bac) * sac
         else:
@@ -114,36 +114,38 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
             at = (date - project_start_date).days + 1
 
         tv = es - at
-        if at != 0:
-            tv_pct = (tv / at)
-        else:
-            tv_pct = 0.0
+        tv_pct = (tv / at) if at != 0 else 0.0
         tv_pct_list.append((date, tv_pct))
 
-    # Filter SV%, CPI, and TV% to dates up to latest_done_date
-    sv_pct_filtered = []
-    cpi_filtered = []
-    tv_pct_filtered = []
-    for date, sv_percent in sv_pct_list:
-        if date <= latest_done_date:
-            sv_pct_filtered.append((date.strftime('%Y-%m-%d'), round(sv_percent, 2)))
-    for date, cpi_value in cpi_list:
-        if date <= latest_done_date:
-            cpi_filtered.append((date.strftime('%Y-%m-%d'), round(cpi_value, 2)))
-    for date, tv_pct in tv_pct_list:
-        if date <= latest_done_date:
-            tv_pct_filtered.append((date.strftime('%Y-%m-%d'), round(tv_pct, 2)))
-
-    # Prepare PV, EV, AC filtered to milestone dates
+    # Build milestone_dates based on target start and completion dates
     milestone_dates = set()
     for col in ['target_start_date', 'target_completion_date']:
         milestone_dates.update({d.strftime('%Y-%m-%d') for d in df[col].dropna().unique()})
-    filtered_planned = [(date.strftime('%Y-%m-%d'), pv) for date, pv, _ in pv_ev_list if
-                        date.strftime('%Y-%m-%d') in milestone_dates]
-    filtered_earned = [(date.strftime('%Y-%m-%d'), ev) for date, _, ev in pv_ev_list if
-                       date.strftime('%Y-%m-%d') in milestone_dates]
-    filtered_actual = [(date.strftime('%Y-%m-%d'), cost) for date, cost in actual_cost_list if
-                       date.strftime('%Y-%m-%d') in milestone_dates]
+
+    # Prepare PV, EV, and Actual Cost lists for milestone dates
+    filtered_planned = [(date.strftime('%Y-%m-%d'), pv) for date, pv, _ in pv_ev_list
+                        if date.strftime('%Y-%m-%d') in milestone_dates]
+    filtered_earned = [(date.strftime('%Y-%m-%d'), ev) for date, _, ev in pv_ev_list
+                       if date.strftime('%Y-%m-%d') in milestone_dates]
+    filtered_actual = [(date.strftime('%Y-%m-%d'), cost) for date, cost in actual_cost_list
+                       if date.strftime('%Y-%m-%d') in milestone_dates]
+
+    # Filter performance metrics to only include milestone dates and dates <= latest_done_date.
+    sv_pct_filtered = [
+        (date.strftime('%Y-%m-%d'), round(sv_amt, 2))
+        for date, sv_amt in sv_pct_list
+        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= latest_done_date)
+    ]
+    cpi_filtered = [
+        (date.strftime('%Y-%m-%d'), round(cpi_val, 2))
+        for date, cpi_val in cpi_list
+        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= latest_done_date)
+    ]
+    tv_pct_filtered = [
+        (date.strftime('%Y-%m-%d'), round(tv_val, 2))
+        for date, tv_val in tv_pct_list
+        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= latest_done_date)
+    ]
 
     # Calculate actual_time
     if pd.isnull(project_start_date) or pd.isnull(latest_done_date):
