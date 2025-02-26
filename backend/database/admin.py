@@ -114,8 +114,8 @@ def set_session_cookie(response, session_id):
     response.set_cookie(
         key='session_id',
         value=session_id,
-        max_age=timedelta(hours=24).total_seconds(),
-        expires=timedelta(hours=8).total_seconds(),
+        max_age=timedelta(hours=168).total_seconds(),
+        expires=timedelta(hours=48).total_seconds(),
         path='/',
         secure=False,
         httponly=True,
