@@ -9,7 +9,8 @@ import ProjectRowHeader from "../../components/ProjectComponents/ProjectRow/Proj
 import {useState} from "react";
 import {sortArray, SortOptions} from "../../utils/sort.ts";
 import {Project} from "../../types/Project.ts";
-import ProjectEditingHeader from "../../components/GenericComponents/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
+import ProjectEditingHeader
+    from "../../components/GenericComponents/EditingHeader/ProjectEditingHeader/ProjectEditingHeader.tsx";
 
 
 const ProjectDashboard = () => {
@@ -17,7 +18,10 @@ const ProjectDashboard = () => {
     const [editingProjects, setEditingProjects] = useState(false)
     const projects = useSelector((state) => state.projects.byId);
     const project_ids = useSelector((state) => state.projects.dashboard);
-    const [projectSortOptions, setProjectSortOptions] = useState({key: 'target_completion_date', order: 'asc'} as SortOptions<Project>)
+    const [projectSortOptions, setProjectSortOptions] = useState({
+        key: 'target_completion_date',
+        order: 'asc'
+    } as SortOptions<Project>)
     const selectedProjects = new Set<number>();
     const {t} = useTranslation();
 
@@ -35,27 +39,31 @@ const ProjectDashboard = () => {
                 dashboard={true}
             />
 
-            <ul className='project-list'>
+            <div className='project-list'>
                 <AddProjectButton project_id={undefined}/>
 
-                <ProjectRowHeader
-                    projectSortOptions={projectSortOptions}
-                    setProjectSortOptions={setProjectSortOptions}
-                />
+                <div className='list-container'>
+                    <ProjectRowHeader
+                        projectSortOptions={projectSortOptions}
+                        setProjectSortOptions={setProjectSortOptions}
+                    />
 
-                {sortedProjects.map((project) => (
-                    <li key={project.id}>
-                        <ProjectRow
-                            project_id={project.id}
-                            editing={editingProjects}
-                            select={(value) => {
-                                if (value) selectedProjects.add(project.id)
-                                else selectedProjects.delete(project.id)
-                            }}
-                        />
-                    </li>
-                ))}
-            </ul>
+                    <ul>
+                        {sortedProjects.map((project) => (
+                            <li key={project.id}>
+                                <ProjectRow
+                                    project_id={project.id}
+                                    editing={editingProjects}
+                                    select={(value) => {
+                                        if (value) selectedProjects.add(project.id)
+                                        else selectedProjects.delete(project.id)
+                                    }}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
 
         </div>
     )
