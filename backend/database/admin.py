@@ -26,9 +26,9 @@ async def _create_session(account_id: int, host):
     session_id = str(uuid.uuid4())
     session_hash = util.hash_sha3_256(session_id)
     session_start = datetime.now(timezone.utc)
-    expires_at = session_start + timedelta(hours=24)
+    expires_at = session_start + timedelta(hours=168)
     last_activity = session_start
-    timout_duration = timedelta(hours=8)
+    timout_duration = timedelta(hours=48)
 
     await client.postgres_client.fetch_row("""
         INSERT INTO Session (id, ip_address, account_id, session_start, expires_at, last_activity, timeout_duration)
