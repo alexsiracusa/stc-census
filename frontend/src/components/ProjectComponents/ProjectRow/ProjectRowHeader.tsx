@@ -70,6 +70,12 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
             className: 'project-budget-variance-header',
             disabled: false,
         },
+        {
+            displayName: t('projectList.columns.download'),
+            columnName: '',
+            className: '',
+            disabled: true,
+        },
     ]
 
     return (
@@ -79,8 +85,9 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
                     className={column.className + " header"}
                     key={column.columnName}
                 >
-                    <div
-                        className='header-button'
+                    <button
+                        disabled={column.disabled}
+                        className={`header-button ${column.disabled ? 'disabled' : ''}`}
                         onClick={() => {
                             if (props.projectSortOptions.key === column.columnName) {
                                 props.setProjectSortOptions({
@@ -106,7 +113,7 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
                         {column.columnName === props.projectSortOptions.key &&
                             <img src={props.projectSortOptions.order === 'asc' ? TriangleUp : TriangleDown}/>
                         }
-                    </div>
+                    </button>
                 </div>
             ))}
         </div>

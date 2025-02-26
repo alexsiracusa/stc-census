@@ -46,11 +46,19 @@
             gap: 0.15em;
             cursor: pointer;
 
+            border: none;
+            background-color: transparent;
+            font-size: 1em;
+
             img {
                 height: 0.6em;
                 width: 0.6em;
                 aspect-ratio: 1.0;
             }
+        }
+        
+        .header-button.disabled {
+            cursor: default;
         }
     }
 }
@@ -158,4 +166,14 @@
         font-size: 0.8em;
         margin-left: 2px;
     }
+}
+
+
+.project-row .project-download-container, .project-row-header .project-download-header {
+    width: 4.5em;
+    min-width: 4.5em;
+}
+
+.project-row .project-download-container {
+    height: 60%;
 }

@@ -96,8 +96,9 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
                     className={column.className + " header"}
                     key={column.columnName}
                 >
-                    <div
-                        className='header-button'
+                    <button
+                        disabled={column.disabled}
+                        className={`header-button ${column.disabled ? 'disabled' : ''}`}
                         onClick={() => {
                             if (props.taskSortOptions.key === column.columnName) {
                                 props.setTaskSortOptions({
@@ -123,7 +124,7 @@ const TaskRowHeader = (props: TaskRowHeaderProps) => {
                         {column.columnName === props.taskSortOptions.key &&
                             <img src={props.taskSortOptions.order === 'asc' ? TriangleUp : TriangleDown}/>
                         }
-                    </div>
+                    </button>
                 </div>
             ))}
         </div>

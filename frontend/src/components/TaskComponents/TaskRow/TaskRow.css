@@ -50,11 +50,19 @@
             gap: 0.15em;
             cursor: pointer;
 
+            border: none;
+            background-color: transparent;
+            font-size: 1em;
+
             img {
                 height: 0.6em;
                 width: 0.6em;
                 aspect-ratio: 1.0;
             }
+        }
+
+        .header-button.disabled {
+            cursor: default;
         }
     }
 }

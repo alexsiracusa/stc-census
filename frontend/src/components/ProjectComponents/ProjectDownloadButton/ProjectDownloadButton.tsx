@@ -1,13 +1,13 @@
-import './DownloadProjectButton.css';
+import './ProjectDownloadButton.css';
 
 import React from 'react';
-import { convertProjectDataToCSV } from './utils/csvFormatter';
+import { convertProjectDataToCSV } from './projectCsvFormatter.ts';
 
 type DownloadProjectButtonProps = {
     projectId: number;
 };
 
-const DownloadProjectButton: React.FC<DownloadProjectButtonProps> = ({ projectId }) => {
+const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId }) => {
     const handleDownload = async () => {
         try {
             // Fetch JSON data for the given project.
@@ -38,10 +38,10 @@ const DownloadProjectButton: React.FC<DownloadProjectButtonProps> = ({ projectId
     };
 
     return (
-        <button className="download-button" onClick={handleDownload}>
+        <button className="project-download-button" onClick={handleDownload}>
             Download
         </button>
     );
 };
 
-export default DownloadProjectButton;
+export default ProjectDownloadButton;
