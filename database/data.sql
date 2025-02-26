@@ -34,7 +34,11 @@ VALUES
     (NULL, 'Project: Over Budget', 1, 'wpi.smwms.email.testing@gmail.com'),
     (NULL, 'Project: Behind Schedule', 1, 'wpi.smwms.email.testing@gmail.com'),
     (NULL, 'Project: On Schedule', 1, 'wpi.smwms.email.testing@gmail.com'),
-    (NULL, 'Project: Ahead of Schedule', 1, 'wpi.smwms.email.testing@gmail.com');
+    (NULL, 'Project: Ahead of Schedule', 1, 'wpi.smwms.email.testing@gmail.com'),
+    (NULL, 'Pronounced SV', 1, 'wpi.smwms.email.testing@gmail.com'),
+    (NULL, 'Pronounced TV', 1, 'wpi.smwms.email.testing@gmail.com'),
+    (NULL, 'High SV', 1, 'wpi.smwms.email.testing@gmail.com'),
+    (NULL, 'High TV', 1, 'wpi.smwms.email.testing@gmail.com');
 
 
 
@@ -373,6 +377,71 @@ VALUES
      'Establish quality control procedures', NULL, NULL, 4200.00, 0.00),
     (12, 'Initial Production Run', '2024-10-01', '2024-10-15', 15, 'to_do',
      'Execute first production batch', NULL, NULL, 15000.00, 0.00);
+
+INSERT INTO Task
+(project_id, name, target_start_date, target_completion_date,
+ target_days_to_complete, status, actual_start_date, actual_completion_date,
+ expected_cost, actual_cost, person_in_charge_id)
+VALUES
+-- High-cost tasks significantly behind schedule (major negative SV%)
+(13, 'Create supply list', '2025-03-04', '2025-03-05', 2, 'done', '2025-07-14', '2025-07-15', 3000.00, 3000.00, 1),
+(13, 'Buy supplies', '2025-03-02', '2025-03-03', 2, 'done', '2025-07-17', '2025-07-18', 5000.00, 5000.00, 2),
+(13, 'Set up venue', '2025-03-16', '2025-03-18', 3, 'done', '2025-07-27', '2025-07-29', 10000.00, 1000.00, 3),
+-- Low-cost tasks slightly ahead of schedule (minor positive SV%)
+(13, 'Book venue', '2025-03-14', '2025-03-16', 3, 'done', '2025-03-14', '2025-03-15', 120.00, 120.00, 4),
+(13, 'Create guest list', '2025-03-12', '2025-03-14', 3, 'done', '2025-03-12', '2025-03-13', 20.00, 20.00, NULL),
+(13, 'Send invitations', '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 10.00, 10.00, NULL);
+
+INSERT INTO Task
+(project_id, name, target_start_date, target_completion_date,
+ target_days_to_complete, status, actual_start_date, actual_completion_date,
+ expected_cost, actual_cost, person_in_charge_id)
+VALUES
+-- Tasks with major time delays but modest costs
+(14, 'Create supply list', '2025-03-01', '2025-03-03', 2, 'done', '2025-07-14', '2025-07-16', 10.00, 5.00, 1),
+(14, 'Buy supplies', '2025-03-04', '2025-03-06', 2, 'done', '2025-07-20', '2025-07-22', 150.00, 0.00, 2),
+(14, 'Set up venue', '2025-03-06', '2025-03-09', 3, 'done', '2025-07-26', '2025-07-27', 300.00, 0.00, 3),
+-- High-cost task with minimal time delay
+(14, 'Book venue', '2025-03-13', '2025-03-16', 3, 'done', '2025-03-14', '2025-03-16', 12000.00, 12000.00, 4),
+(14, 'Create guest list', '2025-03-12', '2025-03-14', 3, 'done', '2025-03-12', '2025-03-14', 200.00, 200.00, NULL),
+(14, 'Send invitations', '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 8000.00, 8000.00, NULL);
+
+INSERT INTO Task
+(project_id, name, target_start_date, target_completion_date,
+ target_days_to_complete, status, actual_start_date, actual_completion_date,
+ expected_cost, actual_cost, person_in_charge_id)
+VALUES
+    (15, 'Market Research', '2025-02-01', '2025-02-28', 28, 'done', '2025-02-01', '2025-02-12', 5000.00, 5000.00, 1),
+    (15, 'Product Design', '2025-03-01', '2025-03-15', 15, 'done', '2025-02-14', '2025-02-25', 8000.00, 8000.00, 2),
+    (15, 'Prototype Development', '2025-03-16', '2025-04-05', 21, 'done', '2025-02-26', '2025-03-10', 12000.00, 12000.00, 3);
+
+-- INSERT INTO Task
+-- (project_id, name, target_start_date, target_completion_date,
+--  target_days_to_complete, status, actual_start_date, actual_completion_date,
+--  expected_cost, actual_cost, person_in_charge_id)
+-- VALUES
+--     (16, 'Software Development', '2025-01-15', '2025-02-15', 31, 'done', '2026-01-20', '2026-02-02', 15000.00, 15000.00, 1),
+--     (16, 'Quality Testing', '2025-02-16', '2025-02-28', 13, 'done', '2026-02-16', '2026-02-22', 8000.00, 8000.00, 2),
+--     (16, 'User Training', '2025-03-01', '2025-03-10', 10, 'done', '2026-03-01', '2026-03-05', 5000.00, 5000.00, 3);
+
+-- INSERT INTO Task
+-- (project_id, name, target_start_date, target_completion_date,
+--  target_days_to_complete, status, actual_start_date, actual_completion_date,
+--  expected_cost, actual_cost, person_in_charge_id)
+-- VALUES
+--     (16, 'High-Cost Task', '2025-01-26', '2025-02-05', 11, 'done', '2025-01-31', '2025-02-25', 5000.00, 5000.00, 1),
+--     (16, 'Low-Cost Task', '2025-01-31', '2025-02-10', 11, 'done', '2025-01-28', '2025-02-02', 1000.00, 1000.00, 2),
+--     (16, 'Medium-Cost Task', '2025-02-10', '2025-02-20', 11, 'done', '2025-02-10', '2025-02-20', 3000.00, 3000.00, 3);
+
+
+INSERT INTO Task
+(project_id, name, target_start_date, target_completion_date,
+ target_days_to_complete, status, actual_start_date, actual_completion_date,
+ expected_cost, actual_cost, person_in_charge_id)
+VALUES
+    (16, 'Task 1', '2025-01-01', '2025-01-15', 15, 'done', '2025-01-05', '2025-01-12', 3000.00, 3000.00, 1),
+    (16, 'Task 2', '2025-01-16', '2025-01-31', 16, 'done', '2025-01-20', '2025-01-28', 3000.00, 3000.00, 2),
+    (16, 'Task 3', '2025-02-01', '2025-02-20', 20, 'done', '2025-02-01', '2025-03-10', 4000.00, 4000.00, 3);
 
 
 ----------------------------------------------------------------
