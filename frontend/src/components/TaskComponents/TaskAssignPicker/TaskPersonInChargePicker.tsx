@@ -38,7 +38,7 @@ const TaskPersonInChargePicker = (props: TaskPersonInChargePickerProps) => {
                 task.person_in_charge === null ? (
                     <p></p>
                 ) : (
-                    <p>{`${task.person_in_charge.first_name[0]}${task.person_in_charge.last_name[0]}`.toUpperCase()}</p>
+                    <p>{`${capitalize(task.person_in_charge.first_name)}`}</p>
                 )
             }
             buttonClassName='task-person-in-charge-picker'
