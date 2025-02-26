@@ -243,14 +243,30 @@ async def get_sensible_scheduling(project_id: int,
 @router.get("/{project_id}/evm")
 async def get_evm_analysis(project_id: int, response: Response):
     try:
+        # check if project exists first
+        project = await data.get_project_by_id(project_id)
+        if not project:
+            raise HTTPException(
+                status_code=404,
+                detail="Project does not exist."
+            )
+
         # Get all tasks for the project
         tasks = await data.get_all_project_tasks_evm(project_id)
         df = pd.DataFrame(tasks)
-        sigma = compute_evm(df)
+
+        # if df is null
+        if df.empty:
+            raise HTTPException(
+                status_code=404,
+                detail="Project exists, but has no tasks."
+            )
+
+        evm_data = compute_evm(df)
         # Create the final dictionary with the desired structure
         result = {
             "id": project_id,
-            "evm": sigma # df.to_dict(orient="records")
+            "evm": evm_data # df.to_dict(orient="records")
         }
         return result
 
