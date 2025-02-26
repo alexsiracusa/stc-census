@@ -61,7 +61,8 @@ const metricDisplayNames: Record<string, string> = {
 // Custom formatting for the four metrics
 const customMetricFormatters: Record<string, (val: any) => string> = {
     actual_time: (val: number) => `${val} days`,
-    total_actual_cost: (val: number) => `$${Number(val).toFixed(2)}`,
+    total_actual_cost: (val: number) =>
+        `$${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     date_of_latest_done_task: (val: string) => {
         const date = new Date(val);
         return date.toLocaleDateString('en-US', {
@@ -70,7 +71,8 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
             year: 'numeric'
         });
     },
-    budget_at_completion: (val: number) => `$${Number(val).toFixed(2)}`
+    budget_at_completion: (val: number) =>
+        `$${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 };
 
 const EVM = (props: TabProps) => {
@@ -129,6 +131,7 @@ const EVM = (props: TabProps) => {
                 ? dates[dates.length - 1]
                 : actualDate;
     }
+    const actualIndex = dates.indexOf(verticalLineDate);
 
     // Build annotations for the cost chart.
     // Only the vertical line for "Actual Time" is retained.
