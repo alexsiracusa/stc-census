@@ -25,7 +25,7 @@ const ProjectView = (props: ProjectViewProps) => {
     const {t} = useTranslation();
 
     if (error) return <p>Project View Error: {error.toString()}</p>;
-    if (loading || project === undefined) return <p>{t('projectView.loading')}</p>;
+    if (loading || !project || !project.path) return <p>{t('projectView.loading')}</p>;
 
     return (
         <div className='project-view'>

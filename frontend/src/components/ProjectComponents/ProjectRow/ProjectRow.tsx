@@ -34,12 +34,12 @@ const ProjectRow = (props: ProjectRowProps) => {
                     />
                 </div>
             ) : (
-                <Link reloadDocument to={`/project/${props.project_id}/task-list`} className="project-id">
+                <Link to={`/project/${props.project_id}/task-list`} className="project-id">
                     <p>P{project.id}</p>
                 </Link>
             )}
 
-            <Link reloadDocument to={`/project/${props.project_id}/task-list`} className="project-name-container">
+            <Link to={`/project/${props.project_id}/task-list`} className="project-name-container">
                 <p>{project.name}</p>
             </Link>
 
