@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import CalendarHeader from './CalendarHeader/CalendarHeader';
 import CalendarGrid from './CalendarGrid/CalendarGrid';
 import getCalendarDays from "../../../../../utils/getCalendarDays.ts";
 import './Calendar.css';
-import TabProps from "../TabProps.ts";
 import { useSelector } from "react-redux";
 import { Task } from "../../../../../types/Task.ts";
 import { TaskStatusInfo } from "../../../../../types/TaskStatuses.ts";
 
 export type Event = {
-    projectId: number;
-    id: string;
+    project_id: number;
+    id: number;
     title: string;
     color: string;
     startDate: string;
@@ -20,8 +19,8 @@ export type Event = {
 
 const convertTasksToEvents = (tasks: Record<string, Task>, projectId: number): Event[] => {
     return Object.values(tasks).map((task: Task) => ({
-        projectId,
-        id: task.id.toString(),
+        project_id: projectId,
+        id: task.id,
         title: task.name || 'Untitled Task',
         color: TaskStatusInfo[task.status]?.color || '#003366',
         startDate: task.target_start_date || 'N/A',
@@ -30,32 +29,20 @@ const convertTasksToEvents = (tasks: Record<string, Task>, projectId: number): E
     }));
 };
 
-const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
-    const { project_id } = props;
+const Calendar = (props: { project_id: number }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
 
-    const selectedEvents = new Set<string>();
-
-    const tasks: Record<string, Task> = useSelector((state) => state.projects.byId[project_id]?.byId) || {};
+    const tasks: Record<string, Task> = useSelector((state) => state.projects.byId[props.project_id].byId) || {};
 
     useEffect(() => {
-        const taskEvents = convertTasksToEvents(tasks, project_id);
+        const taskEvents = convertTasksToEvents(tasks, props.project_id);
         setEvents(taskEvents);
-    }, [tasks, project_id]);
-
+    }, [tasks, props.project_id]);
 
     const setMonth = (dir: number) => {
         const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + dir, 1);
         setCurrentMonth(nextMonth);
-    };
-
-    const toggleSelectEvent = (eventId: string) => {
-        if (selectedEvents.has(eventId)) {
-            selectedEvents.delete(eventId);
-        } else {
-            selectedEvents.add(eventId);
-        }
     };
 
     return (
@@ -68,9 +55,8 @@ const Calendar: React.FC<TabProps & { project_id: number }> = (props) => {
             <CalendarGrid
                 calendarDays={getCalendarDays(currentMonth)}
                 events={events}
-                currentProjectId={project_id}
+                currentProjectId={props.project_id}
                 editing={false}
-                select={toggleSelectEvent}
             />
         </div>
     );

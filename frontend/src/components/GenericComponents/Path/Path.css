@@ -14,12 +14,16 @@
         text-decoration: underline;
         cursor: pointer;
     }
+
+    border: none;
+    background-color: transparent;
 }
 
 .project-path .link p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 15em;
 }
 
 .project-path img {

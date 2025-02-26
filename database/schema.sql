@@ -116,44 +116,6 @@ CREATE TABLE Task_Depends_On (
 -- Views
 -- ===================================
 
-CREATE VIEW Project_Path AS (
-    WITH RECURSIVE project_cte(id,path) AS (
-        SELECT
-            Project.id,
-            ARRAY[jsonb_build_object('id', Project.id, 'name', Project.name)]::JSONB[] AS path
-        FROM Project
-        WHERE Project.parent IS NULL
-    UNION ALL
-        SELECT
-            Project.id,
-            array_append(project_cte.path, jsonb_build_object('id', Project.id, 'name', Project.name))
-        FROM project_cte, Project
-        WHERE Project.parent = project_cte.id
-    )
-    SELECT *
-    FROM project_cte
-);
-
-CREATE VIEW Project_Children AS (
-    WITH RECURSIVE project_tree(parent, child) AS (
-        SELECT
-            Project.id as parent,
-            Project.id as child
-        FROM Project
-    UNION ALL
-        SELECT
-            project_tree.parent,
-            Project.id
-        FROM Project
-        INNER JOIN project_tree ON Project.parent = project_tree.child
-    )
-    SELECT
-        parent AS id,
-        ARRAY_AGG(child) AS children
-    FROM project_tree
-    GROUP BY parent
-);
-
 CREATE VIEW Task_Node AS (
     SELECT
         Task.*,
@@ -177,6 +139,47 @@ CREATE VIEW Task_Node AS (
     GROUP BY Task.id, Task.project_id, Account.id
 );
 
+
+CREATE VIEW Project_Path AS (
+    WITH RECURSIVE project_cte(id,path) AS (
+        SELECT
+            Project.id,
+            ARRAY[jsonb_build_object('id', Project.id, 'name', Project.name)]::JSONB[] AS path
+        FROM Project
+        WHERE Project.parent IS NULL
+    UNION ALL
+        SELECT
+            Project.id,
+            array_append(project_cte.path, jsonb_build_object('id', Project.id, 'name', Project.name))
+        FROM project_cte, Project
+        WHERE Project.parent = project_cte.id
+    )
+    SELECT *
+    FROM project_cte
+);
+
+
+CREATE VIEW Project_Children AS (
+    WITH RECURSIVE project_tree(parent, child) AS (
+        SELECT
+            Project.id as parent,
+            Project.id as child
+        FROM Project
+    UNION ALL
+        SELECT
+            project_tree.parent,
+            Project.id
+        FROM Project
+        INNER JOIN project_tree ON Project.parent = project_tree.child
+    )
+    SELECT
+        parent AS id,
+        ARRAY_AGG(child) AS children
+    FROM project_tree
+    GROUP BY parent
+);
+
+
 CREATE VIEW Project_Summary AS (
     SELECT
         Project.*,
@@ -198,17 +201,27 @@ CREATE VIEW Project_Summary AS (
     GROUP BY Project.id
 );
 
+
 CREATE VIEW Project_Node AS (
     SELECT
         Project.*,
+        Project_Summary.status_counts AS status_counts,
+        Project_Summary.expected_cost AS expected_cost,
+        Project_Summary.actual_cost AS actual_cost,
+        Project_Summary.budget_variance AS budget_variance,
         to_json(array_remove(array_agg(Task_Node.*), NULL)) AS tasks,
         to_json(array_remove(array_agg(DISTINCT Sub_Project.*), NULL)) AS sub_projects,
-        (SELECT path FROM Project_Path WHERE id = Project.id) AS path,
-        (SELECT status_counts FROM Project_Summary WHERE Project_Summary.id = Project.id) AS status_counts
+        (SELECT path FROM Project_Path WHERE id = Project.id) AS path
     FROM Project
     LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
     LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = Project.id
-    GROUP BY Project.id
+    INNER JOIN Project_Summary ON Project_Summary.id = Project.id
+    GROUP BY
+        Project.id,
+        Project_Summary.status_counts,
+        Project_Summary.expected_cost,
+        Project_Summary.actual_cost,
+        Project_Summary.budget_variance
 );
 
 

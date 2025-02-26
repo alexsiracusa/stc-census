@@ -1,8 +1,8 @@
-import './Path.css'
+import '../Path.css'
 
 import {Link} from "react-router";
 import {Fragment} from "react";
-import ChevronRight from "../../../assets/Icons/ChevronRight.svg";
+import ChevronRight from "../../../../assets/Icons/ChevronRight.svg";
 
 type PathProps = {
     path: [{
@@ -11,13 +11,13 @@ type PathProps = {
     }]
 }
 
-const Path = (props: PathProps) => {
+const PathPicker = (props: PathProps) => {
     return (
         <div className='project-path'>
             {props.path.map((item, index) => (
                 <Fragment key={index}>
                     <Link
-                        reloadDocument
+
                         to={item.link}
                         className='link'
                     >
@@ -32,4 +32,4 @@ const Path = (props: PathProps) => {
     )
 }
 
-export default Path;
+export default PathPicker;

@@ -10,21 +10,22 @@ import Calendar from "./ProjectTabs/Calendar/Calendar.tsx";
 import CPM from "./ProjectTabs/CPM/CPM.tsx";
 import EVM from "./ProjectTabs/EVM/EVM.tsx";
 
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import ProjectPath from "../ProjectPath/ProjectPath.tsx"
 import useFetchProject from "../../../hooks/useFetchProject.ts";
+import {useEffect} from "react";
 
 type ProjectViewProps = {
     project_id: number
 }
 
 const ProjectView = (props: ProjectViewProps) => {
-    const { loading, error } = useFetchProject(props.project_id);
+    const {loading, error} = useFetchProject(props.project_id);
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const {t} = useTranslation();
 
     if (error) return <p>Project View Error: {error.toString()}</p>;
-    if (loading || project === undefined) return <p>{t('projectView.loading')}</p>;
+    if (loading || !project || !project.path) return <p>{t('projectView.loading')}</p>;
 
     return (
         <div className='project-view'>

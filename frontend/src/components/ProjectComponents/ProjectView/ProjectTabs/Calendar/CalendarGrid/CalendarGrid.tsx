@@ -6,13 +6,14 @@ import { isToday, isSameDay } from "date-fns";
 import TaskPopup from "../../../../../TaskComponents/TaskPopup/TaskPopup";
 import AllEventsPopup from "../AllEventsPopup/AllEventsPopup";
 import { Task } from "../../../../../../types/Task";
+import useCreateTask from "../../../../../../hooks/useCreateTask.ts";
+import TaskForm from "../../Calendar/TaskForm/TaskForm";
 
 type CalendarGridProps = {
-    calendarDays: { date: Date; isCurrentMonth: boolean }[];
-    events: Event[];
-    currentProjectId: number;
-    editing: boolean;
-    select: (boolean) => void;
+    calendarDays: { date: Date; isCurrentMonth: boolean }[],
+    events: Event[],
+    currentProjectId: number,
+    editing: boolean,
 };
 
 const isStartOrEndDate = (date: Date, startDate: string, endDate: string): boolean => {
@@ -30,10 +31,13 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     const [maxEventsPerDay, setMaxEventsPerDay] = useState(2);
     const [allEventsDate, setAllEventsDate] = useState<Date | null>(null);
     const [allEventsForDate, setAllEventsForDate] = useState<Task[]>([]);
+    const [showTaskForm, setShowTaskForm] = useState(false);
+    const { createTask, loading, error } = useCreateTask();
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows === 6 ? 3 : 2);
+        setMaxEventsPerDay(rows === 6 ? 3 : 3);
     }, [calendarDays]);
 
     const openAllEvents = (date: Date) => {
@@ -47,7 +51,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
         const tasksForPopup: Task[] = filteredEvents.map(event => ({
             id: Number(event.id),
-            project_id: event.projectId,
+            project_id: event.project_id,
             name: event.title,
             description: "",
             status: event.status,
@@ -77,6 +81,23 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         return knownDefaults.includes(title) ? localizedDefaultTitle : title;
     };
 
+    const handleCellClick = (date: Date) => {
+        setSelectedDate(date);
+        setShowTaskForm(true);
+    };
+
+    const handleTaskSave = async (taskDetails: { name: string }) => {
+        if (selectedDate) {
+            createTask(currentProjectId, {
+                name: taskDetails.name,
+                target_start_date: selectedDate.toISOString(),
+                target_completion_date: selectedDate.toISOString()
+            });
+            setShowTaskForm(false);
+            setSelectedDate(null);
+        }
+    };
+
     return (
         <>
             <div className="calendar-weekdays">
@@ -94,6 +115,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                             className={`day-box ${isCurrentMonth ? "" : "other-month"} ${
                                 isToday(date) ? "today" : ""
                             }`}
+                            onClick={() => handleCellClick(date)}
                         >
                             <div className={`day-num ${isToday(date) ? "today" : ""}`}>
                                 {date.getDate()}
@@ -143,14 +165,19 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                         </div>
                     ))}
                 </div>
+                {showTaskForm && (
+                    <TaskForm
+                        project_id={currentProjectId}
+                        task_id={1}
+                        onClose={() => setShowTaskForm(false)}
+                        onSave={handleTaskSave}
+                    />
+                )}
                 {allEventsDate && allEventsForDate.length > 0 && (
                     <AllEventsPopup
                         date={allEventsDate}
                         tasks={allEventsForDate}
                         onClose={closeAllEvents}
-                        openTaskDetails={function (): void {
-                            throw new Error("Function not implemented.");
-                        }}
                     />
                 )}
             </div>
