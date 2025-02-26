@@ -66,8 +66,8 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
     date_of_latest_done_task: (val: string) => {
         const date = new Date(val);
         return date.toLocaleDateString('en-US', {
-            month: 'long',
             day: 'numeric',
+            month: 'long',
             year: 'numeric'
         });
     },
