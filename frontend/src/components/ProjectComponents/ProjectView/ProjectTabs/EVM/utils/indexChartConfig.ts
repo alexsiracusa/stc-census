@@ -7,7 +7,47 @@ export const getIndexChartOptions = (t: Function) => ({
         tooltip: { mode: 'index', intersect: false },
         datalabels: { display: false },
         annotation: {
-            // annotation configuration remains the same
+            annotations: {
+                horizontalLine0: {
+                    type: 'line',
+                    yMin: 0,
+                    yMax: 0,
+                    borderColor: 'grey',
+                    borderWidth: 2,
+                    borderDash: [10, 5],
+                    label: {
+                        enabled: true,
+                        content: '0%',
+                        position: 'end'
+                    }
+                },
+                horizontalLine100: {
+                    type: 'line',
+                    yMin: 100,
+                    yMax: 100,
+                    borderColor: 'grey',
+                    borderWidth: 2,
+                    borderDash: [10, 5],
+                    label: {
+                        enabled: true,
+                        content: '100%',
+                        position: 'end'
+                    }
+                },
+                horizontalLineNeg100: {
+                    type: 'line',
+                    yMin: -100,
+                    yMax: -100,
+                    borderColor: 'grey',
+                    borderWidth: 2,
+                    borderDash: [10, 5],
+                    label: {
+                        enabled: true,
+                        content: '100%',
+                        position: 'end'
+                    }
+                }
+            }
         }
     },
     scales: {
