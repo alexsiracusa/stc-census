@@ -13,10 +13,8 @@ const CPM = (props: TabProps) => {
     const { loading: tasksLoading, error: tasksError } = useFetchTasks(projectId);
     const { loading: cpmLoading, error: cpmError } = useFetchCPM(projectId);
 
-    const tasks = useSelector((state: any) => {
-        const project = state.projects.byId[projectId];
-        return (project && project.byId) ? Object.values(project.byId) : [];
-    });
+    const project = useSelector((state) => state.projects.byId[props.project_id]);
+    const tasks = Object.values(project.byId)
 
     const projectCpmData = useSelector((state: any) => state.projects.byId[projectId]);
 
