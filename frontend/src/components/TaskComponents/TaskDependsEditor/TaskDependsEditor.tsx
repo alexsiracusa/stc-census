@@ -70,7 +70,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                             className='task-depends-editor-row remove-from-list'
                             key={`${option.project_id}-${option.id}`}
                         >
-                            <TaskIcon project_id={option.project_id} task_id={option.id} clickable={true}/>
+                            <TaskIcon project_id={option.project_id} task_id={option.id}/>
 
                             <p className='task-name'>{option.name}</p>
 

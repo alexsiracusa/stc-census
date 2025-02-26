@@ -24,7 +24,7 @@ const TaskDependsList = (props: TaskDependsListProps) => {
                     <TaskIcon
                         project_id={depends_on.project_id}
                         task_id={depends_on.task_id}
-                        clickable={true}
+                        key={`${depends_on.project_id}-${depends_on.task_id}`}
                     />
                 )
             })}

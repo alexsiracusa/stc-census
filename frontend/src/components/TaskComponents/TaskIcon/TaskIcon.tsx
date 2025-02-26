@@ -15,6 +15,10 @@ const TaskIcon = (props: TaskIconProps) => {
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const task = (project && project.byId && project.byId[props.task_id]) ? project.byId[props.task_id] : null
 
+    if (!task) {
+        return <></>
+    }
+
     return (
         <TaskPopup
             project_id={props.project_id}
