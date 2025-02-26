@@ -14,7 +14,6 @@ const PathEditorProject = (props: PathEditorProjectProps) => {
     const toggleDropdown = (value) => {
         props.select(props.project_id)
         setIsVisible(value)
-        console.log("toggle")
     }
 
     return (

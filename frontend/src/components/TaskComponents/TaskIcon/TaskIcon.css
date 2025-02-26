@@ -9,6 +9,8 @@
     aspect-ratio: 1.0;
     height: 100%;
 
+    cursor: default;
+
     p {
         font-family: monospace, monospace;
         font-size: 0.6em;
@@ -16,8 +18,4 @@
         color: black;
         font-weight: bolder;
     }
-
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
 }

@@ -48,7 +48,7 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
     const {updateTask, updateLoading, updateError, data} = useUpdateTask();
     const {t} = useTranslation()
 
-    if (!project || !project.byId) {
+    if (!project || !project.byId || !project.path) {
         return <>Loading</>
     }
 
