@@ -62,7 +62,8 @@ const Navbar: React.FC<NavbarProps> = ({onLogout}) => {
                     <img src={User} alt="User" />
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
-                            <a href="#" onClick={handleLogout} className="dropdown-item">{t('navbar.logout', 'Logout')}</a>                        </div>
+                            <a href="#" onClick={handleLogout} className="dropdown-item">{t('navbar.logout', 'Logout')}</a>
+                        </div>
                     )}
                 </div>
             </nav>

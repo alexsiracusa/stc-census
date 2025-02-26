@@ -79,7 +79,7 @@
     border: 0.1rem solid #dedede;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: 10rem;
+    min-width: 1rem;
     padding: 0.5rem 0;
 }
 

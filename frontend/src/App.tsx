@@ -5,10 +5,11 @@ import UserGuide from "./pages/UserGuide/UserGuide.tsx";
 import ProjectDashboard from "./pages/ProjectDashboard/ProjectDashboard.tsx";
 import Documentation from "./pages/Documentation/Documentation.tsx";
 import Login from "./pages/Login/Login.tsx";
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
 
 function App() {
+    const location = useLocation();
     const [isAuthenticated, setIsAuthenticated] = useState(
         sessionStorage.getItem('isAuthenticated') === 'true'
     );
@@ -28,7 +29,7 @@ function App() {
         if (isAuthenticated !== authStatus) {
             setIsAuthenticated(authStatus);
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, location]);
 
     return (
         <>
@@ -41,9 +42,9 @@ function App() {
                         element={isAuthenticated ? <Navigate to="/projects" replace /> : <Login onLogin={handleLogin} />}
                     />
                     <Route path="/project/:id/*" element={<ProjectPage/>}/>
-                    <Route path="/projects" element={<ProjectDashboard/>}/>
-                    <Route path="/user-guide" element={<UserGuide/>}/>
-                    <Route path="/documentation" element={<Documentation/>}/>
+                    <Route path="/projects" element={isAuthenticated ? <ProjectDashboard/> : <Navigate to="/login" replace />}/>
+                    <Route path="/user-guide" element={isAuthenticated ? <UserGuide/> : <Navigate to="/login" replace />}/>
+                    <Route path="/documentation" element={isAuthenticated ? <Documentation/> : <Navigate to="/login" replace />}/>
                     <Route
                         path="*"
                         element={<Navigate to="/login" replace />}
