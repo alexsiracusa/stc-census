@@ -5,43 +5,29 @@ import UserGuide from "./pages/UserGuide/UserGuide.tsx";
 import ProjectDashboard from "./pages/ProjectDashboard/ProjectDashboard.tsx";
 import Documentation from "./pages/Documentation/Documentation.tsx";
 import Login from "./pages/Login/Login.tsx";
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { Route, Routes, Navigate } from 'react-router-dom';
+import {useSelector} from "react-redux";
+import useFetchUser from "./hooks/useFetchUser.ts";
 
 function App() {
-    const location = useLocation();
-    const [isAuthenticated, setIsAuthenticated] = useState(
-        sessionStorage.getItem('isAuthenticated') === 'true'
-    );
+    const { loading, error } = useFetchUser()
+    const isAuthenticated = useSelector((state) => state.accounts.user);
 
-    const handleLogin = () => {
-        setIsAuthenticated(true);
-        sessionStorage.setItem('isAuthenticated', 'true');
-    };
-
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        sessionStorage.removeItem('isAuthenticated');
-    };
-
-    useEffect(() => {
-        const authStatus = sessionStorage.getItem('isAuthenticated') === 'true';
-        if (isAuthenticated !== authStatus) {
-            setIsAuthenticated(authStatus);
-        }
-    }, [isAuthenticated, location]);
+    if (!isAuthenticated && loading) {
+        return <>Loading</>
+    }
 
     return (
         <>
-            {isAuthenticated && <Navbar onLogout={handleLogout} />}
+            <Navbar/>
 
             <div className='page-content'>
                 <Routes>
                     <Route
                         path="/login"
-                        element={isAuthenticated ? <Navigate to="/projects" replace /> : <Login onLogin={handleLogin} />}
+                        element={isAuthenticated ? <Navigate to="/projects" replace /> : <Login/>}
                     />
-                    <Route path="/project/:id/*" element={<ProjectPage/>}/>
+                    <Route path="/project/:id/*" element={isAuthenticated ? <ProjectPage/> : <Navigate to="/login" replace />}/>
                     <Route path="/projects" element={isAuthenticated ? <ProjectDashboard/> : <Navigate to="/login" replace />}/>
                     <Route path="/user-guide" element={isAuthenticated ? <UserGuide/> : <Navigate to="/login" replace />}/>
                     <Route path="/documentation" element={isAuthenticated ? <Documentation/> : <Navigate to="/login" replace />}/>

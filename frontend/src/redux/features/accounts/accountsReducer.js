@@ -38,13 +38,7 @@ export const accountSlice = createSlice({
             })
         },
         setUser: (state, action) => {
-            const user = action.payload;
-            state.user = {
-                id: user.id,
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name,
-            };
+            state.user = action.payload.json
         },
     }
 });

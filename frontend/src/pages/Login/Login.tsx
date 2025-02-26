@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import "./Login.css";
-import useFetchUser from "../../hooks/useFetchUser";
+import {setUser} from "../../redux/features/accounts/accountsReducer.js";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
 
-interface LoginProps {
-    onLogin: () => void;
-}
-
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [userId, setUserId] = useState<string | null>(null);
 
-    useFetchUser(userId);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const validateCredentials = async (email: string, password: string) => {
         try {
@@ -21,6 +19,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
+                credentials: 'include',
             });
 
             const responseBody = await response.json();
@@ -34,7 +33,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             }
 
             if (responseBody && responseBody.id) {
-                return responseBody.id;
+                return responseBody;
             }
 
             throw new Error("Invalid email or password. Please check your credentials.");
@@ -45,7 +44,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         setError(null);
 
         if (!email || !password) {
@@ -56,10 +54,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         setLoading(true);
 
         try {
-            const fetchedUserId = await validateCredentials(email, password);
-
-            setUserId(fetchedUserId);
-            onLogin();
+            const user = await validateCredentials(email, password);
+            dispatch(setUser({json: user}))
+            navigate('/projects')
         } catch (err: any) {
             setError(err.message);
         } finally {

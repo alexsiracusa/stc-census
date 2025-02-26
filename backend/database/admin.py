@@ -89,6 +89,7 @@ async def authenticate(request: Request):
         raise InvalidCredentials()
 
     session_id_hash = util.hash_sha3_256(session_id)
+    # print(session_id_hash, session_id)
 
     account_info = await client.postgres_client.fetch_row("""
         WITH Account_Session AS (

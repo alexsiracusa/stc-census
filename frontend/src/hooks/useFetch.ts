@@ -22,7 +22,7 @@ const useFetch = (url, actionCreator, options = {}) => {
             setError(null);
 
             try {
-                const response = await fetch(url, options);
+                const response = await fetch(url, {...options, credentials: 'include'});
                 const json = await response.json();
                 if (!response.ok) {
                     setError(json.error || "Unable to fetch data");
