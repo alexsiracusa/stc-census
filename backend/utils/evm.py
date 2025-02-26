@@ -58,12 +58,12 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     else:
         dates = pd.date_range(start=start_date, end=end_date)
 
-    # Compute PV, EV, AC, SV%, CPI, and TV% for each date in the range
-    pv_ev_list = []     # tuple: (date, pv, ev)
-    actual_cost_list = []   # tuple: (date, ac)
-    sv_pct_list = []    # tuple: (date, sv_percent)
-    cpi_list = []       # tuple: (date, cpi)
-    tv_pct_list = []    # tuple: (date, tv_pct)
+    # Compute PV, EV, AC, SV%, CPI, and TV% for each date
+    pv_ev_list = []
+    actual_cost_list = []
+    sv_pct_list = []
+    cpi_list = []
+    tv_pct_list = []
 
     for date in dates:
         # Planned Value (PV)
@@ -96,13 +96,13 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         pv_ev_list.append((date, round(pv, 2), ev))
         actual_cost_list.append((date, round(ac_value, 2)))
 
-        # Schedule Variance Percent and Cost Performance Index (CPI)
+        # Schedule Variance Percent and CPI
         sv_percent = (ev - pv) / pv if pv != 0 else 0.0
         cpi_value = ev / ac_value if ac_value != 0 else 0.0
         sv_pct_list.append((date, sv_percent))
         cpi_list.append((date, cpi_value))
 
-        # Earned Schedule and Time Variance Percent (TV)
+        # Earned Schedule and Time Variance Percent
         if bac != 0:
             es = (ev / bac) * sac
         else:
@@ -114,50 +114,36 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
             at = (date - project_start_date).days + 1
 
         tv = es - at
-        tv_pct = (tv / at) if at != 0 else 0.0
+        if at != 0:
+            tv_pct = (tv / at)
+        else:
+            tv_pct = 0.0
         tv_pct_list.append((date, tv_pct))
 
-    # Build milestone dates from target_start_date and target_completion_date,
-    # then restrict to dates on or before the latest_done_date.
-    milestone_dates = set()
-    for col in ['target_start_date', 'target_completion_date']:
-        milestone_dates.update({d for d in df[col].dropna().unique()})
-    milestone_dates = {d for d in milestone_dates if d <= latest_done_date}
-    milestone_dates_str = {d.strftime('%Y-%m-%d') for d in milestone_dates}
+    # Filter SV%, CPI, and TV% to dates up to latest_done_date
+    sv_pct_filtered = []
+    cpi_filtered = []
+    tv_pct_filtered = []
+    for date, sv_percent in sv_pct_list:
+        if date <= latest_done_date:
+            sv_pct_filtered.append((date.strftime('%Y-%m-%d'), round(sv_percent, 2)))
+    for date, cpi_value in cpi_list:
+        if date <= latest_done_date:
+            cpi_filtered.append((date.strftime('%Y-%m-%d'), round(cpi_value, 2)))
+    for date, tv_pct in tv_pct_list:
+        if date <= latest_done_date:
+            tv_pct_filtered.append((date.strftime('%Y-%m-%d'), round(tv_pct, 2)))
 
     # Prepare PV, EV, AC filtered to milestone dates
-    filtered_planned = [
-        (date.strftime('%Y-%m-%d'), pv)
-        for date, pv, _ in pv_ev_list
-        if date.strftime('%Y-%m-%d') in milestone_dates_str
-    ]
-    filtered_earned = [
-        (date.strftime('%Y-%m-%d'), ev)
-        for date, _, ev in pv_ev_list
-        if date.strftime('%Y-%m-%d') in milestone_dates_str
-    ]
-    filtered_actual = [
-        (date.strftime('%Y-%m-%d'), cost)
-        for date, cost in actual_cost_list
-        if date.strftime('%Y-%m-%d') in milestone_dates_str
-    ]
-
-    # Filter SV%, CPI, and TV% to the same milestone dates (i.e., only up to the latest_completed date)
-    sv_pct_filtered = [
-        (date.strftime('%Y-%m-%d'), round(sv_percent, 2))
-        for date, sv_percent in sv_pct_list
-        if date.strftime('%Y-%m-%d') in milestone_dates_str
-    ]
-    cpi_filtered = [
-        (date.strftime('%Y-%m-%d'), round(cpi_value, 2))
-        for date, cpi_value in cpi_list
-        if date.strftime('%Y-%m-%d') in milestone_dates_str
-    ]
-    tv_pct_filtered = [
-        (date.strftime('%Y-%m-%d'), round(tv_pct, 2))
-        for date, tv_pct in tv_pct_list
-        if date.strftime('%Y-%m-%d') in milestone_dates_str
-    ]
+    milestone_dates = set()
+    for col in ['target_start_date', 'target_completion_date']:
+        milestone_dates.update({d.strftime('%Y-%m-%d') for d in df[col].dropna().unique()})
+    filtered_planned = [(date.strftime('%Y-%m-%d'), pv) for date, pv, _ in pv_ev_list if
+                        date.strftime('%Y-%m-%d') in milestone_dates]
+    filtered_earned = [(date.strftime('%Y-%m-%d'), ev) for date, _, ev in pv_ev_list if
+                       date.strftime('%Y-%m-%d') in milestone_dates]
+    filtered_actual = [(date.strftime('%Y-%m-%d'), cost) for date, cost in actual_cost_list if
+                       date.strftime('%Y-%m-%d') in milestone_dates]
 
     # Calculate actual_time
     if pd.isnull(project_start_date) or pd.isnull(latest_done_date):
@@ -167,6 +153,7 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
 
     # Aggregated metrics
     ac_aggregated = done_tasks['actual_cost'].sum() if not done_tasks.empty else 0.0
+
     metrics = {
         'actual_time': actual_time,
         'total_actual_cost': round(ac_aggregated, 2),
