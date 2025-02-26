@@ -25,4 +25,10 @@
     .simple-date-picker {
         margin-left: -0.5em;
     }
+
+    .task-person-in-charge-picker {
+        margin-left: -0.5em;
+        padding: 0 0.5em;
+        width: 5em;
+    }
 }

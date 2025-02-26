@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {Children, PropsWithChildren, useState} from "react";
 import Popup from "../../GenericComponents/Popup/Popup.tsx";
 import TaskPopupContent from "./TaskPopupContent.tsx";
+import useFetchProject from "../../../hooks/useFetchProject.ts";
 
 type TaskPopupProps = {
     project_id: number,
@@ -12,6 +13,7 @@ type TaskPopupProps = {
 }
 
 const TaskPopup = (props: PropsWithChildren<TaskPopupProps>) => {
+    const {loading, error} = useFetchProject(props.project_id)
     const project = useSelector((state) => state.projects.byId[props.project_id]);
     const task = (project && project.byId && project.byId[props.task_id]) ? project.byId[props.task_id] : null
     const [isVisible, setIsVisible] = useState(false);
