@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import useUpdateTask from "../../../hooks/useUpdateTask.ts";
 import NumberEditor from "../../GenericComponents/NumberEditor/NumberEditor.tsx";
+import TaskPersonInChargePicker from "../TaskAssignPicker/TaskPersonInChargePicker.tsx";
 
 type TaskFieldsProps = {
     project_id: number,
@@ -16,7 +17,12 @@ const TaskFields = (props: TaskFieldsProps) => {
 
     return (
         <div className='task-fields'>
-            <div className='task-field-start-date row'>
+            <div className='row'>
+                <div className='task-field-header'>PiC:</div>
+                <TaskPersonInChargePicker project_id={props.project_id} task_id={props.task_id}/>
+            </div>
+
+            <div className='row'>
                 <div className='task-field-header'>Start Date:</div>
                 <SimpleDatePicker
                     currentDate={task.target_start_date}
@@ -27,7 +33,7 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
-            <div className='task-field-end-date row'>
+            <div className='row'>
                 <div className='task-field-header'>Due Date:</div>
                 <SimpleDatePicker
                     currentDate={task.target_completion_date}
@@ -38,7 +44,7 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
-            <div className='task-field-budget row'>
+            <div className='row'>
                 <div className='task-field-header'>Budget:</div>
                 <NumberEditor
                     value={task.expected_cost}
@@ -51,7 +57,7 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
-            <div className='task-field-actual-cost row'>
+            <div className='row'>
                 <div className='task-field-header'>Spent:</div>
                 <NumberEditor
                     value={task.actual_cost}
@@ -64,7 +70,7 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
-            <div className='task-field-days-to-complete row'>
+            <div className='row'>
                 <div className='task-field-header'>Days to Complete:</div>
                 <NumberEditor
                     value={task.target_days_to_complete}
@@ -77,7 +83,7 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
-            <div className='task-field-actual-start-date row'>
+            <div className='row'>
                 <div className='task-field-header'>Actual Start Date:</div>
                 <SimpleDatePicker
                     currentDate={task.actual_start_date}
@@ -88,7 +94,7 @@ const TaskFields = (props: TaskFieldsProps) => {
                 />
             </div>
 
-            <div className='task-field-actual-end-date row'>
+            <div className='row'>
                 <div className='task-field-header'>Actual End Date:</div>
                 <SimpleDatePicker
                     currentDate={task.actual_completion_date}
