@@ -4,13 +4,13 @@ import { useSelector } from "react-redux";
 import TabProps from "../TabProps";
 import SensibleScheduleButton from "./SensibleScheduleButton/SensibleScheduleButton.tsx";
 import TaskGraph from './TaskGraph/TaskGraph.tsx';
-import useFetchTasks from "../../../../../hooks/useFetchTasks.ts";
+import useFetchProjectTasks from "../../../../../hooks/useFetchProjectTasks.ts";
 import useFetchCPM from "../../../../../hooks/useFetchCPM.ts";
 
 const CPM = (props: TabProps) => {
     const projectId = Number(props.project_id);
 
-    const { loading: tasksLoading, error: tasksError } = useFetchTasks(projectId);
+    const { loading: tasksLoading, error: tasksError } = useFetchProjectTasks(projectId);
     const { loading: cpmLoading, error: cpmError } = useFetchCPM(projectId);
 
     const project = useSelector((state) => state.projects.byId[props.project_id]);
