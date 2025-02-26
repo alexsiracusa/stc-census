@@ -79,9 +79,14 @@ const EVM = (props: TabProps) => {
     // Latest date from EVM metrics; used as cutoff for “done” entries
     const actualDate = evmData.evm.metrics.date_of_latest_done_task || '';
 
-    // Remove index metrics from the table.
-    // (Assuming the remaining metrics in evmData.evm.metrics should be shown.)
-    const { schedule_variance_percent, cost_performance_index, time_variance_percent, ...otherMetrics } = evmData.evm.metrics;
+    // Remove index metrics from the table. (Assuming
+    // the remaining metrics in evmData.evm.metrics should be shown.)
+    const {
+        schedule_variance_percent,
+        cost_performance_index,
+        time_variance_percent,
+        ...otherMetrics
+    } = evmData.evm.metrics;
 
     // Filter out earned and actual cost values up to the actualDate
     const earnedCosts = earnedValue.map((pair: [string, number]) =>
@@ -95,12 +100,16 @@ const EVM = (props: TabProps) => {
     // Determine vertical line date for annotations
     let verticalLineDate = actualDate;
     if (dates.length) {
-        verticalLineDate = actualDate < dates[0] ? dates[0] :
-            actualDate > dates[dates.length - 1] ? dates[dates.length - 1] : actualDate;
+        verticalLineDate = actualDate < dates[0]
+            ? dates[0]
+            : actualDate > dates[dates.length - 1]
+                ? dates[dates.length - 1]
+                : actualDate;
     }
     const actualIndex = dates.indexOf(verticalLineDate);
 
-    // Build annotations for the cost chart (indicating actual time, SV, and CV)
+    // Build annotations for the cost chart.
+    // Only the vertical line for "Actual Time" is retained.
     const annotations: any = {
         verticalLine: {
             type: 'line',
@@ -116,60 +125,6 @@ const EVM = (props: TabProps) => {
             }
         }
     };
-
-    if (actualIndex !== -1) {
-        const pv = plannedCosts[actualIndex];
-        const ev = earnedCosts[actualIndex];
-        const ac = actualCosts[actualIndex];
-
-        if (typeof pv === 'number' && typeof ev === 'number') {
-            const sv = ev - pv;
-            annotations.scheduleVarianceLine = {
-                type: 'line',
-                xMin: verticalLineDate,
-                xMax: verticalLineDate,
-                yMin: pv,
-                yMax: ev,
-                borderColor: '#FF6B6B',
-                borderWidth: 2,
-                borderDash: [5, 5],
-            };
-            annotations.scheduleVarianceLabel = {
-                type: 'label',
-                xValue: verticalLineDate,
-                yValue: (pv + ev) / 2,
-                content: `SV: ${sv.toFixed(2)}`,
-                backgroundColor: 'rgba(255,255,255,0.8)',
-                color: '#FF6B6B',
-                font: { size: 12 },
-                padding: 4
-            };
-        }
-
-        if (typeof ev === 'number' && typeof ac === 'number') {
-            const cv = ev - ac;
-            annotations.costVarianceLine = {
-                type: 'line',
-                xMin: verticalLineDate,
-                xMax: verticalLineDate,
-                yMin: ev,
-                yMax: ac,
-                borderColor: '#4D96FF',
-                borderWidth: 2,
-                borderDash: [5, 5],
-            };
-            annotations.costVarianceLabel = {
-                type: 'label',
-                xValue: verticalLineDate,
-                yValue: (ev + ac) / 2,
-                content: `CV: ${cv.toFixed(2)}`,
-                backgroundColor: 'rgba(255,255,255,0.8)',
-                color: '#4D96FF',
-                font: { size: 12 },
-                padding: 4
-            };
-        }
-    }
 
     // Formatting for metric values shown in the table.
     const formatMetricValue = (key: string, value: any) => {
