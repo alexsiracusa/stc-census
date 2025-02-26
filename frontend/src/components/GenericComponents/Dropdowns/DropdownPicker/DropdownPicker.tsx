@@ -47,7 +47,9 @@ const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
     const ref = useRef(null);
 
     const closeDropdown = () => {
-        props.setIsVisible(false);
+        if (props.isVisible) {
+            props.setIsVisible(false)
+        }
     }
 
     useOutsideAlerter(ref, closeDropdown);

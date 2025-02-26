@@ -1,5 +1,4 @@
 import {useState} from "react";
-import {useSelector} from "react-redux";
 import DropdownPicker from "../../Dropdowns/DropdownPicker/DropdownPicker.tsx";
 import SubProjectDropdown from "./SubProjectDropdown.tsx";
 
@@ -15,6 +14,7 @@ const PathEditorProject = (props: PathEditorProjectProps) => {
     const toggleDropdown = (value) => {
         props.select(props.project_id)
         setIsVisible(value)
+        console.log("toggle")
     }
 
     return (

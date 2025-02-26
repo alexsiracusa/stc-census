@@ -58,14 +58,17 @@ async def get_project_by_id(project_id):
 
 
 async def get_all_project_tasks(project_id):
-    return await client.postgres_client.fetch("""
-        SELECT * FROM Task_Node
-        WHERE Task_Node.project_id IN (
-            SELECT unnest(children)
-            FROM Project_Children 
-            WHERE id = $1
-        )
-    """, project_id)
+    return await client.postgres_client.fetch_row("""
+        SELECT
+            $1::INTEGER AS project_id,
+            (SELECT jsonb_agg(row_to_json(t)) FROM (
+                SELECT * FROM Task_Node
+                WHERE Task_Node.project_id IN (
+                    SELECT unnest(children)
+                    FROM Project_Children 
+                    WHERE id = $1
+            )) AS t) AS all_tasks
+        """, project_id)
 
 
 # this is for the cpm algorithm to compute cpm stats

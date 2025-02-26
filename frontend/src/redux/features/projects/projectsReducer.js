@@ -148,26 +148,37 @@ export const projectSlice = createSlice({
                 })
             })
         },
+        setTask: (state, action) => {
+            const task = action.payload.json
+            const projectId = task.project_id;
+            // Create a project placeholder if it doesn't exist.
+            if (!state.byId[projectId]) {
+                state.byId[projectId] = {id: projectId, byId: {}};
+            }
+            if (!state.byId[projectId].byId) {
+                state.byId[projectId].byId = {};
+            }
+            state.byId[projectId].byId[task.id] = task;
+        },
         setTasks: (state, action) => {
             const tasks = action.payload.json; // expecting an array of task objects
             tasks.forEach((task) => {
-                const projectId = task.project_id;
-                // Create a project placeholder if it doesn't exist.
-                if (!state.byId[projectId]) {
-                    state.byId[projectId] = { id: projectId, byId: {} };
-                }
-                if (!state.byId[projectId].byId) {
-                    state.byId[projectId].byId = {};
-                }
-                state.byId[projectId].byId[task.id] = task;
+                projectSlice.caseReducers.setTask(state, {payload: {json: {task: task}}})
             });
+        },
+        setAllTasks: (state, action) => {
+            const {project_id, all_tasks} = action.payload.json
+            all_tasks.forEach((task) => {
+                projectSlice.caseReducers.setTask(state, {payload: {json: {task: task}}})
+            });
+            state.byId[project_id].all_tasks = all_tasks.map((task) => task.id)
         },
         setCPM: (state, action) => {
             const json = action.payload.json;
             const projectId = json.id;
             // Create a placeholder for the project if it doesn't already exist.
             if (!state.byId[projectId]) {
-                state.byId[projectId] = { id: projectId };
+                state.byId[projectId] = {id: projectId};
             }
             // Save the CPM-related data.
             state.byId[projectId].cpm = json.cpm;
@@ -187,7 +198,9 @@ export const {
     createTask,
     deleteTask,
     deleteTasks,
+    setTask,
     setTasks,
+    setAllTasks,
     setCPM,
 } = projectSlice.actions;
 
