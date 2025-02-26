@@ -122,6 +122,9 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     for col in ['target_start_date', 'target_completion_date']:
         milestone_dates.update({d.strftime('%Y-%m-%d') for d in df[col].dropna().unique()})
 
+    if not done_tasks.empty:
+        milestone_dates.add(latest_done_date.strftime('%Y-%m-%d'))
+
     # Prepare PV, EV, and Actual Cost lists for milestone dates
     filtered_planned = [(date.strftime('%Y-%m-%d'), pv) for date, pv, _ in pv_ev_list
                         if date.strftime('%Y-%m-%d') in milestone_dates]
