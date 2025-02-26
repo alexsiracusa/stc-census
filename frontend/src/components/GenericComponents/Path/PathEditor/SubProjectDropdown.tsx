@@ -1,3 +1,5 @@
+import './PathEditor.css'
+
 import useFetchProject from "../../../../hooks/useFetchProject.ts";
 import {useSelector} from "react-redux";
 
