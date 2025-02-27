@@ -1,6 +1,6 @@
 import './DropdownPicker.css'
 
-import React, {PropsWithChildren, useRef, useState, useEffect} from "react";
+import React, {PropsWithChildren, useRef} from "react";
 import useOutsideAlerter from "../../../../hooks/useOutsideAlerter.ts";
 import DropdownPickerContent from "./DropdownPickerContent.tsx";
 
@@ -14,34 +14,6 @@ type DropdownProps = {
     isVisible: boolean
     setIsVisible: (boolean) => void
 }
-
-const findScrollableParents = (element) => {
-    const scrollable = []
-    let parent = element.parentNode;
-
-    while (parent) {
-        if (!(parent instanceof Element)) {
-            break;
-        }
-        const style = window.getComputedStyle(parent);
-
-        const overflowY = style.overflowY;
-        const overflowX = style.overflowX;
-
-        const isScrollableY = (overflowY === 'auto' || overflowY === 'scroll') && parent.scrollHeight > parent.clientHeight;
-        const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll') && parent.scrollWidth > parent.clientWidth;
-
-        if (isScrollableY || isScrollableX) {
-            scrollable.push(parent)
-            // return parent;
-        }
-
-        parent = parent.parentNode; // Step up to the next parent
-    }
-
-    return scrollable; // No scrollable parent found
-};
-
 
 const DropdownPicker = (props: PropsWithChildren<DropdownProps>) => {
     const ref = useRef(null);

@@ -3,34 +3,30 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import  './ProfileDropdown.css'
+import useLogout from "../../../hooks/useLogout.ts";
+import {useSelector} from "react-redux";
+import useOutsideAlerter from "../../../hooks/useOutsideAlerter.ts";
 
 const ProfileDropdown = () => {
-    const { t } = useTranslation();
+    const { logout, loading, error, data } = useLogout()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+    useOutsideAlerter(dropdownRef, () => {setIsDropdownOpen(false)});
+    const { t } = useTranslation();
+
+    const account = useSelector((state) => state.accounts.user)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!account) {
+            navigate('/login')
+        }
+    }, [account, navigate]);
 
     const handleLogout = () => {
         setIsDropdownOpen(false);
-        navigate("/login");
+        logout()
     };
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsDropdownOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        if (isDropdownOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isDropdownOpen]);
 
     return (
         <div

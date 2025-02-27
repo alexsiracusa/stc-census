@@ -9,20 +9,19 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [displayError, setError] = useState<string | null>(null);
-    const navigate = useNavigate()
+
     const account = useSelector((state) => state.accounts.user)
+    const navigate = useNavigate()
 
     useEffect(() => {
         setError(error)
     }, [error]);
 
     useEffect(() => {
-        console.log("aa")
         if (account) {
             navigate('/projects')
-            console.log("aa")
         }
-    }, [account]);
+    }, [account, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
