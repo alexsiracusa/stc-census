@@ -3,8 +3,8 @@ import './CPMComponent.css';
 import { useSelector } from "react-redux";
 import SensibleScheduleButton from "./SensibleScheduleButton/SensibleScheduleButton.tsx";
 import CPMGraph from './CPMGraph/CPMGraph.tsx';
-import useFetchProjectTasks from "../../../../../hooks/useFetchProjectTasks.ts";
-import useFetchCPM from "../../../../../hooks/useFetchCPM.ts";
+import useFetchProjectTasks from "../../../../../../hooks/useFetchProjectTasks.ts";
+import useFetchCPM from "../../../../../../hooks/useFetchCPM.ts";
 
 interface CPMComponentProps {
     project_id: string;

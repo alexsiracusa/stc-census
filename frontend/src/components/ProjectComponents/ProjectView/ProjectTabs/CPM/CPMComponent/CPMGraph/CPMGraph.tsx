@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import './CPMGraph.css';
-import { Task } from "../../../../../../types/Task.ts";
-import { TaskStatus, TaskStatusInfo } from "../../../../../../types/TaskStatuses.ts";
-import { taskGraphStyles } from "./utils/taskGraphStyles.ts";
+import { Task } from "../../../../../../../types/Task.ts";
+import { TaskStatus, TaskStatusInfo } from "../../../../../../../types/TaskStatuses.ts";
+import { taskGraphStyles } from "./taskGraphStyles.ts";
 import { useSelector } from 'react-redux';
 
 cytoscape.use(dagre);

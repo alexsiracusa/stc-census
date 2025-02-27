@@ -1,6 +1,6 @@
 import './CPM.css';
 import TabProps from "../TabProps";
-import CPMComponent from './CPMComponent';
+import CPMComponent from './CPMComponent/CPMComponent.tsx';
 
 const CPM = (props: TabProps) => {
     return (
