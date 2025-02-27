@@ -88,15 +88,20 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
     const handleTaskSave = async (taskDetails: { name: string }) => {
         if (selectedDate) {
-             createTask(currentProjectId, {
+            const adjustedDate = new Date(selectedDate);
+
+            adjustedDate.setHours(adjustedDate.getHours() + 24);
+
+            createTask(currentProjectId, {
                 name: taskDetails.name,
-                target_start_date: selectedDate.toISOString(),
-                target_completion_date: selectedDate.toISOString(),
+                target_start_date: adjustedDate.toISOString(),
+                target_completion_date: adjustedDate.toISOString(),
             });
             setShowTaskForm(false);
             setSelectedDate(null);
         }
     };
+
 
     const toggleTaskSelection = (taskId: number) => {
         if (selectedTasks.has(taskId)) {
