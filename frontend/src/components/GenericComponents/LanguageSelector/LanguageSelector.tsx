@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import "./LanguageSelector.css";
+import useOutsideAlerter from "../../../hooks/useOutsideAlerter.ts";
 
 const LanguageSelector: React.FC = () => {
     const { i18n } = useTranslation();
     const [language, setLanguage] = useState(i18n.language);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef(null);
+    useOutsideAlerter(dropdownRef, () => {setIsDropdownOpen(false)});
 
     const changeLanguage = (lang: string) => {
         i18n.changeLanguage(lang);
@@ -14,23 +16,6 @@ const LanguageSelector: React.FC = () => {
         setIsDropdownOpen(false);
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsDropdownOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        if (isDropdownOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        } else {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isDropdownOpen]);
 
     return (
         <div className="language-selector" ref={dropdownRef}>
