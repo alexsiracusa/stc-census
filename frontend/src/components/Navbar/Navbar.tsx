@@ -3,30 +3,19 @@ import Logo from '../../assets/STC.png';
 import LanguageSelector from '../GenericComponents/LanguageSelector/LanguageSelector.tsx';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router";
 import ProfileDropdown from "./ProfileDropdown/ProfileDropdown.tsx";
-import {Link} from "react-router";
 
-type NavbarProps = {
-    onLogout: () => void;
-};
-
-const Navbar: React.FC<NavbarProps> = ({onLogout}) => {
+const Navbar: React.FC = () => {
     const { t } = useTranslation();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const navigate = useNavigate();
 
     const handleClickOutside = (event: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsDropdownOpen(false);
         }
     };
-
-    const handleLogout = () => {
-        onLogout();
-        navigate('/login');
-    }
 
     useEffect(() => {
         if (isDropdownOpen) {
