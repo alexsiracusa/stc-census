@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import useLogin from "../../hooks/useLogin.ts";
-import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Login = () => {
-    const {login, loading, error, data} = useLogin()
+    const { login, loading, error, data } = useLogin()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [displayError, setError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     const account = useSelector((state) => state.accounts.user)
     const navigate = useNavigate()
@@ -35,6 +36,9 @@ const Login = () => {
         login(email, password)
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div className='login-container'>
@@ -57,12 +61,30 @@ const Login = () => {
                     <div className="form-group">
                         <label htmlFor="password">Password:</label>
                         <input
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            style={{ 
+                                position: 'absolute', 
+                                right: '500px', 
+                                top: '55.5%',
+                                width: '50px',
+                                transform: 'translateY(-50%)',
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '1.5rem',
+                             }}
+                        >
+                            {showPassword ? '🙈' : '👁️'}
+                        </button>
                     </div>
                     <button type="submit" disabled={loading}>
                         {loading ? "Logging in..." : "Login"}
