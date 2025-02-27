@@ -46,11 +46,6 @@
     text-overflow: ellipsis;
 }
 
-.calendar-container .calendar-grid .other-month {
-    background-color: #fafafa;
-    color: #bbb;
-}
-
 .calendar-container .calendar-grid .day-box .day-num {
     display: flex;
     justify-content: center;
@@ -69,6 +64,10 @@
 .calendar-container .calendar-grid .day-box .day-num.today {
     background-color: #003366;
     color: white;
+}
+
+.calendar-container .calendar-grid .other-mon {
+    background-color: #f5f5f5;
 }
 
 .calendar-container .calendar-grid .day-box .event-list {

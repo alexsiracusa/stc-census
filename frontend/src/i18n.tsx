@@ -57,25 +57,10 @@ i18n
                             nextMonth: 'Next Month',
                             nextYear: 'Next Year',
                         },
-                        eventForm: {
-                            defaultTitle: '(No title)',
-                            endDateError: 'End date cannot be before the start date.',
-                            titlePlaceholder: 'Add title',
-                            startDate: 'Start date',
-                            endDate: 'End date',
-                            notePlaceholder: 'Add note',
-                            saveButton: 'Save',
-                            locale: 'en-US',
-                            noNote: '',
-                            note: 'Note',
-                            status: 'Status',
-                        },
-                        eventPopup: {
-                            edit: "Edit",
-                            delete: "Delete",
-                            email: "Email",
-                            close: "Close",
-                            note: "Note"
+                        taskForm: {
+                            createTask: 'Create Task',
+                            taskName: 'Task Name',
+                            save: 'Save',
                         },
                         months: {
                             january: 'January',
@@ -219,26 +204,12 @@ i18n
                             previous: '上一页',
                             next: '下一页',
                         },
-                        eventForm: {
-                            defaultTitle: '(无标题)',
-                            endDateError: '结束日期不能早于开始日期。',
-                            titlePlaceholder: '添加标题',
-                            startDate: '开始日期',
-                            endDate: '结束日期',
-                            notePlaceholder: '添加注释',
-                            saveButton: '保存',
-                            locale: 'zh-CN',
-                            noNote: '',
-                            note: '笔记',
-                            status: '地位',
+                        taskForm: {
+                            createTask: '创建任务',
+                            taskName: '任务名称',
+                            save: '保存',
                         },
-                        eventPopup: {
-                            edit: "编辑",
-                            delete: "删除",
-                            email: "邮件",
-                            close: "关闭",
-                            note: "笔记",
-                        },
+
                         months: {
                             january: '一月',
                             february: '二月',

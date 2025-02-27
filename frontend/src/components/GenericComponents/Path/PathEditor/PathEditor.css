@@ -1,17 +1,33 @@
 
-.project-path .sub-project-row {
-    text-align: left;
-    padding: 0.2em 0.5em;
-    width: 12em;
+.project-path {
+    .sub-project-dropdown-container {
+        max-height: 12.5em;
+        overflow-y: scroll;
+    }
+
+    .sub-project-row {
+        text-align: left;
+        padding: 0.2em 0.5em;
+        width: 12em;
+        height: 1.5em;
+
+        p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    button {
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+    }
+
+    button:hover {
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
 }
 
-.project-path button:hover {
-    background-color: transparent;
-    text-decoration: underline;
-}
-
-.project-path button {
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-}

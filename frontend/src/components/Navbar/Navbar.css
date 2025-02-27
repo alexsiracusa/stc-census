@@ -82,17 +82,3 @@
     min-width: 1rem;
     padding: 0.5rem 0;
 }
-
-.navbar .dropdown-item {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    text-align: left;
-    color: #242424;
-    transition: background-color 0.2s;
-    display: block;
-}
-
-.navbar .dropdown-item:hover {
-    background-color: #f2f2f2;
-}

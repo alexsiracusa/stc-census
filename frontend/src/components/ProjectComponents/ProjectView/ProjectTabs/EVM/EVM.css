@@ -1,33 +1,45 @@
+
 .evm {
     font-family: Arial, sans-serif;
     overflow-y: auto;
+
+    .chart-container {
+        height: 40em;
+        overflow-y: auto;
+        margin-bottom: 2em;
+        border: 1px solid #ccc;
+        background-color: #fff;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .evm-metrics-table {
+        width: 10em;
+        border-collapse: collapse;
+    }
+
+    .evm-metrics-table th,
+    .evm-metrics-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .evm-metrics-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
 }
 
-.chart-container {
-    height: 40em;
-    overflow-y: auto;
-    margin-bottom: 2em;
-    border: 1px solid #ccc;
-    background-color: #fff;
+.evm {
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
-.table-container {
-    overflow-x: auto;
+/* Make the scrollbar background transparent */
+.evm::-webkit-scrollbar-track {
+    background-color: transparent; /* Ensure the track is transparent */
 }
 
-.evm-metrics-table {
-    width: 10em;
-    border-collapse: collapse;
-}
 
-.evm-metrics-table th,
-.evm-metrics-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.evm-metrics-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}

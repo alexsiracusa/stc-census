@@ -21,7 +21,7 @@ const TaskRow = (props: TaskRowProps) => {
     const {updateTask, loading, error, data} = useUpdateTask();
 
     if (task === undefined) {
-        return <></>
+        return <div className='task-row'>Loading</div>
     }
 
     const isOverdue = () => {

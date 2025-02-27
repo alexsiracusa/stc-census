@@ -153,6 +153,7 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
             padding: {
                 top: 30,
                 right: 40,
+                left: 40,
                 bottom: 40,
             },
         },

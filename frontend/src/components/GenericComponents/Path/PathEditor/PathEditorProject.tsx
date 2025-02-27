@@ -20,7 +20,7 @@ const PathEditorProject = (props: PathEditorProjectProps) => {
         <DropdownPicker
             icon={(<p>{props.project_name}</p>)}
             buttonClassName='link'
-            contentClassName=''
+            contentClassName='sub-project-dropdown-container'
             containerAlignment='flex-start'
             contentAlignment='flex-start'
             title=''

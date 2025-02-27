@@ -21,7 +21,7 @@ const ProjectRow = (props: ProjectRowProps) => {
     const { updateProject } = useUpdateProject();
 
     if (error) return <p>Error: {error.toString()}</p>;
-    if (loading || project === undefined) return <p>Loading</p>;
+    if (project === undefined) return <div className="project-row">Loading</div>;
 
     return (
         <div className="project-row">

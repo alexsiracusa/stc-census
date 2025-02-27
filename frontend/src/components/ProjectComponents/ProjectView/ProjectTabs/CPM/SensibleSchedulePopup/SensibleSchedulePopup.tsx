@@ -1,8 +1,9 @@
+import "./SensibleSchedulePopup.css";
+
 import React, { useState } from "react";
 import { format } from "date-fns";
 import SimpleDatePicker from "../../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker";
 import Popup from "../../../../../GenericComponents/Popup/Popup";
-import "./SensibleSchedulePopup.css";
 
 interface SensibleSchedulePopupProps {
     onClose: () => void;
