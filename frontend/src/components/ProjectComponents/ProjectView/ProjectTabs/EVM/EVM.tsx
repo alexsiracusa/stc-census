@@ -1,10 +1,11 @@
 import './EVM.css';
 import { useTranslation } from 'react-i18next';
 import TabProps from "../TabProps";
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Graph from "./utils/Graph.tsx";
 import { getCostChartOptions } from "./utils/costChartConfig.ts";
 import { getIndexChartOptions } from "./utils/indexChartConfig.ts";
+import useFetchEVM from "../../../../../hooks/useFetchEVM.ts";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -27,28 +28,6 @@ ChartJS.register(
     Legend,
     annotationPlugin
 );
-
-const useFetchEvmData = (projectId: number): [any, boolean] => {
-    const [evmData, setEvmData] = useState<any>({});
-    const [loading, setLoading] = useState(true);
-    const host = import.meta.env.VITE_BACKEND_HOST;
-
-    useEffect(() => {
-        setLoading(true);
-        fetch(`${host}/project/${projectId}/evm`)
-            .then(response => response.json())
-            .then(json => {
-                setEvmData(json);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error(error);
-                setLoading(false);
-            });
-    }, [projectId, host]);
-
-    return [evmData, loading];
-};
 
 // Custom mapping of keys to display names
 const metricDisplayNames: Record<string, string> = {
@@ -78,40 +57,50 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
 const EVM = (props: TabProps) => {
     const { t } = useTranslation();
     const projectId = Number(props.project_id);
-    const [evmData, evmLoading] = useFetchEvmData(projectId);
+    const { loading: evmLoading, error: evmError } = useFetchEVM(projectId);
+    const projectEvmData = useSelector((state: any) => state.projects.byId[projectId]);
 
     if (evmLoading) {
         return <div className="evm">Loading EVM data...</div>;
     }
 
-    if (!evmData.evm) {
+    if (evmError) {
+        return <div className="evm">
+            Error loading EVM data
+            <div className="error-message">{evmError.toString()}</div>
+        </div>;
+    }
+
+    if (!projectEvmData || !projectEvmData.evm) {
         return <div className="evm">No EVM data available.</div>;
     }
 
+    const evmData = projectEvmData.evm;
+
     // Cost-related arrays
-    const plannedValue = evmData.evm.planned_value || [];
-    const earnedValue = evmData.evm.earned_value || [];
-    const actualCost = evmData.evm.actual_cost || [];
+    const plannedValue = evmData.planned_value || [];
+    const earnedValue = evmData.earned_value || [];
+    const actualCost = evmData.actual_cost || [];
 
     // New index/percentage arrays from the response
-    const scheduleVarianceArray = evmData.evm.schedule_variance_percent_in_decimal || [];
-    const costPerformanceArray = evmData.evm.cost_performance_index || [];
-    const timeVarianceArray = evmData.evm.time_variance_percent_in_decimal || [];
+    const scheduleVarianceArray = evmData.schedule_variance_percent_in_decimal || [];
+    const costPerformanceArray = evmData.cost_performance_index || [];
+    const timeVarianceArray = evmData.time_variance_percent_in_decimal || [];
 
     // Get dates from the planned value (used for the cost chart)
     const dates = plannedValue.map((pair: [string, number]) => pair[0]);
 
-    // Latest date from EVM metrics; used as cutoff for “done” entries
-    const actualDate = evmData.evm.metrics.date_of_latest_done_task || '';
+    // Latest date from EVM metrics; used as cutoff for "done" entries
+    const actualDate = evmData.metrics.date_of_latest_done_task || '';
 
     // Remove index metrics from the table. (Assuming
-    // the remaining metrics in evmData.evm.metrics should be shown.)
+    // the remaining metrics in evmData.metrics should be shown.)
     const {
         schedule_variance_percent,
         cost_performance_index,
         time_variance_percent,
         ...otherMetrics
-    } = evmData.evm.metrics;
+    } = evmData.metrics;
 
     // Filter out earned and actual cost values up to the actualDate
     const earnedCosts = earnedValue.map((pair: [string, number]) =>
@@ -131,7 +120,6 @@ const EVM = (props: TabProps) => {
                 ? dates[dates.length - 1]
                 : actualDate;
     }
-    const actualIndex = dates.indexOf(verticalLineDate);
 
     // Build annotations for the cost chart.
     // Only the vertical line for "Actual Time" is retained.
@@ -217,7 +205,7 @@ const EVM = (props: TabProps) => {
             },
             {
                 label: t('Cost Performance Index (%)'),
-                // Multiply by 100 so it’s on the same percent scale as the others.
+                // Multiply by 100 so it's on the same percent scale as the others.
                 data: costPerformanceValues.map((val: number) => val * 100),
                 borderColor: '#4D96FF',
                 tension: 0.0,

@@ -195,6 +195,16 @@ export const projectSlice = createSlice({
             state.byId[projectId].cycleInfo = json.cycleInfo;
             state.byId[projectId].criticalPathLength = json.criticalPathLength;
         },
+        setEVM: (state, action) => {
+            const json = action.payload;
+            const projectId = json.id;
+            // Create a placeholder for the project if it doesn't already exist.
+            if (!state.byId[projectId]) {
+                state.byId[projectId] = {id: projectId};
+            }
+            // Save the EVM-related data.
+            state.byId[projectId].evm = json.evm;
+        },
     }
 });
 
@@ -212,6 +222,7 @@ export const {
     setTasks,
     setAllTasks,
     setCPM,
+    setEVM
 } = projectSlice.actions;
 
 export default projectSlice.reducer;
