@@ -32,22 +32,21 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     const [allEventsDate, setAllEventsDate] = useState<Date | null>(null);
     const [allEventsForDate, setAllEventsForDate] = useState<Task[]>([]);
     const [showTaskForm, setShowTaskForm] = useState(false);
-    const { createTask, loading, error } = useCreateTask();
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const { createTask } = useCreateTask();
+    const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows === 6 ? 3 : 3);
+        setMaxEventsPerDay(rows >= 6 ? 3 : 2);
     }, [calendarDays]);
 
     const openAllEvents = (date: Date) => {
-        const filteredEvents = events.filter((event) =>
+        const filteredEvents = events.filter(event =>
             isStartOrEndDate(date, event.startDate, event.endDate)
         );
 
-        if (filteredEvents.length === 0) {
-            return;
-        }
+        if (filteredEvents.length === 0) return;
 
         const tasksForPopup: Task[] = filteredEvents.map(event => ({
             id: Number(event.id),
@@ -84,18 +83,28 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
     const handleCellClick = (date: Date) => {
         setSelectedDate(date);
         setShowTaskForm(true);
+        setSelectedTasks(new Set());
     };
 
     const handleTaskSave = async (taskDetails: { name: string }) => {
         if (selectedDate) {
-            createTask(currentProjectId, {
+             createTask(currentProjectId, {
                 name: taskDetails.name,
                 target_start_date: selectedDate.toISOString(),
-                target_completion_date: selectedDate.toISOString()
+                target_completion_date: selectedDate.toISOString(),
             });
             setShowTaskForm(false);
             setSelectedDate(null);
         }
+    };
+
+    const toggleTaskSelection = (taskId: number) => {
+        if (selectedTasks.has(taskId)) {
+            selectedTasks.delete(taskId);
+        } else {
+            selectedTasks.add(taskId);
+        }
+        setSelectedTasks(new Set(selectedTasks));
     };
 
     return (
@@ -112,9 +121,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     {calendarDays.map(({ date, isCurrentMonth }, index) => (
                         <div
                             key={index}
-                            className={`day-box ${isCurrentMonth ? "" : "other-month"} ${
-                                isToday(date) ? "today" : ""
-                            }`}
+                            className={`day-box ${isCurrentMonth ? "" : "other-month"} ${isToday(date) ? "today" : ""}`}
                             onClick={() => handleCellClick(date)}
                         >
                             <div className={`day-num ${isToday(date) ? "today" : ""}`}>
@@ -122,11 +129,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                             </div>
                             <div className="event-list">
                                 {events
-                                    .filter((event) =>
-                                        isStartOrEndDate(date, event.startDate, event.endDate)
-                                    )
+                                    .filter(event => isStartOrEndDate(date, event.startDate, event.endDate))
                                     .slice(0, maxEventsPerDay)
-                                    .map((event) => (
+                                    .map(event => (
                                         <TaskPopup
                                             key={event.id}
                                             project_id={currentProjectId}
@@ -144,9 +149,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                             </div>
                                         </TaskPopup>
                                     ))}
-                                {events.filter((event) =>
-                                    isStartOrEndDate(date, event.startDate, event.endDate)
-                                ).length > maxEventsPerDay && (
+                                {events.filter(event => isStartOrEndDate(date, event.startDate, event.endDate)).length > maxEventsPerDay && (
                                     <button
                                         className="more-events"
                                         onClick={(e) => {
@@ -154,11 +157,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                             openAllEvents(date);
                                         }}
                                     >
-                                        {`+ ${events.filter((event) =>
-                                            isStartOrEndDate(date, event.startDate, event.endDate)
-                                        ).length - maxEventsPerDay} ${t(
-                                            "calendar.calendarGrid.more"
-                                        )}`}
+                                        {`+ ${events.filter(event => isStartOrEndDate(date, event.startDate, event.endDate)).length - maxEventsPerDay} ${t("calendar.calendarGrid.more")}`}
                                     </button>
                                 )}
                             </div>
@@ -166,12 +165,21 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     ))}
                 </div>
                 {showTaskForm && (
-                    <TaskForm
-                        project_id={currentProjectId}
-                        task_id={1}
-                        onClose={() => setShowTaskForm(false)}
-                        onSave={handleTaskSave}
-                    />
+                    <ul>
+                        {events.map((task) => (
+                            <li key={task.id}>
+                                <TaskForm
+                                    project_id={currentProjectId}
+                                    task_id={task.id}
+                                    onClose={() => setShowTaskForm(false)}
+                                    onSave={handleTaskSave}
+                                />
+                                <button onClick={() => toggleTaskSelection(task.id)}>
+                                    {selectedTasks.has(task.id) ? "Deselect" : "Select"}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 )}
                 {allEventsDate && allEventsForDate.length > 0 && (
                     <AllEventsPopup

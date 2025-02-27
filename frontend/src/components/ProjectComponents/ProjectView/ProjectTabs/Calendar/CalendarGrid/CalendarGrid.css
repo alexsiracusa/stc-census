@@ -46,11 +46,6 @@
     text-overflow: ellipsis;
 }
 
-.calendar-container .calendar-grid .other-month {
-    background-color: #fafafa;
-    color: #bbb;
-}
-
 .calendar-container .calendar-grid .day-box .day-num {
     display: flex;
     justify-content: center;
