@@ -3,7 +3,7 @@ import './CPM.css';
 import { useSelector } from "react-redux";
 import TabProps from "../TabProps";
 import SensibleScheduleButton from "./SensibleScheduleButton/SensibleScheduleButton.tsx";
-import CPMGraph from './TaskGraph/CPMGraph.tsx';
+import CPMGraph from './CPMGraph/CPMGraph.tsx';
 import useFetchProjectTasks from "../../../../../hooks/useFetchProjectTasks.ts";
 import useFetchCPM from "../../../../../hooks/useFetchCPM.ts";
 
