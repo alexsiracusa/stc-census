@@ -91,7 +91,7 @@ const EVM = (props: TabProps) => {
     const dates = plannedValue.map((pair: [string, number]) => pair[0]);
 
     // Latest date from EVM metrics; used as cutoff for "done" entries
-    const actualDate = evmData.metrics.date_of_latest_done_task || '';
+    const actualDate = evmData.metrics.actual_time || '';
 
     // Remove index metrics from the table. (Assuming
     // the remaining metrics in evmData.metrics should be shown.)
@@ -102,32 +102,50 @@ const EVM = (props: TabProps) => {
         ...otherMetrics
     } = evmData.metrics;
 
+    // Determine if the vertical line should be displayed
+    const determineVerticalLineVisibility = (actualDate: string, dates: string[]) => {
+        if (!dates.length || !actualDate) {
+            return { show: false };
+        }
+
+        // Check if actual date is outside the range of chart dates
+        const firstDate = new Date(dates[0]);
+        const lastDate = new Date(dates[dates.length - 1]);
+        const actualDateObj = new Date(actualDate);
+
+        // If actual date is before or after the date range, don't show the line
+        if (actualDateObj < firstDate || actualDateObj > lastDate) {
+            return { show: false };
+        }
+
+        // Otherwise, show the line at the actual date
+        return { show: true, date: actualDate };
+    };
+
+    const lineVisibility = determineVerticalLineVisibility(actualDate, dates);
+
     // Filter out earned and actual cost values up to the actualDate
-    const earnedCosts = earnedValue.map((pair: [string, number]) =>
-        pair[0] <= actualDate ? pair[1] : null
-    );
-    const actualCosts = actualCost.map((pair: [string, number]) =>
-        pair[0] <= actualDate ? pair[1] : null
-    );
+    const earnedCosts = earnedValue.map((pair: [string, number]) => {
+        const dateObj = new Date(pair[0]);
+        const actualDateObj = new Date(actualDate);
+        return dateObj <= actualDateObj ? pair[1] : null;
+    });
+
+    const actualCosts = actualCost.map((pair: [string, number]) => {
+        const dateObj = new Date(pair[0]);
+        const actualDateObj = new Date(actualDate);
+        return dateObj <= actualDateObj ? pair[1] : null;
+    });
+
     const plannedCosts = plannedValue.map((pair: [string, number]) => pair[1]);
 
-    // Determine vertical line date for annotations
-    let verticalLineDate = actualDate;
-    if (dates.length) {
-        verticalLineDate = actualDate < dates[0]
-            ? dates[0]
-            : actualDate > dates[dates.length - 1]
-                ? dates[dates.length - 1]
-                : actualDate;
-    }
-
     // Build annotations for the cost chart.
-    // Only the vertical line for "Actual Time" is retained.
-    const annotations: any = {
+    // Only show the vertical line if actual date is within the chart date range
+    const annotations: any = lineVisibility.show ? {
         verticalLine: {
             type: 'line',
             scaleID: 'x',
-            value: verticalLineDate,
+            value: lineVisibility.date,
             borderColor: 'grey',
             borderWidth: 2,
             borderDash: [10, 5],
@@ -137,7 +155,7 @@ const EVM = (props: TabProps) => {
                 position: 'start'
             }
         }
-    };
+    } : {};
 
     // Formatting for metric values shown in the table.
     const formatMetricValue = (key: string, value: any) => {

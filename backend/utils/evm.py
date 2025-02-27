@@ -4,6 +4,12 @@ from pandas.tseries.offsets import DateOffset
 
 
 def compute_evm(df: pd.DataFrame, current_day: datetime = None):
+    # Set current_day to today if not provided
+    if current_day is None:
+        current_day = datetime.now()
+    else:
+        current_day = pd.to_datetime(current_day)
+
     # Rename columns for consistency
     df.columns = ['status',
                   'actual_cost', 'expected_cost',
@@ -41,20 +47,20 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     # Determine done tasks and latest_done_date
     done_tasks = df[~df['actual_completion_date'].isna()]
     if done_tasks.empty:
-        latest_done_date = pd.to_datetime(current_day) if current_day else pd.to_datetime(datetime.now().date())
+        latest_done_date = current_day
     else:
         latest_done_date = done_tasks['actual_completion_date'].max()
 
-    # Adjust date range to include latest_done_date and target dates
+    # Adjust date range to include current_day and target dates
     start_date = df['target_start_date'].min()
     initial_end_date = df['target_completion_date'].max()
-    end_date = max(initial_end_date, latest_done_date) if not pd.isnull(initial_end_date) else latest_done_date
+    end_date = max(initial_end_date, current_day) if not pd.isnull(initial_end_date) else current_day
 
     # Handle NaT cases for start_date and end_date
     if pd.isnull(start_date):
         start_date = df['actual_start_date'].min()
     if pd.isnull(start_date) or pd.isnull(end_date):
-        dates = pd.date_range(start=latest_done_date, end=latest_done_date)  # Single date fallback
+        dates = pd.date_range(start=current_day, end=current_day)  # Single date fallback
     else:
         dates = pd.date_range(start=start_date, end=end_date)
 
@@ -81,13 +87,13 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
                 if duration != 0:
                     pv += (days_elapsed / duration) * task['expected_cost']
 
-        # Earned Value (EV)
+        # Earned Value (EV) - remains constant after latest_done_date
         ev = 0.0
         for _, task in df.iterrows():
             if not pd.isnull(task['actual_completion_date']) and task['actual_completion_date'] <= date:
                 ev += task['expected_cost']
 
-        # Actual Cost (AC)
+        # Actual Cost (AC) - remains constant after latest_done_date
         ac_value = 0.0
         for _, task in df.iterrows():
             if not pd.isnull(task['actual_completion_date']) and task['actual_completion_date'] <= date:
@@ -125,6 +131,9 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     if not done_tasks.empty:
         milestone_dates.add(latest_done_date.strftime('%Y-%m-%d'))
 
+    # Add current_day to milestone dates
+    milestone_dates.add(current_day.strftime('%Y-%m-%d'))
+
     # Prepare PV, EV, and Actual Cost lists for milestone dates
     filtered_planned = [(date.strftime('%Y-%m-%d'), pv) for date, pv, _ in pv_ev_list
                         if date.strftime('%Y-%m-%d') in milestone_dates]
@@ -133,28 +142,28 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     filtered_actual = [(date.strftime('%Y-%m-%d'), cost) for date, cost in actual_cost_list
                        if date.strftime('%Y-%m-%d') in milestone_dates]
 
-    # Filter performance metrics to only include milestone dates and dates <= latest_done_date.
+    # Filter performance metrics to only include milestone dates and dates <= current_day
     sv_pct_filtered = [
         (date.strftime('%Y-%m-%d'), round(sv_amt, 2))
         for date, sv_amt in sv_pct_list
-        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= latest_done_date)
+        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= current_day)
     ]
     cpi_filtered = [
         (date.strftime('%Y-%m-%d'), round(cpi_val, 2))
         for date, cpi_val in cpi_list
-        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= latest_done_date)
+        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= current_day)
     ]
     tv_pct_filtered = [
         (date.strftime('%Y-%m-%d'), round(tv_val, 2))
         for date, tv_val in tv_pct_list
-        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= latest_done_date)
+        if (date.strftime('%Y-%m-%d') in milestone_dates) and (date <= current_day)
     ]
 
-    # Calculate actual_time
-    if pd.isnull(project_start_date) or pd.isnull(latest_done_date):
+    # Calculate actual_time using current_day instead of latest_done_date
+    if pd.isnull(project_start_date):
         actual_time = 0
     else:
-        actual_time = (latest_done_date - project_start_date).days + 1
+        actual_time = (current_day - project_start_date).days + 1
 
     # Aggregated metrics
     ac_aggregated = done_tasks['actual_cost'].sum() if not done_tasks.empty else 0.0
@@ -165,10 +174,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         'date_of_latest_done_task': latest_done_date.strftime('%Y-%m-%d') if not done_tasks.empty else None,
         'budget_at_completion': round(bac, 2),
     }
-
-    # Handle current_day default
-    if current_day is None:
-        current_day = datetime.now()
 
     return {
         'planned_value': filtered_planned,
