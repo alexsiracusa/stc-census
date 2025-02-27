@@ -171,7 +171,10 @@ export const projectSlice = createSlice({
             all_tasks.forEach((task) => {
                 projectSlice.caseReducers.setTask(state, {payload: {json: {task: task}}})
             });
-            state.byId[project_id].all_tasks = all_tasks.map((task) => task.id)
+            state.byId[project_id].all_tasks = all_tasks.map((task) => ({
+                project_id: task.project_id,
+                task_id: task.id
+            }))
         },
         setCPM: (state, action) => {
             const json = action.payload.json;
