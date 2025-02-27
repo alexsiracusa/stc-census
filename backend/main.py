@@ -60,11 +60,14 @@ async def session_middleware(request: Request, call_next):
 async def authentication_middleware(request: Request, call_next):
     try:
         account_info = await admin.authenticate(request)
+        session_id = request.cookies.get('session_id')
         request.scope["auth"] = ["user"]
         request.scope["user"] = account_info
+        request.scope["session"] = session_id
     except InvalidCredentials:
         request.scope["auth"] = ["anonymous"]
         request.scope["user"] = None
+        request.scope["session"] = None
 
     response = await call_next(request)
     return response

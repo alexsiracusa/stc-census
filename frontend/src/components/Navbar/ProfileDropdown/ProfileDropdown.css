@@ -1,14 +1,19 @@
-.profile-dropdown .dropdown-item {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    text-align: center;
-    color: #242424;
-    transition: background-color 0.2s;
-    display: block;
-    width: 5.5rem;
-}
+.profile-dropdown {
+    .dropdown-item {
+        display: block;
+        padding: 0.5rem 1rem;
+        width: 5.5rem;
+        font-size: 1rem;
 
-.profile-dropdown .dropdown-item:hover {
-    background-color: #f2f2f2;
+        cursor: pointer;
+        text-align: center;
+
+        border: none;
+        background-color: transparent;
+        color: #242424;
+    }
+
+    .dropdown-item:hover {
+        background-color: #00000020;
+    }
 }

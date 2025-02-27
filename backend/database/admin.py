@@ -83,13 +83,21 @@ async def login(account: AccountLogin, host):
     }
 
 
+async def logout(session_id):
+    session_id_hash = util.hash_sha3_256(session_id)
+
+    await client.postgres_client.execute("""
+        DELETE FROM Session
+        WHERE id = $1
+    """, session_id_hash)
+
+
 async def authenticate(request: Request):
     session_id = request.cookies.get('session_id')
     if not session_id:
         raise InvalidCredentials()
 
     session_id_hash = util.hash_sha3_256(session_id)
-    # print(session_id_hash, session_id)
 
     account_info = await client.postgres_client.fetch_row("""
         WITH Account_Session AS (

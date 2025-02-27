@@ -48,13 +48,12 @@ const ProfileDropdown = () => {
                     className="dropdown-menu"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <a
-                        href="#"
+                    <button
                         onClick={handleLogout}
                         className="dropdown-item"
                     >
                         {t("navbar.logout", "Logout")}
-                    </a>
+                    </button>
                 </div>
             )}
         </div>

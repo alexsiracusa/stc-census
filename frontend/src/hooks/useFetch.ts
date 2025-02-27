@@ -32,7 +32,7 @@ const useFetch = (url, actionCreator, options = {}) => {
 
                 setData(json); // Store the fetched data (optional)
                 if (actionCreator) {
-                    dispatch(actionCreator({json})); // Dispatch the Redux action with the fetched data
+                    dispatch(actionCreator(json)); // Dispatch the Redux action with the fetched data
                 }
             } catch (error) {
                 setError(error.message || "An error occurred");

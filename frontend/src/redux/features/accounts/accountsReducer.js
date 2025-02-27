@@ -32,13 +32,13 @@ export const accountSlice = createSlice({
     },
     reducers: {
         setAccounts: (state, action) => {
-            const accounts = action.payload.json
+            const accounts = action.payload
             accounts.forEach((account) => {
                 state.byId[`${account.id}`] = account
             })
         },
         setUser: (state, action) => {
-            state.user = action.payload.json
+            state.user = action.payload
         },
     }
 });

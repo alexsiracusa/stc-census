@@ -52,6 +52,27 @@ async def login(
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
+@router.post("/logout/")
+async def logout(
+    request: Request,
+    response: Response,
+):
+    try:
+        session_id = request.session
+        if session_id is None:
+            InvalidCredentials()
+
+        await admin.logout(session_id)
+        admin.set_session_cookie(response, None)
+
+        response.status_code = status.HTTP_200_OK
+        return {"message": "Logged out successfully"}
+
+    except InvalidCredentials:
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return {"error": "Invalid or expired session_id"}
+
+
 @router.get("/ping/")
 async def ping(
     request: Request,

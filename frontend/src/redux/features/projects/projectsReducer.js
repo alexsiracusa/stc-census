@@ -62,7 +62,7 @@ export const projectSlice = createSlice({
     },
     reducers: {
         addProject: (state, action) => {
-            const project = action.payload.json;
+            const project = action.payload;
             const oldProject = state.byId[`${project.id}`]
 
             // combine old project with new project
@@ -138,18 +138,18 @@ export const projectSlice = createSlice({
             })
         },
         setDashboard: (state, action) => {
-            const projects = action.payload.json;
+            const projects = action.payload;
 
             state.dashboard = projects.map((project) => project.id)
 
             projects.forEach((project) => {
                 projectSlice.caseReducers.addProject(state, {
-                    payload: {json: project}
+                    payload: project
                 })
             })
         },
         setTask: (state, action) => {
-            const task = action.payload.json
+            const task = action.payload
             const projectId = task.project_id;
             // Create a project placeholder if it doesn't exist.
             if (!state.byId[projectId]) {
@@ -161,15 +161,15 @@ export const projectSlice = createSlice({
             state.byId[projectId].byId[task.id] = task;
         },
         setTasks: (state, action) => {
-            const tasks = action.payload.json; // expecting an array of task objects
+            const tasks = action.payload; // expecting an array of task objects
             tasks.forEach((task) => {
-                projectSlice.caseReducers.setTask(state, {payload: {json: {task: task}}})
+                projectSlice.caseReducers.setTask(state, {payload: {task: task}})
             });
         },
         setAllTasks: (state, action) => {
-            const {project_id, all_tasks} = action.payload.json
+            const {project_id, all_tasks} = action.payload
             all_tasks.forEach((task) => {
-                projectSlice.caseReducers.setTask(state, {payload: {json: {task: task}}})
+                projectSlice.caseReducers.setTask(state, {payload: {task: task}})
             });
             state.byId[project_id].all_tasks = all_tasks.map((task) => ({
                 project_id: task.project_id,
@@ -177,7 +177,7 @@ export const projectSlice = createSlice({
             }))
         },
         setCPM: (state, action) => {
-            const json = action.payload.json;
+            const json = action.payload;
             const projectId = json.id;
             // Create a placeholder for the project if it doesn't already exist.
             if (!state.byId[projectId]) {
