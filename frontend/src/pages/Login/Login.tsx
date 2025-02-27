@@ -73,8 +73,9 @@ const Login = () => {
                             aria-label={showPassword ? 'Hide password' : 'Show password'}
                             style={{ 
                                 position: 'absolute', 
-                                right: '-110px', 
-                                top: '55.5%', 
+                                right: '500px', 
+                                top: '55.5%',
+                                width: '50px',
                                 transform: 'translateY(-50%)',
                                 background: 'none',
                                 border: 'none',
