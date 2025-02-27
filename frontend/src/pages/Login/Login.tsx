@@ -72,10 +72,11 @@ const Login = () => {
                             onClick={togglePasswordVisibility}
                             aria-label={showPassword ? 'Hide password' : 'Show password'}
                             style={{ 
-                                position: 'absolute', 
-                                right: '500px', 
-                                top: '55.5%',
-                                width: '50px',
+                                position: 'relative', 
+                                right: '-215px', 
+                                top: '-17px',
+                                width: '40px',
+                                padding: '0',
                                 transform: 'translateY(-50%)',
                                 background: 'none',
                                 border: 'none',
