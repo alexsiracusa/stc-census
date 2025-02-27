@@ -1,0 +1,48 @@
+.evm-component {
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+}
+
+.evm-component .chart-container {
+    height: 400px;
+    margin-bottom: 2em;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.evm-component .table-container {
+    overflow-x: auto;
+    margin-top: 2em;
+}
+
+.evm-component .evm-metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+}
+
+.evm-component .evm-metrics-table th,
+.evm-component .evm-metrics-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.evm-component .evm-metrics-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.evm-component {
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.evm-component::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.error-message {
+    color: red;
+    font-style: italic;
+    margin-top: 10px;
+}
