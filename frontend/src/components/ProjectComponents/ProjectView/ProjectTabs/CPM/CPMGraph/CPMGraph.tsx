@@ -46,9 +46,6 @@ const CPMGraph: React.FC<TaskGraphProps> = ({
 
     // Collect all relevant tasks (from the current project and from any other projects referenced in cpmData)
     const tasks: Task[] = [];
-
-    console.log(cpmData);
-    // Get tasks referenced in cpmData
     const relevantProjectIds = new Set<number>();
     cpmData.forEach(item => {
         relevantProjectIds.add(item.project_id);
