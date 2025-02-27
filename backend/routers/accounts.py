@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException, Response, status
-from pydantic import BaseModel
-from typing import List
+from fastapi import APIRouter, HTTPException, Response, Depends, status
+from ..database import admin
 import asyncpg
 
 from ..database import data
@@ -9,6 +8,7 @@ router = APIRouter(
     prefix="/accounts",
     tags=["accounts"],
     responses={404: {"description": "Not found"}},
+    dependencies=[Depends(admin.get_authenticated_user)],
 )
 
 

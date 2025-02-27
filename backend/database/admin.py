@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from fastapi import Request
+from fastapi import Request, HTTPException
 from datetime import datetime, timedelta, timezone
 import uuid
 
@@ -16,6 +16,7 @@ class AccountInfo(BaseModel):
     first_name: str
     last_name: str
     password: str
+
 
 class AccountLogin(BaseModel):
     email: str
@@ -117,6 +118,19 @@ async def authenticate(request: Request):
         raise InvalidCredentials()
 
     return account_info
+
+
+async def get_authenticated_user(request: Request):
+    try:
+        account_info = await authenticate(request)
+        session_id = request.cookies.get('session_id')
+
+        request.scope["auth"] = ["user"]
+        request.scope["user"] = account_info
+        request.scope["session"] = session_id
+        return account_info
+    except InvalidCredentials:
+        raise HTTPException(status_code=401, detail="You must be logged in to perform this action")
 
 
 def set_session_cookie(response, session_id):

@@ -1,10 +1,10 @@
-from fastapi import APIRouter, HTTPException, Response, status, Body
+from fastapi import APIRouter, HTTPException, Response, status, Body, Depends
 import pandas as pd
 import asyncpg
 from typing import Any, Optional
 from datetime import date
 
-from ..database import data
+from ..database import data, admin
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
@@ -14,6 +14,7 @@ router = APIRouter(
     prefix="/project",
     tags=["project"],
     responses={404: {"description": "Not found"}},
+    dependencies=[Depends(admin.get_authenticated_user)],
 )
 
 router.include_router(task_router)
@@ -145,10 +146,11 @@ async def get_cpm_analysis(project_id: int, response: Response):
 
 
 @router.get("/{project_id}/sensible_scheduling")
-async def get_sensible_scheduling(project_id: int,
-                                  wanted_start: Optional[date] = None,
-                                  wanted_end: Optional[date] = None,
-                                  response: Response = None):
+async def get_sensible_scheduling(
+        project_id: int,
+        wanted_start: Optional[date] = None,
+        wanted_end: Optional[date] = None,
+):
     try:
         params = {
             "wanted_start": wanted_start,

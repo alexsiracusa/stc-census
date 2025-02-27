@@ -1,13 +1,14 @@
-from fastapi import APIRouter, HTTPException, Response, Body, status
+from fastapi import APIRouter, HTTPException, Response, Body, Depends, status
 from typing import Any
 import asyncpg
 
-from ..database import data
+from ..database import data, admin
 
 router = APIRouter(
     prefix="/{project_id}/task",
     tags=["task"],
     responses={404: {"description": "Not found"}},
+    dependencies=[Depends(admin.get_authenticated_user)],
 )
 
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Response, Request, status
+from fastapi import APIRouter, HTTPException, Response, Request, Depends, status
 import asyncpg
 
 from ..database import AccountInfo, AccountLogin, InvalidCredentials, admin
@@ -75,11 +75,10 @@ async def logout(
 
 @router.get("/ping/")
 async def ping(
-    request: Request,
     response: Response,
+    account_info = Depends(admin.get_authenticated_user),
 ):
     try:
-        account_info = request.user
         if account_info is None:
             raise InvalidCredentials()
 
