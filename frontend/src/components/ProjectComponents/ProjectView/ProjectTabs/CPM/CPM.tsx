@@ -3,7 +3,7 @@ import './CPM.css';
 import { useSelector } from "react-redux";
 import TabProps from "../TabProps";
 import SensibleScheduleButton from "./SensibleScheduleButton/SensibleScheduleButton.tsx";
-import TaskGraph from './TaskGraph/TaskGraph.tsx';
+import CPMGraph from './TaskGraph/CPMGraph.tsx';
 import useFetchProjectTasks from "../../../../../hooks/useFetchProjectTasks.ts";
 import useFetchCPM from "../../../../../hooks/useFetchCPM.ts";
 
@@ -12,9 +12,6 @@ const CPM = (props: TabProps) => {
 
     const { loading: tasksLoading, error: tasksError } = useFetchProjectTasks(projectId);
     const { loading: cpmLoading, error: cpmError } = useFetchCPM(projectId);
-
-    const project = useSelector((state) => state.projects.byId[props.project_id]);
-    const tasks = Object.values(project.byId)
 
     const projectCpmData = useSelector((state: any) => state.projects.byId[projectId]);
 
@@ -51,8 +48,7 @@ const CPM = (props: TabProps) => {
                 <div className="critical-path-length">
                     Critical Path Length: {projectCpmData.criticalPathLength} days
                 </div>
-                <TaskGraph
-                    tasks={tasks}
+                <CPMGraph
                     currentProjectId={projectId}
                     cpmData={projectCpmData.cpm}
                     cycleInfo={projectCpmData.cycleInfo}
