@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import './TaskGraph.css';
+import './CPMGraph.css';
 import { Task } from "../../../../../../types/Task.ts";
 import { TaskStatus, TaskStatusInfo } from "../../../../../../types/TaskStatuses.ts";
 import { taskGraphStyles } from "./utils/taskGraphStyles.ts";
+import { useSelector } from 'react-redux';
 
 cytoscape.use(dagre);
 
@@ -26,21 +27,56 @@ interface TaskInCycle {
 
 interface TaskGraphProps {
     className?: string;
-    tasks?: Task[];
     currentProjectId?: number;
     cpmData?: CpmData[];
     cycleInfo?: TaskInCycle[];
 }
 
-const TaskGraph: React.FC<TaskGraphProps> = ({
+const CPMGraph: React.FC<TaskGraphProps> = ({
                                                  className = '',
-                                                 tasks = [],
                                                  currentProjectId,
                                                  cpmData = [],
                                                  cycleInfo = []
                                              }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
+
+    // Fetch tasks directly from Redux
+    const allProjects = useSelector((state: any) => state.projects.byId);
+
+    // Collect all relevant tasks (from the current project and from any other projects referenced in cpmData)
+    const tasks: Task[] = [];
+
+    console.log(cpmData);
+    // Get tasks referenced in cpmData
+    const relevantProjectIds = new Set<number>();
+    cpmData.forEach(item => {
+        relevantProjectIds.add(item.project_id);
+    });
+
+    // Add tasks from all relevant projects
+    relevantProjectIds.forEach(projectId => {
+        const project = allProjects[projectId];
+        if (project && project.byId) {
+            Object.values(project.byId).forEach((task: any) => {
+                tasks.push(task);
+            });
+        }
+    });
+
+    // If we have the current project's all_tasks array, we can also use that to ensure all tasks are included
+    if (currentProjectId && allProjects[currentProjectId]?.all_tasks) {
+        allProjects[currentProjectId].all_tasks.forEach((taskRef: any) => {
+            // Check if this task exists in any project and isn't already in our tasks array
+            const projectWithTask = allProjects[taskRef.project_id];
+            if (projectWithTask?.byId && projectWithTask.byId[taskRef.task_id]) {
+                const task = projectWithTask.byId[taskRef.task_id];
+                if (!tasks.some(t => t.id === task.id && t.project_id === task.project_id)) {
+                    tasks.push(task);
+                }
+            }
+        });
+    }
 
     // Format tooltip using the task info and corresponding CPM data.
     const formatTooltip = (task: Task, cpm: CpmData) => {
@@ -143,4 +179,4 @@ const TaskGraph: React.FC<TaskGraphProps> = ({
     );
 };
 
-export default TaskGraph;
+export default CPMGraph;
