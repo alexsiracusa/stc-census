@@ -149,8 +149,9 @@ export const projectSlice = createSlice({
             })
         },
         setTask: (state, action) => {
-            const task = action.payload
+            const task = action.payload;
             const projectId = task.project_id;
+
             // Create a project placeholder if it doesn't exist.
             if (!state.byId[projectId]) {
                 state.byId[projectId] = {id: projectId, byId: {}};
@@ -161,7 +162,7 @@ export const projectSlice = createSlice({
             state.byId[projectId].byId[task.id] = task;
         },
         setTasks: (state, action) => {
-            const tasks = action.payload; // expecting an array of task objects
+            const tasks = action.payload;
             tasks.forEach((task) => {
                 projectSlice.caseReducers.setTask(state, {payload: {task: task}})
             });
@@ -169,8 +170,14 @@ export const projectSlice = createSlice({
         setAllTasks: (state, action) => {
             const {project_id, all_tasks} = action.payload
             all_tasks.forEach((task) => {
-                projectSlice.caseReducers.setTask(state, {payload: {task: task}})
+                projectSlice.caseReducers.setTask(state, {payload: task})
             });
+
+            // Ensure the project exists before adding all_tasks
+            if (!state.byId[project_id]) {
+                state.byId[project_id] = {id: project_id, byId: {}};
+            }
+
             state.byId[project_id].all_tasks = all_tasks.map((task) => ({
                 project_id: task.project_id,
                 task_id: task.id
