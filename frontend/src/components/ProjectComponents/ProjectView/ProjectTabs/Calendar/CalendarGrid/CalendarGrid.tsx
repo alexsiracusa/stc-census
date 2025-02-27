@@ -38,7 +38,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
     useEffect(() => {
         const rows = Math.ceil(calendarDays.length / 7);
-        setMaxEventsPerDay(rows >= 6 ? 3 : 2);
+        setMaxEventsPerDay(rows >= 6 ? 3 : 3);
     }, [calendarDays]);
 
     const openAllEvents = (date: Date) => {
@@ -121,7 +121,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                     {calendarDays.map(({ date, isCurrentMonth }, index) => (
                         <div
                             key={index}
-                            className={`day-box ${isCurrentMonth ? "" : "other-month"} ${isToday(date) ? "today" : ""}`}
+                            className={`day-box ${isCurrentMonth ? "" : "other-mon"} ${isToday(date) ? "today" : ""}`}
                             onClick={() => handleCellClick(date)}
                         >
                             <div className={`day-num ${isToday(date) ? "today" : ""}`}>

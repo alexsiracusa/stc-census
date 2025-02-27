@@ -66,6 +66,10 @@
     color: white;
 }
 
+.calendar-container .calendar-grid .other-mon {
+    background-color: #f5f5f5;
+}
+
 .calendar-container .calendar-grid .day-box .event-list {
     display: flex;
     flex-direction: column;
