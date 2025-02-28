@@ -12,6 +12,10 @@
         color: black;
     }
 
+    .path-editor {
+        font-size: 0.85em;
+    }
+
     .task-depends-editor-row {
         display: flex;
         flex-direction: row;

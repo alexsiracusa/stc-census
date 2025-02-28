@@ -10,7 +10,7 @@ import {useTranslation} from "react-i18next";
 import PathEditor from "../../GenericComponents/Path/PathEditor/PathEditor.tsx";
 import {createSelector} from 'reselect';
 import useFetchProject from "../../../hooks/useFetchProject.ts";
-import TaskPopup from "../TaskPopup/TaskPopup.tsx";
+
 
 // Input selectors: These grab pieces of the state directly.
 const selectProjectsById = (state) => state.projects.byId;
@@ -64,7 +64,8 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
             {depends_on.length != 0 &&
                 <ul>
                     <div
-                        className='task-depends-editor-header task-field-header'>{t('taskDependsEditor.dependsOn') + ':'}</div>
+                        className='task-depends-editor-header task-field-header'>{t('taskDependsEditor.dependsOn') + ':'}
+                    </div>
                     {depends_on.length != 0 && depends_on.map((option) => (
                         <div
                             className='task-depends-editor-row remove-from-list'
@@ -92,7 +93,9 @@ const TaskDependsEditor = (props: TaskDependsEditorProps) => {
                 </ul>
             }
 
-            <PathEditor path={project.path} select={select}/>
+            <div className='path-editor'>
+                <PathEditor path={project.path} select={select}/>
+            </div>
 
             {options.length != 0 &&
                 <ul>
