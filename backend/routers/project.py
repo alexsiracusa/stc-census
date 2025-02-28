@@ -37,6 +37,34 @@ async def get_project(
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
 
 
+@router.get("/{project_id}/with-descendants")
+async def get_project_with_descendants_endpoint(
+        response: Response,
+        project_id: int
+):
+    """
+    Retrieves a project by ID along with all its descendant projects in a hierarchical structure.
+
+    Args:
+        response: FastAPI Response object
+        project_id: The ID of the top-level project to fetch
+
+    Returns:
+        A JSON object containing the project and all its descendants
+    """
+    try:
+        result = await data.get_project_with_descendants(project_id)
+
+        if not result:
+            raise HTTPException(status_code=404, detail="Project not found")
+
+        response.status_code = status.HTTP_200_OK
+        return result
+
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
+
+
 @router.put("/{project_id}/update")
 async def update_project(
     response: Response,

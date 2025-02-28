@@ -57,6 +57,42 @@ async def get_project_by_id(project_id):
     """, project_id)
 
 
+# basically, get_project_by_id but recursive to fetch the project and all its descendants
+async def get_project_with_descendants(project_id):
+    """
+    Fetches a project by ID including all of its descendant projects recursively.
+
+    Args:
+        project_id: The ID of the top-level project to fetch
+
+    Returns:
+        A dictionary containing the project and all its descendants in a nested structure
+    """
+    return await client.postgres_client.fetch_row("""
+        SELECT 
+            jsonb_build_object(
+                'project', (
+                    SELECT row_to_json(p) 
+                    FROM (SELECT * FROM Project_Node WHERE id = $1) AS p
+                ),
+                'descendants', (
+                    SELECT COALESCE(jsonb_agg(row_to_json(p)), '[]'::jsonb)
+                    FROM (
+                        SELECT * 
+                        FROM Project_Node
+                        WHERE id IN (
+                            SELECT unnest(children)
+                            FROM Project_Children
+                            WHERE id = $1
+                        )
+                        AND id != $1
+                        ORDER BY id
+                    ) AS p
+                )
+            ) AS result
+    """, project_id)
+
+
 async def get_all_project_tasks(project_id):
     return await client.postgres_client.fetch_row("""
         SELECT
