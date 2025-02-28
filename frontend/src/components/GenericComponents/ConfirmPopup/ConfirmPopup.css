@@ -42,5 +42,9 @@
         button.destructive {
             background-color: #cc1b0030;
         }
+
+        button.safe {
+            background-color: #4287f550;
+        }
     }
 }

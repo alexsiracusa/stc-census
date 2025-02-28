@@ -4,17 +4,18 @@ import React, {Children, PropsWithChildren, useState} from "react";
 import Popup from "../Popup/Popup.tsx";
 
 type ConfirmPopupProps = {
-    className: string,
+    className?: string,
+    title?: string,
     message: string
     left: {
         text: string,
         onPress: () => void,
-        type: 'neutral' | 'destructive'
+        type: 'neutral' | 'destructive' | 'safe'
     }
     right: {
         text: string,
         onPress: () => void,
-        type: 'neutral' | 'destructive'
+        type: 'neutral' | 'destructive' | 'safe'
     }
 }
 
@@ -30,9 +31,9 @@ const ConfirmPopup = (props: PropsWithChildren<ConfirmPopupProps>) => {
     return (
         <Popup
             icon={icon}
-            buttonClassName={props.className}
+            buttonClassName={props.className ?? ''}
             contentClassName='confirm-button-content'
-            title='Delete'
+            title={props.title ?? ''}
             isVisible={isVisible}
             setIsVisible={setIsVisible}
             transparentBackground={true}

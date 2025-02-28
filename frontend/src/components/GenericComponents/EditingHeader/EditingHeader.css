@@ -4,7 +4,7 @@
     align-items: center;
     gap: 0.25em;
 
-    .edit-button, .delete-button {
+    .edit-button, .delete-button, .archive-button {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -14,7 +14,7 @@
         border-radius: 3px;
 
         aspect-ratio: 1.0;
-        height: 1.5em;
+        height: 1.75em;
 
         cursor: pointer;
 
@@ -24,7 +24,7 @@
         }
     }
 
-    .edit-button:hover, .delete-button:hover {
+    .edit-button:hover, .delete-button:hover, .archive-button:hover {
         background-color: #00000020;
     }
 }

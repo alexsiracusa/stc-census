@@ -1,11 +1,13 @@
 import '../EditingHeader.css'
-import XMark from "../../../../assets/Icons/X.svg";
-import Edit from "../../../../assets/Icons/Edit.svg";
 import ConfirmPopup from "../../ConfirmPopup/ConfirmPopup.tsx";
-import Trash from "../../../../assets/Icons/Trash.svg";
 import {useState} from "react";
 import useDeleteProjects from "../../../../hooks/useDeleteProjects.ts";
 import {useTranslation} from "react-i18next";
+
+import XMark from "../../../../assets/Icons/X.svg";
+import Edit from "../../../../assets/Icons/Edit.svg";
+import Trash from "../../../../assets/Icons/Trash.svg";
+import Archive from "../../../../assets/Icons/Archive.svg"
 
 type ProjectEditingHeaderProps = {
     editing: boolean
@@ -36,29 +38,57 @@ const ProjectEditingHeader = (props: ProjectEditingHeaderProps) => {
             </button>
 
             {editing && (
-                <ConfirmPopup
-                    className='delete-button'
-                    message='Are you sure you want to delete all selected projects and related information? This cannot be undone. It is recommended to archive instead.'
-                    left={{
-                        text: 'Delete',
-                        onPress: () => {
-                            deleteProjects(Array.from(props.selected.values()))
-                            setEditing(false)
-                            props.setEditing(false)
-                        },
-                        type: 'destructive',
-                    }}
-                    right={{
-                        text: 'Cancel',
-                        onPress: () => {
-                            setEditing(false)
-                            props.setEditing(false)
-                        },
-                        type: 'neutral'
-                    }}
-                >
-                    <img src={Trash}/>
-                </ConfirmPopup>
+                <>
+                    <ConfirmPopup
+                        className='archive-button'
+                        title='Archive'
+                        message='Are you sure you want to archive all selected projects and related information?'
+                        left={{
+                            text: 'Archive',
+                            onPress: () => {
+                                // archive projects
+                                setEditing(false)
+                                props.setEditing(false)
+                            },
+                            type: 'safe',
+                        }}
+                        right={{
+                            text: 'Cancel',
+                            onPress: () => {
+                                setEditing(false)
+                                props.setEditing(false)
+                            },
+                            type: 'neutral'
+                        }}
+                    >
+                        <img src={Archive}/>
+                    </ConfirmPopup>
+
+                    <ConfirmPopup
+                        className='delete-button'
+                        title='Delete'
+                        message='Are you sure you want to delete all selected projects and related information? This cannot be undone. It is recommended to archive instead.'
+                        left={{
+                            text: 'Delete',
+                            onPress: () => {
+                                deleteProjects(Array.from(props.selected.values()))
+                                setEditing(false)
+                                props.setEditing(false)
+                            },
+                            type: 'destructive',
+                        }}
+                        right={{
+                            text: 'Cancel',
+                            onPress: () => {
+                                setEditing(false)
+                                props.setEditing(false)
+                            },
+                            type: 'neutral'
+                        }}
+                    >
+                        <img src={Trash}/>
+                    </ConfirmPopup>
+                </>
             )}
         </div>
     )
