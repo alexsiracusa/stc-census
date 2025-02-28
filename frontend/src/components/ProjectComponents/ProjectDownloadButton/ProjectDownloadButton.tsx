@@ -1,49 +1,60 @@
 import './ProjectDownloadButton.css';
 
-import React, {useEffect} from 'react';
-import { convertProjectDataToCSV } from './projectCsvFormatter.ts';
-import useFetchProjectDownload from "../../../hooks/useFetchProjectDownload.ts";
+import React, { useEffect, useState } from 'react';
+import { convertProjectDataToCSV, downloadCSV } from './projectCsvFormatter';
+import useFetchProjectDownload from "../../../hooks/useFetchProjectDownload";
 
 type DownloadProjectButtonProps = {
     projectId: number;
 };
 
 const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId }) => {
-
-    const {downloadProject, loading, error, data} = useFetchProjectDownload();
+    const { downloadProject, loading, error, data } = useFetchProjectDownload();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [processingError, setProcessingError] = useState<string | null>(null);
 
     const handleDownload = async () => {
-
         // Fetch JSON data for the given project.
         downloadProject(projectId);
     };
 
-
     useEffect(() => {
-        // Convert the JSON data to a formatted CSV string.
-        const csvString = convertProjectDataToCSV(data);
+        // Only process data if it exists and is not null
+        if (data) {
+            setIsProcessing(true);
+            setProcessingError(null);
 
-        // Create a Blob from the CSV data and trigger the download.
-        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `project_${projectId}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-    }, [data]);
+            try {
+                // Convert project data to CSV format
+                const csvContent = JSON.stringify(data) // !!! convertProjectDataToCSV(data);
+
+                // Generate filename using project name if available
+                const projectName = data.result.project.name || `Project_${projectId}`;
+                const sanitizedName = projectName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const filename = `${sanitizedName}_${timestamp}.csv`;
+
+                // Trigger the download
+                downloadCSV(csvContent, filename);
+            } catch (err) {
+                console.error("Error processing data for download:", err);
+                setProcessingError("Failed to process project data for download.");
+            } finally {
+                setIsProcessing(false);
+            }
+        }
+    }, [data, projectId]);
 
     return (
         <div className="project-download-container">
             {error && <div className="project-download-error">Error: {error}</div>}
+            {processingError && <div className="project-download-error">Error: {processingError}</div>}
             <button
                 className="project-download-button"
                 onClick={handleDownload}
-                disabled={loading}
+                disabled={loading || isProcessing}
             >
-                {loading ? 'Downloading...' : 'Download'}
+                {loading || isProcessing ? 'Processing...' : 'Download CSV'}
             </button>
         </div>
     );

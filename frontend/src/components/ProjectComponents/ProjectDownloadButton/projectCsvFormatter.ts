@@ -1,108 +1,240 @@
-// Helper function to escape CSV values.
-export const escapeCSV = (value: any): string => {
-    if (value === null || value === undefined) {
+type Task = {
+    id: number;
+    name: string;
+    status: string;
+    created_at: string;
+    depends_on: Array<{task_id: number, project_id: number}>;
+    project_id: number;
+    actual_cost: number | null;
+    description: string | null;
+    expected_cost: number | null;
+    budget_variance: number | null;
+    person_in_charge: {
+        id: number;
+        email: string;
+        last_name: string;
+        first_name: string;
+    } | null;
+    actual_start_date: string | null;
+    target_start_date: string | null;
+    person_in_charge_id: number | null;
+    actual_completion_date: string | null;
+    target_completion_date: string | null;
+    target_days_to_complete: number | null;
+};
+
+type Project = {
+    id: number;
+    name: string;
+    path: Array<{id: number, name: string}>;
+    tasks: Task[];
+    budget: number | null;
+    parent: number | null;
+    status: string;
+    archived: boolean;
+    created_at: string;
+    actual_cost: number;
+    description: string | null;
+    requested_by: string | null;
+    sub_projects: any[];
+    expected_cost: number;
+    status_counts: {
+        done: number;
+        to_do: number;
+        on_hold: number;
+        in_progress: number;
+    };
+    date_requested: string | null;
+    budget_variance: number;
+    team_email_alias: string;
+    actual_start_date: string | null;
+    target_start_date: string | null;
+    person_in_charge_id: number | null;
+    actual_completion_date: string | null;
+    target_completion_date: string | null;
+};
+
+type ProjectData = {
+    result: {
+        project: Project;
+        descendants: Project[];
+    };
+};
+
+// Helper to escape CSV fields
+const escapeCSV = (field: string | number | null | undefined): string => {
+    if (field === null || field === undefined) {
         return '';
     }
-    // If the value is an object or array, return its JSON representation.
-    if (typeof value === 'object') {
-        return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+
+    const fieldStr = String(field);
+    // If the field contains commas, quotes, or newlines, wrap it in quotes
+    if (fieldStr.includes(',') || fieldStr.includes('"') || fieldStr.includes('\n')) {
+        // Double up any quotes within the field
+        return `"${fieldStr.replace(/"/g, '""')}"`;
     }
-    return `"${String(value).replace(/"/g, '""')}"`;
+    return fieldStr;
 };
 
-// Function to process a single project into CSV format
-const processSingleProjectToCSV = (data: any): string => {
-    let csv = '';
-
-    // ------ 1. Project Data Section ------------
-    csv += 'Project Data\n';
-    const projectFields = [
-        'id',
-        'parent',
-        'name',
-        'description',
-        'status',
-        'budget',
-        'created_at',
-        'requested_by',
-        'date_requested',
-        'actual_start_date',
-        'actual_completion_date',
-        'target_start_date',
-        'target_completion_date',
-        'archived',
-    ];
-    // Header row for project data.
-    csv += projectFields.join(',') + '\n';
-    const projectRow = projectFields.map((field) => escapeCSV(data[field])).join(',');
-    csv += projectRow + '\n\n';
-
-    // ------ 2. Tasks Section ------------
-    if (data.tasks && Array.isArray(data.tasks) && data.tasks.length > 0) {
-        csv += 'Tasks\n';
-        // Use keys from the first task as headers.
-        const taskFields = Object.keys(data.tasks[0]);
-        csv += taskFields.join(',') + '\n';
-        data.tasks.forEach((task: any) => {
-            const row = taskFields.map((field) => escapeCSV(task[field])).join(',');
-            csv += row + '\n';
-        });
-        csv += '\n';
-    }
-
-    // ------ 3. Sub Projects Section ------------
-    if (data.sub_projects && Array.isArray(data.sub_projects) && data.sub_projects.length > 0) {
-        csv += 'Sub Projects\n';
-        const subProjectFields = Object.keys(data.sub_projects[0]);
-        csv += subProjectFields.join(',') + '\n';
-        data.sub_projects.forEach((subProject: any) => {
-            const row = subProjectFields.map((field) => escapeCSV(subProject[field])).join(',');
-            csv += row + '\n';
-        });
-        csv += '\n';
-    }
-
-    // ------ 4. Path Section ------------
-    if (data.path && Array.isArray(data.path) && data.path.length > 0) {
-        csv += 'Path\n';
-        const pathFields = Object.keys(data.path[0]);
-        csv += pathFields.join(',') + '\n';
-        data.path.forEach((segment: any) => {
-            const row = pathFields.map((field) => escapeCSV(segment[field])).join(',');
-            csv += row + '\n';
-        });
-        csv += '\n';
-    }
-
-    // ------ 5. Status Counts Section ------------
-    if (data.status_counts && typeof data.status_counts === 'object') {
-        csv += 'Status Counts\n';
-        csv += 'Status,Count\n';
-        Object.keys(data.status_counts).forEach((statusKey) => {
-            csv += `${escapeCSV(statusKey)},${escapeCSV(data.status_counts[statusKey])}\n`;
-        });
-        csv += '\n';
-    }
-
-    return csv;
+// Helper to format task dependencies
+const formatDependencies = (depends_on: Array<{task_id: number, project_id: number}>): string => {
+    if (!depends_on || depends_on.length === 0) return '';
+    return depends_on.map(dep => `Task ${dep.task_id} (Project ${dep.project_id})`).join(', ');
 };
 
-// Function that converts project JSON data into a formatted CSV string with sections.
-export const convertProjectDataToCSV = (data: any): string => {
-    let combinedCSV = '';
+// Helper to format person in charge
+const formatPersonInCharge = (person: {id: number, email: string, last_name: string, first_name: string} | null): string => {
+    if (!person) return '';
+    return `${person.first_name} ${person.last_name} (${person.email})`;
+};
 
-    // Process the main project
-    if (data.result && data.result.project) {
-        combinedCSV += processSingleProjectToCSV(data.result.project);
+// Convert project data to CSV format
+export const convertProjectDataToCSV = (data: ProjectData): string => {
+    // CSV Headers
+    const headers = [
+        'Project ID', 'Project Name', 'Project Path', 'Status', 'Budget', 'Expected Cost', 'Actual Cost', 'Budget Variance',
+        'Target Start Date', 'Actual Start Date', 'Target Completion Date', 'Actual Completion Date',
+        'Task ID', 'Task Name', 'Task Status', 'Task Description', 'Depends On', 'Expected Cost', 'Actual Cost', 'Budget Variance',
+        'Person in Charge', 'Target Start Date', 'Actual Start Date', 'Target Completion Date', 'Actual Completion Date', 'Target Days to Complete'
+    ].map(escapeCSV).join(',');
+
+    const rows: string[] = [];
+
+    // Process main project
+    const mainProject = data.result.project;
+    const mainProjectPath = mainProject.path.map(p => p.name).join(' > ');
+
+    // Add rows for main project tasks
+    if (mainProject.tasks && mainProject.tasks.length > 0) {
+        mainProject.tasks.forEach(task => {
+            const row = [
+                escapeCSV(mainProject.id),
+                escapeCSV(mainProject.name),
+                escapeCSV(mainProjectPath),
+                escapeCSV(mainProject.status),
+                escapeCSV(mainProject.budget),
+                escapeCSV(mainProject.expected_cost),
+                escapeCSV(mainProject.actual_cost),
+                escapeCSV(mainProject.budget_variance),
+                escapeCSV(mainProject.target_start_date),
+                escapeCSV(mainProject.actual_start_date),
+                escapeCSV(mainProject.target_completion_date),
+                escapeCSV(mainProject.actual_completion_date),
+                escapeCSV(task.id),
+                escapeCSV(task.name),
+                escapeCSV(task.status),
+                escapeCSV(task.description),
+                escapeCSV(formatDependencies(task.depends_on)),
+                escapeCSV(task.expected_cost),
+                escapeCSV(task.actual_cost),
+                escapeCSV(task.budget_variance),
+                escapeCSV(formatPersonInCharge(task.person_in_charge)),
+                escapeCSV(task.target_start_date),
+                escapeCSV(task.actual_start_date),
+                escapeCSV(task.target_completion_date),
+                escapeCSV(task.actual_completion_date),
+                escapeCSV(task.target_days_to_complete)
+            ].join(',');
+
+            rows.push(row);
+        });
+    } else {
+        // Add a row for the project with no tasks
+        const row = [
+            escapeCSV(mainProject.id),
+            escapeCSV(mainProject.name),
+            escapeCSV(mainProjectPath),
+            escapeCSV(mainProject.status),
+            escapeCSV(mainProject.budget),
+            escapeCSV(mainProject.expected_cost),
+            escapeCSV(mainProject.actual_cost),
+            escapeCSV(mainProject.budget_variance),
+            escapeCSV(mainProject.target_start_date),
+            escapeCSV(mainProject.actual_start_date),
+            escapeCSV(mainProject.target_completion_date),
+            escapeCSV(mainProject.actual_completion_date),
+            '', '', '', '', '', '', '', '', '', '', '', '', '', ''
+        ].join(',');
+
+        rows.push(row);
     }
 
-    // Process each descendant project
-    if (data.result && data.result.descendants && Array.isArray(data.result.descendants)) {
-        data.result.descendants.forEach((descendant: any) => {
-            // Add each descendant's CSV data with a separator of two newlines
-            combinedCSV += processSingleProjectToCSV(descendant);
+    // Process descendant projects
+    if (data.result.descendants && data.result.descendants.length > 0) {
+        data.result.descendants.forEach(project => {
+            const projectPath = project.path.map(p => p.name).join(' > ');
+
+            // Add rows for descendant project tasks
+            if (project.tasks && project.tasks.length > 0) {
+                project.tasks.forEach(task => {
+                    const row = [
+                        escapeCSV(project.id),
+                        escapeCSV(project.name),
+                        escapeCSV(projectPath),
+                        escapeCSV(project.status),
+                        escapeCSV(project.budget),
+                        escapeCSV(project.expected_cost),
+                        escapeCSV(project.actual_cost),
+                        escapeCSV(project.budget_variance),
+                        escapeCSV(project.target_start_date),
+                        escapeCSV(project.actual_start_date),
+                        escapeCSV(project.target_completion_date),
+                        escapeCSV(project.actual_completion_date),
+                        escapeCSV(task.id),
+                        escapeCSV(task.name),
+                        escapeCSV(task.status),
+                        escapeCSV(task.description),
+                        escapeCSV(formatDependencies(task.depends_on)),
+                        escapeCSV(task.expected_cost),
+                        escapeCSV(task.actual_cost),
+                        escapeCSV(task.budget_variance),
+                        escapeCSV(formatPersonInCharge(task.person_in_charge)),
+                        escapeCSV(task.target_start_date),
+                        escapeCSV(task.actual_start_date),
+                        escapeCSV(task.target_completion_date),
+                        escapeCSV(task.actual_completion_date),
+                        escapeCSV(task.target_days_to_complete)
+                    ].join(',');
+
+                    rows.push(row);
+                });
+            } else {
+                // Add a row for the project with no tasks
+                const row = [
+                    escapeCSV(project.id),
+                    escapeCSV(project.name),
+                    escapeCSV(projectPath),
+                    escapeCSV(project.status),
+                    escapeCSV(project.budget),
+                    escapeCSV(project.expected_cost),
+                    escapeCSV(project.actual_cost),
+                    escapeCSV(project.budget_variance),
+                    escapeCSV(project.target_start_date),
+                    escapeCSV(project.actual_start_date),
+                    escapeCSV(project.target_completion_date),
+                    escapeCSV(project.actual_completion_date),
+                    '', '', '', '', '', '', '', '', '', '', '', '', '', ''
+                ].join(',');
+
+                rows.push(row);
+            }
         });
     }
 
-    return combinedCSV;
+    return [headers, ...rows].join('\n');
+};
+
+// Helper function to trigger CSV download
+export const downloadCSV = (csvContent: string, filename: string): void => {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 };
