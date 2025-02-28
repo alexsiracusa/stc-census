@@ -16,35 +16,36 @@ const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId
 
         // Fetch JSON data for the given project.
         downloadProject(projectId);
-        
-        // // Parse the JSON.
-        // const data = await response.json();
-        //
-        // // Convert the JSON data to a formatted CSV string.
-        // const csvString = convertProjectDataToCSV(data);
-        //
-        // // Create a Blob from the CSV data and trigger the download.
-        // const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-        // const url = window.URL.createObjectURL(blob);
-        // const link = document.createElement('a');
-        // link.href = url;
-        // link.setAttribute('download', `project_${projectId}.csv`);
-        // document.body.appendChild(link);
-        // link.click();
-        // document.body.removeChild(link);
-        // window.URL.revokeObjectURL(url);
-
     };
 
-    // useEffect that console logs the data
+
     useEffect(() => {
-        console.log(data);
+        // Convert the JSON data to a formatted CSV string.
+        const csvString = convertProjectDataToCSV(data);
+
+        // Create a Blob from the CSV data and trigger the download.
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `project_${projectId}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
     }, [data]);
 
     return (
-        <button className="project-download-button" onClick={handleDownload}>
-            Download
-        </button>
+        <div className="project-download-container">
+            {error && <div className="project-download-error">Error: {error}</div>}
+            <button
+                className="project-download-button"
+                onClick={handleDownload}
+                disabled={loading}
+            >
+                {loading ? 'Downloading...' : 'Download'}
+            </button>
+        </div>
     );
 };
 

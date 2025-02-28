@@ -10,8 +10,8 @@ export const escapeCSV = (value: any): string => {
     return `"${String(value).replace(/"/g, '""')}"`;
 };
 
-// Function that converts project JSON data into a formatted CSV string with sections.
-export const convertProjectDataToCSV = (data: any): string => {
+// Function to process a single project into CSV format
+const processSingleProjectToCSV = (data: any): string => {
     let csv = '';
 
     // ------ 1. Project Data Section ------------
@@ -85,4 +85,24 @@ export const convertProjectDataToCSV = (data: any): string => {
     }
 
     return csv;
+};
+
+// Function that converts project JSON data into a formatted CSV string with sections.
+export const convertProjectDataToCSV = (data: any): string => {
+    let combinedCSV = '';
+
+    // Process the main project
+    if (data.result && data.result.project) {
+        combinedCSV += processSingleProjectToCSV(data.result.project);
+    }
+
+    // Process each descendant project
+    if (data.result && data.result.descendants && Array.isArray(data.result.descendants)) {
+        data.result.descendants.forEach((descendant: any) => {
+            // Add each descendant's CSV data with a separator of two newlines
+            combinedCSV += processSingleProjectToCSV(descendant);
+        });
+    }
+
+    return combinedCSV;
 };
