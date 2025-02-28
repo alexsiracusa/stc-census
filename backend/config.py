@@ -3,6 +3,8 @@ import os
 
 load_dotenv()
 
+FRONTEND_HOST = os.getenv("FRONTEND_HOST")
+
 class POSTGRES:
     HOST = os.getenv("POSTGRES_HOST")
     DB = os.getenv("POSTGRES_DB")

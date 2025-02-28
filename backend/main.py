@@ -3,9 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 
 from .utils.scheduler import setup_scheduler
-from .database import admin, InvalidCredentials
 from .routers import auth, project, projects, tasks, accounts
 from . import client
+from .config import FRONTEND_HOST
+
 
 # Configure logging
 logging.basicConfig(
@@ -21,7 +22,7 @@ app.include_router(tasks.router)
 app.include_router(accounts.router)
 
 origins = [
-    "http://localhost:5173"
+    FRONTEND_HOST
 ]
 
 app.add_middleware(
