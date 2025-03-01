@@ -1,13 +1,33 @@
 .evm {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
-}
-
-.evm {
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    overflow-x: scroll;
+    overflow-y: scroll;
 }
 
 .evm::-webkit-scrollbar-track {
     background-color: transparent;
+}
+
+.evm .chart-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+
+.evm .chart-container {
+    flex: 0;
+    min-width: 30em;
+    height: 20em;
+}
+
+.evm .evm-component .table-container {
+    overflow-x: auto;
+    margin-top: 2em;
+}
+
+.evm .evm-component .evm-metrics-table {
+    width: 20em;
+    margin-bottom: 2em;
 }

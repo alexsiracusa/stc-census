@@ -1,34 +1,16 @@
 .evm-component {
     font-family: Arial, sans-serif;
-    overflow-y: auto;
+    overflow-x: scroll;
+    overflow-y: scroll;
 }
 
-/* Flex container for charts */
-.chart-row {
-    display: flex;
-    flex-wrap: wrap; /* Allow charts to wrap on smaller screens */
-    gap: 1em; /* Space between charts */
-    margin-bottom: 2em;
-}
-
-/* Individual chart container */
-.chart-container {
-    flex: 1; /* Each chart takes equal space */
-    min-width: 30em;
-    height: 20em;
+.evm-component .chart-container {
     border: 1px solid #ccc;
     background-color: #fff;
 }
 
-.evm-component .table-container {
-    overflow-x: auto;
-    margin-top: 2em;
-}
-
 .evm-component .evm-metrics-table {
-    width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2em;
 }
 
 .evm-component .evm-metrics-table th,
@@ -41,10 +23,6 @@
 .evm-component .evm-metrics-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
-
-.evm-component::-webkit-scrollbar-track {
-    background-color: transparent;
 }
 
 .error-message {
