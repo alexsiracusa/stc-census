@@ -3,11 +3,10 @@ import TabProps from "../TabProps";
 import EVMComponent from "./EVMComponent/EVMComponent.tsx";
 
 const EVM = (props: TabProps) => {
-    const projectId = Number(props.project_id);
 
     return (
         <div className="evm">
-            <EVMComponent projectId={projectId} />
+            <EVMComponent project_id={props.project_id} />
         </div>
     );
 };

@@ -43,10 +43,6 @@
     font-weight: bold;
 }
 
-.evm-component {
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-}
-
 .evm-component::-webkit-scrollbar-track {
     background-color: transparent;
 }

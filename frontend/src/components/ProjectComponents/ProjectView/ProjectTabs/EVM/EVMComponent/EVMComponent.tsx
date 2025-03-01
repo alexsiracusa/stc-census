@@ -7,13 +7,13 @@ import IndexChart from './IndexChart/IndexChart.tsx';
 import MetricsTable from './MetricsTable/MetricsTable.tsx';
 
 interface EVMComponentProps {
-    projectId: number;
+    project_id: number;
 }
 
-const EVMComponent = ({ projectId }: EVMComponentProps) => {
+const EVMComponent = ({ project_id }: EVMComponentProps) => {
     const { t } = useTranslation();
-    const { loading: evmLoading, error: evmError } = useFetchEVM(projectId);
-    const projectEvmData = useSelector((state: any) => state.projects.byId[projectId]);
+    const { loading: evmLoading, error: evmError } = useFetchEVM(project_id);
+    const projectEvmData = useSelector((state: any) => state.projects.byId[project_id]);
 
     if (evmLoading) {
         return <div className="evm-component">Loading EVM data...</div>;
