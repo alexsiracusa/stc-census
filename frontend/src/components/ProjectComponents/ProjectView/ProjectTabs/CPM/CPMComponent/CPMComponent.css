@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-.error-message {
+.cpm-component .error-message {
     background-color: #ffeeba;
     color: #856404;
     border: 1px solid #f5c6cb;
@@ -19,7 +19,7 @@
     z-index: 1;
 }
 
-.graph-container {
+.cpm-component .graph-container {
     flex-grow: 1;
     position: relative;
     overflow: auto;
@@ -31,7 +31,7 @@
     height: 100%;
 }
 
-.critical-path-length {
+.cpm-component .critical-path-length {
     position: absolute;
     top: 20px;
     right: 20px;

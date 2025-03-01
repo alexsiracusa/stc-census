@@ -32,7 +32,10 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
         `$${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     schedule_variance_percent_in_decimal: (val: number) =>
         `${val}`,
-    cost_performance_index: (val: number) => val.toFixed(2),
+    cost_performance_index: (val: number) => {
+        console.log(val, typeof val)
+        return val.toFixed(2)
+    },
     time_variance_percent_in_decimal: (val: number) =>
         `${val}`,
 };
@@ -51,15 +54,15 @@ const MetricsTable = ({ evmData }: MetricsTableProps) => {
     // Get the last entry from each list and extract the number (second element)
     const lastScheduleVariancePercent = evmData.schedule_variance_percent_in_decimal?.length > 0
         ? evmData.schedule_variance_percent_in_decimal[evmData.schedule_variance_percent_in_decimal.length - 1][1]
-        : 'N/A';
+        : null;
 
     const lastCostPerformanceIndex = evmData.cost_performance_index?.length > 0
         ? evmData.cost_performance_index[evmData.cost_performance_index.length - 1][1]
-        : 'N/A';
+        : null;
 
     const lastTimeVariancePercent = evmData.time_variance_percent_in_decimal?.length > 0
         ? evmData.time_variance_percent_in_decimal[evmData.time_variance_percent_in_decimal.length - 1][1]
-        : 'N/A';
+        : null;
 
     // Add the last entries to the otherMetrics object
     otherMetrics.schedule_variance_percent_in_decimal = lastScheduleVariancePercent;

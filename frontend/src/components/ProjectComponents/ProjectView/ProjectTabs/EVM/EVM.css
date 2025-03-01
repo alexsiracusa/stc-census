@@ -20,20 +20,9 @@
     margin-bottom: 2em;
 }
 
-.evm .evm-component .chart-container {
-    flex: 0;
-    min-width: 30em;
-    height: 20em;
-}
-
 .evm .evm-component .table-container {
     overflow-x: auto;
     margin-top: 2em;
-}
-
-.evm .evm-component .evm-metrics-table {
-    width: 20em;
-    margin-bottom: 2em;
 }
 
 .evm .error-message {

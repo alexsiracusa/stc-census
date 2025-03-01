@@ -1,13 +1,13 @@
-import { useTranslation } from 'react-i18next';
-import Graph from "../Graph.tsx";
-import { getIndexChartOptions } from "./indexChartConfig.ts";
+import {useTranslation} from 'react-i18next';
+import Graph from "../Graph/Graph.tsx";
+import {getIndexChartOptions} from "./indexChartConfig.ts";
 
 interface IndexChartProps {
     evmData: any;
 }
 
-const IndexChart = ({ evmData }: IndexChartProps) => {
-    const { t } = useTranslation();
+const IndexChart = ({evmData}: IndexChartProps) => {
+    const {t} = useTranslation();
 
     // New index/percentage arrays from the response
     const scheduleVarianceArray = evmData.schedule_variance_percent_in_decimal || [];
@@ -52,9 +52,7 @@ const IndexChart = ({ evmData }: IndexChartProps) => {
     const indexOptions = getIndexChartOptions(t);
 
     return (
-        <div className="chart-container">
-            <Graph data={indexChartData} options={indexOptions} />
-        </div>
+        <Graph data={indexChartData} options={indexOptions}/>
     );
 };
 

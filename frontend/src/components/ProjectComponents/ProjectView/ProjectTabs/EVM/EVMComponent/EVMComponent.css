@@ -7,20 +7,17 @@
     background-color: #fff;
 }
 
-.evm-component .evm-metrics-table {
-    border-collapse: collapse;
+.evm-component .chart-container {
+    flex: 0;
+    min-width: 30em;
+    height: 20em;
 }
 
-.evm-component .evm-metrics-table th,
-.evm-component .evm-metrics-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.evm-component .evm-metrics-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+.evm-component .chart-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-bottom: 2em;
 }
 
 .error-message {

@@ -1,3 +1,5 @@
+import './Graph.css'
+
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -8,7 +10,7 @@ interface GraphProps {
 
 const Graph: React.FC<GraphProps> = ({ data, options }) => {
     return (
-        <div className="chart-container">
+        <div className="evm-graph-container">
             <Line data={data} options={options} />
         </div>
     );

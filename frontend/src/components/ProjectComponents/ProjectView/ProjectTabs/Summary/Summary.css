@@ -10,36 +10,3 @@
 .summary-container::-webkit-scrollbar-track {
     background-color: transparent; /* Ensure the track is transparent */
 }
-
-.evm-summary {
-
-}
-
-.evm-summary .evm-component {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1em;
-}
-
-.evm-summary .evm-component .chart-row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1em;
-}
-
-.evm-summary .evm-component .chart-container {
-    flex: 0;
-    min-width: 25em;
-    height: 25em;
-}
-
-.evm-summary .evm-component .table-container {
-    height: 25em;
-}
-
-.evm-summary .evm-component .evm-metrics-table {
-    width: 20em;
-    margin-bottom: 2em;
-}
