@@ -1,0 +1,16 @@
+
+.evm-metrics-table {
+    border-collapse: collapse;
+}
+
+.evm-metrics-table th,
+.evm-metrics-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.evm-metrics-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}

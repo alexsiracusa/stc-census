@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import Graph from "../Graph.tsx";
-import { getCostChartOptions } from "./costChartConfig.ts";
+import {useTranslation} from 'react-i18next';
+import Graph from "../Graph/Graph.tsx";
+import {getCostChartOptions} from "./costChartConfig.ts";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -28,8 +28,8 @@ interface CostChartProps {
     evmData: any;
 }
 
-const CostChart = ({ evmData }: CostChartProps) => {
-    const { t } = useTranslation();
+const CostChart = ({evmData}: CostChartProps) => {
+    const {t} = useTranslation();
 
     // Cost-related arrays
     const plannedValue = evmData.planned_value || [];
@@ -45,7 +45,7 @@ const CostChart = ({ evmData }: CostChartProps) => {
     // Determine if the vertical line should be displayed
     const determineVerticalLineVisibility = (actualDate: string, dates: string[]) => {
         if (!dates.length || !actualDate) {
-            return { show: false };
+            return {show: false};
         }
 
         // Convert dates to Date objects for comparison
@@ -54,11 +54,11 @@ const CostChart = ({ evmData }: CostChartProps) => {
         const actualDateObj = new Date(actualDate);
 
         if (actualDateObj < firstDate || actualDateObj > lastDate) {
-            return { show: false };
+            return {show: false};
         }
 
         // Otherwise, show the line at the actual date
-        return { show: true, date: actualDate };
+        return {show: true, date: actualDate};
     };
 
 
@@ -125,9 +125,7 @@ const CostChart = ({ evmData }: CostChartProps) => {
     const costOptions = getCostChartOptions(t, annotations);
 
     return (
-        <div className="chart-container">
-            <Graph data={costChartData} options={costOptions} />
-        </div>
+        <Graph data={costChartData} options={costOptions}/>
     );
 };
 

@@ -1,6 +1,6 @@
 import './EVMComponent.css';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from "react-redux";
+
+import {useSelector} from "react-redux";
 import useFetchEVM from "../../../../../../hooks/useFetchEVM.ts";
 import CostChart from './CostChart/CostChart.tsx';
 import IndexChart from './IndexChart/IndexChart.tsx';
@@ -10,9 +10,8 @@ interface EVMComponentProps {
     project_id: number;
 }
 
-const EVMComponent = ({ project_id }: EVMComponentProps) => {
-    const { t } = useTranslation();
-    const { loading: evmLoading, error: evmError } = useFetchEVM(project_id);
+const EVMComponent = ({project_id}: EVMComponentProps) => {
+    const {loading: evmLoading, error: evmError} = useFetchEVM(project_id);
     const projectEvmData = useSelector((state: any) => state.projects.byId[project_id]);
 
     if (evmLoading) {
@@ -20,10 +19,12 @@ const EVMComponent = ({ project_id }: EVMComponentProps) => {
     }
 
     if (evmError) {
-        return <div className="evm-component">
-            Error loading EVM data
-            <div className="error-message">{evmError.toString()}</div>
-        </div>;
+        return (
+            <div className="evm-component">
+                Error loading EVM data
+                <div className="error-message">{evmError.toString()}</div>
+            </div>
+        );
     }
 
     if (!projectEvmData || !projectEvmData.evm) {
@@ -34,10 +35,14 @@ const EVMComponent = ({ project_id }: EVMComponentProps) => {
 
     return (
         <div className="evm-component">
-            <MetricsTable evmData={evmData} />
+            <MetricsTable evmData={evmData}/>
             <div className="chart-row"> {/* New flex container for charts */}
-                <CostChart evmData={evmData} />
-                <IndexChart evmData={evmData} />
+                <div className="chart-container">
+                    <CostChart evmData={evmData}/>
+                </div>
+                <div className="chart-container">
+                    <IndexChart evmData={evmData}/>
+                </div>
             </div>
         </div>
     );
