@@ -1,7 +1,5 @@
 .evm-component {
     font-family: Arial, sans-serif;
-    overflow-x: scroll;
-    overflow-y: scroll;
 }
 
 .evm-component .chart-container {
