@@ -35,11 +35,6 @@ const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId
             setProcessingError(null);
 
             try {
-                // cause loading for debugging
-                setTimeout(() => {
-                    setIsProcessing(false);
-                }, 5000);
-
                 // Convert project data to CSV format
                 const csvContent = convertProjectDataToCSV(data);
 
