@@ -179,15 +179,16 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     }
 
     return {
+        'metadata': {
+            'today': current_day.strftime('%Y-%m-%d'),
+            'last_expected_completion_date': last_expected_completion_date.strftime('%Y-%m-%d') if not pd.isnull(
+                last_expected_completion_date) else None
+        },
+        'metrics': metrics,
         'planned_value': filtered_planned,
         'earned_value': filtered_earned,
         'actual_cost': filtered_actual,
         'schedule_variance_percent_in_decimal': sv_pct_filtered,
         'cost_performance_index': cpi_filtered,
         'time_variance_percent_in_decimal': tv_pct_filtered,
-        'metrics': metrics,
-        'metadata': {
-            'today': current_day.strftime('%Y-%m-%d'),
-            'last_expected_completion_date': last_expected_completion_date.strftime('%Y-%m-%d') if not pd.isnull(last_expected_completion_date) else None
-        }
     }
