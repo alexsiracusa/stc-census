@@ -9,14 +9,14 @@
     background-color: transparent;
 }
 
-.evm .chart-row {
+.evm .evm-component .chart-row {
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
     margin-bottom: 2em;
 }
 
-.evm .chart-container {
+.evm .evm-component .chart-container {
     flex: 0;
     min-width: 30em;
     height: 20em;
@@ -30,4 +30,8 @@
 .evm .evm-component .evm-metrics-table {
     width: 20em;
     margin-bottom: 2em;
+}
+
+.evm .error-message {
+    margin-top: 2em;
 }
