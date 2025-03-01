@@ -6,8 +6,8 @@
 .evm-summary {
     width: 100%;
     height: 100%;
-    overflow-x: scroll;
-    overflow-y: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
 .evm-summary::-webkit-scrollbar-track {
@@ -35,7 +35,6 @@
 }
 
 .evm-summary .evm-component .table-container {
-    overflow-x: auto;
     height: 25em;
 }
 
