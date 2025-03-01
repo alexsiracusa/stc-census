@@ -18,6 +18,16 @@ const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId
         downloadProject(projectId);
     };
 
+    // Log errors to the console whenever they change
+    useEffect(() => {
+        if (error) {
+            console.error("Fetch error:", error);
+        }
+        if (processingError) {
+            console.error("Processing error:", processingError);
+        }
+    }, [error, processingError]);
+
     useEffect(() => {
         // Only process data if it exists and is not null
         if (data) {
@@ -25,8 +35,13 @@ const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId
             setProcessingError(null);
 
             try {
+                // cause loading for debugging
+                setTimeout(() => {
+                    setIsProcessing(false);
+                }, 5000);
+
                 // Convert project data to CSV format
-                const csvContent = JSON.stringify(data) // !!! convertProjectDataToCSV(data);
+                const csvContent = convertProjectDataToCSV(data);
 
                 // Generate filename using project name if available
                 const projectName = data.result.project.name || `Project_${projectId}`;
@@ -47,14 +62,12 @@ const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId
 
     return (
         <div className="project-download-container">
-            {error && <div className="project-download-error">Error: {error}</div>}
-            {processingError && <div className="project-download-error">Error: {processingError}</div>}
             <button
-                className="project-download-button"
+                className={`project-download-button ${error || processingError ? 'error-state' : ''}`}
                 onClick={handleDownload}
                 disabled={loading || isProcessing}
             >
-                {loading || isProcessing ? 'Processing...' : 'Download CSV'}
+                {loading || isProcessing ? 'Processing...' : 'Download'}
             </button>
         </div>
     );

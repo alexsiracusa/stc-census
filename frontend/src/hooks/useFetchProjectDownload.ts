@@ -10,7 +10,7 @@ const useFetchProjectDownload = () => {
     // Create a callback to update task status
     const downloadProject = useCallback((project_id: number) => {
         const url = getUrl(project_id);
-        updateData(url, () => {}, { method: 'GET' });
+        updateData(url, null, { method: 'GET' });
     }, [updateData]);
 
     return {downloadProject: downloadProject, loading, error, data};
