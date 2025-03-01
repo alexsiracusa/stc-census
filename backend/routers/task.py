@@ -6,7 +6,7 @@ import pandas as pd
 import asyncpg
 
 from ..database import data, admin
-import utils.sensible_scheduling as ss
+from ..utils.sensible_scheduling import calculate_sensible_schedule
 
 router = APIRouter(
     prefix="/{project_id}/task",
@@ -54,12 +54,14 @@ async def update_task(
 
 @router.put("/use_suggested_schedule")
 async def use_suggested_schedule(project_id: int,
+                                 response: Response,
                                  wanted_start: Optional[date] = None,
-                                 wanted_end: Optional[date] = None,
-                                 response: Response = None):
+                                 wanted_end: Optional[date] = None
+                                 ):
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     try:
         # Get scheduled tasks from external source
-        schedule_df, _, _, _, _ = await ss.calculate_sensible_schedule(project_id,wanted_start,wanted_end)  # Implement this function
+        schedule_df, _, _, _, _ = await calculate_sensible_schedule(project_id,wanted_start,wanted_end)  # Implement this function
 
         # Validate DataFrame structure
         required_columns = {'task_id', 'project_id', 'target_start_date', 'target_completion_date'}
