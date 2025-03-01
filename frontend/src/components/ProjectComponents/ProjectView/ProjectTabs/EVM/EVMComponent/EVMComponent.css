@@ -3,9 +3,19 @@
     overflow-y: auto;
 }
 
-.evm-component .chart-container {
-    height: 400px;
+/* Flex container for charts */
+.chart-row {
+    display: flex;
+    flex-wrap: wrap; /* Allow charts to wrap on smaller screens */
+    gap: 1em; /* Space between charts */
     margin-bottom: 2em;
+}
+
+/* Individual chart container */
+.chart-container {
+    flex: 1; /* Each chart takes equal space */
+    min-width: 30em;
+    height: 20em;
     border: 1px solid #ccc;
     background-color: #fff;
 }
