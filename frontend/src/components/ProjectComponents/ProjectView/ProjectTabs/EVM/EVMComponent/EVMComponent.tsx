@@ -34,9 +34,9 @@ const EVMComponent = ({ projectId }: EVMComponentProps) => {
 
     return (
         <div className="evm-component">
+            <MetricsTable evmData={evmData} />
             <CostChart evmData={evmData} />
             <IndexChart evmData={evmData} />
-            <MetricsTable evmData={evmData} />
         </div>
     );
 };
