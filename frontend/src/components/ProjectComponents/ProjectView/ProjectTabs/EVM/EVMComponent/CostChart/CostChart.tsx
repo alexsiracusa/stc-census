@@ -40,7 +40,7 @@ const CostChart = ({ evmData }: CostChartProps) => {
     const dates = plannedValue.map((pair: [string, number]) => pair[0]);
 
     // Latest date from EVM metrics; used as cutoff for "done" entries
-    const actualDate = evmData.metrics.actual_time || '';
+    const actualDate = evmData.metadata.today;
 
     // Determine if the vertical line should be displayed
     const determineVerticalLineVisibility = (actualDate: string, dates: string[]) => {
