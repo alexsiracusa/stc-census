@@ -14,7 +14,7 @@ const Summary = (props: TabProps) => {
                 <ProjectName project_id={props.project_id}/>
             </div>
             <div className="evm-summary">
-                <EVMComponent project_id={props.project_id}/>
+                <EVMComponent project_id={props.project_id} direction='row'/>
             </div>
         </div>
     )

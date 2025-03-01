@@ -1,5 +1,10 @@
 .summary-container {
     overflow-y: scroll;
+
+    .evm-summary {
+        height: 25em;
+        width: 100%;
+    }
 }
 
 .summary-container {

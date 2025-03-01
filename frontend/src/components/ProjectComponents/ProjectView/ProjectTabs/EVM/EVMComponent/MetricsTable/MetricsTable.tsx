@@ -1,4 +1,6 @@
-import { useTranslation } from 'react-i18next';
+import './MetricsTable.css'
+
+import {useTranslation} from 'react-i18next';
 
 interface MetricsTableProps {
     evmData: any;
@@ -19,7 +21,7 @@ const metricDisplayNames: Record<string, string> = {
 const customMetricFormatters: Record<string, (val: any) => string> = {
     actual_time: (val: number) => `${val} days`,
     total_actual_cost: (val: number) =>
-        `$${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        `$${Number(val).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`,
     date_of_latest_done_task: (val: string) => {
         const date = new Date(val);
         return date.toLocaleDateString('en-US', {
@@ -29,7 +31,7 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
         });
     },
     budget_at_completion: (val: number) =>
-        `$${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        `$${Number(val).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`,
     schedule_variance_percent_in_decimal: (val: number) =>
         `${val}`,
     cost_performance_index: (val: number) => {
@@ -40,8 +42,8 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
         `${val}`,
 };
 
-const MetricsTable = ({ evmData }: MetricsTableProps) => {
-    const { t } = useTranslation();
+const MetricsTable = ({evmData}: MetricsTableProps) => {
+    const {t} = useTranslation();
 
     // Remove index metrics from the table
     const {
@@ -83,25 +85,23 @@ const MetricsTable = ({ evmData }: MetricsTableProps) => {
     };
 
     return (
-        <div className="table-container">
-            <table className="evm-metrics-table">
-                <thead>
-                <tr>
-                    <th>{t('Metric')}</th>
-                    <th>{t('Value')}</th>
+        <table className="evm-metrics-table">
+            <thead>
+            <tr>
+                <th>{t('Metric')}</th>
+                <th>{t('Value')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {Object.entries(otherMetrics).map(([key, value]) => (
+                <tr key={key}>
+                    {/* Use custom display name if available */}
+                    <td>{t(metricDisplayNames[key] || key)}</td>
+                    <td>{formatMetricValue(key, value)}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {Object.entries(otherMetrics).map(([key, value]) => (
-                    <tr key={key}>
-                        {/* Use custom display name if available */}
-                        <td>{t(metricDisplayNames[key] || key)}</td>
-                        <td>{formatMetricValue(key, value)}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
+            ))}
+            </tbody>
+        </table>
     );
 };
 

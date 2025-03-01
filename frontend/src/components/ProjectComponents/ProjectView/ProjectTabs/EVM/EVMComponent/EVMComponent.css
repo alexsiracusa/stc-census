@@ -1,26 +1,32 @@
+
+.evm-component.row {
+    flex-direction: row;
+}
+
+.evm-component.column {
+    flex-direction: column;
+}
+
 .evm-component {
-    font-family: Arial, sans-serif;
-}
-
-.evm-component .chart-container {
-    border: 1px solid #ccc;
-    background-color: #fff;
-}
-
-.evm-component .chart-container {
-    flex: 0;
-    min-width: 30em;
-    height: 20em;
-}
-
-.evm-component .chart-row {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1em;
-    margin-bottom: 2em;
-}
+    height: 100%;
+    width: 100%;
 
-.error-message {
-    color: red;
-    font-style: italic;
+    gap: 1em;
+
+    font-family: Arial, sans-serif;
+
+    .chart-container {
+        border: 1px solid #ccc;
+        background-color: #fff;
+
+        max-width: 100%;
+        max-height: 95%;
+        aspect-ratio: 1.66;
+    }
+
+    .error-message {
+        color: red;
+        font-style: italic;
+    }
 }

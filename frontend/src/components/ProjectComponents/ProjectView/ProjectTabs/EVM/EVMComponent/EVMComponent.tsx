@@ -8,11 +8,12 @@ import MetricsTable from './MetricsTable/MetricsTable.tsx';
 
 interface EVMComponentProps {
     project_id: number;
+    direction?: 'row' | 'column'
 }
 
-const EVMComponent = ({project_id}: EVMComponentProps) => {
-    const {loading: evmLoading, error: evmError} = useFetchEVM(project_id);
-    const projectEvmData = useSelector((state: any) => state.projects.byId[project_id]);
+const EVMComponent = (props: EVMComponentProps) => {
+    const {loading: evmLoading, error: evmError} = useFetchEVM(props.project_id);
+    const projectEvmData = useSelector((state: any) => state.projects.byId[props.project_id]);
 
     if (evmLoading) {
         return <div className="evm-component">Loading EVM data...</div>;
@@ -34,15 +35,15 @@ const EVMComponent = ({project_id}: EVMComponentProps) => {
     const evmData = projectEvmData.evm;
 
     return (
-        <div className="evm-component">
-            <MetricsTable evmData={evmData}/>
-            <div className="chart-row"> {/* New flex container for charts */}
-                <div className="chart-container">
-                    <CostChart evmData={evmData}/>
-                </div>
-                <div className="chart-container">
-                    <IndexChart evmData={evmData}/>
-                </div>
+        <div className={`evm-component ${props.direction ?? 'column'}`}>
+            <div className="chart-container">
+                <CostChart evmData={evmData}/>
+            </div>
+            <div className="chart-container">
+                <IndexChart evmData={evmData}/>
+            </div>
+            <div className="table-container">
+                <MetricsTable evmData={evmData}/>
             </div>
         </div>
     );
