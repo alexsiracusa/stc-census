@@ -50,7 +50,7 @@ const CostChart = ({evmData}: CostChartProps) => {
 
         // Convert dates to Date objects for comparison
         const firstDate = new Date(dates[0]);
-        const lastDate = new Date(evmData.metadata.last_expected_completion_date);
+        const lastDate = new Date(dates[dates.length - 1]);
         const actualDateObj = new Date(actualDate);
 
         if (actualDateObj < firstDate || actualDateObj > lastDate) {

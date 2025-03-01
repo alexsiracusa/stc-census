@@ -52,13 +52,17 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         latest_done_date = done_tasks['actual_completion_date'].max()
 
     # Adjust date range to include current_day and target dates
-    start_date = df['target_start_date'].min()
-    initial_end_date = df['target_completion_date'].max()
-    end_date = max(initial_end_date, current_day) if not pd.isnull(initial_end_date) else current_day
+    # Find the earliest date between actual_start_date and target_start_date
+    earliest_actual_start = df['actual_start_date'].min()
+    earliest_target_start = df['target_start_date'].min()
+    start_date = min(earliest_actual_start, earliest_target_start) if not pd.isnull(earliest_actual_start) and not pd.isnull(earliest_target_start) else earliest_actual_start if not pd.isnull(earliest_actual_start) else earliest_target_start
+
+    # Find the latest date between actual_completion_date and target_completion_date
+    latest_actual_end = df['actual_completion_date'].max()
+    latest_target_end = df['target_completion_date'].max()
+    end_date = max(latest_actual_end, latest_target_end) if not pd.isnull(latest_actual_end) and not pd.isnull(latest_target_end) else latest_actual_end if not pd.isnull(latest_actual_end) else latest_target_end
 
     # Handle NaT cases for start_date and end_date
-    if pd.isnull(start_date):
-        start_date = df['actual_start_date'].min()
     if pd.isnull(start_date) or pd.isnull(end_date):
         dates = pd.date_range(start=current_day, end=current_day)  # Single date fallback
     else:
@@ -168,9 +172,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     # Aggregated metrics
     ac_aggregated = done_tasks['actual_cost'].sum() if not done_tasks.empty else 0.0
 
-    # Get the last expected completion date
-    last_expected_completion_date = df['target_completion_date'].max()
-
     metrics = {
         'actual_time': actual_time,
         'total_actual_cost': round(ac_aggregated, 2),
@@ -181,8 +182,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     return {
         'metadata': {
             'today': current_day.strftime('%Y-%m-%d'),
-            'last_expected_completion_date': last_expected_completion_date.strftime('%Y-%m-%d') if not pd.isnull(
-                last_expected_completion_date) else None
         },
         'metrics': metrics,
         'planned_value': filtered_planned,
