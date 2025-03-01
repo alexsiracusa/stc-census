@@ -168,6 +168,9 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     # Aggregated metrics
     ac_aggregated = done_tasks['actual_cost'].sum() if not done_tasks.empty else 0.0
 
+    # Get the last expected completion date
+    last_expected_completion_date = df['target_completion_date'].max()
+
     metrics = {
         'actual_time': actual_time,
         'total_actual_cost': round(ac_aggregated, 2),
@@ -183,5 +186,8 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         'cost_performance_index': cpi_filtered,
         'time_variance_percent_in_decimal': tv_pct_filtered,
         'metrics': metrics,
-        'metadata': {'today': current_day.strftime('%Y-%m-%d')}
+        'metadata': {
+            'today': current_day.strftime('%Y-%m-%d'),
+            'last_expected_completion_date': last_expected_completion_date.strftime('%Y-%m-%d') if not pd.isnull(last_expected_completion_date) else None
+        }
     }
