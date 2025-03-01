@@ -61,10 +61,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     latest_actual_end = df['actual_completion_date'].max()
     latest_target_end = df['target_completion_date'].max()
     end_date = max(latest_actual_end, latest_target_end) if not pd.isnull(latest_actual_end) and not pd.isnull(latest_target_end) else latest_actual_end if not pd.isnull(latest_actual_end) else latest_target_end
-    latest_end = end_date
-
-    # Ensure end_date is at least current_day
-    end_date = max(end_date, current_day) if not pd.isnull(end_date) else current_day
 
     # Handle NaT cases for start_date and end_date
     if pd.isnull(start_date) or pd.isnull(end_date):
@@ -186,7 +182,6 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
     return {
         'metadata': {
             'today': current_day.strftime('%Y-%m-%d'),
-            'latest_project_end_date': latest_end.strftime('%Y-%m-%d') if not pd.isnull(latest_end) else None,
         },
         'metrics': metrics,
         'planned_value': filtered_planned,
