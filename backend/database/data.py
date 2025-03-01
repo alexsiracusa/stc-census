@@ -207,6 +207,97 @@ async def update_task(project_id, task_id, fields: dict):
             return result
 
 
+from fastapi import HTTPException
+
+ALLOWED_TASK_FIELDS = {
+    'name', 'description', 'status', 'created_at', 'person_in_charge_id',
+    'expected_cost', 'actual_cost', 'actual_start_date', 'actual_completion_date',
+    'target_start_date', 'target_completion_date', 'target_days_to_complete'
+}
+
+async def update_tasks(project_id: int, tasks: list):
+    # Pre-validation before starting transaction
+    for task in tasks:
+        if 'task_id' not in task:
+            raise HTTPException(400, "Each task must include 'task_id'")
+        if 'fields' not in task:
+            raise HTTPException(400, "Each task must include 'fields'")
+        if 'id' in task['fields']:
+            raise HTTPException(400, "Cannot update task ID")
+
+        invalid_fields = [f for f in task['fields'] if f not in ALLOWED_TASK_FIELDS and f != 'depends_on']
+        if invalid_fields:
+            raise HTTPException(400, f"Invalid fields: {invalid_fields}")
+
+    async with await client.postgres_client.get_con() as con:
+        async with con.transaction():
+            for task in tasks:
+                task_id = task['task_id']
+                fields = task['fields'].copy()
+                depends_on = fields.pop('depends_on', None)
+
+                # Update main task fields
+                if fields:
+                    set_clauses = []
+                    params = []
+                    for idx, (field, value) in enumerate(fields.items(), start=1):
+                        set_clauses.append(f"{field} = ${idx}")
+                        params.append(value)
+                    params.extend([project_id, task_id])
+
+                    await con.execute(
+                        f"UPDATE Task SET {', '.join(set_clauses)} "
+                        f"WHERE project_id = ${len(params) - 1} AND id = ${len(params)}",
+                        *params
+                    )
+
+                # Verify task exists if no fields updated
+                else:
+                    exists = await con.fetchval(
+                        "SELECT 1 FROM Task WHERE project_id = \$1 AND id = \$2",
+                        project_id, task_id
+                    )
+                    if not exists:
+                        raise HTTPException(404, f"Task {task_id} not found")
+
+                # Process dependencies if specified
+                if depends_on is not None:
+                    # Clear existing dependencies
+                    await con.execute(
+                        "DELETE FROM Task_Depends_On "
+                        "WHERE project_id = \$1 AND task_id = \$2",
+                        project_id, task_id
+                    )
+
+                    # Insert new dependencies
+                    if depends_on:
+                        values = []
+                        for dep in depends_on:
+                            if not isinstance(dep, dict) or 'task_id' not in dep or 'project_id' not in dep:
+                                raise HTTPException(400, "Dependency must include task_id and project_id")
+                            values.extend([
+                                task_id,
+                                project_id,
+                                dep['task_id'],
+                                dep['project_id']
+                            ])
+
+                        # Generate placeholders (\$1-\$4, \$5-\$8, etc.)
+                        placeholders = [
+                            f"(${i * 4 + 1}, ${i * 4 + 2}, ${i * 4 + 3}, ${i * 4 + 4})"
+                            for i in range(len(depends_on))
+                        ]
+
+                        await con.execute(
+                            f"INSERT INTO Task_Depends_On "
+                            f"(task_id, project_id, depends_task_id, depends_project_id) "
+                            f"VALUES {', '.join(placeholders)}",
+                            *values
+                        )
+
+            return {"updated_tasks": len(tasks), "project_id": project_id}
+
+
 async def delete_task(project_id, task_id):
     return await client.postgres_client.fetch(f"""
         DELETE FROM Task
