@@ -1,12 +1,4 @@
 
-.evm-component.row {
-    flex-direction: row;
-}
-
-.evm-component.column {
-    flex-direction: column;
-}
-
 .evm-component {
     display: flex;
     height: 100%;
@@ -22,11 +14,38 @@
 
         max-width: 100%;
         max-height: 95%;
-        aspect-ratio: 1.66;
+        aspect-ratio: 1.5;
+    }
+
+    .table-container {
+        min-height: fit-content;
+        max-height: 95%;
+
+        width: 25em;
+        min-width: 25em;
+
+        overflow-y: scroll;
     }
 
     .error-message {
         color: red;
         font-style: italic;
     }
+}
+
+.evm-component.row {
+    flex-direction: row;
+
+    .table-container {
+        min-height: 0 !important;
+    }
+
+    .chart-container, .table-container {
+        max-height: 100%;
+        min-height: 100%;
+    }
+}
+
+.evm-component.column {
+    flex-direction: column;
 }

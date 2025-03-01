@@ -4,6 +4,8 @@
     .evm-summary {
         height: 25em;
         width: 100%;
+
+        overflow-x: scroll;
     }
 }
 
