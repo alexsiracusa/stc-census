@@ -48,12 +48,11 @@ const CostChart = ({ evmData }: CostChartProps) => {
             return { show: false };
         }
 
-        // Check if actual date is outside the range of chart dates
+        // Convert dates to Date objects for comparison
         const firstDate = new Date(dates[0]);
-        const lastDate = new Date(dates[dates.length - 1]);
+        const lastDate = new Date(evmData.metadata.last_expected_completion_date);
         const actualDateObj = new Date(actualDate);
 
-        // If actual date is before or after the date range, don't show the line
         if (actualDateObj < firstDate || actualDateObj > lastDate) {
             return { show: false };
         }
@@ -61,6 +60,7 @@ const CostChart = ({ evmData }: CostChartProps) => {
         // Otherwise, show the line at the actual date
         return { show: true, date: actualDate };
     };
+
 
     const lineVisibility = determineVerticalLineVisibility(actualDate, dates);
 
