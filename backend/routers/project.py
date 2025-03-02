@@ -217,7 +217,6 @@ async def use_suggested_schedule(
         schedule_df, _, _, _, _ = await calculate_sensible_schedule(project_id, wanted_start, wanted_end)  # Implement this function
 
         # Validate DataFrame structure
-        print(schedule_df.columns)
         required_columns = {'task_id', 'project_id', 'start_date', 'end_date'}
         if not required_columns.issubset(set(schedule_df.columns)):
             missing = required_columns - set(schedule_df.columns)
