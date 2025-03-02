@@ -62,6 +62,41 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
         setShowConfirmation(false);
     };
 
+    // Helper function to format the suggested schedule data
+    const renderSuggestedSchedule = () => {
+        if (!suggestedScheduleData) return null;
+
+        const { givenDurationOverridden, projectStartDate, projectEndDate, projectDurationInDays, suggested_schedule } = suggestedScheduleData;
+
+        return (
+            <div className="suggested-schedule-container">
+                {givenDurationOverridden && (
+                    <div className="duration-overridden-message">
+                        <p>The provided dates were unrealistic and have been overwritten.</p>
+                    </div>
+                )}
+                <div className="project-duration">
+                    <h3>Project Duration</h3>
+                    <p><strong>Start Date:</strong> {projectStartDate}</p>
+                    <p><strong>End Date:</strong> {projectEndDate}</p>
+                    <p><strong>Duration:</strong> {projectDurationInDays} workdays</p>
+                </div>
+                <div className="task-schedule">
+                    <h3>Suggested Task Schedule</h3>
+                    <ul>
+                        {suggested_schedule.map((task, index) => (
+                            <li key={index}>
+                                <p><strong>Task ID:</strong> {task.task_id}</p>
+                                <p><strong>Start Date:</strong> {task.start_date}</p>
+                                <p><strong>End Date:</strong> {task.end_date}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <>
             <Popup
@@ -110,7 +145,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                             ) : error ? (
                                 <p>Error: {error}</p>
                             ) : (
-                                <pre>{JSON.stringify(suggestedScheduleData, null, 2)}</pre>
+                                renderSuggestedSchedule()
                             )}
                             <div className="confirmation-button">
                                 <button className="schedule-button" onClick={handleRejectPlan}>
