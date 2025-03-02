@@ -52,14 +52,15 @@ async def update_task(
 
 
 @router.put("/use_suggested_schedule")
-async def use_suggested_schedule(project_id: int,
-                                 response: Response,
-                                 wanted_start: date = None,
-                                 wanted_end: date = None
-                                 ):
+async def use_suggested_schedule(
+    project_id: int,
+    response: Response,
+    wanted_start: date = None,
+    wanted_end: date = None
+):
     try:
         # Get scheduled tasks from external source
-        schedule_df, _, _, _, _ = await calculate_sensible_schedule(project_id,wanted_start,wanted_end)  # Implement this function
+        schedule_df, _, _, _, _ = await calculate_sensible_schedule(project_id, wanted_start, wanted_end)  # Implement this function
 
         # Validate DataFrame structure
         print(schedule_df.columns)
@@ -72,13 +73,11 @@ async def use_suggested_schedule(project_id: int,
         tasks_to_update = []
         for _, row in schedule_df.iterrows():
             task_update = {
-                "task_id": row['task_id'],
-                "project_id": row['project_id'],
+                "task_id": int(row['task_id']),  # Convert numpy.int64 to int
+                "project_id": int(row['project_id']),  # Convert numpy.int64 to int
                 "fields": {
-                    "target_start_date": row['start_date'].isoformat() if pd.notnull(
-                        row['start_date']) else None,
-                    "target_completion_date": row['end_date'].isoformat() if pd.notnull(
-                        row['end_date']) else None
+                    "target_start_date": row['start_date'].isoformat() if pd.notnull(row['start_date']) else None,
+                    "target_completion_date": row['end_date'].isoformat() if pd.notnull(row['end_date']) else None
                 }
             }
             tasks_to_update.append(task_update)
@@ -88,8 +87,8 @@ async def use_suggested_schedule(project_id: int,
 
         response.status_code = status.HTTP_200_OK
         return {
-            "message": f"Updated schedule for {update_result['updated_tasks']} tasks",
-            "updated_projects": list(schedule_df['project_id'].unique())
+            "message": f"Updated schedule for {int(update_result['updated_tasks'])} tasks",  # Convert numpy.int64 to int
+            "updated_projects": [int(proj_id) for proj_id in schedule_df['project_id'].unique()]  # Convert numpy.int64 to int
         }
 
     except HTTPException as he:
