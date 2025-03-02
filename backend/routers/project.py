@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Response, status, Body, Depends
-from typing import Optional, Any, Tuple
+from typing import Optional, Any
 from datetime import date
 import pandas as pd
 import asyncpg
@@ -8,9 +8,7 @@ from ..database import data, admin
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
-from ..utils.sensible_scheduling import (schedule_tasks, adjust_if_weekend,
-                                         business_days_between, convert_and_adjust_schedule,
-                                         calculate_sensible_schedule)
+from ..utils.sensible_scheduling import calculate_sensible_schedule
 
 router = APIRouter(
     prefix="/project",
@@ -166,6 +164,8 @@ async def get_cpm_analysis(project_id: int, response: Response):
             "cycleInfo": cycle_info,
             "criticalPathLength": float(critical_path_length)
         }
+        
+        response.status_code = status.HTTP_200_OK
         return result
 
     except Exception as e:
@@ -280,6 +280,8 @@ async def get_evm_analysis(project_id: int, response: Response):
             "id": project_id,
             "evm": evm_data # df.to_dict(orient="records")
         }
+
+        response.status_code = status.HTTP_200_OK
         return result
 
     except Exception as e:
