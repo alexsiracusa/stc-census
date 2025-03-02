@@ -5,11 +5,15 @@ import { format } from "date-fns";
 import SimpleDatePicker from "../../../../../../GenericComponents/SimpleDatePicker/SimpleDatePicker.tsx";
 import Popup from "../../../../../../GenericComponents/Popup/Popup.tsx";
 
+import useFetchProjectSuggestedSchedule from "../../../../../../../hooks/useFetchProjectSuggestedSchedule.ts";
+import useUpdateProjectSchedule from "../../../../../../../hooks/useUpdateProjectSchedule.ts";
+
 interface SensibleSchedulePopupProps {
     onClose: () => void;
+    project_id: number;
 }
 
-const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }) => {
+const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, project_id }) => {
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
@@ -27,7 +31,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
         setFetchError(null);
         try {
             const response = await fetch(
-                `http://localhost:8000/project/1/sensible_scheduling?wanted_start=${wanted_start}&wanted_end=${wanted_end}`
+                `http://localhost:8000/project/${project_id}/sensible_scheduling?wanted_start=${wanted_start}&wanted_end=${wanted_end}`
             );
             const data = await response.json();
             setSuggestedScheduleData(data);
@@ -50,6 +54,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose }
 
     const handleAcceptPlan = () => {
         console.log("Accepting plan with schedule data:", suggestedScheduleData);
+        // {} = useUpdateProjectSchedule(props.project_id);
         setShowConfirmation(false);
         onClose();
     };

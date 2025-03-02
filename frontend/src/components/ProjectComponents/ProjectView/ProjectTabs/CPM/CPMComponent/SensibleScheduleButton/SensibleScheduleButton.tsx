@@ -21,7 +21,7 @@ const SensibleScheduleButton: React.FC<SensibleScheduleButtonProps> = ({ props: 
     return (
         <div>
             <button className='schedule-button' onClick={openPopup}>Sensible Schedule</button>
-            {isPopupOpen && <SensibleSchedulePopup onClose={closePopup} />}
+            {isPopupOpen && <SensibleSchedulePopup onClose={closePopup} project_id=props.project_id}/>}
         </div>
     );
 };
