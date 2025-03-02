@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Response, Body, Depends, status
 from typing import Any
 from datetime import date
-from typing import Optional
 import pandas as pd
 import asyncpg
 
@@ -55,16 +54,16 @@ async def update_task(
 @router.put("/use_suggested_schedule")
 async def use_suggested_schedule(project_id: int,
                                  response: Response,
-                                 wanted_start: Optional[date] = None,
-                                 wanted_end: Optional[date] = None
+                                 wanted_start: date = None,
+                                 wanted_end: date = None
                                  ):
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     try:
         # Get scheduled tasks from external source
         schedule_df, _, _, _, _ = await calculate_sensible_schedule(project_id,wanted_start,wanted_end)  # Implement this function
 
         # Validate DataFrame structure
-        required_columns = {'task_id', 'project_id', 'target_start_date', 'target_completion_date'}
+        print(schedule_df.columns)
+        required_columns = {'task_id', 'project_id', 'start_date', 'end_date'}
         if not required_columns.issubset(set(schedule_df.columns)):
             missing = required_columns - set(schedule_df.columns)
             raise HTTPException(400, f"Missing required columns in schedule data: {missing}")
@@ -76,16 +75,16 @@ async def use_suggested_schedule(project_id: int,
                 "task_id": row['task_id'],
                 "project_id": row['project_id'],
                 "fields": {
-                    "target_start_date": row['target_start_date'].isoformat() if pd.notnull(
-                        row['target_start_date']) else None,
-                    "target_completion_date": row['target_completion_date'].isoformat() if pd.notnull(
-                        row['target_completion_date']) else None
+                    "target_start_date": row['start_date'].isoformat() if pd.notnull(
+                        row['start_date']) else None,
+                    "target_completion_date": row['end_date'].isoformat() if pd.notnull(
+                        row['end_date']) else None
                 }
             }
             tasks_to_update.append(task_update)
 
         # Perform batch update
-        update_result = await data.update_tasks(tasks_to_update)
+        update_result = await data.update_tasks(project_id, tasks_to_update)
 
         response.status_code = status.HTTP_200_OK
         return {

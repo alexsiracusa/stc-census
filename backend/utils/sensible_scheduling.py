@@ -17,14 +17,12 @@ def adjust_if_weekend(d: date) -> date:
         return (d_ts + pd.Timedelta(days=1)).date()
     return d
 
-
 # Helper function: count number of business days (Monday-Friday) between two date objects.
 def business_days_between(start: date, end: date) -> int:
     start_np = np.datetime64(start)
     end_np = np.datetime64(end)
     # np.busday_count returns the number of business days between start (inclusive) and end (exclusive)
     return int(np.busday_count(start_np, end_np))
-
 
 def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -156,8 +154,7 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
 
     return pd.DataFrame(result_data)
 
-
-def convert_and_adjust_schedule(schedule_df: pd.DataFrame, diff: int, mode: int, wanted_start: date) -> (pd.DataFrame, date):
+def convert_and_adjust_schedule(schedule_df: pd.DataFrame, diff: int, wanted_start: date) -> (pd.DataFrame, date):
     """
     Given a schedule with “working day offsets” convert these into actual dates by adding business day offsets.
     If the schedule’s overall duration (i.e. the CPM minimum) is longer than what the user requested (diff < 0)
@@ -166,13 +163,8 @@ def convert_and_adjust_schedule(schedule_df: pd.DataFrame, diff: int, mode: int,
     """
     wanted_start_ts = pd.Timestamp(wanted_start)
     if diff < 0:
-        # For modes 0 and 1, shift the project start earlier business-day wise.
-        if mode in (0, 1):
-            wanted_start_ts = wanted_start_ts - pd.offsets.BDay(abs(diff))
-        elif mode == 2:
-            pass
-        else:
-            raise ValueError("Invalid mode value. Must be 0, 1, or 2.")
+        # Shift the project start earlier business-day wise.
+        wanted_start_ts = wanted_start_ts - pd.offsets.BDay(abs(diff))
 
     # Now, for each task offset (in working days) add the offset using Business Day arithmetic.
     schedule_df['start_date'] = schedule_df['start_date'].apply(
@@ -182,7 +174,6 @@ def convert_and_adjust_schedule(schedule_df: pd.DataFrame, diff: int, mode: int,
         lambda x: (wanted_start_ts + pd.offsets.BDay(x)).date()
     )
     return schedule_df, wanted_start_ts.date()
-
 
 async def calculate_sensible_schedule(
         project_id: int,
@@ -205,47 +196,19 @@ async def calculate_sensible_schedule(
             - end_int (int): The project duration in business days.
             - given_duration_overridden (bool): Whether the given duration was overridden.
     """
-    params = {
-        "wanted_start": wanted_start,
-        "wanted_end": wanted_end,
-        "wanted_duration": None  # deprecated, so this has been set to None
-    }
-    wanted_duration = None  # deprecated, so this has been set to None
-
-    none_count = sum(value is None for value in params.values())
-    if none_count != 1:
+    # Ensure both wanted_start and wanted_end are provided.
+    if wanted_start is None or wanted_end is None:
         raise HTTPException(
             status_code=400,
-            detail=f"Exactly two of wanted_start, wanted_end, or wanted_duration must be provided, "
-                   f"with the third as null. {3 - none_count} were provided."
+            detail="Both wanted_start and wanted_end must be provided."
         )
 
     # Make sure any user-provided dates fall on business days.
-    if wanted_start is not None:
-        wanted_start = adjust_if_weekend(wanted_start)
-    if wanted_end is not None:
-        wanted_end = adjust_if_weekend(wanted_end)
+    wanted_start = adjust_if_weekend(wanted_start)
+    wanted_end = adjust_if_weekend(wanted_end)
 
-    # Determine scheduling mode (how the missing parameter is computed) and compute the project duration
-    # in business days:
-    #
-    #   Mode 0: Both wanted_start and wanted_end provided.
-    #           (Then we compute the working-days duration between them.)
-    #   Mode 1: (wanted_end and wanted_duration provided) so we compute wanted_start
-    #   Mode 2: (wanted_start and wanted_duration provided) so we compute wanted_end
-    if wanted_duration is None:  # Mode 0: Both dates given.
-        computed_duration = business_days_between(wanted_start, wanted_end)
-        end_int = computed_duration
-        schedule_mode = 0
-    elif wanted_start is None:  # Mode 1: wanted_end and duration provided. Compute wanted_start by subtracting business days.
-        # Subtract wanted_duration business days from wanted_end.
-        wanted_start = (pd.Timestamp(wanted_end) - pd.offsets.BDay(wanted_duration)).date()
-        schedule_mode = 1
-        end_int = wanted_duration
-    elif wanted_end is None:  # Mode 2: wanted_start and duration provided. Compute wanted_end by adding business days.
-        wanted_end = (pd.Timestamp(wanted_start) + pd.offsets.BDay(wanted_duration)).date()
-        schedule_mode = 2
-        end_int = wanted_duration
+    # Compute the project duration in business days.
+    end_int = business_days_between(wanted_start, wanted_end)
 
     # Retrieve the tasks (here we assume data.get_all_project_tasks_cpm is defined elsewhere)
     tasks = await data.get_all_project_tasks_cpm(project_id)
@@ -276,7 +239,7 @@ async def calculate_sensible_schedule(
     # Convert the offsets to actual calendar dates (using business day arithmetic) for the tasks.
     # If the provided duration was too short, then adjust the project’s start date accordingly.
     adjusted_schedule, adjusted_wanted_start = convert_and_adjust_schedule(
-        sensible_schedule, diff, schedule_mode, wanted_start
+        sensible_schedule, diff, wanted_start
     )
 
     return adjusted_schedule, adjusted_wanted_start, wanted_end, end_int, given_duration_overridden
