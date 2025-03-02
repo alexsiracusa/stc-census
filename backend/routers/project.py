@@ -1,14 +1,16 @@
 from fastapi import APIRouter, HTTPException, Response, status, Body, Depends
+from typing import Optional, Any, Tuple
+from datetime import date
 import pandas as pd
 import asyncpg
-from typing import Any, Optional
-from datetime import date
 
 from ..database import data, admin
 from .task import router as task_router
 from ..utils.cpm import compute_cpm
 from ..utils.evm import compute_evm
-from ..utils.sensible_scheduling import schedule_tasks, adjust_if_weekend, business_days_between, convert_and_adjust_schedule
+from ..utils.sensible_scheduling import (schedule_tasks, adjust_if_weekend,
+                                         business_days_between, convert_and_adjust_schedule,
+                                         calculate_sensible_schedule)
 
 router = APIRouter(
     prefix="/project",
@@ -203,108 +205,52 @@ async def get_sensible_scheduling(
         )
 
 
-from datetime import date
-from typing import Optional, Dict, Any, Tuple
-import pandas as pd
-from fastapi import HTTPException
+@router.put("/{project_id}/use_suggested_schedule")
+async def use_suggested_schedule(
+    project_id: int,
+    response: Response,
+    wanted_start: date = None,
+    wanted_end: date = None
+):
+    try:
+        # Get scheduled tasks from external source
+        schedule_df, _, _, _, _ = await calculate_sensible_schedule(project_id, wanted_start, wanted_end)  # Implement this function
 
+        # Validate DataFrame structure
+        print(schedule_df.columns)
+        required_columns = {'task_id', 'project_id', 'start_date', 'end_date'}
+        if not required_columns.issubset(set(schedule_df.columns)):
+            missing = required_columns - set(schedule_df.columns)
+            raise HTTPException(400, f"Missing required columns in schedule data: {missing}")
 
-async def calculate_sensible_schedule(
-        project_id: int,
-        wanted_start: Optional[date],
-        wanted_end: Optional[date],
-) -> Tuple[pd.DataFrame, date, date, int, bool]:
-    """
-    Core logic for calculating the sensible schedule.
+        # Convert DataFrame to batch update format
+        tasks_to_update = []
+        for _, row in schedule_df.iterrows():
+            task_update = {
+                "task_id": int(row['task_id']),  # Convert numpy.int64 to int
+                "project_id": int(row['project_id']),  # Convert numpy.int64 to int
+                "fields": {
+                    "target_start_date": row['start_date'].isoformat() if pd.notnull(row['start_date']) else None,
+                    "target_completion_date": row['end_date'].isoformat() if pd.notnull(row['end_date']) else None
+                }
+            }
+            tasks_to_update.append(task_update)
 
-    Args:
-        project_id (int): The ID of the project.
-        wanted_start (Optional[date]): The desired start date.
-        wanted_end (Optional[date]): The desired end date.
+        # Perform batch update
+        update_result = await data.update_tasks(project_id, tasks_to_update)
 
-    Returns:
-        Tuple containing:
-            - adjusted_schedule (pd.DataFrame): The adjusted schedule.
-            - adjusted_wanted_start (date): The adjusted start date.
-            - wanted_end (date): The end date.
-            - end_int (int): The project duration in business days.
-            - given_duration_overridden (bool): Whether the given duration was overridden.
-    """
-    params = {
-        "wanted_start": wanted_start,
-        "wanted_end": wanted_end,
-        "wanted_duration": None  # deprecated, so this has been set to None
-    }
-    wanted_duration = None  # deprecated, so this has been set to None
+        response.status_code = status.HTTP_200_OK
+        return {
+            "message": f"Updated schedule for {int(update_result['updated_tasks'])} tasks",  # Convert numpy.int64 to int
+            "updated_projects": [int(proj_id) for proj_id in schedule_df['project_id'].unique()]  # Convert numpy.int64 to int
+        }
 
-    none_count = sum(value is None for value in params.values())
-    if none_count != 1:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Exactly two of wanted_start, wanted_end, or wanted_duration must be provided, "
-                   f"with the third as null. {3 - none_count} were provided."
-        )
-
-    # Make sure any user-provided dates fall on business days.
-    if wanted_start is not None:
-        wanted_start = adjust_if_weekend(wanted_start)
-    if wanted_end is not None:
-        wanted_end = adjust_if_weekend(wanted_end)
-
-    # Determine scheduling mode (how the missing parameter is computed) and compute the project duration
-    # in business days:
-    #
-    #   Mode 0: Both wanted_start and wanted_end provided.
-    #           (Then we compute the working-days duration between them.)
-    #   Mode 1: (wanted_end and wanted_duration provided) so we compute wanted_start
-    #   Mode 2: (wanted_start and wanted_duration provided) so we compute wanted_end
-    if wanted_duration is None:  # Mode 0: Both dates given.
-        computed_duration = business_days_between(wanted_start, wanted_end)
-        end_int = computed_duration
-        schedule_mode = 0
-    elif wanted_start is None:  # Mode 1: wanted_end and duration provided. Compute wanted_start by subtracting business days.
-        # Subtract wanted_duration business days from wanted_end.
-        wanted_start = (pd.Timestamp(wanted_end) - pd.offsets.BDay(wanted_duration)).date()
-        schedule_mode = 1
-        end_int = wanted_duration
-    elif wanted_end is None:  # Mode 2: wanted_start and duration provided. Compute wanted_end by adding business days.
-        wanted_end = (pd.Timestamp(wanted_start) + pd.offsets.BDay(wanted_duration)).date()
-        schedule_mode = 2
-        end_int = wanted_duration
-
-    # Retrieve the tasks (here we assume data.get_all_project_tasks_cpm is defined elsewhere)
-    tasks = await data.get_all_project_tasks_cpm(project_id)
-    df = pd.DataFrame(tasks)
-    df, cycle_info, critical_path_length = compute_cpm(df, include_dependencies_in_result=True)
-
-    # convert cycle_info (a list of 2-tuples) to a list of objects with keys 'id' and 'project_id'
-    cycle_info = [{'id': x[0], 'project_id': x[1]} for x in cycle_info]
-
-    if cycle_info:
-        raise HTTPException(
-            status_code=500,
-            detail="Computing schedule: cyclical dependencies detected."
-        )
-
-    # Compare the provided (business-day) project duration with the CPM minimum.
-    # (critical_path_length is assumed to be in working days – i.e. the sum of target_days_to_complete on the critical path)
-    diff = end_int - critical_path_length
-    given_duration_overridden = diff < 0
-    if given_duration_overridden:
-        # If the user-provided working-day duration isn’t long enough to fit the critical path,
-        # then default the project duration to the critical path’s length.
-        end_int = critical_path_length
-
-    # Calculate the schedule as “working day offsets.”
-    sensible_schedule = schedule_tasks(end_int, df)
-
-    # Convert the offsets to actual calendar dates (using business day arithmetic) for the tasks.
-    # If the provided duration was too short, then adjust the project’s start date accordingly.
-    adjusted_schedule, adjusted_wanted_start = convert_and_adjust_schedule(
-        sensible_schedule, diff, schedule_mode, wanted_start
-    )
-
-    return adjusted_schedule, adjusted_wanted_start, wanted_end, end_int, given_duration_overridden
+    except HTTPException as he:
+        raise he
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(500, f"Database error: {str(error)}")
+    except Exception as e:
+        raise HTTPException(500, f"Schedule update failed: {str(e)}")
 
 
 @router.get("/{project_id}/evm")
