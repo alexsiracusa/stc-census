@@ -25,6 +25,9 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
     // Use the useFetchProjectSuggestedSchedule hook
     const { fetchSuggestedSchedule, loading, error, data: suggestedScheduleData } = useFetchProjectSuggestedSchedule();
 
+    // Use the useUpdateSchedule hook
+    const { updateProjectSchedule, loading: updateLoading, error: updateError } = useUpdateProjectSchedule();
+
     const handleGenerateSchedule = () => {
         // Using date-fns format to ensure the dates are in "YYYY-MM-DD" format.
         const wanted_start = format(startDate, "yyyy-MM-dd");
@@ -34,11 +37,24 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
         fetchSuggestedSchedule(project_id, wanted_start, wanted_end);
     };
 
-    const handleAcceptPlan = () => {
+    const handleAcceptPlan = async () => {
         console.log("Accepting plan with schedule data:", suggestedScheduleData);
-        // {} = useUpdateProjectSchedule(props.project_id);
-        setShowConfirmation(false);
-        onClose();
+
+        try {
+            // Call the updateProjectSchedule function from the useUpdateSchedule hook
+            const response = updateProjectSchedule(project_id, format(startDate, "yyyy-MM-dd"), format(dueDate, "yyyy-MM-dd"));
+
+            if (updateError) {
+                console.error("An error occurred with accepting the plan:", updateError);
+            } else {
+                console.log("Plan accepted successfully. Response:", response);
+            }
+        } catch (error) {
+            console.error("An error occurred with accepting the plan:", error);
+        } finally {
+            setShowConfirmation(false);
+            onClose();
+        }
     };
 
     const handleRejectPlan = () => {
