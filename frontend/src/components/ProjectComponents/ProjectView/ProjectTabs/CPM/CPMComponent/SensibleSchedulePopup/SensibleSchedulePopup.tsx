@@ -21,27 +21,9 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
     const [startDate, setStartDate] = useState<Date>(today);
     const [dueDate, setDueDate] = useState<Date>(tomorrow);
     const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-    const [suggestedScheduleData, setSuggestedScheduleData] = useState<any>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [fetchError, setFetchError] = useState<string | null>(null);
 
-    const fetchScheduleData = async (wanted_start: string, wanted_end: string) => {
-        // wanted_start and wanted_end are now in the "YYYY-MM-DD" format
-        setIsLoading(true);
-        setFetchError(null);
-        try {
-            const response = await fetch(
-                `http://localhost:8000/project/${project_id}/sensible_scheduling?wanted_start=${wanted_start}&wanted_end=${wanted_end}`
-            );
-            const data = await response.json();
-            setSuggestedScheduleData(data);
-        } catch (error: any) {
-            console.error("Error fetching schedule data:", error);
-            setFetchError(error.message || "Error fetching data");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    // Use the useFetchProjectSuggestedSchedule hook
+    const { fetchSuggestedSchedule, loading, error, data: suggestedScheduleData } = useFetchProjectSuggestedSchedule();
 
     const handleGenerateSchedule = () => {
         // Using date-fns format to ensure the dates are in "YYYY-MM-DD" format.
@@ -49,7 +31,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
         const wanted_end = format(dueDate, "yyyy-MM-dd");
 
         setShowConfirmation(true);
-        fetchScheduleData(wanted_start, wanted_end);
+        fetchSuggestedSchedule(project_id, wanted_start, wanted_end);
     };
 
     const handleAcceptPlan = () => {
@@ -105,10 +87,10 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                 {showConfirmation && (
                     <div className="confirmation-section">
                         <h2>Confirm Schedule</h2>
-                        {isLoading ? (
+                        {loading ? (
                             <p>Loading schedule data...</p>
-                        ) : fetchError ? (
-                            <p>Error: {fetchError}</p>
+                        ) : error ? (
+                            <p>Error: {error}</p>
                         ) : (
                             <pre>{JSON.stringify(suggestedScheduleData, null, 2)}</pre>
                         )}
@@ -119,7 +101,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                             <button
                                 className="schedule-button"
                                 onClick={handleAcceptPlan}
-                                disabled={isLoading || !!fetchError}
+                                disabled={loading || !!error}
                             >
                                 Accept Plan
                             </button>
