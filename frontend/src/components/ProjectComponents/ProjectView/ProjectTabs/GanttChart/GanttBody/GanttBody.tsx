@@ -1,3 +1,5 @@
+import './GanttBody.css'
+
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,15 +12,15 @@ import {
     TooltipPositionerMap,
     ChartOptions,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import {Bar} from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import "chartjs-adapter-date-fns";
 
-import { findStartAndEndDates } from "./hooks/findStartAndEndDates";
-import { formatDateInLocal } from "./utils/formattedDate";
-import formatGanttData from "./utils/formatGanttData";
-import { Task } from "../../../../../types/Task";
-import { useEffect, useRef } from "react";
+import {findStartAndEndDates} from "../hooks/findStartAndEndDates.tsx";
+import {formatDateInLocal} from "../utils/formattedDate.ts";
+import formatGanttData from "../utils/formatGanttData.tsx";
+import {Task} from "../../../../../../types/Task.ts";
+import {useEffect, useRef} from "react";
 
 ChartJS.register(
     CategoryScale,
@@ -49,25 +51,21 @@ interface CustomTooltip extends TooltipPositionerMap {
     };
 };
 
-const TASK_ROW_HEIGHT = 70; // Fixed height for each task row
-const CHART_CONTAINER_HEIGHT = 690; // Fixed height for the chart container
-
-const TIME_UNIT_WIDTH = 50; // Fixed width for each time unit
-const CHART_CONTAINER_WIDTH = 1000; // Fixed width for the chart container
+const TASK_ROW_HEIGHT = 45; // Fixed height for each task row
 
 interface GanttBodyProps {
     data: Task[];
     dateRange?: { startDate: string; endDate: string } | null;
 }
 
-const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
+const GanttBody = ({data, dateRange}: GanttBodyProps) => {
     const chartRef = useRef<any>(null);
-    
+
     if (!data) {
         throw new Error("GanttBody: data is null or undefined");
     }
 
-    const { startDate, endDate } = findStartAndEndDates(data);
+    const {startDate, endDate} = findStartAndEndDates(data);
 
     if (!startDate || !endDate) {
         throw new Error(
@@ -86,16 +84,6 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
     const chartHeight = data.length * TASK_ROW_HEIGHT + 100;
 
     const timeRangeInDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    // const chartWidth = timeRangeInDays * TIME_UNIT_WIDTH;
-
-    let chartWidth
-    if (timeRangeInDays < 20) {
-        chartWidth = 1000;
-    } else if (timeRangeInDays <= 30) {
-        chartWidth = timeRangeInDays * TIME_UNIT_WIDTH;
-    } else {
-        chartWidth = 1000;
-    }
 
     let timeUnit: "day" | "week" | "month";
     if (timeRangeInDays <= 30) {
@@ -109,7 +97,7 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
     const todayLine = {
         id: 'todayLine',
         afterDatasetsDraw(chart, args, pluginOptions) {
-            const { ctx, data, chartArea: { top, bottom, left, right }, scales: { x, y } } = chart;
+            const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
 
             ctx.save();
 
@@ -151,7 +139,7 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
         maintainAspectRatio: false,
         layout: {
             padding: {
-                top: 30,
+                top: 10,
                 right: 40,
                 left: 40,
                 bottom: 40,
@@ -241,9 +229,9 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
                         color: "#1c1c1c",
                         align: "bottom",
                         anchor: "center",
-                        offset: 15,
-                        padding: { top: 10 },
-                        font: { size: 12, weight: 400, lineHeight: 1.7 },
+                        // offset: 15,
+                        padding: {top: 8},
+                        font: {size: 12, weight: 400, lineHeight: 1.7},
                         formatter(value: { EventName: string; x: string[] }) {
                             if (!value.EventName) {
                                 throw new Error(
@@ -259,7 +247,7 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
                 },
             },
         },
-    };
+    } as ChartOptions<"bar">;
 
     useEffect(() => {
         if (chartRef.current && dateRange) {
@@ -271,11 +259,8 @@ const GanttBody = ({ data, dateRange }: GanttBodyProps) => {
     }, [dateRange]);
 
     return (
-        <div style={{ height: `${CHART_CONTAINER_HEIGHT}px`, width: `${CHART_CONTAINER_WIDTH}px`, overflow: 'auto' }}>
-            <div style={{ height: `${chartHeight}px`, width: `${chartWidth}px` }}>
-                <h4>Timeline</h4>
-                <Bar data={formattedData} options={baseOptions} plugins={[todayLine]} />
-            </div>
+        <div style={{height: `${chartHeight}px`}}>
+            <Bar data={formattedData} options={baseOptions} plugins={[todayLine]}/>
         </div>
     );
 }
