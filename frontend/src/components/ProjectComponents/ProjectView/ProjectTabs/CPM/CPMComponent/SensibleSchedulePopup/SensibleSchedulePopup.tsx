@@ -77,6 +77,8 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
 
         const { givenDurationOverridden, projectStartDate, projectEndDate, projectDurationInDays, suggested_schedule } = suggestedScheduleData;
 
+        const isDurationOverridden = givenDurationOverridden === 'true';
+
         const mappedTasks = suggested_schedule.map((task: TaskSchedule) => ({
             id: task.task_id,
             project_id: task.project_id,
@@ -88,7 +90,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
 
         return (
             <div className="suggested-schedule-container">
-                {givenDurationOverridden && (
+                {isDurationOverridden && (
                     <div className="duration-overridden-message">
                         <p>The provided dates were unrealistic and have been overwritten.</p>
                     </div>
