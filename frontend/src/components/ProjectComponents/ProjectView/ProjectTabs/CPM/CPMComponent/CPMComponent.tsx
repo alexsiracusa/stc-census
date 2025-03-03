@@ -39,7 +39,10 @@ const CPMComponent = (props: CPMComponentProps) => {
         </div>;
     }
 
-    const hasCycles = projectCpmData.cycleInfo && projectCpmData.cycleInfo.length > 0;
+    const cycleInfo = projectCpmData.cycle_info;
+    const criticalPathLength = projectCpmData.critical_path_length;
+
+    const hasCycles = cycleInfo && cycleInfo.length > 0;
 
     return (
         <div className="cpm-component">
@@ -50,12 +53,12 @@ const CPMComponent = (props: CPMComponentProps) => {
             )}
             <div className="graph-container">
                 <div className="critical-path-length">
-                    Critical Path Length: {projectCpmData.criticalPathLength} days
+                    Critical Path Length: {criticalPathLength} days
                 </div>
                 <CPMGraph
                     currentProjectId={projectId}
                     cpmData={projectCpmData.cpm}
-                    cycleInfo={projectCpmData.cycleInfo}
+                    cycleInfo={cycleInfo}
                 />
                 <div className="sensible-schedule-button">
                     <SensibleScheduleButton props={props} />

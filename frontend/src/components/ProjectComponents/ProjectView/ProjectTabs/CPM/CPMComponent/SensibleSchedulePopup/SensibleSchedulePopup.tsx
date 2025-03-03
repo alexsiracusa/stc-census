@@ -75,11 +75,11 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
     const renderSuggestedSchedule = () => {
         if (!suggestedScheduleData) return null;
 
-        const { givenDurationOverridden, projectStartDate, projectEndDate, projectDurationInDays, suggested_schedule } = suggestedScheduleData;
+        const { given_duration_in_days: givenDurationOverridden, project_start_date: projectStartDate, project_end_date: projectEndDate, project_duration_in_days: projectDurationInDays, suggested_schedule: suggestedSchedule } = suggestedScheduleData;
 
         const isDurationOverridden = givenDurationOverridden === 'true';
 
-        const mappedTasks = suggested_schedule.map((task: TaskSchedule) => ({
+        const mappedTasks = suggestedSchedule.map((task: TaskSchedule) => ({
             id: task.task_id,
             project_id: task.project_id,
             name: task.name,
