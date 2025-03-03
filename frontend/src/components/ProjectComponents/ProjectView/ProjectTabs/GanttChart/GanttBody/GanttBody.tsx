@@ -19,7 +19,6 @@ import "chartjs-adapter-date-fns";
 import {findStartAndEndDates} from "../hooks/findStartAndEndDates.tsx";
 import {formatDateInLocal} from "../utils/formattedDate.ts";
 import formatGanttData from "../utils/formatGanttData.tsx";
-import {Task} from "../../../../../../types/Task.ts";
 import {useEffect, useRef} from "react";
 
 ChartJS.register(
@@ -53,8 +52,13 @@ interface CustomTooltip extends TooltipPositionerMap {
 
 const TASK_ROW_HEIGHT = 45; // Fixed height for each task row
 
+interface TaskSchedule {
+    start: string;
+    end: string;
+}
+
 interface GanttBodyProps {
-    data: Task[];
+    data: TaskSchedule[];
     dateRange?: { startDate: string; endDate: string } | null;
 }
 
