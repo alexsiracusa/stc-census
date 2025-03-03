@@ -1,15 +1,15 @@
 import './ProjectDownloadButton.css';
 
-import React, { useEffect, useState } from 'react';
-import { convertProjectDataToCSV, downloadCSV } from './projectCsvFormatter';
+import React, {useEffect, useState} from 'react';
+import {convertProjectDataToCSV, downloadCSV} from './projectCsvFormatter';
 import useFetchProjectDownload from "../../../hooks/useFetchProjectDownload";
 
 type DownloadProjectButtonProps = {
     projectId: number;
 };
 
-const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId }) => {
-    const { downloadProject, loading, error, data } = useFetchProjectDownload();
+const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({projectId}) => {
+    const {downloadProject, loading, error, data} = useFetchProjectDownload();
     const [isProcessing, setIsProcessing] = useState(false);
     const [processingError, setProcessingError] = useState<string | null>(null);
 
@@ -56,15 +56,13 @@ const ProjectDownloadButton: React.FC<DownloadProjectButtonProps> = ({ projectId
     }, [data, projectId]);
 
     return (
-        <div className="project-download-container">
-            <button
-                className={`project-download-button ${error || processingError ? 'error-state' : ''}`}
-                onClick={handleDownload}
-                disabled={loading || isProcessing}
-            >
-                {loading || isProcessing ? 'Processing...' : 'Download'}
-            </button>
-        </div>
+        <button
+            className={`project-download-button ${error || processingError ? 'error-state' : ''}`}
+            onClick={handleDownload}
+            disabled={loading || isProcessing}
+        >
+            {loading || isProcessing ? 'Processing...' : 'Download'}
+        </button>
     );
 };
 
