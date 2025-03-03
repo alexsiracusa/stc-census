@@ -129,13 +129,12 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                 transparentBackground={false}
             >
                 <div className="sensible-schedule-popup-inner">
-                    <button className="close-button" onClick={onClose}>
-                        &times;
-                    </button>
-
                     {!showConfirmation && (
                         <>
                             <h2>Select Schedule Dates</h2>
+                            <button className="close-button" onClick={onClose}>
+                                &times;
+                            </button>
                             <div className="date-picker-container">
                                 <div className="date-picker-header">Start Date:</div>
                                 <SimpleDatePicker
