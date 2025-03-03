@@ -13,6 +13,14 @@ interface SensibleSchedulePopupProps {
     project_id: number;
 }
 
+interface TaskSchedule {
+    task_id: number;
+    project_id: number,
+    name: string,
+    start_date: string;
+    end_date: string;
+}
+
 const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, project_id }) => {
     const today = new Date();
     const tomorrow = new Date();
@@ -84,7 +92,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                 <div className="task-schedule">
                     <h3>Suggested Task Schedule</h3>
                     <ul>
-                        {suggested_schedule.map((task, index) => (
+                        {suggested_schedule.map((task: TaskSchedule, index: number) => (
                             <li key={index}>
                                 <p><strong>Task ID:</strong> {task.task_id}</p>
                                 <p><strong>Start Date:</strong> {task.start_date}</p>
