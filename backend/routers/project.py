@@ -161,8 +161,8 @@ async def get_cpm_analysis(project_id: int, response: Response):
         result = {
             "id": project_id,
             "cpm": df.to_dict(orient="records"),
-            "cycleInfo": cycle_info,
-            "criticalPathLength": float(critical_path_length)
+            "cycle_info": cycle_info,
+            "critical_path_length": float(critical_path_length)
         }
         
         response.status_code = status.HTTP_200_OK
@@ -190,10 +190,10 @@ async def get_sensible_scheduling(
         # Prepare the result
         result = {
             "id": project_id,
-            "givenDurationOverridden": str(given_duration_overridden),
-            "projectStartDate": adjusted_wanted_start,
-            "projectEndDate": wanted_end,
-            "projectDurationInDays": int(end_int),
+            "given_duration_overridden": str(given_duration_overridden),
+            "project_start_date": adjusted_wanted_start,
+            "project_end_date": wanted_end,
+            "project_duration_in_days": int(end_int),
             "suggested_schedule": adjusted_schedule.to_dict(orient="records"),
         }
         return result
