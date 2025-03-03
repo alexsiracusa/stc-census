@@ -83,27 +83,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
             name: task.name,
             target_start_date: task.start_date,
             target_completion_date: task.end_date,
-            // Default values for required fields
-            description: null,
-            status: 'planned',
-            created_at: new Date().toISOString(),
-            person_in_charge_id: 0,
-            expected_cost: 0,
-            actual_cost: 0,
-            actual_start_date: task.start_date,
-            actual_completion_date: null,
-            target_days_to_complete: Math.ceil(
-                (new Date(task.end_date).getTime() - new Date(task.start_date).getTime()) /
-                (1000 * 3600 * 24)
-            ),
-            depends_on: [],
-            person_in_charge: {
-                id: 0,
-                email: '',
-                last_name: '',
-                first_name: '',
-            },
-            budget_variance: 0,
+            status: '',
         }));
 
         return (
