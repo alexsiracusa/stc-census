@@ -8,12 +8,14 @@ async def get_accounts():
         FROM Account
     """)
 
+
 async def get_projects():
     return await client.postgres_client.fetch("""
         SELECT * 
         FROM Project_Summary
         WHERE parent IS NULL
     """)
+
 
 async def delete_projects(project_ids):
     query_parts = [f'id = {project_id}' for project_id in project_ids]
@@ -26,6 +28,20 @@ async def delete_projects(project_ids):
         )
         SELECT count(*) FROM deleted
     """)
+
+
+async def archive_projects(project_ids, archive=True):
+    query_parts = [f'id = {project_id}' for project_id in project_ids]
+
+    return await client.postgres_client.fetch(f"""
+        WITH archived AS (
+            UPDATE Project
+            SET archived = $1
+            WHERE {' OR '.join(query_parts)}
+            RETURNING *
+        )
+        SELECT count(*) FROM archived
+    """, archive)
 
 
 async def delete_tasks(task_ids):

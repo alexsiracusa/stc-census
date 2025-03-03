@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 
 import XMark from "../../../../assets/Icons/X.svg";
 import Edit from "../../../../assets/Icons/Edit.svg";
-import Archive from "../../../../assets/Icons/Archive.svg";
 import Trash from "../../../../assets/Icons/Trash.svg";
 
 type TaskEditingHeaderProps = {
@@ -42,31 +41,6 @@ const TaskEditingHeader = (props: TaskEditingHeaderProps) => {
 
             {editing && (
                 <>
-                    <ConfirmPopup
-                        className='archive-button'
-                        title='Archive'
-                        message='Are you sure you want to archive all selected projects and related information?'
-                        left={{
-                            text: 'Archive',
-                            onPress: () => {
-                                // archive projects
-                                setEditing(false)
-                                props.setEditing(false)
-                            },
-                            type: 'safe',
-                        }}
-                        right={{
-                            text: 'Cancel',
-                            onPress: () => {
-                                setEditing(false)
-                                props.setEditing(false)
-                            },
-                            type: 'neutral'
-                        }}
-                    >
-                        <img src={Archive}/>
-                    </ConfirmPopup>
-
                     <ConfirmPopup
                         className='delete-button'
                         message='Are you sure you want to delete all selected tasks? This cannot be undone.'

@@ -41,3 +41,31 @@ async def delete_projects(
 
     except asyncpg.exceptions.PostgresError as error:
         raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
+
+
+@router.put("/archive")
+async def archive_projects(
+    response: Response,
+    request: ProjectIds,
+):
+    try:
+        num_archived = await data.archive_projects(request.project_ids, archive=True)
+        response.status_code = status.HTTP_200_OK
+        return {"num_archived": num_archived}
+
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")
+
+
+@router.put("/unarchive")
+async def archive_projects(
+    response: Response,
+    request: ProjectIds,
+):
+    try:
+        num_unarchived = await data.archive_projects(request.project_ids, archive=False)
+        response.status_code = status.HTTP_200_OK
+        return {"num_unarchived": num_unarchived}
+
+    except asyncpg.exceptions.PostgresError as error:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(error)}")

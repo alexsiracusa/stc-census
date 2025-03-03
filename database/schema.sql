@@ -49,19 +49,19 @@ CREATE INDEX session_account_b_tree_index ON Session USING BTREE (account_id);
 
 
 CREATE TABLE Project (
-    id              SERIAL          PRIMARY KEY,
-    parent          INT             REFERENCES Project(id) ON DELETE CASCADE,
-    name            TEXT            NOT NULL,
-    description     TEXT,
-    status          PROJECT_STATUS  NOT NULL DEFAULT 'to_do',
-    person_in_charge_id     INT     REFERENCES Account(id) ON DELETE SET NULL,
-    team_email_alias        TEXT    DEFAULT NULL,
+    id                      SERIAL          PRIMARY KEY,
+    parent                  INT             REFERENCES Project(id) ON DELETE CASCADE,
+    name                    TEXT            NOT NULL,
+    description             TEXT,
+    status                  PROJECT_STATUS  NOT NULL DEFAULT 'to_do',
+    person_in_charge_id     INT             REFERENCES Account(id) ON DELETE SET NULL,
+    team_email_alias        TEXT            DEFAULT NULL,
     
-    budget          DECIMAL(2),
-    created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    budget                  DECIMAL(2),
+    created_at              TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    requested_by    TEXT,
-    date_requested  DATE,
+    requested_by            TEXT,
+    date_requested          DATE,
 
     actual_start_date       DATE,
     actual_completion_date  DATE,
@@ -69,17 +69,17 @@ CREATE TABLE Project (
     target_start_date       DATE,
     target_completion_date  DATE,
 
-    archived        BOOLEAN         NOT NULL DEFAULT false
+    archived                BOOLEAN         NOT NULL DEFAULT false
 );
 
 
 CREATE TABLE Task (
-    id              INT         NOT NULL,
-    project_id      INT         NOT NULL REFERENCES Project(id) ON DELETE CASCADE,
-    name            TEXT        NOT NULL,
-    description     TEXT,
-    status          TASK_STATUS NOT NULL DEFAULT 'to_do',
-    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id                      INT                 NOT NULL,
+    project_id              INT                 NOT NULL REFERENCES Project(id) ON DELETE CASCADE,
+    name                    TEXT                NOT NULL,
+    description             TEXT,
+    status                  TASK_STATUS         NOT NULL DEFAULT 'to_do',
+    created_at              TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     person_in_charge_id     INT                 REFERENCES Account(id) ON DELETE SET NULL,
     expected_cost           DECIMAL(1000, 2)    NOT NULL DEFAULT 0,
@@ -91,7 +91,7 @@ CREATE TABLE Task (
     target_start_date       DATE,
     target_completion_date  DATE,
 
-    target_days_to_complete DECIMAL(1000, 2) NOT NULL DEFAULT 1,
+    target_days_to_complete DECIMAL(1000, 2)    NOT NULL DEFAULT 1,
 
     PRIMARY KEY (project_id, id)
 );
