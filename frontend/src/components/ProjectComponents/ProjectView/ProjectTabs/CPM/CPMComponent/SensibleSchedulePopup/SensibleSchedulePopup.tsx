@@ -132,25 +132,28 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                     <button className="close-button" onClick={onClose}>
                         &times;
                     </button>
-                    <h2>Select Schedule Dates</h2>
-                    <div className="date-picker-container">
-                        <div className="date-picker-header">Start Date:</div>
-                        <SimpleDatePicker
-                            title="Start Date"
-                            currentDate={startDate}
-                            onChange={(date: Date) => setStartDate(date)}
-                        />
-                        <div className="date-picker-header">Due Date:</div>
-                        <SimpleDatePicker
-                            title="Due Date"
-                            currentDate={dueDate}
-                            onChange={(date: Date) => setDueDate(date)}
-                        />
-                    </div>
+
                     {!showConfirmation && (
-                        <button className="schedule-button" onClick={handleGenerateSchedule}>
-                            Generate Schedule
-                        </button>
+                        <>
+                            <h2>Select Schedule Dates</h2>
+                            <div className="date-picker-container">
+                                <div className="date-picker-header">Start Date:</div>
+                                <SimpleDatePicker
+                                    title="Start Date"
+                                    currentDate={startDate}
+                                    onChange={(date: Date) => setStartDate(date)}
+                                />
+                                <div className="date-picker-header">Due Date:</div>
+                                <SimpleDatePicker
+                                    title="Due Date"
+                                    currentDate={dueDate}
+                                    onChange={(date: Date) => setDueDate(date)}
+                                />
+                            </div>
+                            <button className="schedule-button" onClick={handleGenerateSchedule}>
+                                Generate Schedule
+                            </button>
+                        </>
                     )}
 
                     {showConfirmation && (
