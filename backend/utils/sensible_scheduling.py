@@ -32,7 +32,8 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     tasks = []
     for row in tasks_df.to_dict('records'):
         task_id = row['id']
-        project_id = row['project_id']  # Ensure project_id is included
+        project_id = row['project_id']
+        name = row['name']
         es = row['earliest_start']
         ee = row['earliest_finish']
         ls = row['latest_start']
@@ -42,14 +43,15 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
         dependencies = row['dependencies']
         target_days = row['target_days_to_complete']  # assumed to be working days
         deps_task_ids = [tasks_df.iloc[idx]['id'] for idx in dependencies]
-        tasks.append((task_id, project_id, es, ee, ls, le, slack, is_critical, deps_task_ids, target_days))
+        tasks.append((task_id, project_id, name, es, ee, ls, le, slack, is_critical, deps_task_ids, target_days))
 
     task_map = {}
     for t in tasks:
-        task_id, project_id, es, ee, ls, le, slack, is_critical, deps, target_days = t
+        task_id, project_id, name, es, ee, ls, le, slack, is_critical, deps, target_days = t
         task_map[task_id] = {
             'id': task_id,
             'project_id': project_id,  # Include project_id in the task map
+            'name': name,
             'earliest_start': es,
             'earliest_finish': ee,
             'latest_start': ls,
@@ -147,8 +149,9 @@ def schedule_tasks(end_date: int, tasks_df: pd.DataFrame) -> pd.DataFrame:
     for t_id, (start, end) in schedule.items():
         result_data.append({
             'task_id': t_id,
-            'project_id': task_map[t_id]['project_id'],  # Include project_id in the result
-            'start_date': start,  # these are offsets expressed in working days
+            'project_id': task_map[t_id]['project_id'],
+            'name': task_map[t_id]['name'],
+            'start_date': start,
             'end_date': end
         })
 

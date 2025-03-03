@@ -8,7 +8,7 @@ def compute_cpm(df: pd.DataFrame, include_dependencies_in_result:bool=False) -> 
     if n == 0:
         # Return an empty dataframe with the proper columns, an empty cycle list, and a critical path duration of 0.
         empty_df = pd.DataFrame(columns=[
-            'id', 'project_id', 'earliest_start', 'earliest_finish',
+            'id', 'project_id', 'name', 'earliest_start', 'earliest_finish',
             'latest_start', 'latest_finish', 'slack', 'is_critical', 'dependencies'
         ])
         return empty_df, [], 0
@@ -80,6 +80,7 @@ def compute_cpm(df: pd.DataFrame, include_dependencies_in_result:bool=False) -> 
     result_df = pd.DataFrame({
         'id': df['id'],
         'project_id': df['project_id'],
+        'name': df['name'],
         'target_days_to_complete': df['target_duration'],
         'earliest_start': es,
         'earliest_finish': ef,
@@ -95,7 +96,7 @@ def compute_cpm(df: pd.DataFrame, include_dependencies_in_result:bool=False) -> 
     return result_df, cycle_node_info, project_duration
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
-    df.columns = ['id', 'project_id', 'status', 'target_duration', 'dependencies']
+    df.columns = ['id', 'project_id', 'name', 'status', 'target_duration', 'dependencies']
     # Set any null target_duration to 0
     df['target_duration'] = df['target_duration'].fillna(0)
     df['target_duration'] = df['target_duration'].astype(float)
