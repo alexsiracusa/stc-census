@@ -7,6 +7,7 @@ import Popup from "../../../../../../GenericComponents/Popup/Popup.tsx";
 
 import useFetchProjectSuggestedSchedule from "../../../../../../../hooks/useFetchProjectSuggestedSchedule.ts";
 import useUpdateProjectSchedule from "../../../../../../../hooks/useUpdateProjectSchedule.ts";
+import GanttBody from "../../../GanttChart/GanttBody/GanttBody.tsx";
 
 interface SensibleSchedulePopupProps {
     onClose: () => void;
@@ -76,6 +77,35 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
 
         const { givenDurationOverridden, projectStartDate, projectEndDate, projectDurationInDays, suggested_schedule } = suggestedScheduleData;
 
+        const mappedTasks = suggested_schedule.map((task: TaskSchedule) => ({
+            id: task.task_id,
+            project_id: task.project_id,
+            name: task.name,
+            target_start_date: task.start_date,
+            target_completion_date: task.end_date,
+            // Default values for required fields
+            description: null,
+            status: 'planned',
+            created_at: new Date().toISOString(),
+            person_in_charge_id: 0,
+            expected_cost: 0,
+            actual_cost: 0,
+            actual_start_date: task.start_date,
+            actual_completion_date: null,
+            target_days_to_complete: Math.ceil(
+                (new Date(task.end_date).getTime() - new Date(task.start_date).getTime()) /
+                (1000 * 3600 * 24)
+            ),
+            depends_on: [],
+            person_in_charge: {
+                id: 0,
+                email: '',
+                last_name: '',
+                first_name: '',
+            },
+            budget_variance: 0,
+        }));
+
         return (
             <div className="suggested-schedule-container">
                 {givenDurationOverridden && (
@@ -89,18 +119,16 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                     <p><strong>End Date:</strong> {projectEndDate}</p>
                     <p><strong>Duration:</strong> {projectDurationInDays} workdays</p>
                 </div>
-                <div className="task-schedule">
-                    <h3>Suggested Task Schedule</h3>
-                    <ul>
-                        {suggested_schedule.map((task: TaskSchedule, index: number) => (
-                            <li key={index}>
-                                <p><strong>Task ID:</strong> {task.task_id}</p>
-                                <p><strong>Start Date:</strong> {task.start_date}</p>
-                                <p><strong>End Date:</strong> {task.end_date}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                    <div className="task-schedule">
+                        <h3>Suggested Task Schedule</h3>
+                        <GanttBody
+                            data={mappedTasks}
+                            dateRange={{
+                                startDate: projectStartDate,
+                                endDate: projectEndDate
+                            }}
+                        />
+                    </div>
             </div>
         );
     };
@@ -108,7 +136,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
     return (
         <>
             <Popup
-                icon={<span style={{ display: "none" }} />}
+                icon={<span style={{display: "none"}}/>}
                 buttonClassName="hidden-button"
                 contentClassName="sensible-schedule-popup-content"
                 title="Select Schedule Dates"
