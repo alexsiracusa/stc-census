@@ -1,10 +1,6 @@
 
 .gantt-chart {
     overflow-y: scroll;
-}
-
-
-.gantt-chart {
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
