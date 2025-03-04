@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next';
 import TabProps from "../TabProps.ts";
 import ProjectName from "../../../ProjectRow/ProjectName/ProjectName.tsx";
 import EVMComponent from "../EVM/EVMComponent/EVMComponent.tsx";
+import CPMComponent from "../CPM/CPMComponent/CPMComponent.tsx";
 
 const Summary = (props: TabProps) => {
     const {t} = useTranslation();
@@ -15,6 +16,9 @@ const Summary = (props: TabProps) => {
             </div>
             <div className="evm-summary">
                 <EVMComponent project_id={props.project_id} direction='row'/>
+            </div>
+            <div className="cpm-summary">
+                <CPMComponent project_id={props.project_id} direction='row'/>
             </div>
         </div>
     )
