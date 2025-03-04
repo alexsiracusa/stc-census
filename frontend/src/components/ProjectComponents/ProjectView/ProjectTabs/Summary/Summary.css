@@ -2,6 +2,7 @@
     overflow-y: scroll;
 
     .evm-summary {
+        margin-top: 1em;
         height: 25em;
         width: 100%;
 
@@ -19,6 +20,7 @@
 }
 
 .cpm-summary {
-    width: 100%;
-    height: 100%;
+    margin-top: 1em;
+    width: 50%;
+    height: 50%;
 }
