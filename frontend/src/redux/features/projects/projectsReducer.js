@@ -192,8 +192,8 @@ export const projectSlice = createSlice({
             }
             // Save the CPM-related data.
             state.byId[projectId].cpm = json.cpm;
-            state.byId[projectId].cycleInfo = json.cycleInfo;
-            state.byId[projectId].criticalPathLength = json.criticalPathLength;
+            state.byId[projectId].cycle_info = json.cycle_info;
+            state.byId[projectId].critical_path_length = json.critical_path_length;
         },
         setEVM: (state, action) => {
             const json = action.payload;
