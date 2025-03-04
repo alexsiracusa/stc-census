@@ -33,10 +33,8 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
     const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
     const [showErrorPopup, setShowErrorPopup] = useState<boolean>(false);
 
-    // Use the useFetchProjectSuggestedSchedule hook
     const { fetchSuggestedSchedule, loading, error, data: suggestedScheduleData } = useFetchProjectSuggestedSchedule();
 
-    // Use the useUpdateSchedule hook
     const { updateProjectSchedule, loading: updateLoading, error: updateError, data: updateResponse } = useUpdateProjectSchedule();
 
     const handleGenerateSchedule = () => {
@@ -52,8 +50,7 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
         console.log("Accepting plan with schedule data:", suggestedScheduleData);
 
         try {
-            // Call the updateProjectSchedule function from the useUpdateSchedule hook
-            await updateProjectSchedule(project_id, format(startDate, "yyyy-MM-dd"), format(dueDate, "yyyy-MM-dd"));
+            updateProjectSchedule(project_id, format(startDate, "yyyy-MM-dd"), format(dueDate, "yyyy-MM-dd"));
 
             if (updateError) {
                 setShowErrorPopup(true);
@@ -71,7 +68,6 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
         setShowConfirmation(false);
     };
 
-    // Helper function to format the suggested schedule data
     const renderSuggestedSchedule = () => {
         if (!suggestedScheduleData) return null;
 
