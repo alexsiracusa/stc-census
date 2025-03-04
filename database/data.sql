@@ -93,15 +93,15 @@ INSERT INTO Task
 VALUES
 -- Completed tasks
 (pid4, 'Kick-off Meeting', '2025-01-15', '2025-01-15', 1, 'done',
- 'Initial planning meeting for HKCC Awards Ceremony 2025', '2025-01-15', '2025-01-15', 80.00, 75.00),
+ 'Initial planning meeting for HKCC Awards Ceremony 2025', '2025-01-15', '2025-01-15', 80.00, 200.00),
 (pid4, 'Confirm Ceremony Date', '2025-01-16', '2025-01-20', 5, 'done',
- 'Set final date for Awards Ceremony: July 24, 2025', '2025-01-16', '2025-01-19', 50.00, 50.00),
+ 'Set final date for Awards Ceremony: July 24, 2025', '2025-01-16', '2025-01-19', 50.00, 250.00),
 (pid4, 'Select and Confirm Venue', '2025-01-21', '2025-01-31', 11, 'done',
- 'Venue secured at Tsuen Wan Plaza Exhibition Hall', '2025-01-21', '2025-02-03', 500.00, 520.00),
+ 'Venue secured at Tsuen Wan Plaza Exhibition Hall', '2025-01-21', '2025-02-03', 350.00, 300.00),
 (pid4, 'Generate Honorable Guest List', '2025-01-21', '2025-01-25', 5, 'done',
- 'Initial list of potential guests created with 45 names', '2025-01-22', '2025-01-24', 75.00, 80.00),
+ 'Initial list of potential guests created with 45 names', '2025-01-22', '2025-01-24', 75.00, 300.00),
 (pid4, 'Invite Honorable Guests', '2025-01-26', '2025-02-04', 10, 'done',
- 'Formal invitations sent to all potential guests', '2025-01-26', '2025-02-05', 120.00, 115.00),
+ 'Formal invitations sent to all potential guests', '2025-01-26', '2025-02-05', 120.00, 150.00),
 
 -- In progress tasks
 (pid4, 'Define Ceremony Theme', '2025-02-05', '2025-02-10', 6, 'in_progress',
@@ -125,21 +125,21 @@ VALUES
 (pid4, 'Create Updated Floor Plan', '2025-02-16', '2025-02-21', 6, 'to_do',
  'Need to create floor plan with modified exhibition layout', NULL, NULL, 25.00, 0.00),
 (pid4, 'Submit Floor Plan to FEHD', '2025-02-22', '2025-02-26', 5, 'to_do',
- 'Official submission of floor plan for safety inspection', NULL, NULL, 1000.00, 0.00),
+ 'Official submission of floor plan for safety inspection', NULL, NULL, 300.00, 0.00),
 (pid4, 'Prepare Booth Exhibitors List', '2025-03-01', '2025-03-10', 10, 'to_do',
- 'Identify and invite potential exhibitors for 20 booths', NULL, NULL, 1800.00, 0.00),
+ 'Identify and invite potential exhibitors for 20 booths', NULL, NULL, 650.00, 0.00),
 (pid4, 'Finalize Exhibitor Numbers', '2025-03-11', '2025-03-20', 10, 'to_do',
- 'Confirm final exhibitor count and booth assignments', NULL, NULL, 1500.00, 0.00),
+ 'Confirm final exhibitor count and booth assignments', NULL, NULL, 500.00, 0.00),
 (pid4, 'Prepare Opening Ceremony Production', '2025-03-15', '2025-03-30', 16, 'to_do',
- 'Develop opening animation and ceremony sequence', NULL, NULL, 15000.00, 0.00),
+ 'Develop opening animation and ceremony sequence', NULL, NULL, 400.00, 0.00),
 (pid4, 'Prepare Opening Ceremony Sound Effects', '2025-04-01', '2025-04-10', 10, 'to_do',
- 'Create custom sound effects package including balloon reveal', NULL, NULL, 3500.00, 0.00),
+ 'Create custom sound effects package including balloon reveal', NULL, NULL, 500.00, 0.00),
 (pid4, 'Prepare Media Invitations', '2025-04-15', '2025-04-25', 11, 'to_do',
- 'Draft and design media invitation packages', NULL, NULL, 2000.00, 0.00),
+ 'Draft and design media invitation packages', NULL, NULL, 200.00, 0.00),
 (pid4, 'Send Media Invitations', '2025-04-26', '2025-05-02', 7, 'to_do',
- 'Distribute invitations to 30 media outlets', NULL, NULL, 1200.00, 0.00),
+ 'Distribute invitations to 30 media outlets', NULL, NULL, 420.00, 0.00),
 (pid4, 'Create Marketing Materials', '2025-05-05', '2025-05-20', 16, 'to_do',
- 'Design and produce posters, flyers, backdrop, and digital assets', NULL, NULL, 18000.00, 0.00);
+ 'Design and produce posters, flyers, backdrop, and digital assets', NULL, NULL, 400.00, 0.00);
 
 -- Awards Ceremony 2024 (DONE)
 INSERT INTO Task
