@@ -78,7 +78,7 @@
     cursor: pointer;
     border-radius: 6px;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .calendar-container .calendar-grid .day-box .event-list .event-block {
