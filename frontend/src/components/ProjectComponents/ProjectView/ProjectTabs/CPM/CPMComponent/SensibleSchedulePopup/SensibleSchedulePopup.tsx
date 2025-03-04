@@ -139,12 +139,14 @@ const SensibleSchedulePopup: React.FC<SensibleSchedulePopupProps> = ({ onClose, 
                                     title="Start Date"
                                     currentDate={startDate}
                                     onChange={(date: Date) => setStartDate(date)}
+                                    disableWeekends={true}
                                 />
                                 <div className="date-picker-header">Due Date:</div>
                                 <SimpleDatePicker
                                     title="Due Date"
                                     currentDate={dueDate}
                                     onChange={(date: Date) => setDueDate(date)}
+                                    disableWeekends={true}
                                 />
                             </div>
                             <button className="schedule-button" onClick={handleGenerateSchedule}>
