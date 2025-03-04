@@ -21,6 +21,19 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+
+    .show-password-container {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        margin-top: 0.5em;
+        font-size: 0.8em;
+
+        input {
+            width: auto;
+        }
+    }
 
     h2 {
         text-align: center;
@@ -29,11 +42,7 @@
     .form-group {
         margin-bottom: 15px;
     }
-    
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
+
 
     input {
         width: 100%;
