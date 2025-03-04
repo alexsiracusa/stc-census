@@ -35,7 +35,7 @@
     height: 3em;
 }
 
-.navbar a, button {
+.navbar a, .navbar button {
     font-size: 1.125em;
     color: #242424;
     font-weight: 500;
