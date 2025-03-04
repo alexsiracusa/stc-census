@@ -8,7 +8,8 @@ import useFetchCPM from "../../../../../../hooks/useFetchCPM.ts";
 
 interface CPMComponentProps {
     project_id: number;
-    [key: string]: any; // For any additional props
+    sensible_schedule?: boolean;
+    [key: string]: any;
 }
 
 const CPMComponent = (props: CPMComponentProps) => {
@@ -59,9 +60,9 @@ const CPMComponent = (props: CPMComponentProps) => {
                     cpmData={projectCpmData.cpm}
                     cycleInfo={cycleInfo}
                 />
-                <div className="sensible-schedule-button">
-                    <SensibleScheduleButton props={props} />
-                </div>
+                {props.sensible_schedule && (<div className="sensible-schedule-button">
+                    <SensibleScheduleButton props={props}/>
+                </div>)}
             </div>
         </div>
     );
