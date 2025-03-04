@@ -35,7 +35,6 @@ const customMetricFormatters: Record<string, (val: any) => string> = {
     schedule_variance_percent_in_decimal: (val: number) =>
         `${val}`,
     cost_performance_index: (val: number) => {
-        console.log(val, typeof val)
         return val.toFixed(2)
     },
     time_variance_percent_in_decimal: (val: number) =>
