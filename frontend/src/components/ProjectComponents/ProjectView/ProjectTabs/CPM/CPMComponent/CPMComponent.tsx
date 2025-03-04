@@ -7,17 +7,16 @@ import useFetchProjectTasks from "../../../../../../hooks/useFetchProjectTasks.t
 import useFetchCPM from "../../../../../../hooks/useFetchCPM.ts";
 
 interface CPMComponentProps {
-    project_id: string;
+    project_id: number;
     [key: string]: any; // For any additional props
 }
 
 const CPMComponent = (props: CPMComponentProps) => {
-    const projectId = Number(props.project_id);
 
-    const { loading: tasksLoading, error: tasksError } = useFetchProjectTasks(projectId);
-    const { loading: cpmLoading, error: cpmError } = useFetchCPM(projectId);
+    const { loading: tasksLoading, error: tasksError } = useFetchProjectTasks(props.project_id);
+    const { loading: cpmLoading, error: cpmError } = useFetchCPM(props.project_id);
 
-    const projectCpmData = useSelector((state: any) => state.projects.byId[projectId]);
+    const projectCpmData = useSelector((state: any) => state.projects.byId[props.project_id]);
 
     // Return early while data is loading or if there are errors.
     if (tasksLoading) {
@@ -56,7 +55,7 @@ const CPMComponent = (props: CPMComponentProps) => {
                     Critical Path Length: {criticalPathLength} days
                 </div>
                 <CPMGraph
-                    currentProjectId={projectId}
+                    currentProjectId={props.project_id}
                     cpmData={projectCpmData.cpm}
                     cycleInfo={cycleInfo}
                 />
