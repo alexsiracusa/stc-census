@@ -100,3 +100,16 @@
     color: white;
 }
 
+.date-picker-calendar-grid .day-cell .day-number:disabled {
+    background-color: transparent !important;
+    cursor: default;
+}
+
+.date-picker-calendar-grid .day-cell .day-number:disabled p {
+    color: #bbb;
+}
+
+.date-picker-calendar-grid .day-cell .day-number.selected:disabled {
+    background-color: #003366 !important;
+    color: white !important;
+}

@@ -7,6 +7,7 @@ type SimpleDatePickerProps = {
     currentDate: string | null
     title: string
     onChange: (arg0: any) => void
+    disableWeekends?: boolean
 }
 
 const SimpleDatePicker = (props: SimpleDatePickerProps) => {
@@ -18,6 +19,7 @@ const SimpleDatePicker = (props: SimpleDatePickerProps) => {
             title={props.title}
             currentDate={date}
             onChange={props.onChange}
+            disableWeekends={props.disableWeekends}
         >
             {date ? <p>{format(date, 'dd-MM-yy')}</p> : <p></p>}
         </DropdownDatePicker>

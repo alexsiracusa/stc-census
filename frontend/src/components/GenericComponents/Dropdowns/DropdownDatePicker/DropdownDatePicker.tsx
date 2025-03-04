@@ -17,6 +17,7 @@ type DropdownDatePickerProps = {
     title: string
     currentDate: Date | null
     onChange: (arg0: any) => void
+    disableWeekends?: boolean
 }
 
 
@@ -87,24 +88,33 @@ const DropdownDatePicker = (props: PropsWithChildren<DropdownDatePickerProps>) =
                             <p>{t(`calendar.days.${day.toLowerCase()}`)}</p>
                         </div>
                     ))}
-                    {calendarDays.map(({date, isCurrentMonth}, index) => (
-                        <div
-                            key={index}
-                            className={`day-cell ${isCurrentMonth ? '' : 'other-month'} ${date === props.currentDate ? 'today' : ''}`}
-                        >
-                            <button
-                                className={`day-number ${isSameDay(date, props.currentDate) ? 'selected' : ''} ${isSameDay(date, new Date()) ? 'today' : ''}`}
-                                onClick={() => {
-                                    const newDate = (isSameDay(date, props.currentDate)) ? null : date
-                                    props.onChange(newDate ? format(newDate, 'yyyy-MM-dd') : null)
-                                    setIsVisible(false)
-                                    setCurrentMonth(date)
-                                }}
+                    {calendarDays.map(({date, isCurrentMonth}, index) => {
+                        const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                        const isDisabled = props.disableWeekends && isWeekend;
+
+                        return (
+                            <div
+                                key={index}
+                                className={`day-cell ${isCurrentMonth ? '' : 'other-month'}`}
                             >
-                                <p>{date.getDate()}</p>
-                            </button>
-                        </div>
-                    ))}
+                                <button
+                                    className={`day-number 
+                    ${isSameDay(date, props.currentDate) ? 'selected' : ''} 
+                    ${isSameDay(date, new Date()) ? 'today' : ''}
+                `}
+                                    onClick={() => {
+                                        const newDate = (isSameDay(date, props.currentDate)) ? null : date;
+                                        props.onChange(newDate ? format(newDate, 'yyyy-MM-dd') : null);
+                                        setIsVisible(false);
+                                        setCurrentMonth(date);
+                                    }}
+                                    disabled={isDisabled}
+                                >
+                                    <p>{date.getDate()}</p>
+                                </button>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </DropdownPicker>
