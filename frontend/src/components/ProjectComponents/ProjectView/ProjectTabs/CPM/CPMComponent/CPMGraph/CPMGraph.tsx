@@ -30,13 +30,15 @@ interface TaskGraphProps {
     currentProjectId?: number;
     cpmData?: CpmData[];
     cycleInfo?: TaskInCycle[];
+    userInteraction: boolean;
 }
 
 const CPMGraph: React.FC<TaskGraphProps> = ({
-                                                 className = '',
-                                                 currentProjectId,
-                                                 cpmData = [],
-                                                 cycleInfo = []
+                                                className = '',
+                                                currentProjectId,
+                                                cpmData = [],
+                                                cycleInfo = [],
+                                                userInteraction
                                              }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const cyRef = useRef<any>(null);
@@ -138,7 +140,11 @@ const CPMGraph: React.FC<TaskGraphProps> = ({
                 spacingFactor: 1,
                 nodeDimensionsIncludeLabels: true
             },
-            style: taskGraphStyles
+            style: taskGraphStyles,
+            userPanningEnabled: userInteraction,
+            userZoomingEnabled: userInteraction,
+            boxSelectionEnabled: userInteraction,
+            autoungrabify: !userInteraction,
         });
 
         // Show tooltip on node hover.

@@ -5,7 +5,7 @@ import CPMComponent from './CPMComponent/CPMComponent.tsx';
 const CPM = (props: TabProps) => {
     return (
         <div className="cpm">
-            <CPMComponent {...props} sensible_schedule={true} />
+            <CPMComponent {...props} sensible_schedule={true} user_interaction={true} />
         </div>
     );
 };

@@ -18,7 +18,7 @@ const Summary = (props: TabProps) => {
                 <EVMComponent project_id={props.project_id} direction='row'/>
             </div>
             <div className="cpm-summary">
-                <CPMComponent project_id={props.project_id} direction='row'/>
+                <CPMComponent project_id={props.project_id} user_interaction={false} direction='row'/>
             </div>
         </div>
     )
