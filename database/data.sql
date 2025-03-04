@@ -190,108 +190,110 @@ VALUES
  'Distribute invitations to 30 media outlets', '2024-04-26', '2024-05-02', 1200.00, 1200.00),
 (pid13, 'Create Marketing Materials', '2024-05-05', '2024-05-20', 16, 'done',
  'Design and produce posters, flyers, backdrop, and digital assets', '2024-05-05', '2024-05-20', 18000.00, 18000.00);
+
+-- Project 5: Project: Under Budget (modified dates and costs)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, description, actual_start_date, actual_completion_date,
  expected_cost, actual_cost)
 VALUES
-    (pid5, 'Kick-off Meeting', '2024-05-10', '2024-05-10', 1, 'done',
-     'Initial planning meeting for Marketing Campaign', '2024-05-10', '2024-05-10', 500.00, 450.00),
-    (pid5, 'Market Research', '2024-05-11', '2024-05-20', 10, 'done',
-     'Analyze target demographics and competitors', '2024-05-11', '2024-05-18', 3000.00, 2500.00),
-    (pid5, 'Strategy Development', '2024-05-21', '2024-05-30', 10, 'done',
-     'Develop comprehensive marketing strategy', '2024-05-19', '2024-05-30', 4500.00, 4000.00),
-    (pid5, 'Content Creation', '2024-05-31', '2024-06-15', 16, 'done',
-     'Create marketing content for all channels', '2024-05-31', '2024-06-14', 8000.00, 7200.00),
-    (pid5, 'Website Updates', '2024-06-16', '2024-06-25', 10, 'in_progress',
-     'Update company website with new content', '2024-06-16', NULL, 5000.00, 4200.00),
-    (pid5, 'Social Media Campaign', '2024-06-20', '2024-07-05', 16, 'in_progress',
-     'Execute social media marketing campaign', '2024-06-20', NULL, 6500.00, 5800.00),
-    (pid5, 'Email Marketing Setup', '2024-06-25', '2024-07-05', 11, 'in_progress',
-     'Prepare email templates and mailing lists', '2024-06-25', NULL, 3500.00, 3200.00),
-    (pid5, 'PPC Campaign Configuration', '2024-07-01', '2024-07-10', 10, 'on_hold',
-     'Setup and configure pay-per-click campaigns', '2024-07-01', NULL, 7000.00, 0.00),
-    (pid5, 'SEO Optimization', '2024-07-06', '2024-07-20', 15, 'on_hold',
-     'Optimize website for search engines', '2024-07-06', NULL, 4500.00, 0.00),
-    (pid5, 'Campaign Analytics Setup', '2024-07-11', '2024-07-15', 5, 'to_do',
+    (pid5, 'Kick-off Meeting', '2025-02-10', '2025-02-10', 1, 'done',
+     'Initial planning meeting for Marketing Campaign', '2025-02-10', '2025-02-10', 500.00, 450.00),
+    (pid5, 'Market Research', '2025-02-11', '2025-02-20', 10, 'done',
+     'Analyze target demographics and competitors', '2025-02-11', '2025-02-18', 3000.00, 2500.00),
+    (pid5, 'Strategy Development', '2025-02-21', '2025-03-02', 10, 'done',
+     'Develop comprehensive marketing strategy', '2025-02-19', '2025-03-02', 4500.00, 4000.00),
+    (pid5, 'Content Creation', '2025-03-03', '2025-03-15', 13, 'done',
+     'Create marketing content for all channels', '2025-03-03', '2025-03-14', 8000.00, 7200.00),
+    (pid5, 'Website Updates', '2025-03-16', '2025-03-25', 10, 'in_progress',
+     'Update company website with new content', '2025-03-16', NULL, 5000.00, 4200.00),
+    (pid5, 'Social Media Campaign', '2025-03-20', '2025-04-05', 16, 'in_progress',
+     'Execute social media marketing campaign', '2025-03-20', NULL, 6500.00, 5800.00),
+    (pid5, 'Email Marketing Setup', '2025-03-25', '2025-04-05', 11, 'in_progress',
+     'Prepare email templates and mailing lists', '2025-03-25', NULL, 3500.00, 3200.00),
+    (pid5, 'PPC Campaign Configuration', '2025-04-01', '2025-04-10', 10, 'on_hold',
+     'Setup and configure pay-per-click campaigns', '2025-04-01', NULL, 7000.00, 0.00),
+    (pid5, 'SEO Optimization', '2025-04-06', '2025-04-20', 15, 'on_hold',
+     'Optimize website for search engines', '2025-04-06', NULL, 4500.00, 0.00),
+    (pid5, 'Campaign Analytics Setup', '2025-04-11', '2025-04-15', 5, 'to_do',
      'Configure analytics to track campaign performance', NULL, NULL, 2000.00, 0.00),
-    (pid5, 'Mid-Campaign Review', '2024-07-20', '2024-07-22', 3, 'to_do',
+    (pid5, 'Mid-Campaign Review', '2025-04-20', '2025-04-22', 3, 'to_do',
      'Review initial campaign performance', NULL, NULL, 1500.00, 0.00),
-    (pid5, 'Campaign Adjustments', '2024-07-23', '2024-07-30', 8, 'to_do',
+    (pid5, 'Campaign Adjustments', '2025-04-23', '2025-04-30', 8, 'to_do',
      'Make adjustments based on initial performance', NULL, NULL, 3000.00, 0.00),
-    (pid5, 'Final Performance Analysis', '2024-08-01', '2024-08-10', 10, 'to_do',
+    (pid5, 'Final Performance Analysis', '2025-05-01', '2025-05-10', 10, 'to_do',
      'Analyze overall campaign performance', NULL, NULL, 2500.00, 0.00),
-    (pid5, 'Client Presentation', '2024-08-11', '2024-08-15', 5, 'to_do',
+    (pid5, 'Client Presentation', '2025-05-11', '2025-05-15', 5, 'to_do',
      'Present campaign results to client', NULL, NULL, 1000.00, 0.00);
 
+-- Project 6: Project: Behind Schedule (modified dates and costs)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, description, actual_start_date, actual_completion_date,
  expected_cost, actual_cost)
 VALUES
-    (pid6, 'Project Charter Creation', '2024-02-01', '2024-02-05', 5, 'done',
-     'Draft project charter and objectives', '2024-02-01', '2024-02-08', 1500.00, 1650.00),
-    (pid6, 'Stakeholder Analysis', '2024-02-06', '2024-02-10', 5, 'done',
-     'Identify and analyze key stakeholders', '2024-02-09', '2024-02-15', 2000.00, 2100.00),
-    (pid6, 'Requirements Gathering', '2024-02-11', '2024-02-20', 10, 'done',
-     'Collect detailed project requirements', '2024-02-16', '2024-02-28', 3500.00, 3800.00),
-    (pid6, 'Project Planning', '2024-02-21', '2024-03-01', 10, 'done',
-     'Create comprehensive project plan', '2024-03-01', '2024-03-15', 4000.00, 4200.00),
-    (pid6, 'Resource Allocation', '2024-03-02', '2024-03-08', 7, 'done',
-     'Assign resources to project tasks', '2024-03-16', '2024-03-25', 2500.00, 2650.00),
-    (pid6, 'Design Phase', '2024-03-09', '2024-03-23', 15, 'in_progress',
-     'System design and architecture', '2024-03-26', NULL, 7500.00, 6800.00),
-    (pid6, 'Development Kickoff', '2024-03-24', '2024-03-30', 7, 'in_progress',
-     'Begin development activities', '2024-04-10', NULL, 3000.00, 2700.00),
-    (pid6, 'Backend Development', '2024-03-31', '2024-04-14', 15, 'in_progress',
-     'Develop system backend components', '2024-04-20', NULL, 8500.00, 4200.00),
-    (pid6, 'Frontend Development', '2024-04-15', '2024-04-29', 15, 'on_hold',
-     'Develop user interface components', '2024-05-05', NULL, 7800.00, 2500.00),
-    (pid6, 'Integration', '2024-04-30', '2024-05-09', 10, 'to_do',
+    (pid6, 'Project Charter Creation', '2025-02-01', '2025-02-05', 5, 'done',
+     'Draft project charter and objectives', '2025-02-01', '2025-02-08', 1500.00, 1650.00),
+    (pid6, 'Stakeholder Analysis', '2025-02-06', '2025-02-10', 5, 'done',
+     'Identify and analyze key stakeholders', '2025-02-09', '2025-02-15', 2000.00, 2100.00),
+    (pid6, 'Requirements Gathering', '2025-02-11', '2025-02-20', 10, 'done',
+     'Collect detailed project requirements', '2025-02-16', '2025-02-28', 3500.00, 3800.00),
+    (pid6, 'Project Planning', '2025-02-21', '2025-03-01', 10, 'done',
+     'Create comprehensive project plan', '2025-03-01', '2025-03-15', 4000.00, 4200.00),
+    (pid6, 'Resource Allocation', '2025-03-02', '2025-03-08', 7, 'done',
+     'Assign resources to project tasks', '2025-03-16', '2025-03-25', 2500.00, 2650.00),
+    (pid6, 'Design Phase', '2025-03-09', '2025-03-23', 15, 'in_progress',
+     'System design and architecture', '2025-03-26', NULL, 7500.00, 6800.00),
+    (pid6, 'Development Kickoff', '2025-03-24', '2025-03-30', 7, 'in_progress',
+     'Begin development activities', '2025-04-10', NULL, 3000.00, 2700.00),
+    (pid6, 'Backend Development', '2025-03-31', '2025-04-14', 15, 'in_progress',
+     'Develop system backend components', '2025-04-20', NULL, 8500.00, 4200.00),
+    (pid6, 'Frontend Development', '2025-04-15', '2025-04-29', 15, 'on_hold',
+     'Develop user interface components', '2025-05-05', NULL, 7800.00, 2500.00),
+    (pid6, 'Integration', '2025-04-30', '2025-05-09', 10, 'to_do',
      'Integrate system components', NULL, NULL, 5500.00, 0.00),
-    (pid6, 'Testing Setup', '2024-05-10', '2024-05-16', 7, 'to_do',
+    (pid6, 'Testing Setup', '2025-05-10', '2025-05-16', 7, 'to_do',
      'Prepare testing environment', NULL, NULL, 3200.00, 0.00),
-    (pid6, 'QA Testing', '2024-05-17', '2024-05-31', 15, 'to_do',
+    (pid6, 'QA Testing', '2025-05-17', '2025-05-31', 15, 'to_do',
      'Perform quality assurance testing', NULL, NULL, 6500.00, 0.00),
-    (pid6, 'User Acceptance Testing', '2024-06-01', '2024-06-10', 10, 'to_do',
+    (pid6, 'User Acceptance Testing', '2025-06-01', '2025-06-10', 10, 'to_do',
      'Conduct user acceptance testing', NULL, NULL, 4800.00, 0.00),
-    (pid6, 'Documentation', '2024-06-11', '2024-06-20', 10, 'to_do',
+    (pid6, 'Documentation', '2025-06-11', '2025-06-20', 10, 'to_do',
      'Create system documentation', NULL, NULL, 3500.00, 0.00),
-    (pid6, 'Training Materials', '2024-06-21', '2024-06-30', 10, 'to_do',
+    (pid6, 'Training Materials', '2025-06-21', '2025-06-30', 10, 'to_do',
      'Develop user training materials', NULL, NULL, 2800.00, 0.00),
-    (pid6, 'Deployment Planning', '2024-07-01', '2024-07-07', 7, 'to_do',
+    (pid6, 'Deployment Planning', '2025-07-01', '2025-07-07', 7, 'to_do',
      'Prepare for system deployment', NULL, NULL, 2000.00, 0.00),
-    (pid6, 'Go-Live', '2024-07-08', '2024-07-15', 8, 'to_do',
+    (pid6, 'Go-Live', '2025-07-08', '2025-07-15', 8, 'to_do',
      'System deployment to production', NULL, NULL, 4500.00, 0.00);
 
+-- Project 7: Project: On Schedule (modified dates and costs)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
  expected_cost, actual_cost, person_in_charge_id)
 VALUES
--- High-cost tasks significantly behind schedule (major negative SV%)
-(pid7, 'Create supply list', '2025-03-04', '2025-03-05', 2, 'done', '2025-07-14', '2025-07-15', 3000.00, 3000.00, 1),
-(pid7, 'Buy supplies', '2025-03-02', '2025-03-03', 2, 'done', '2025-07-17', '2025-07-18', 5000.00, 5000.00, 2),
-(pid7, 'Set up venue', '2025-03-16', '2025-03-18', 3, 'done', '2025-07-27', '2025-07-29', 10000.00, 1000.00, 3),
--- Low-cost tasks slightly ahead of schedule (minor positive SV%)
-(pid7, 'Book venue', '2025-03-14', '2025-03-16', 3, 'done', '2025-03-14', '2025-03-15', 120.00, 120.00, 4),
-(pid7, 'Create guest list', '2025-03-12', '2025-03-14', 3, 'done', '2025-03-12', '2025-03-13', 20.00, 20.00, NULL),
-(pid7, 'Send invitations', '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 10.00, 10.00, NULL);
+    (pid7, 'Create supply list', '2025-02-25', '2025-02-26', 2, 'done', '2025-02-25', '2025-02-26', 3000.00, 3000.00, 1),
+    (pid7, 'Buy supplies', '2025-02-27', '2025-02-28', 2, 'done', '2025-02-27', '2025-02-28', 5000.00, 5000.00, 2),
+    (pid7, 'Set up venue', '2025-03-01', '2025-03-03', 3, 'done', '2025-03-01', '2025-03-03', 10000.00, 1000.00, 3),
+    (pid7, 'Book venue', '2025-03-04', '2025-03-06', 3, 'in_progress', '2025-03-04', NULL, 120.00, 120.00, 4),
+    (pid7, 'Create guest list', '2025-03-07', '2025-03-09', 3, 'to_do', NULL, NULL, 20.00, 0.00, NULL),
+    (pid7, 'Send invitations', '2025-03-10', '2025-03-10', 1, 'to_do', NULL, NULL, 10.00, 0.00, NULL);
 
+-- Project 8: Project: Ahead of Schedule (modified dates and costs)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
  expected_cost, actual_cost, person_in_charge_id)
 VALUES
--- Tasks with major time delays but modest costs
-(pid8, 'Create supply list', '2025-03-01', '2025-03-03', 2, 'done', '2025-07-14', '2025-07-16', 10.00, 5.00, 1),
-(pid8, 'Buy supplies', '2025-03-04', '2025-03-06', 2, 'done', '2025-07-20', '2025-07-22', 150.00, 0.00, 2),
-(pid8, 'Set up venue', '2025-03-06', '2025-03-09', 3, 'done', '2025-07-26', '2025-07-27', 300.00, 0.00, 3),
--- High-cost task with minimal time delay
-(pid8, 'Book venue', '2025-03-13', '2025-03-16', 3, 'done', '2025-03-14', '2025-03-16', 12000.00, 12000.00, 4),
-(pid8, 'Create guest list', '2025-03-12', '2025-03-14', 3, 'done', '2025-03-12', '2025-03-14', 200.00, 200.00, NULL),
-(pid8, 'Send invitations', '2025-03-14', '2025-03-14', 1, 'done', '2025-03-14', '2025-03-14', 8000.00, 8000.00, NULL);
+    (pid8, 'Create supply list', '2025-02-20', '2025-02-22', 3, 'done', '2025-02-20', '2025-02-21', 10.00, 5.00, 1),
+    (pid8, 'Buy supplies', '2025-02-23', '2025-02-25', 3, 'done', '2025-02-23', '2025-02-24', 150.00, 0.00, 2),
+    (pid8, 'Set up venue', '2025-02-26', '2025-02-28', 3, 'done', '2025-02-26', '2025-02-27', 300.00, 0.00, 3),
+    (pid8, 'Book venue', '2025-03-01', '2025-03-03', 3, 'done', '2025-03-01', '2025-03-02', 12000.00, 12000.00, 4),
+    (pid8, 'Create guest list', '2025-03-04', '2025-03-06', 3, 'in_progress', '2025-03-04', NULL, 200.00, 200.00, NULL),
+    (pid8, 'Send invitations', '2025-03-07', '2025-03-07', 1, 'to_do', NULL, NULL, 8000.00, 0.00, NULL);
 
+-- Project 9: Pronounced SV (modified dates and costs)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
@@ -301,6 +303,7 @@ VALUES
     (pid9, 'Product Design', '2025-03-01', '2025-03-15', 15, 'done', '2025-02-14', '2025-02-25', 8000.00, 8000.00, 2),
     (pid9, 'Prototype Development', '2025-03-16', '2025-04-05', 21, 'done', '2025-02-26', '2025-03-10', 12000.00, 12000.00, 3);
 
+-- Project 10: Pronounced TV (modified dates and costs)
 INSERT INTO Task
 (project_id, name, target_start_date, target_completion_date,
  target_days_to_complete, status, actual_start_date, actual_completion_date,
@@ -308,7 +311,7 @@ INSERT INTO Task
 VALUES
     (pid10, 'Task 1', '2025-01-01', '2025-01-15', 15, 'done', '2025-01-05', '2025-01-12', 3000.00, 3000.00, 1),
     (pid10, 'Task 2', '2025-01-16', '2025-01-31', 16, 'done', '2025-01-20', '2025-01-28', 3000.00, 3000.00, 2),
-    (pid10, 'Task 3', '2025-02-01', '2025-02-20', 20, 'done', '2025-02-01', '2025-03-10', 4000.00, 4000.00, 3);
+    (pid10, 'Task 3', '2025-02-01', '2025-02-20', 20, 'done', '2025-02-01', '2025-03-04', 4000.00, 4000.00, 3);
 
 
 ----------------------------------------------------------------
