@@ -1,0 +1,45 @@
+.account-manager-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.account-manager-page h1 {
+    text-align: center;
+    color: #343a40;
+}
+
+.account-manager-page .account-details {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.account-manager-page strong {
+    color: #495057;
+}
+
+.account-manager-page button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.account-manager-page button:hover {
+    background-color: #0056b3;
+}
+
+.account-manager-page p {
+    font-size: 1rem;
+    margin: 5px 0;
+}

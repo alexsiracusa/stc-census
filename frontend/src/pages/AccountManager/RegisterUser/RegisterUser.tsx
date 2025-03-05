@@ -1,5 +1,5 @@
-import './RegisterUser.css'; // Include any styles you want for the Register component
-import useRegisterUser from '../../../hooks/useRegisterUser.ts'; // Adjust the import path as necessary
+import './RegisterUser.css';
+import useRegisterUser from '../../../hooks/useRegisterUser.ts';
 import { useState } from 'react';
 
 const Register = () => {
@@ -12,7 +12,6 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await register(email, firstName, lastName, password);
-        // Optionally reset form fields or provide success feedback
         setEmail('');
         setFirstName('');
         setLastName('');
@@ -59,10 +58,9 @@ const Register = () => {
                         required
                     />
                 </div>
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Registering...' : 'Register'}
+                <button type="submit">
+                    Submit
                 </button>
-                {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
             </form>
         </div>
     );

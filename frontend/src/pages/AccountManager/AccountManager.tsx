@@ -2,7 +2,6 @@ import './AccountManager.css';
 import { useSelector } from "react-redux";
 import RegisterUser from './RegisterUser/RegisterUser.tsx'; // Ensure the path is correctly set
 import { useState } from 'react';
-import useUpdateAccount from "../../hooks/useUpdateAccount.ts";
 
 const AccountManager = () => {
     const account = useSelector((state) => state.accounts.user);
