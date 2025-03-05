@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
                     </Link>
             </nav>
             <nav className="right">
-                <div title='Change Language'>
+                <div>
                     <LanguageSelector/>
                 </div>
                 <ProfileDropdown/>

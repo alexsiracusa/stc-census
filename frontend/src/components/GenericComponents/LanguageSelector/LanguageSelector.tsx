@@ -31,12 +31,14 @@ const LanguageSelector: React.FC = () => {
                     <div
                         className="dropdown-item"
                         onClick={() => changeLanguage("en")}
+                        title="英文"
                     >
                         En
                     </div>
                     <div
                         className="dropdown-item"
                         onClick={() => changeLanguage("scn")}
+                        title='Simplified Chinese'
                     >
                         简
                     </div>
