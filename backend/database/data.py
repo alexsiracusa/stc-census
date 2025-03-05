@@ -3,7 +3,7 @@ from .. import client
 
 async def get_accounts():
     return await client.postgres_client.fetch("""
-        SELECT id, email, first_name, last_name 
+        SELECT id, email, first_name, last_name, admin
         FROM Account
     """)
 

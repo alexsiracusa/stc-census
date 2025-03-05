@@ -53,7 +53,8 @@ async def register(account: AccountInfo, host):
         "id": account_id,
         "email": account.email,
         "first_name": account.first_name,
-        "last_name": account.last_name
+        "last_name": account.last_name,
+        "admin": False
     }
 
 
