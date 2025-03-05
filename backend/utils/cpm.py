@@ -96,7 +96,7 @@ def compute_cpm(df: pd.DataFrame, include_dependencies_in_result:bool=False) -> 
     return result_df, cycle_node_info, project_duration
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
-    df = df[['id', 'project_id', 'name', 'status', 'target_days_to_complete', 'depends_on']]
+    df = df.loc[:, ['id', 'project_id', 'name', 'status', 'target_days_to_complete', 'depends_on']]
     df.columns = ['id', 'project_id', 'name', 'status', 'target_duration', 'dependencies']
     # Set any null target_duration to 0
     df['target_duration'] = df['target_duration'].fillna(0)
