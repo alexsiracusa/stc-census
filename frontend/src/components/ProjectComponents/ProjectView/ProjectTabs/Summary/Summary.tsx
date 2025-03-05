@@ -6,6 +6,7 @@ import ProjectName from "../../../ProjectRow/ProjectName/ProjectName.tsx";
 import EVMComponent from "../EVM/EVMComponent/EVMComponent.tsx";
 import CPMComponent from "../CPM/CPMComponent/CPMComponent.tsx";
 import SummaryInfo from "./SummaryInfo/SummaryInfo.tsx";
+import ProjectTeamAlias from "../../../ProjectRow/ProjectTeamAlias/ProjectTeamAlias.tsx";
 
 const Summary = (props: TabProps) => {
     const {t} = useTranslation();
@@ -14,6 +15,9 @@ const Summary = (props: TabProps) => {
         <div className='summary-container'>
             <div className="project-name" title='Click to edit project name'>
                 <ProjectName project_id={props.project_id}/>
+            </div>
+            <div className="project-team-alias">
+                <ProjectTeamAlias project_id={props.project_id}/>
             </div>
             {/*<div className="summary-information">*/}
             {/*    <SummaryInfo project_id={props.project_id}/>*/}
