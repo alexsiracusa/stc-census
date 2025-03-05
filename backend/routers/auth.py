@@ -18,7 +18,8 @@ router = APIRouter(
 async def register(
     request: Request,
     response: Response,
-    account: AccountInfo
+    account: AccountInfo,
+    _ = Depends(admin.get_admin_user),
 ):
     try:
         session_id, account = await admin.register(account, request.client.host)
@@ -79,9 +80,6 @@ async def ping(
     account_info = Depends(admin.get_authenticated_user),
 ):
     try:
-        if account_info is None:
-            raise InvalidCredentials()
-
         response.status_code = status.HTTP_200_OK
         return account_info
 

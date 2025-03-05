@@ -109,7 +109,7 @@ async def authenticate(request: Request):
             )
             RETURNING account_id
         )
-        SELECT id, email, first_name, last_name 
+        SELECT id, email, first_name, last_name, admin 
         FROM Account_Session
         JOIN Account ON id = account_id;
     """, session_id_hash)
@@ -121,6 +121,15 @@ async def authenticate(request: Request):
 
 
 async def get_authenticated_user(request: Request):
+    return _get_authenticated_user(request)
+
+async def get_admin_user(request: Request):
+    account_info = await _get_authenticated_user(request)
+    if not account_info.get('admin'):
+        raise HTTPException(status_code=401, detail="You must be an admin to perform this action")
+    return account_info
+
+async def _get_authenticated_user(request: Request):
     try:
         account_info = await authenticate(request)
         session_id = request.cookies.get('session_id')

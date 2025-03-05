@@ -29,7 +29,8 @@ CREATE TABLE Account (
     email           TEXT    NOT NULL,
     first_name      TEXT    NOT NULL,
     last_name       TEXT    NOT NULL,
-    password_hash   TEXT    NOT NULL
+    password_hash   TEXT    NOT NULL,
+    admin           BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE UNIQUE INDEX ON Account ((lower(email)));
