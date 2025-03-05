@@ -172,6 +172,7 @@ CREATE VIEW Project_Children AS (
             Project.id
         FROM Project
         INNER JOIN project_tree ON Project.parent = project_tree.child
+        WHERE NOT Project.archived
     )
     SELECT
         parent AS id,
