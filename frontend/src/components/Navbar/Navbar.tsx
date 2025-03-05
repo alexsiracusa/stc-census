@@ -55,6 +55,10 @@ const Navbar: React.FC = () => {
                 >
                     {t('navbar.documentation', 'Documentation')}
                 </button>
+
+                    <Link to={"/account-manager"} title='Go to Account Manager'>
+                        {t('navbar.accountManager', 'Account Manager')}
+                    </Link>
             </nav>
             <nav className="right">
                 <div title='Change Language'>
