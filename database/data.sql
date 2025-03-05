@@ -367,3 +367,38 @@ VALUES
     (21, pid4, 19, pid4); -- Create Marketing Materials depends on Media Invitation Preparation
 
 END $$;
+
+-- --------------------- Testing Email Things; I recommend commenting out the above normal before testing email things with the below....
+-- DO $$
+-- DECLARE
+-- pid1 INT := 1;
+-- BEGIN
+--
+-- -- Reset Sequences
+-- ALTER SEQUENCE project_id_seq RESTART WITH 1;
+--
+-- ----------------------------------------------------------------
+-- -- Create Minimal Accounts
+-- ----------------------------------------------------------------
+-- INSERT INTO Account (email, first_name, last_name, password_hash, admin)
+-- VALUES
+--     ('azgu@wpi.edu', 'Alex', 'Gu', '$2b$12$7jTHX5prhBJWd3xXVaE./e0fWuDMjxgdKT87w2wNH0SwMfWqNKwTC', true),  -- Project PIC
+--     ('alexander.siracusa@gmail.com', 'Intern (Slave)', 'LastName', '$2b$12$7jTHX5prhBJWd3xXVaE./e0fWuDMjxgdKT87w2wNH0SwMfWqNKwTC', false),          -- Task PIC 1
+--     ('eigigigigigi@gmail.com', 'Avid', 'ChatbotUser', '$2b$12$7jTHX5prhBJWd3xXVaE./e0fWuDMjxgdKT87w2wNH0SwMfWqNKwTC', false);          -- Task PIC 2
+--
+-- ----------------------------------------------------------------
+-- -- Create Project with Team Alias
+-- ----------------------------------------------------------------
+-- INSERT INTO Project (parent, name, person_in_charge_id, team_email_alias)
+-- VALUES (NULL, 'Test Project', 1, 'gr-stcc25@wpi.edu');
+--
+-- ----------------------------------------------------------------
+-- -- Create Test Tasks
+-- ----------------------------------------------------------------
+-- INSERT INTO Task (project_id, name, person_in_charge_id, target_completion_date)
+-- VALUES
+--     (pid1, 'Assigned Task 1', 2, '2025-03-7'),   -- Assigned to task.owner1
+--     (pid1, 'Assigned Task 2', 3, '2025-03-2'),   -- Assigned to task.owner2
+--     (pid1, 'Unassigned Task', NULL, '2025-03-2');-- No task PIC
+--
+-- END $$;

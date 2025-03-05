@@ -347,7 +347,7 @@ async def create_project(fields: dict):
 
 
 # for email notifications
-async def get_tasks_due_soon(days_until_due:int=3):
+async def get_tasks_due_soon(days_until_due: int = 3):
     return await client.postgres_client.fetch(f"""
         SELECT t.id, t.project_id, t.name, t.target_completion_date, 
                task_person.email AS task_person_email, 
@@ -355,15 +355,17 @@ async def get_tasks_due_soon(days_until_due:int=3):
                task_person.last_name AS task_person_last_name,
                proj_person.email AS project_person_email, 
                proj_person.first_name AS project_person_first_name, 
-               proj_person.last_name AS project_person_last_name
+               proj_person.last_name AS project_person_last_name,
+               p.team_email_alias AS project_team_email_alias
         FROM Task t
         JOIN Project p ON t.project_id = p.id
         LEFT JOIN Account task_person ON t.person_in_charge_id = task_person.id
         LEFT JOIN Account proj_person ON p.person_in_charge_id = proj_person.id
         WHERE t.target_completion_date IS NOT NULL
-        AND NOW() BETWEEN (t.target_completion_date - INTERVAL '{int(days_until_due*24)} hours')
+        AND NOW() BETWEEN (t.target_completion_date - INTERVAL '{int(days_until_due * 24)} hours')
         AND t.target_completion_date
-    """ )
+    """)
+
 
 
 async def get_tasks_overdue():
@@ -374,7 +376,8 @@ async def get_tasks_overdue():
                task_person.last_name AS task_person_last_name,
                proj_person.email AS project_person_email, 
                proj_person.first_name AS project_person_first_name, 
-               proj_person.last_name AS project_person_last_name
+               proj_person.last_name AS project_person_last_name,
+               p.team_email_alias AS project_team_email_alias
         FROM Task t
         JOIN Project p ON t.project_id = p.id
         LEFT JOIN Account task_person ON t.person_in_charge_id = task_person.id
@@ -382,3 +385,4 @@ async def get_tasks_overdue():
         WHERE t.target_completion_date IS NOT NULL
         AND NOW() > t.target_completion_date
     """)
+
