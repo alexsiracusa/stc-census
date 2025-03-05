@@ -8,6 +8,7 @@ import XMark from "../../../../assets/Icons/X.svg";
 import Edit from "../../../../assets/Icons/Edit.svg";
 import Trash from "../../../../assets/Icons/Trash.svg";
 import Archive from "../../../../assets/Icons/Archive.svg"
+import useArchiveProjects from "../../../../hooks/useArchiveProjects.ts";
 
 type ProjectEditingHeaderProps = {
     editing: boolean
@@ -18,6 +19,7 @@ type ProjectEditingHeaderProps = {
 
 const ProjectEditingHeader = (props: ProjectEditingHeaderProps) => {
     const {deleteProjects, loading, error, data} = useDeleteProjects();
+    const {archiveProjects, loadingArchive, errorArchive, dataArchive} = useArchiveProjects();
     const [editing, setEditing] = useState(false)
     const {t} = useTranslation();
 
@@ -46,7 +48,7 @@ const ProjectEditingHeader = (props: ProjectEditingHeaderProps) => {
                         left={{
                             text: 'Archive',
                             onPress: () => {
-                                // archive projects
+                                archiveProjects(Array.from(props.selected.values()))
                                 setEditing(false)
                                 props.setEditing(false)
                             },
