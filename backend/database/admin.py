@@ -121,7 +121,7 @@ async def authenticate(request: Request):
 
 
 async def get_authenticated_user(request: Request):
-    return _get_authenticated_user(request)
+    return await _get_authenticated_user(request)
 
 async def get_admin_user(request: Request):
     account_info = await _get_authenticated_user(request)
