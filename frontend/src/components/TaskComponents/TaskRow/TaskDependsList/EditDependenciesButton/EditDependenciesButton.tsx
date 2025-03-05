@@ -30,7 +30,7 @@ const MoreTaskButton = (props: TaskIconProps) => {
     return (
         <EditDependenciesDropdown
             className='square-button more-tasks-button'
-            title='More Taks'
+            title='More Tasks'
             task_id={props.task_id}
             project_id={props.project_id}
         >
