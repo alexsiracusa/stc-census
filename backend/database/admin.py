@@ -61,7 +61,7 @@ async def register(account: AccountInfo, host):
 async def login(account: AccountLogin, host):
     # get stored hash value from database
     record = await client.postgres_client.fetch_row("""
-        SELECT id, email, first_name, last_name, password_hash 
+        SELECT id, email, first_name, last_name, admin, password_hash 
         FROM Account 
         WHERE lower(email)=lower($1)
     """, account.email)
@@ -81,7 +81,8 @@ async def login(account: AccountLogin, host):
         "id": record.get('id'),
         "email": record.get('email'),
         "first_name": record.get('first_name'),
-        "last_name": record.get('last_name')
+        "last_name": record.get('last_name'),
+        "admin": record.get('admin')
     }
 
 
