@@ -215,7 +215,9 @@ CREATE VIEW Project_Node AS (
         (SELECT path FROM Project_Path WHERE id = Project.id) AS path
     FROM Project
     LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
-    LEFT JOIN Project AS Sub_Project ON Sub_Project.parent = Project.id
+    LEFT JOIN (
+        SELECT * FROM Project WHERE NOT archived
+    ) AS Sub_Project ON Sub_Project.parent = Project.id
     INNER JOIN Project_Summary ON Project_Summary.id = Project.id
     GROUP BY
         Project.id,

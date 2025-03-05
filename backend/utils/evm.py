@@ -11,11 +11,11 @@ def compute_evm(df: pd.DataFrame, current_day: datetime = None):
         current_day = pd.to_datetime(current_day)
 
     # Rename columns for consistency
-    df.columns = ['status',
-                  'actual_cost', 'expected_cost',
-                  'actual_start_date', 'target_start_date',
-                  'actual_completion_date', 'target_completion_date',
-                  'target_days_to_complete']
+    df = df[[
+        'status', 'actual_cost', 'expected_cost', 'actual_start_date',
+        'target_start_date', 'actual_completion_date', 'target_completion_date',
+        'target_days_to_complete'
+    ]]
 
     # Convert numeric and date columns and fill missing values
     df[['actual_cost', 'expected_cost']] = df[['actual_cost', 'expected_cost']].astype(float).fillna(0)

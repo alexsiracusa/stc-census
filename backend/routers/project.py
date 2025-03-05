@@ -143,7 +143,8 @@ async def get_cpm_analysis(project_id: int, response: Response):
             )
 
         # Get all tasks with dependencies for the project
-        tasks = await data.get_all_project_tasks_cpm(project_id)
+        tasks = await data.get_all_project_tasks(project_id)
+        tasks = tasks.get('all_tasks')
         df = pd.DataFrame(tasks)
 
         # if df is null
@@ -264,7 +265,8 @@ async def get_evm_analysis(project_id: int, response: Response):
             )
 
         # Get all tasks for the project
-        tasks = await data.get_all_project_tasks_evm(project_id)
+        tasks = await data.get_all_project_tasks(project_id)
+        tasks = tasks.get('all_tasks')
         df = pd.DataFrame(tasks)
 
         # if df is null

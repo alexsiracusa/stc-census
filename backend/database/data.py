@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from .. import client
 
 
@@ -13,7 +12,7 @@ async def get_projects():
     return await client.postgres_client.fetch("""
         SELECT * 
         FROM Project_Summary
-        WHERE parent IS NULL
+        WHERE parent IS NULL AND NOT archived
     """)
 
 
@@ -121,33 +120,6 @@ async def get_all_project_tasks(project_id):
                     WHERE id = $1
             )) AS t) AS all_tasks
         """, project_id)
-
-
-# this is for the cpm algorithm to compute cpm stats
-async def get_all_project_tasks_cpm(project_id):
-    return await client.postgres_client.fetch("""
-        SELECT id, project_id, name, status, target_days_to_complete, depends_on
-        FROM Task_Node
-        WHERE Task_Node.project_id IN (
-            SELECT unnest(children)
-            FROM Project_Children
-            WHERE id = $1
-        )
-    """, project_id)
-
-
-# for evm
-async def get_all_project_tasks_evm(project_id):
-    return await client.postgres_client.fetch("""
-        SELECT status, actual_cost, expected_cost, actual_start_date,
-        target_start_date, actual_completion_date, target_completion_date, target_days_to_complete
-        FROM Task_Node
-        WHERE Task_Node.project_id IN (
-            SELECT unnest(children)
-            FROM Project_Children
-            WHERE id = $1
-        )
-    """, project_id)
 
 
 async def get_task(project_id, task_id):

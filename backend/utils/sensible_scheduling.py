@@ -214,7 +214,8 @@ async def calculate_sensible_schedule(
     end_int = business_days_between(wanted_start, wanted_end)
 
     # Retrieve the tasks (here we assume data.get_all_project_tasks_cpm is defined elsewhere)
-    tasks = await data.get_all_project_tasks_cpm(project_id)
+    tasks = await data.get_all_project_tasks(project_id)
+    tasks = tasks.get('all_tasks')
     df = pd.DataFrame(tasks)
     df, cycle_info, critical_path_length = compute_cpm(df, include_dependencies_in_result=True)
 
