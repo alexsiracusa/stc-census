@@ -216,9 +216,15 @@ CREATE VIEW Project_Node AS (
     FROM Project
     LEFT JOIN Task_Node ON Task_Node.project_id = Project.id
     LEFT JOIN (
-        SELECT * FROM Project WHERE NOT archived
+        SELECT *
+        FROM Project
+        WHERE NOT archived
     ) AS Sub_Project ON Sub_Project.parent = Project.id
-    INNER JOIN Project_Summary ON Project_Summary.id = Project.id
+    INNER JOIN (
+        SELECT *
+        FROM Project_Summary
+        WHERE NOT archived
+    ) AS Project_Summary ON Project_Summary.id = Project.id
     GROUP BY
         Project.id,
         Project_Summary.status_counts,

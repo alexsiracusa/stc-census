@@ -113,8 +113,11 @@ async def get_all_project_tasks(project_id):
         SELECT
             $1::INTEGER AS project_id,
             (SELECT jsonb_agg(row_to_json(t)) FROM (
-                SELECT * FROM Task_Node
-                WHERE Task_Node.project_id IN (
+                SELECT Task_Node.*
+                FROM Task_Node
+                JOIN Project ON Project.id = Task_Node.project_id
+                WHERE NOT Project.archived AND
+                Task_Node.project_id IN (
                     SELECT unnest(children)
                     FROM Project_Children 
                     WHERE id = $1
