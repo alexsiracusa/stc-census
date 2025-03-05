@@ -19,7 +19,7 @@
     background-color: transparent; /* Ensure the track is transparent */
 }
 
-.cpm-summary {
+.summary-container .cpm-summary {
     margin-top: 1em;
     width: 50%;
     height: 50%;
