@@ -39,7 +39,8 @@ export const accountSlice = createSlice({
         },
         addAccount: (state, action) => {
             const account = action.payload
-            state.byId[`${account.id}`] = account
+            const oldAccount = state.byId[`${account.id}`]
+            state.byId[`${account.id}`] = {...oldAccount, ...account}
         },
         setUser: (state, action) => {
             state.user = action.payload
