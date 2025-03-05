@@ -147,7 +147,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                                                 className="event-block"
                                                 style={{
                                                     backgroundColor: event.color,
-                                                    padding: "4.8px 8px",
+                                                    padding: "4.8em 0.5em",
                                                 }}
                                             >
                                                 {localizeTitle(event.title)}
