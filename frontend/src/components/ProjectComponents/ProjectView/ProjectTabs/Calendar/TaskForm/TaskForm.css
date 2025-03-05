@@ -16,7 +16,7 @@
     border-radius: 12px;
     width: 360px;
     max-width: 90%;
-    padding: 1rem;
+    padding: 1em;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -64,7 +64,7 @@
 }
 
 .task-form-overlay .task-name-container {
-    margin-bottom: 1rem;
+    margin-bottom: 1em;
 }
 
 .task-form-overlay .task-title-input {
