@@ -62,7 +62,7 @@ const CPMComponent = (props: CPMComponentProps) => {
                     cycleInfo={cycleInfo}
                     userInteraction={props.user_interaction}
                 />
-                {props.sensible_schedule && (<div className="sensible-schedule-button">
+                {props.sensible_schedule && (<div className="sensible-schedule-button" title="Click to open a scheduling popup">
                     <SensibleScheduleButton props={props}/>
                 </div>)}
             </div>

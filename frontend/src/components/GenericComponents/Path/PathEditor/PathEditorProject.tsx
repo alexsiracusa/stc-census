@@ -23,7 +23,7 @@ const PathEditorProject = (props: PathEditorProjectProps) => {
             contentClassName='sub-project-dropdown-container'
             containerAlignment='flex-start'
             contentAlignment='flex-start'
-            title=''
+            title='Click to see a sub project menu'
             isVisible={isVisible}
             setIsVisible={toggleDropdown}
         >

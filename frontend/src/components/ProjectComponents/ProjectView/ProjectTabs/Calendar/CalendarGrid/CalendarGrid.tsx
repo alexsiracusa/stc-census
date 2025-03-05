@@ -128,6 +128,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                             key={index}
                             className={`day-box ${isCurrentMonth ? "" : "other-mon"} ${isToday(date) ? "today" : ""}`}
                             onClick={() => handleCellClick(date)}
+                            title='Click to add a task'
                         >
                             <div className={`day-num ${isToday(date) ? "today" : ""}`}>
                                 {date.getDate()}

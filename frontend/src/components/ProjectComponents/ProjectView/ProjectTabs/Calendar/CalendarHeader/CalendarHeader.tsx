@@ -17,19 +17,19 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ currentMonth, onNavigat
 
     return (
         <header className="calendar-header">
-            <button className="today-button" onClick={onResetToToday}>
+            <button className="today-button" onClick={onResetToToday} title='Move to this month and year'>
                 {t('calendar.calendarHeader.today')}
             </button>
-                <button className="nav-button nav-button-previous-year" onClick={() => onNavigate(-12)}>
+                <button className="nav-button nav-button-previous-year" onClick={() => onNavigate(-12)} title='Move to previous year'>
                     <img src={DoubleChevronLeft} alt={t('calendar.calendarHeader.previousYear')} />
                 </button>
-                <button className="nav-button nav-button-previous-month" onClick={() => onNavigate(-1)}>
+                <button className="nav-button nav-button-previous-month" onClick={() => onNavigate(-1)} title='Move to previous month'>
                     <img src={ChevronLeft} alt={t('calendar.calendarHeader.previousMonth')} />
                 </button>
-                <button className="nav-button nav-button-next-month" onClick={() => onNavigate(1)}>
+                <button className="nav-button nav-button-next-month" onClick={() => onNavigate(1)} title='Move to next month'>
                     <img src={ChevronRight} alt={t('calendar.calendarHeader.nextMonth')} />
                 </button>
-                <button className="nav-button nav-button-next-year" onClick={() => onNavigate(12)}>
+                <button className="nav-button nav-button-next-year" onClick={() => onNavigate(12)} title='Move to next year'>
                     <img src={DoubleChevronRight} alt={t('calendar.calendarHeader.nextYear')} />
                 </button>
             <h2>
