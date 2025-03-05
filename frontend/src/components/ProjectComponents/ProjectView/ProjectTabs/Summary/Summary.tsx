@@ -16,7 +16,7 @@ const Summary = (props: TabProps) => {
             <div className="project-name" title='Click to edit project name'>
                 <ProjectName project_id={props.project_id}/>
             </div>
-            <div className="project-team-alias">
+            <div className="project-team-alias" title='Click to edit team email alias'>
                 <ProjectTeamAlias project_id={props.project_id}/>
             </div>
             {/*<div className="summary-information">*/}
