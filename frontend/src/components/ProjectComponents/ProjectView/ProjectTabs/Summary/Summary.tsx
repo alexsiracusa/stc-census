@@ -12,7 +12,7 @@ const Summary = (props: TabProps) => {
 
     return (
         <div className='summary-container'>
-            <div>
+            <div className="project-name" title='Click to edit project name'>
                 <ProjectName project_id={props.project_id}/>
             </div>
             {/*<div className="summary-information">*/}
