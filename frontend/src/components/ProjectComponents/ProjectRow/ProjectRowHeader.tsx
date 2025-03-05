@@ -53,6 +53,12 @@ const ProjectRowHeader = (props: ProjectRowHeaderProps) => {
             disabled: false,
         },
         {
+            displayName: t('projectList.columns.personInCharge'),
+            columnName: 'person_in_charge',
+            className: 'project-person-in-charge-header',
+            disabled: false,
+        },
+        {
             displayName: t('projectList.columns.budget'),
             columnName: 'expected_cost',
             className: 'project-budget-header',

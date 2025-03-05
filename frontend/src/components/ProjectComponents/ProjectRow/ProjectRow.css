@@ -133,11 +133,21 @@
     height: 60%;
 }
 
-/* START AND COMPLETION DATE */
+/* START AND DUE DATE */
 .project-row .project-start-date, .project-row-header .project-start-date-header,
 .project-row .project-due-date, .project-row-header .project-due-date-header {
     width: 5.5em;
     min-width: 5.5em;
+    height: 60%;
+}
+
+/* PROJECT PERSON IN CHARGE */
+.project-row .project-person-in-charge-container, .project-row-header .project-person-in-charge-header {
+    width: 4.5em;
+    min-width: 4.5em;
+}
+
+.project-row .project-person-in-charge-container {
     height: 60%;
 }
 

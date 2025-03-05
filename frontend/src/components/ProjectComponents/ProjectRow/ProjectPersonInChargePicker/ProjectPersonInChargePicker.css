@@ -1,0 +1,67 @@
+
+.project-person-in-charge-picker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    height: 100%;
+    width: 4.5em;
+    padding: 0 0.3em;
+
+    font-size: 1em;
+    cursor: pointer;
+
+    border-radius: 3px;
+    border: none;
+    background-color: transparent;
+
+    p {
+        font-size: 0.8em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.project-person-in-charge-picker:hover {
+    background-color: #00000020;
+}
+
+.project-person-in-charge-picker-content {
+    overflow-y: scroll;
+
+    width: 18em;
+    height: 20em;
+
+    .project-person-in-charge-picker-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        font-size: 1em;
+        width: 100%;
+        height: fit-content;
+
+        border: none;
+        background: none;
+
+        p {
+            padding: 0.5em;
+        }
+    }
+
+    .project-person-in-charge-picker-row:hover {
+        background: #00000020;
+    }
+}
+
+.project-person-in-charge-picker-content {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.project-person-in-charge-picker-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}

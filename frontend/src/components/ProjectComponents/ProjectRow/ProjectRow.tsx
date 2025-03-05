@@ -8,6 +8,7 @@ import SimpleDatePicker from "../../GenericComponents/SimpleDatePicker/SimpleDat
 import useUpdateProject from "../../../hooks/useUpdateProject.ts";
 import ProjectTasks from "./ProjectTasks/ProjectTasks.tsx";
 import ProjectDownloadButton from "../ProjectDownloadButton/ProjectDownloadButton.tsx";
+import ProjectPersonInChargePicker from "./ProjectPersonInChargePicker/ProjectPersonInChargePicker.tsx";
 
 type ProjectRowProps = {
     project_id: number;
@@ -70,6 +71,10 @@ const ProjectRow = (props: ProjectRowProps) => {
                         updateProject(props.project_id, { target_completion_date: value });
                     }}
                 />
+            </div>
+
+            <div className="project-person-in-charge">
+                <ProjectPersonInChargePicker project_id={props.project_id} />
             </div>
 
             <div className="project-budget">

@@ -183,25 +183,35 @@ CREATE VIEW Project_Children AS (
 
 
 CREATE VIEW Project_Summary AS (
-    SELECT
-        Project.*,
-        jsonb_build_object(
-            'to_do', COUNT(CASE WHEN Task.status = 'to_do' THEN 1 END),
-            'in_progress', COUNT(CASE WHEN Task.status = 'in_progress' THEN 1 END),
-            'on_hold', COUNT(CASE WHEN Task.status = 'on_hold' THEN 1 END),
-            'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
-        ) AS status_counts,
-        COALESCE(SUM(Task.expected_cost), 0) AS expected_cost,
-        COALESCE(SUM(Task.actual_cost), 0) AS actual_cost,
-        COALESCE(SUM(Task.expected_cost - Task.actual_cost), 0) AS budget_variance
-    FROM Task
-    RIGHT JOIN Project ON project_id IN (
-        SELECT unnest(children)
-        FROM Project_Children
-        WHERE id = Project.id
-    )
-    GROUP BY Project.id
-);
+       SELECT
+           Project.*,
+           jsonb_build_object(
+                   'to_do', COUNT(CASE WHEN Task.status = 'to_do' THEN 1 END),
+                   'in_progress', COUNT(CASE WHEN Task.status = 'in_progress' THEN 1 END),
+                   'on_hold', COUNT(CASE WHEN Task.status = 'on_hold' THEN 1 END),
+                   'done', COUNT(CASE WHEN Task.status = 'done' THEN 1 END)
+           ) AS status_counts,
+           COALESCE(SUM(Task.expected_cost), 0) AS expected_cost,
+           COALESCE(SUM(Task.actual_cost), 0) AS actual_cost,
+           COALESCE(SUM(Task.expected_cost - Task.actual_cost), 0) AS budget_variance,
+           CASE
+               WHEN Account.id IS NULL THEN NULL
+               ELSE jsonb_build_object(
+                       'id', Account.id,
+                       'email', Account.email,
+                       'first_name', Account.first_name,
+                       'last_name', Account.last_name
+                    )
+               END AS person_in_charge
+       FROM Task
+                RIGHT JOIN Project ON project_id IN (
+           SELECT unnest(children)
+           FROM Project_Children
+           WHERE id = Project.id
+       )
+                LEFT JOIN Account ON Account.id = Project.person_in_charge_id
+       GROUP BY Project.id, Account.id
+           );
 
 
 CREATE VIEW Project_Node AS (
