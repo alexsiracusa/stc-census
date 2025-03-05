@@ -40,6 +40,7 @@ const AddTaskButton = (props: AddTaskButtonProps) => {
                 <div
                     className='icon'
                     onClick={handleButton}
+                    title='Click to add task'
                 >
                     <img src={Plus}/>
                 </div>
