@@ -93,6 +93,29 @@ async def logout(session_id):
     """, session_id_hash)
 
 
+async def update_account(account_id: int, fields: dict):
+    if fields.get('id') is not None:
+        raise HTTPException(status_code=400, detail="Account id cannot be updated")
+
+    valid_columns = ['email', 'first_name', 'last_name', 'password', 'admin']
+    if not all(key in valid_columns for key in fields):
+        raise HTTPException(status_code=400, detail="Invalid field specified")
+
+    if fields.get('password') is not None:
+        fields['password_hash'] = util.hash_bcrypt_2b(fields.get('password'))
+        del fields['password']
+
+    query_parts = [f"{field} = ${i + 1}" for i, field in enumerate(fields.keys())]
+    values = list(fields.values()) + [account_id]
+
+    return await client.postgres_client.fetch_row(f"""
+        UPDATE Account
+        SET {', '.join(query_parts)}
+        WHERE id = ${len(values)}
+        RETURNING id, email, first_name, last_name, admin
+     """, *values)
+
+
 async def authenticate(request: Request):
     session_id = request.cookies.get('session_id')
     if not session_id:
@@ -123,11 +146,13 @@ async def authenticate(request: Request):
 async def get_authenticated_user(request: Request):
     return await _get_authenticated_user(request)
 
+
 async def get_admin_user(request: Request):
     account_info = await _get_authenticated_user(request)
     if not account_info.get('admin'):
         raise HTTPException(status_code=401, detail="You must be an admin to perform this action")
     return account_info
+
 
 async def _get_authenticated_user(request: Request):
     try:

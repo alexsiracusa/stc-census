@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 
 from .utils.scheduler import setup_scheduler
-from .routers import auth, project, projects, tasks, accounts
+from .routers import auth, project, projects, tasks, accounts, account
 from . import client
 from .config import FRONTEND_HOST
 
@@ -20,6 +20,7 @@ app.include_router(projects.router)
 app.include_router(project.router)
 app.include_router(tasks.router)
 app.include_router(accounts.router)
+app.include_router(account.router)
 
 origins = [
     FRONTEND_HOST
