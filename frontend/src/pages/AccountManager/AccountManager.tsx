@@ -1,6 +1,6 @@
 import './AccountManager.css';
 import { useSelector } from "react-redux";
-import RegisterUser from './RegisterUser/RegisterUser.tsx'; // Ensure the path is correctly set
+import RegisterUser from './RegisterUser/RegisterUser.tsx';
 import { useState } from 'react';
 
 const AccountManager = () => {
