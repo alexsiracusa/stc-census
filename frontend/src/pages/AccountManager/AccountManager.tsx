@@ -7,6 +7,7 @@ import NameEditor from "../../components/GenericComponents/NameEditor/NameEditor
 import useUpdateAccount from "../../hooks/useUpdateAccount.ts";
 
 const AccountManager = () => {
+    const user = useSelector((state) => state.accounts.user)
     const accounts = useSelector((state) => state.accounts.byId)
     const [showRegistration, setShowRegistration] = useState(false);
 
@@ -62,6 +63,17 @@ const AccountManager = () => {
                                 setName={(value) => {
                                     updateAccount(account.id, {
                                         password: value
+                                    })
+                                }}
+                            />
+                            <input
+                                className='admin'
+                                checked={account.admin}
+                                type='checkbox'
+                                onChange={(e) => {
+                                    if (account.id === user.id) { return }
+                                    updateAccount(account.id, {
+                                        admin: e.target.checked
                                     })
                                 }}
                             />
