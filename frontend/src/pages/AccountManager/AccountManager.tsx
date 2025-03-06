@@ -27,6 +27,14 @@ const AccountManager = () => {
             <div className='account-manager-container'>
                 <h1>Account Manager</h1>
                 <div className='account-list'>
+                    <div className='account-row'>
+                        <div className='email'>Email</div>
+                        <div className='name'>First Name</div>
+                        <div className='name'>Last Name</div>
+                        <div className='password'>Password</div>
+                        <div className='admin'>Admin</div>
+                    </div>
+
                     {Object.values(accounts).map((account) => (
                         <div className='account-row' key={account.id}>
                             <NameEditor
