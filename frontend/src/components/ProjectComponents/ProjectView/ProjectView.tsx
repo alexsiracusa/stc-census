@@ -13,7 +13,7 @@ import EVM from "./ProjectTabs/EVM/EVM.tsx";
 import {useSelector} from 'react-redux';
 import ProjectPath from "../ProjectPath/ProjectPath.tsx"
 import useFetchProject from "../../../hooks/useFetchProject.ts";
-import {useEffect} from "react";
+
 
 type ProjectViewProps = {
     project_id: number

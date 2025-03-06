@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.put("/update/{account_id}")
+@router.put("/{account_id}/update/")
 async def get_accounts(
     response: Response,
     account_id: int,

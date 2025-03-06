@@ -5,11 +5,13 @@ import {useTranslation} from 'react-i18next';
 import React, {useEffect, useRef, useState} from 'react';
 import {Link} from "react-router";
 import ProfileDropdown from "./ProfileDropdown/ProfileDropdown.tsx";
+import {useSelector} from "react-redux";
 
 const Navbar: React.FC = () => {
     const {t} = useTranslation();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const user = useSelector((state) => state.accounts.user)
 
     const handleClickOutside = (event: MouseEvent) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -43,22 +45,28 @@ const Navbar: React.FC = () => {
                 <Link to={"/projects"} title='Go to Project Dashboard'>{t('navbar.project', 'Project')}</Link>
 
                 <button
-                    onClick={() => {openPdf('user-guide.pdf')}}
+                    onClick={() => {
+                        openPdf('user-guide.pdf')
+                    }}
                     title='Go to User Guide'
                 >
                     {t('navbar.userGuide', 'User Guide')}
                 </button>
 
                 <button
-                    onClick={() => {openPdf('documentation.pdf')}}
+                    onClick={() => {
+                        openPdf('documentation.pdf')
+                    }}
                     title='Go to Technical Documentation (for IT Personnel)'
                 >
                     {t('navbar.documentation', 'Documentation')}
                 </button>
 
+                {(user && user.admin) &&
                     <Link to={"/account-manager"} title='Go to Account Manager'>
                         {t('navbar.accountManager', 'Account Manager')}
                     </Link>
+                }
             </nav>
             <nav className="right">
                 <div>

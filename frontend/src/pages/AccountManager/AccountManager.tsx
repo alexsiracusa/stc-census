@@ -1,34 +1,79 @@
 import './AccountManager.css';
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import RegisterUser from './RegisterUser/RegisterUser.tsx';
-import { useState } from 'react';
+import {useState} from 'react';
+import useFetchAccounts from "../../hooks/useFetchAccounts.ts";
+import NameEditor from "../../components/GenericComponents/NameEditor/NameEditor.tsx";
+import useUpdateAccount from "../../hooks/useUpdateAccount.ts";
 
 const AccountManager = () => {
-    const account = useSelector((state) => state.accounts.user);
+    const accounts = useSelector((state) => state.accounts.byId)
     const [showRegistration, setShowRegistration] = useState(false);
+
+    const {updateAccount, updateLoading, updateError, updateData} = useUpdateAccount()
+    const {loading, error, date} = useFetchAccounts()
 
     const toggleRegistrationForm = () => {
         setShowRegistration((prev) => !prev);
     };
 
+    if (!accounts || Object.values(accounts).length === 0) {
+        return <>Loading</>
+    }
+
     return (
         <div className='account-manager-page'>
-            <h1>Account Manager</h1>
-            {account ? (
-                <div className="account-details">
-                    <p><strong>Email:</strong> {account.email}</p>
-                    <p><strong>First Name:</strong> {account.first_name || 'N/A'}</p>
-                    <p><strong>Last Name:</strong> {account.last_name || 'N/A'}</p>
-                    <button onClick={toggleRegistrationForm}>
-                        {showRegistration ? 'Hide Registration Form' : 'Show Registration Form'}
-                    </button>
-                    {showRegistration && <RegisterUser />}
+            <div className='account-manager-container'>
+                <h1>Account Manager</h1>
+                <div className='account-list'>
+                    {Object.values(accounts).map((account) => (
+                        <div className='account-row' key={account.id}>
+                            <NameEditor
+                                name={account.email}
+                                className='email'
+                                setName={(value) => {
+                                    updateAccount(account.id, {
+                                        email: value
+                                    })
+                                }}
+                            />
+                            <NameEditor
+                                name={account.first_name}
+                                className='name'
+                                setName={(value) => {
+                                    updateAccount(account.id, {
+                                        first_name: value
+                                    })
+                                }}
+                            />
+                            <NameEditor
+                                name={account.last_name}
+                                className='name'
+                                setName={(value) => {
+                                    updateAccount(account.id, {
+                                        last_name: value
+                                    })
+                                }}
+                            />
+                            <NameEditor
+                                name={''}
+                                className='password'
+                                placeholder={"Reset Password"}
+                                setName={(value) => {
+                                    updateAccount(account.id, {
+                                        password: value
+                                    })
+                                }}
+                            />
+                        </div>
+                    ))}
                 </div>
-            ) : (
-                <>
-                    <p>No account information available. Please register.</p>
-                </>
-            )}
+
+                <button onClick={toggleRegistrationForm}>
+                    {showRegistration ? 'Hide Registration Form' : 'Show Registration Form'}
+                </button>
+                {showRegistration && <RegisterUser/>}
+            </div>
         </div>
     );
 };

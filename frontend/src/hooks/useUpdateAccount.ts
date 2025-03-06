@@ -17,8 +17,8 @@ const useUpdateAccount = () => {
                 "Content-Type": "application/json",
             },
         };
-        const update = () => {
-            return addAccountRedux({account_id, body})
+        const update = (data) => {
+            return addAccountRedux(data)
         }
         updateData(url, update, options);
     }, [updateData]);

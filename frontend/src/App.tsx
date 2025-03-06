@@ -10,9 +10,9 @@ import useFetchUser from "./hooks/useFetchUser.ts";
 
 function App() {
     const { loading, error } = useFetchUser()
-    const isAuthenticated = useSelector((state) => state.accounts.user);
+    const user = useSelector((state) => state.accounts.user);
 
-    if (!isAuthenticated && loading) {
+    if (!user && loading) {
         return <>Loading</>
     }
 
@@ -24,12 +24,12 @@ function App() {
                 <Routes>
                     <Route
                         path="/login"
-                        element={isAuthenticated ? <Navigate to="/projects" replace /> : <Login/>}
+                        element={user ? <Navigate to="/projects" replace /> : <Login/>}
                     />
                     {/*TODO fix routing when logged in*/}
-                    <Route path="/project/:id/*" element={isAuthenticated ? <ProjectPage/> : <Navigate to="/login" replace />}/>
-                    <Route path="/projects" element={isAuthenticated ? <ProjectDashboard/> : <Navigate to="/login" replace />}/>
-                    <Route path="/account-manager" element={isAuthenticated ? <AccountManager/> : <Navigate to="/login" replace />}/>
+                    <Route path="/project/:id/*" element={user ? <ProjectPage/> : <Navigate to="/login" replace />}/>
+                    <Route path="/projects" element={user ? <ProjectDashboard/> : <Navigate to="/login" replace />}/>
+                    <Route path="/account-manager" element={user && user.admin ? <AccountManager/> : <Navigate to="/login" replace />}/>
                     <Route
                         path="*"
                         element={<Navigate to="/login" replace />}
